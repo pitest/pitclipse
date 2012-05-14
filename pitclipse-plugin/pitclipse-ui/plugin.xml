@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.pitest.pitclipse.ui.launchPIT"
+            name="Launch PIT">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               id="org.pitest.pitclipse.ui.menu.Mutate"
+               label="Mutate">
+            <command
+                  commandId="org.pitest.pitclipse.ui.launchPIT"
+                  label="Run Pitest"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.pitest.pitclipse.ui.handlers.PITHandler"
+            commandId="org.pitest.pitclipse.ui.launchPIT">
+      </handler>
+   </extension>
+</plugin>

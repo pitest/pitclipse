@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>pitclipse-dep</module>
-<!--     <module>pitclipse-plugin</module> -->
+    <module>pitclipse-plugin</module>
   </modules>
   <organization>
     <name>Pitest.org</name>
