@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.pitest</groupId>
+  <artifactId>pitclipse</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>pitclipse-dep</module>
+<!--     <module>pitclipse-plugin</module> -->
+  </modules>
+  <organization>
+    <name>Pitest.org</name>
+    <url>http://pitest.org/</url>
+  </organization>
+  <properties>
+    <springsource.osgi.url>http://repository.springsource.com/maven/bundles/external</springsource.osgi.url>
+  </properties>
+  <repositories>
+    <repository>
+      <id>com.springsource.repository.bundles.external</id>
+      <url>${springsource.osgi.url}</url>
+    </repository>
+  </repositories>
+</project> 
