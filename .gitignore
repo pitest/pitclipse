@@ -1,6 +1,14 @@
+# Generic excludes
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+# Java
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+# Maven
+target/
+# Eclipse
+.classpath
+.project
+.settings/
