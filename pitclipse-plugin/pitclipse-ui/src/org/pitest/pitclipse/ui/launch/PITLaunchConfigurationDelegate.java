@@ -127,7 +127,7 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		List<String> classPath = ImmutableList.copyOf(getClassesForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
 		List<File> sourceDirs = ImmutableList.copyOf(getSourceDirsForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
 		PITOptions options = new PITOptionsBuilder().withClassUnderTest(launchConfig.getAttribute(PIT_TEST_CLASS, "")).withClassesToMutate(classPath).withSourceDirectory(sourceDirs.get(0)).build();
-		return new StringBuilder(super.getProgramArguments(launchConfig)).append(options.toCLIArgs()).toString();
+		return new StringBuilder(super.getProgramArguments(launchConfig)).append(options.toCLIArgsAsString()).toString();
 	}
 	
 	
