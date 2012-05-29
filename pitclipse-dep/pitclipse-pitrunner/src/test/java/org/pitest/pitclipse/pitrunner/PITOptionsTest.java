@@ -63,6 +63,7 @@ public class PITOptionsTest {
 		assertEquals(TEST_CLASS1, options.getClassUnderTest());
 		assertArrayEquals(expectedArgs(reportDir, testSrcDir, TEST_CLASS1),
 				options.toCLIArgs());
+		assertEquals(expectedArgsAsString(reportDir, testSrcDir, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 	
 	@Test(expected = PITLaunchException.class)
@@ -82,6 +83,7 @@ public class PITOptionsTest {
 		assertTrue(expectedDir.exists());
 		assertArrayEquals(expectedArgs(expectedDir,testSrcDir , TEST_CLASS1),
 				options.toCLIArgs());
+		assertEquals(expectedArgsAsString(expectedDir, testSrcDir, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
 	@Test(expected = PITLaunchException.class)
@@ -106,6 +108,7 @@ public class PITOptionsTest {
 		assertEquals(TEST_CLASS1, options.getClassUnderTest());
 		assertArrayEquals(expectedArgs(reportDir, testSrcDir, TEST_CLASS1, TEST_CLASS1, TEST_CLASS2),
 				options.toCLIArgs());
+		assertEquals(expectedArgsAsString(reportDir, testSrcDir, TEST_CLASS1, TEST_CLASS1, TEST_CLASS2), options.toCLIArgsAsString());
 	}
 
 	private String randomString() {
@@ -114,7 +117,7 @@ public class PITOptionsTest {
 	
 	private Object[] expectedArgs(File reportDir, File sourceDir, String classUnderTest,
 			String... classpath) {
-		List<String> args = Lists.newArrayList("--outputFormats", "XML", "--reportDir", reportDir.getPath(), "--sourceDirs", sourceDir.getPath(), "--targetTests", classUnderTest, "--targetClasses");
+		List<String> args = Lists.newArrayList("--outputFormats", "HTML", "--reportDir", reportDir.getPath(), "--sourceDirs", sourceDir.getPath(), "--targetTests", classUnderTest, "--targetClasses");
 		if (null != classpath) {
 			for (int i = 0; i < classpath.length; i++) {
 				if (i == (classpath.length - 1)) {
@@ -125,6 +128,16 @@ public class PITOptionsTest {
 			}
 		}
 		return args.toArray();
+	}
+	
+	private String expectedArgsAsString(File reportDir, File sourceDir, String classUnderTest,
+			String... classpath) {
+		Object[] args = expectedArgs(reportDir, sourceDir, classUnderTest, classpath);
+		StringBuilder argsBuilder = new StringBuilder();
+		for (Object arg : args) {
+			argsBuilder.append(' ').append(arg);
+		}
+		return argsBuilder.toString().trim();
 	}
 	
 	private File randomDir() {

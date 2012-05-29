@@ -142,4 +142,12 @@ public final class PITOptions {
 	public String getClassUnderTest() {
 		return classUnderTest;
 	}
+
+	public String toCLIArgsAsString() {
+		StringBuilder argsBuilder = new StringBuilder();
+		for (String arg : toCLIArgs()) {
+			argsBuilder.append(' ').append(arg);
+		}
+		return argsBuilder.toString().trim();
+	}
 }
