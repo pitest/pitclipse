@@ -124,15 +124,10 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 	@Override
 	public String getProgramArguments(ILaunchConfiguration launchConfig)
 			throws CoreException {
-		StringBuilder argsBuilder = new StringBuilder(super.getProgramArguments(launchConfig));
 		List<String> classPath = ImmutableList.copyOf(getClassesForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
 		List<File> sourceDirs = ImmutableList.copyOf(getSourceDirsForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
 		PITOptions options = new PITOptionsBuilder().withClassUnderTest(launchConfig.getAttribute(PIT_TEST_CLASS, "")).withClassesToMutate(classPath).withSourceDirectory(sourceDirs.get(0)).build();
-		for (String arg : options.toCLIArgs()) {
-			argsBuilder.append(' ').append(arg);
-		}
-		System.out.println(argsBuilder.toString());
-		return argsBuilder.toString().trim();
+		return new StringBuilder(super.getProgramArguments(launchConfig)).append(options.toCLIArgs()).toString();
 	}
 	
 	
