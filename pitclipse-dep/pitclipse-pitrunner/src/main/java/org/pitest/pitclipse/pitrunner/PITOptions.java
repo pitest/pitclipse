@@ -35,7 +35,7 @@ public final class PITOptions {
 	}
 
 	public String[] toCLIArgs() {
-		List<String> args = Lists.newArrayList("--outputFormats", "XML",
+		List<String> args = Lists.newArrayList("--outputFormats", "HTML",
 				"--reportDir", reportDir.getPath(), "--sourceDirs",
 				sourceDir.getPath(), "--targetTests", classUnderTest,
 				"--targetClasses");

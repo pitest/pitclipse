@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pitclipse UI Tests
+Bundle-SymbolicName: org.pitest.pitclipse-ui.tests
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.ui,
+ org.pitest.pitclipse-ui;bundle-version="1.0.0",
+ org.junit4;bundle-version="4.8.1"

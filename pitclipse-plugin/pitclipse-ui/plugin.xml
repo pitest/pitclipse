@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            id="org.pitest.pitclipse.ui.launchPIT"
-            name="Launch PIT">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-         <menu
-               id="org.pitest.pitclipse.ui.menu.Mutate"
-               label="Mutate">
-            <command
-                  commandId="org.pitest.pitclipse.ui.launchPIT"
-                  label="Run Pitest"
-                  style="push">
-            </command>
-         </menu>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.pitest.pitclipse.ui.handlers.PITHandler"
-            commandId="org.pitest.pitclipse.ui.launchPIT">
-      </handler>
-   </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+     <command
+           id="org.pitest.pitclipse.ui.launchPIT"
+           name="Launch PIT">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           allPopups="false"
+           locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+        <menu
+              id="org.pitest.pitclipse.ui.menu.Mutate"
+              label="Mutate">
+           <command
+                 commandId="org.pitest.pitclipse.ui.launchPIT"
+                 label="Run Pitest"
+                 style="push">
+           </command>
+        </menu>
+     </menuContribution>
+  </extension>
+  <extension
+        point="org.eclipse.ui.handlers">
+     <handler
+           class="org.pitest.pitclipse.ui.handlers.PITHandler"
+           commandId="org.pitest.pitclipse.ui.launchPIT">
+     </handler>
+  </extension>
+  <extension
+      point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+      name="PIT Mutation Test"
+      delegate="org.pitest.pitclipse.ui.launch.PITLaunchConfigurationDelegate"
+      modes="run"               
+      id="org.pitest.pitclipse.ui.mutationTest">        
+    </launchConfigurationType>
+  </extension>
+  <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+        icon="icons/pit.gif"
+        configTypeID="org.pitest.pitclipse.ui.mutationTest"
+        id="org.pitest.pitclipse.ui.mutationTest.icon">
+    </launchConfigurationTypeImage>
+  </extension>
+  <extension point="org.eclipse.debug.ui.launchShortcuts">
+    <shortcut
+      id="org.pitest.pitclipse.ui.mutationTest.shortcut"
+      class="org.pitest.pitclipse.ui.launch.PITLaunchShortcut"
+      label="PIT Mutation Test"
+      icon="icons/pit.gif"
+      modes="run">
+      <contextualLaunch>
+        <contextLabel mode="run" label="PIT Mutation Test" />
+        <enablement>
+          
+        </enablement>
+       </contextualLaunch>
+    </shortcut>
+  </extension>
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+       type="org.pitest.pitclipse.ui.mutationTest"
+       class="org.pitest.pitclipse.ui.launch.PITLaunchConfigurationTabGroup"
+       id="org.pitest.pitclipse.ui.mutationTest.config">
+    </launchConfigurationTabGroup>
+  </extension>
 </plugin>

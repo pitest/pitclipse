@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>org.pitest.pitclipse-ui.tests</artifactId>
+  <parent>
+    <groupId>org.pitest</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>pitclipse-plugin</artifactId>
+  </parent>
+  <packaging>eclipse-test-plugin</packaging>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>
+          <useUIHarness>false</useUIHarness>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+<!--    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>com.springsource.org.antlr.runtime</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.guava-osgi</groupId>
+      <artifactId>guava-osgi</artifactId>
+      <version>11.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitclipse-dep-bundle</artifactId>
+      <version>${pom.version}</version>
+    </dependency>
+    
+    -->
+  </dependencies>
+</project>
