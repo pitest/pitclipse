@@ -32,12 +32,60 @@ import com.google.common.collect.ImmutableSet.Builder;
 
 public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
-	private static final String PIT_REPORT_GENERATOR = MutationCoverageReport.class.getCanonicalName();
+	private static final String PIT_REPORT_GENERATOR = MutationCoverageReport.class
+			.getCanonicalName();
+
+	private static final class UpdateView implements Runnable {
+		private final File reportDirectory;
+		
+		public UpdateView(File reportDirectory) {
+			this.reportDirectory = new File(reportDirectory.getAbsolutePath());
+		}
+		
+		public void run() {
+			
+			File result = findResultFile(reportDirectory);
+			if (null == result) {
+				return;
+			} 
+		}
+
+		private File findResultFile(File reportDir) {
+			for (File file : reportDir.listFiles()) {
+				if (file.isDirectory()) {
+					File result = findResultFile(file);
+					if (null != result) {
+						return result;
+					}
+				}
+				if ("index.html".equals(file.getName())) {
+					return file;
+				}
+			}
+			return null;
+		}
+	}
+	
+	private PITOptions options = null;
 
 	@Override
 	public void launch(ILaunchConfiguration launchConfig, String mode,
 			ILaunch launch, IProgressMonitor progress) throws CoreException {
+		List<String> classPath = ImmutableList
+				.copyOf(getClassesForProject(launchConfig.getAttribute(
+						PIT_PROJECT, "")));
+		List<File> sourceDirs = ImmutableList
+				.copyOf(getSourceDirsForProject(launchConfig.getAttribute(
+						PIT_PROJECT, "")));
+		options = new PITOptionsBuilder()
+				.withClassUnderTest(
+						launchConfig.getAttribute(PIT_TEST_CLASS, ""))
+				.withClassesToMutate(classPath)
+				.withSourceDirectory(sourceDirs.get(0)).build();
 		super.launch(launchConfig, mode, launch, progress);
+		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
+				.getProcesses()), new UpdateView(options.getReportDirectory()));
+		new Thread(updater).start();
 	}
 
 	@Override
@@ -45,18 +93,21 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 			throws CoreException {
 		return PIT_REPORT_GENERATOR;
 	}
-	
+
 	@Override
 	public String[] getClasspath(ILaunchConfiguration launchConfig)
 			throws CoreException {
-		List<String> newClasspath = ImmutableList.<String>builder().addAll(ImmutableList.copyOf(super.getClasspath(launchConfig))).addAll(PITActivator.getPITClasspath()).build();
+		List<String> newClasspath = ImmutableList.<String> builder()
+				.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
+				.addAll(PITActivator.getPITClasspath()).build();
 		return newClasspath.toArray(new String[newClasspath.size()]);
 	}
 
-	private Set<String> getClassesForProject(String projectName) throws CoreException {
-		Builder<String> classPathBuilder = ImmutableSet.builder(); 
-		IWorkspaceRoot root= ResourcesPlugin.getWorkspace().getRoot();
-	    for (IProject project : root.getProjects()) {
+	private Set<String> getClassesForProject(String projectName)
+			throws CoreException {
+		Builder<String> classPathBuilder = ImmutableSet.builder();
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName()) && project.isOpen()) {
 				IJavaProject javaProject = JavaCore.create(project);
 				classPathBuilder.addAll(getClassesFromProject(javaProject));
@@ -67,16 +118,18 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
 	private Set<String> getClassesFromProject(IJavaProject javaProject)
 			throws JavaModelException {
-		Builder<String> classPathBuilder = ImmutableSet.builder(); 
-		IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
+		Builder<String> classPathBuilder = ImmutableSet.builder();
+		IPackageFragmentRoot[] packageRoots = javaProject
+				.getPackageFragmentRoots();
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
 			if (!packageRoot.isArchive()) {
 				for (IJavaElement element : packageRoot.getChildren()) {
 					if (element instanceof IPackageFragment) {
-						IPackageFragment packge = (IPackageFragment)element;
+						IPackageFragment packge = (IPackageFragment) element;
 						if (packge.getCompilationUnits().length > 0) {
-							classPathBuilder.add(packge.getElementName() + ".*");
-					//		classPathBuilder.addAll(getClassesFromPackage(packge));
+							classPathBuilder
+									.add(packge.getElementName() + ".*");
+							// classPathBuilder.addAll(getClassesFromPackage(packge));
 						}
 					}
 				}
@@ -84,36 +137,36 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		}
 		return classPathBuilder.build();
 	}
-	
-/*	private Set<String> getClassesFromPackage(
-			IPackageFragment packge) throws JavaModelException {
-		Builder<String> classPathBuilder = ImmutableSet.builder(); 
-		for (ICompilationUnit javaFile : packge.getCompilationUnits()) {
-			classPathBuilder.addAll(getClassesFromSourceFile(javaFile)) ;
-		}
-		return classPathBuilder.build();
-	}
 
-	private Set<String> getClassesFromSourceFile(
-			ICompilationUnit javaFile) throws JavaModelException {
-		Builder<String> classPathBuilder = ImmutableSet.builder();
-		for (IType type : javaFile.getAllTypes()) {
-			classPathBuilder.add(type.getFullyQualifiedName());
-		}
-		return classPathBuilder.build();
-	}
-*/
-	private Set<File> getSourceDirsForProject(String projectName) throws CoreException {
-		Builder<File> sourceDirBuilder = ImmutableSet.builder(); 
-		IWorkspaceRoot root= ResourcesPlugin.getWorkspace().getRoot();
+	/*
+	 * private Set<String> getClassesFromPackage( IPackageFragment packge)
+	 * throws JavaModelException { Builder<String> classPathBuilder =
+	 * ImmutableSet.builder(); for (ICompilationUnit javaFile :
+	 * packge.getCompilationUnits()) {
+	 * classPathBuilder.addAll(getClassesFromSourceFile(javaFile)) ; } return
+	 * classPathBuilder.build(); }
+	 * 
+	 * private Set<String> getClassesFromSourceFile( ICompilationUnit javaFile)
+	 * throws JavaModelException { Builder<String> classPathBuilder =
+	 * ImmutableSet.builder(); for (IType type : javaFile.getAllTypes()) {
+	 * classPathBuilder.add(type.getFullyQualifiedName()); } return
+	 * classPathBuilder.build(); }
+	 */
+	private Set<File> getSourceDirsForProject(String projectName)
+			throws CoreException {
+		Builder<File> sourceDirBuilder = ImmutableSet.builder();
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
 				IJavaProject javaProject = JavaCore.create(project);
-				IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
-				File workspaceRoot = new File(project.getDescription().getLocationURI()).getParentFile();
+				IPackageFragmentRoot[] packageRoots = javaProject
+						.getPackageFragmentRoots();
+				File workspaceRoot = new File(project.getDescription()
+						.getLocationURI()).getParentFile();
 				for (IPackageFragmentRoot packageRoot : packageRoots) {
 					if (!packageRoot.isArchive()) {
-						sourceDirBuilder.add(new File(workspaceRoot, packageRoot.getPath().toString()));
+						sourceDirBuilder.add(new File(workspaceRoot,
+								packageRoot.getPath().toString()));
 					}
 				}
 			}
@@ -124,12 +177,9 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 	@Override
 	public String getProgramArguments(ILaunchConfiguration launchConfig)
 			throws CoreException {
-		List<String> classPath = ImmutableList.copyOf(getClassesForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
-		List<File> sourceDirs = ImmutableList.copyOf(getSourceDirsForProject(launchConfig.getAttribute(PIT_PROJECT, "")));
-		PITOptions options = new PITOptionsBuilder().withClassUnderTest(launchConfig.getAttribute(PIT_TEST_CLASS, "")).withClassesToMutate(classPath).withSourceDirectory(sourceDirs.get(0)).build();
-		return new StringBuilder(super.getProgramArguments(launchConfig)).append(options.toCLIArgsAsString()).toString();
+		String pitArgs = null == options ? "" : options.toCLIArgsAsString();
+		return new StringBuilder(super.getProgramArguments(launchConfig))
+				.append(pitArgs).toString();
 	}
-	
-	
-	
+
 }
