@@ -43,7 +43,6 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		}
 		
 		public void run() {
-			
 			File result = findResultFile(reportDirectory);
 			if (null == result) {
 				return;
