@@ -21,10 +21,12 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
+import org.eclipse.swt.widgets.Display;
 import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.PITOptions;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
 import org.pitest.pitclipse.ui.PITActivator;
+import org.pitest.pitclipse.ui.view.PITView;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -37,34 +39,18 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
 	private static final class UpdateView implements Runnable {
 		private final File reportDirectory;
-		
+		private final PITViewFinder viewFinder = new PITViewFinder();
+
 		public UpdateView(File reportDirectory) {
-			this.reportDirectory = new File(reportDirectory.getAbsolutePath());
-		}
-		
-		public void run() {
-			File result = findResultFile(reportDirectory);
-			if (null == result) {
-				return;
-			} 
+			this.reportDirectory = new File(reportDirectory.toURI());
 		}
 
-		private File findResultFile(File reportDir) {
-			for (File file : reportDir.listFiles()) {
-				if (file.isDirectory()) {
-					File result = findResultFile(file);
-					if (null != result) {
-						return result;
-					}
-				}
-				if ("index.html".equals(file.getName())) {
-					return file;
-				}
-			}
-			return null;
+		public void run() {
+			PITView view = viewFinder.getView() ;
+			view.update(reportDirectory);
 		}
 	}
-	
+
 	private PITOptions options = null;
 
 	@Override
@@ -84,7 +70,7 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		super.launch(launchConfig, mode, launch, progress);
 		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateView(options.getReportDirectory()));
-		new Thread(updater).start();
+		Display.getDefault().asyncExec(updater);
 	}
 
 	@Override

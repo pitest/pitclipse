@@ -39,4 +39,20 @@
        id="org.pitest.pitclipse.ui.mutationTest.config">
     </launchConfigurationTabGroup>
   </extension>
+  <extension
+        point="org.eclipse.ui.views">
+    <view
+          allowMultiple="false"
+          class="org.pitest.pitclipse.ui.view.PITView"
+          icon="icons/pit.gif"
+          id="org.pitest.pitclipse-ui.PITView"
+          name="PIT View"
+          restorable="true"/>
+<!--    <stickyView
+      closeable="true"
+      id="org.pitest.pitclipse-ui.stickyPITView"
+      location="RIGHT"
+      moveable="true">
+     </stickyView> -->
+  </extension>
 </plugin>
