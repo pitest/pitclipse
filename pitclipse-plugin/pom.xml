@@ -11,6 +11,7 @@
   <modules>
     <module>pitclipse-ui</module>
     <module>pitclipse-ui.tests</module>
+    <module>org.pitest.pitclipse.feature</module>
   </modules>
   <properties>
     <tycho.version>0.14.1</tycho.version>
