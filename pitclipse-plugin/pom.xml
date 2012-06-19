@@ -4,7 +4,7 @@
   <parent>
     <artifactId>pitclipse</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.27.0-SNAPSHOT</version>
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
@@ -12,9 +12,10 @@
     <module>pitclipse-ui</module>
     <module>pitclipse-ui.tests</module>
     <module>org.pitest.pitclipse.feature</module>
+    <module>org.pitest.pitclipse.site</module>
   </modules>
   <properties>
-    <tycho.version>0.14.1</tycho.version>
+    <tycho.version>0.15.0</tycho.version>
     <p2.url>http://download.eclipse.org/releases/indigo</p2.url>
   </properties>
   <repositories>

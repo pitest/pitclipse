@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -33,11 +34,11 @@ public class PITActivator extends AbstractUIPlugin {
 	public static List<String> getPITClasspath() {
 		return pitClasspath;
 	}
-	
+
 	private static void setPITClasspath(List<String> classpath) {
 		pitClasspath = ImmutableList.copyOf(classpath);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -70,7 +71,7 @@ public class PITActivator extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		setPITClasspath(ImmutableList.<String>of());
+		setPITClasspath(ImmutableList.<String> of());
 		super.stop(context);
 	}
 
@@ -93,5 +94,21 @@ public class PITActivator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	public static void log(String msg) {
+		log(Status.INFO, msg, null);
+	}
+
+	public static void warn(String msg) {
+		warn(msg, null);
+	}
+
+	public static void warn(String msg, Exception e) {
+		log(Status.WARNING, msg, e);
+	}
+	
+	private static void log(int status, String msg, Exception e) {
+		getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, e));
 	}
 }

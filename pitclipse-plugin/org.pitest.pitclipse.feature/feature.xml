@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.pitest.pitclipse.feature"
-      label="Feature"
-      version="1.0.0.qualifier">
+      label="Pitclipse"
+      version="0.27.0.qualifier">
 
    <description url="http://pitest.org">
       PITest Eclipse plugin

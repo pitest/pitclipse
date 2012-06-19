@@ -1,9 +1,11 @@
 package org.pitest.pitclipse.ui.launch;
 
+import static org.pitest.pitclipse.ui.PITActivator.log;
 import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_PROJECT;
 import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_TEST_CLASS;
 
 import java.io.File;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +33,6 @@ import org.pitest.pitclipse.ui.view.PITView;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
-
 public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
 	private static final String PIT_REPORT_GENERATOR = MutationCoverageReport.class
@@ -67,6 +68,9 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 						launchConfig.getAttribute(PIT_TEST_CLASS, ""))
 				.withClassesToMutate(classPath)
 				.withSourceDirectory(sourceDirs.get(0)).build();
+		log(launchConfig.getAttribute(PIT_TEST_CLASS, ""));
+		log(classPath.toString());
+		log(sourceDirs.get(0).toString());
 		super.launch(launchConfig, mode, launch, progress);
 		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateView(options.getReportDirectory()));
@@ -143,11 +147,13 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
+				URI location = getProjectLocation(project);
+				log("Building source directories for project: " + projectName + " location: " + location);
 				IJavaProject javaProject = JavaCore.create(project);
 				IPackageFragmentRoot[] packageRoots = javaProject
 						.getPackageFragmentRoots();
-				File workspaceRoot = new File(project.getDescription()
-						.getLocationURI()).getParentFile();
+
+				File workspaceRoot = new File(location).getParentFile();
 				for (IPackageFragmentRoot packageRoot : packageRoots) {
 					if (!packageRoot.isArchive()) {
 						sourceDirBuilder.add(new File(workspaceRoot,
@@ -157,6 +163,16 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 			}
 		}
 		return sourceDirBuilder.build();
+	}
+
+	private URI getProjectLocation(IProject project) throws CoreException {
+		URI locationURI = project.getDescription().getLocationURI();
+		if (null != locationURI) {
+			return locationURI;
+		}
+		// We're using the default location under workspace
+		File projLocation = new File(project.getLocation().toOSString());
+		return projLocation.toURI();
 	}
 
 	@Override
