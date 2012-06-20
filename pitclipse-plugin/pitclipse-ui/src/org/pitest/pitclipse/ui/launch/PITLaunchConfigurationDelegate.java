@@ -67,9 +67,6 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 						launchConfig.getAttribute(PIT_TEST_CLASS, ""))
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs).build();
-		log(launchConfig.getAttribute(PIT_TEST_CLASS, ""));
-		log(classPath.toString());
-		log(sourceDirs.get(0).toString());
 		super.launch(launchConfig, mode, launch, progress);
 		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateView(options.getReportDirectory()));
