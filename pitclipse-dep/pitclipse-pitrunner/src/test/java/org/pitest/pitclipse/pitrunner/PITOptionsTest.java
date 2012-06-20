@@ -27,6 +27,7 @@ public class PITOptionsTest {
 	private final Random random = new Random();
 	private final File testTmpDir = randomDir();
 	private final File testSrcDir = randomDir();
+	private final File anotherTestSrcDir = randomDir();
 	private static final File REALLY_BAD_PATH = new File("BADDRIVE:\\");
 	private static final String TEST_CLASS1 = PITOptionsTest.class.getCanonicalName();
 	private static final String TEST_CLASS2 = PITRunner.class.getCanonicalName();
@@ -34,8 +35,10 @@ public class PITOptionsTest {
 	
 	@Before
 	public void setup() {
-		testTmpDir.mkdirs();
-		testSrcDir.mkdirs();
+		for (File dir : ImmutableList.of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
+			dir.mkdirs();
+			dir.deleteOnExit();
+		}
 	}
 	
 	@AfterClass
@@ -69,6 +72,25 @@ public class PITOptionsTest {
 	@Test(expected = PITLaunchException.class)
 	public void sourceDirectoryDoesNotExist() throws IOException {
 		new PITOptionsBuilder().withSourceDirectory(randomDir()).withClassUnderTest(TEST_CLASS1).build();
+	}
+	
+	@Test(expected = PITLaunchException.class)
+	public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
+		new PITOptionsBuilder().withSourceDirectories(ImmutableList.of(testSrcDir, randomDir())).withClassUnderTest(TEST_CLASS1).build();
+	}
+	
+	@Test
+	public void multipleSourceDirectoriesExist() throws IOException {
+		List<File> srcDirs = ImmutableList.of(testSrcDir, anotherTestSrcDir);
+		PITOptions options = new PITOptionsBuilder().withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1).build();
+		File reportDir = options.getReportDirectory();
+		assertTrue(reportDir.isDirectory());
+		assertTrue(reportDir.exists());
+		assertEquals(TMP_DIR, reportDir.getParentFile());
+		assertEquals(TEST_CLASS1, options.getClassUnderTest());
+		assertArrayEquals(expectedArgs(reportDir, srcDirs, TEST_CLASS1),
+				options.toCLIArgs());
+		assertEquals(expectedArgsAsString(reportDir, srcDirs, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 	
 	@Test
@@ -117,7 +139,12 @@ public class PITOptionsTest {
 	
 	private Object[] expectedArgs(File reportDir, File sourceDir, String classUnderTest,
 			String... classpath) {
-		List<String> args = Lists.newArrayList("--outputFormats", "HTML", "--reportDir", reportDir.getPath(), "--sourceDirs", sourceDir.getPath(), "--targetTests", classUnderTest, "--targetClasses");
+		return expectedArgs(reportDir, ImmutableList.of(sourceDir), classUnderTest, classpath);
+	}
+	
+	private Object[] expectedArgs(File reportDir, List<File> sourceDirs, String classUnderTest,
+			String... classpath) {
+		List<String> args = Lists.newArrayList("--outputFormats", "HTML", "--reportDir", reportDir.getPath(), "--targetTests", classUnderTest, "--targetClasses");
 		if (null != classpath) {
 			for (int i = 0; i < classpath.length; i++) {
 				if (i == (classpath.length - 1)) {
@@ -127,12 +154,27 @@ public class PITOptionsTest {
 				}
 			}
 		}
+		args.add("--sourceDirs");
+		if (null != sourceDirs) {
+			for (int i = 0; i < sourceDirs.size(); i++) {
+				if (i == (sourceDirs.size() - 1)) {
+					args.add(sourceDirs.get(i).getPath());
+				} else {
+					args.add(sourceDirs.get(i).getPath() + ",");
+				}
+			}
+		}
 		return args.toArray();
 	}
 	
 	private String expectedArgsAsString(File reportDir, File sourceDir, String classUnderTest,
 			String... classpath) {
-		Object[] args = expectedArgs(reportDir, sourceDir, classUnderTest, classpath);
+		return expectedArgsAsString(reportDir, ImmutableList.of(sourceDir), classUnderTest, classpath);
+	}
+	
+	private String expectedArgsAsString(File reportDir, List<File> sourceDirs, String classUnderTest,
+			String... classpath) {
+		Object[] args = expectedArgs(reportDir, sourceDirs, classUnderTest, classpath);
 		StringBuilder argsBuilder = new StringBuilder();
 		for (Object arg : args) {
 			argsBuilder.append(' ').append(arg);

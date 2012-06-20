@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.ImmutableList;
 
@@ -20,7 +21,7 @@ public final class UIUpdate implements Runnable {
 
 	public void run() {
 		waitForCompletion();
-		update.run();
+		Display.getDefault().asyncExec(update);
 	}
 
 	private void waitForCompletion() {

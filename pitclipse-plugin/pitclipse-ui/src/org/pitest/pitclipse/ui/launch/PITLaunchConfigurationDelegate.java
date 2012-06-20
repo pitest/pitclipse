@@ -23,7 +23,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
-import org.eclipse.swt.widgets.Display;
 import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.PITOptions;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
@@ -67,14 +66,14 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 				.withClassUnderTest(
 						launchConfig.getAttribute(PIT_TEST_CLASS, ""))
 				.withClassesToMutate(classPath)
-				.withSourceDirectory(sourceDirs.get(0)).build();
+				.withSourceDirectories(sourceDirs).build();
 		log(launchConfig.getAttribute(PIT_TEST_CLASS, ""));
 		log(classPath.toString());
 		log(sourceDirs.get(0).toString());
 		super.launch(launchConfig, mode, launch, progress);
 		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateView(options.getReportDirectory()));
-		Display.getDefault().asyncExec(updater);
+		new Thread(updater).start();
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
@@ -16,13 +17,13 @@ public final class PITOptions {
 	private final File reportDir;
 	private final String classUnderTest;
 	private final List<String> classesToMutate;
-	private final File sourceDir;
+	private final List<File> sourceDirs;
 
 	private PITOptions(String classUnderTest, List<String> classesToMutate,
-			File sourceDir, File reportDir) {
+			List<File> sourceDirs, File reportDir) {
 		this.classUnderTest = classUnderTest;
 		this.classesToMutate = ImmutableList.copyOf(classesToMutate);
-		this.sourceDir = sourceDir;
+		this.sourceDirs = sourceDirs;
 		this.reportDir = reportDir;
 	}
 
@@ -30,54 +31,87 @@ public final class PITOptions {
 		return new File(reportDir.getPath());
 	}
 
-	public File getSourceDirectory() {
-		return new File(sourceDir.getPath());
+	public List<File> getSourceDirectories() {
+		return copyOf(sourceDirs);
 	}
 
 	public String[] toCLIArgs() {
 		List<String> args = Lists.newArrayList("--outputFormats", "HTML",
-				"--reportDir", reportDir.getPath(), "--sourceDirs",
-				sourceDir.getPath(), "--targetTests", classUnderTest,
+				"--reportDir", reportDir.getPath(), "--targetTests", classUnderTest,
 				"--targetClasses");
 		args.addAll(classpath());
+		args.add("--sourceDirs");
+		args.addAll(sourceDirs());
 		return args.toArray(new String[args.size()]);
 	}
 
-	private List<String> classpath() {
-		List<String> classpath = Lists.newArrayList();
-		int classes = classesToMutate.size();
-		for (int i = 0; i < classes; i++) {
-			String clazz = classesToMutate.get(i);
-			if (i != (classes - 1)) {
-				classpath.add(clazz + ",");
-			} else {
-				classpath.add(clazz);
-			}
-		}
-		return classpath;
+	private List<String> sourceDirs() {
+		return commaSeperate(fileAsStrings(sourceDirs));
 	}
 
+	private List<String> fileAsStrings(List<File> files) {
+		Builder<String> builder = ImmutableList.builder();
+		for (File file : files) {
+			builder.add(file.getPath());
+		}		
+		return builder.build();
+	}
+
+	private List<String> classpath() {
+		return commaSeperate(classesToMutate);
+	}
+
+	private List<String> commaSeperate(List<String> candidates) {
+		List<String> formattedCandidates = Lists.newArrayList();
+		int size = candidates.size();
+		for (int i = 0; i < size; i++) {
+			String candidate = candidates.get(i);
+			if (i != (size - 1)) {
+				formattedCandidates.add(candidate + ",");
+			} else {
+				formattedCandidates.add(candidate);
+			}
+		}
+		return formattedCandidates;
+	}
+
+	private static File copyOf(File sourceDir) {
+		return new File(sourceDir.getPath());
+	}
+
+	private static List<File> copyOf(List<File> sourceDirs) {
+		Builder<File> builder = ImmutableList.builder();
+		for (File file : sourceDirs) {
+			builder.add(copyOf(file));
+		}
+		return builder.build();
+	}
+	
 	public static final class PITOptionsBuilder {
 		private String classUnderTest = null;
 		private List<String> classesToMutate = ImmutableList.of();
 		private File reportDir = null;
-		private File sourceDir = null;
+		private List<File> sourceDirs = ImmutableList.of();
 
 		public PITOptionsBuilder withReportDirectory(File reportDir) {
-			this.reportDir = new File(reportDir.getPath());
+			this.reportDir = copyOf(reportDir);
 			return this;
 		}
 
 		public PITOptionsBuilder withSourceDirectory(File sourceDir) {
-			this.sourceDir = new File(sourceDir.getPath());
-			return this;
+			return withSourceDirectories(ImmutableList.of(copyOf(sourceDir)));
 		}
 
+		public PITOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
+			this.sourceDirs = copyOf(sourceDirs); 
+			return this;
+		}
+		
 		public PITOptions build() {
 			validateSourceDir();
 			validateTestClass();
 			initialiseReportDir();
-			return new PITOptions(classUnderTest, classesToMutate, sourceDir,
+			return new PITOptions(classUnderTest, classesToMutate, sourceDirs,
 					reportDir);
 		}
 
@@ -96,12 +130,14 @@ public final class PITOptions {
 		}
 
 		private void validateSourceDir() {
-			if (null == sourceDir) {
+			if (sourceDirs.isEmpty()) {
 				throw new PITLaunchException("Source directory not set.");
 			}
-			if (!sourceDir.exists()) {
-				throw new PITLaunchException("Directory does not exist: "
-						+ sourceDir);
+			for (File dir : sourceDirs) {
+				if (!dir.exists()) {
+					throw new PITLaunchException("Directory does not exist: "
+							+ dir);
+				}
 			}
 		}
 
