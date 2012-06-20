@@ -24,6 +24,7 @@ public class PITView extends ViewPart {
 			messageBox.setMessage("Browser cannot be initialized.");
 			messageBox.setText("Exit");
 			messageBox.open();
+			System.exit(-1);
 		}
 	}
 
