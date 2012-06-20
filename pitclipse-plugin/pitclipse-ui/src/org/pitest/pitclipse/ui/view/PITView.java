@@ -43,15 +43,20 @@ public class PITView extends ViewPart {
 	}
 
 	private File findResultFile(File reportDir) {
+		// Does this directory contain the file?
+		for (File file : reportDir.listFiles()) {
+			if (!file.isDirectory()) {
+				if ("index.html".equals(file.getName())) {
+					return file;
+				}
+			}
+		}
 		for (File file : reportDir.listFiles()) {
 			if (file.isDirectory()) {
 				File result = findResultFile(file);
 				if (null != result) {
 					return result;
 				}
-			}
-			if ("index.html".equals(file.getName())) {
-				return file;
 			}
 		}
 		return null;
