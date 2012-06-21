@@ -22,7 +22,5 @@ Bundle-ClassPath: lib/guava-11.0.2.jar,
  lib/bsh-2.0b4.jar,
  lib/hamcrest-core-1.1.jar,
  lib/jcommander-1.12.jar,
- lib/junit-4.9.jar,
  lib/snakeyaml-1.6.jar,
- lib/testng-6.1.1.jar,
  .
