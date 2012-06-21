@@ -144,7 +144,6 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
 				URI location = getProjectLocation(project);
-				log("Building source directories for project: " + projectName + " location: " + location);
 				IJavaProject javaProject = JavaCore.create(project);
 				IPackageFragmentRoot[] packageRoots = javaProject
 						.getPackageFragmentRoots();
@@ -175,6 +174,8 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 	public String getProgramArguments(ILaunchConfiguration launchConfig)
 			throws CoreException {
 		String pitArgs = null == options ? "" : options.toCLIArgsAsString();
+		pitArgs += " --verbose";
+		log("PIT Arguments: " + pitArgs);
 		return new StringBuilder(super.getProgramArguments(launchConfig))
 				.append(pitArgs).toString();
 	}
