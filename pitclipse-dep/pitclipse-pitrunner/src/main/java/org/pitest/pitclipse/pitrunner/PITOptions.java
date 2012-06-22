@@ -41,12 +41,17 @@ public final class PITOptions {
 				"--targetClasses");
 		args.addAll(classpath());
 		args.add("--sourceDirs");
-		args.addAll(sourceDirs());
+		args.add(sourceDirs());
 		return args.toArray(new String[args.size()]);
 	}
 
-	private List<String> sourceDirs() {
-		return commaSeperate(fileAsStrings(sourceDirs));
+	private String sourceDirs() {
+		StringBuilder result = new StringBuilder();
+		List<String> srcDirs = commaSeperate(fileAsStrings(sourceDirs));
+		for (String src : srcDirs) {
+			result.append(src);
+		}
+		return result.toString();
 	}
 
 	private List<String> fileAsStrings(List<File> files) {
@@ -65,7 +70,7 @@ public final class PITOptions {
 		List<String> formattedCandidates = Lists.newArrayList();
 		int size = candidates.size();
 		for (int i = 0; i < size; i++) {
-			String candidate = candidates.get(i);
+			String candidate = candidates.get(i).trim();
 			if (i != (size - 1)) {
 				formattedCandidates.add(candidate + ",");
 			} else {

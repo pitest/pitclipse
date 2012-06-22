@@ -156,13 +156,15 @@ public class PITOptionsTest {
 		}
 		args.add("--sourceDirs");
 		if (null != sourceDirs) {
+			String result = "";
 			for (int i = 0; i < sourceDirs.size(); i++) {
 				if (i == (sourceDirs.size() - 1)) {
-					args.add(sourceDirs.get(i).getPath());
+					result += sourceDirs.get(i).getPath();
 				} else {
-					args.add(sourceDirs.get(i).getPath() + ",");
+					result += sourceDirs.get(i).getPath() + ",";
 				}
 			}
+			args.add(result);
 		}
 		return args.toArray();
 	}
