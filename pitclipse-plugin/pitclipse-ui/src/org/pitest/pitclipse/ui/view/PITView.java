@@ -46,7 +46,7 @@ public class PITView extends ViewPart {
 		if (null != directory) {
 			for (File file : directory.listFiles()) {
 				if (file.isDirectory()) {
-					clearDown(directory);
+					clearDown(file);
 				}
 				file.delete();
 			}
