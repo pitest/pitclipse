@@ -48,7 +48,9 @@ public class PITView extends ViewPart {
 				if (file.isDirectory()) {
 					clearDown(file);
 				}
-				file.delete();
+				if (!file.delete()) {
+					file.deleteOnExit();
+				}
 			}
 		}
 	}

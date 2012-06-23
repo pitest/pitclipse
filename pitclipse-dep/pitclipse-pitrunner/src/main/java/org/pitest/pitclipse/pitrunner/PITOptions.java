@@ -127,10 +127,13 @@ public final class PITOptions {
 			if (!reportDir.exists()) {
 				try {
 					Files.createParentDirs(this.reportDir);
+					if (!reportDir.mkdir()) {
+						throw new PITLaunchException("Directory could not be created: "
+								+ reportDir);
+					}
 				} catch (IOException e) {
 					rethrow(reportDir, e);
 				}
-				this.reportDir.mkdir();
 			}
 		}
 
