@@ -11,11 +11,11 @@ import org.eclipse.ui.part.ViewPart;
 
 public class PITView extends ViewPart {
 
-	private Browser browser;
+	private Browser browser = null;
 	private File currentReportDirectory = null;
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public synchronized void createPartControl(Composite parent) {
 		try {
 			browser = new Browser(parent, SWT.NONE);
 		} catch (SWTError e) {
