@@ -7,7 +7,7 @@ import javax.annotation.concurrent.Immutable;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
 
 @Immutable
-public class PITResults {
+public final class PITResults {
 	//	Placeholder
 	private PITResults() {} ;
 	
