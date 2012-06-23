@@ -57,7 +57,7 @@ public class PITArgumentsTab extends JavaLaunchTab {
 	private void createProjectWidgets(Font font, Composite comp) {
 		GridData gd;
 		Label projectLabel = new Label(comp, SWT.NONE);
-		projectLabel.setText("Project:");
+		projectLabel.setText("Project to mutate:");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 1;
@@ -73,7 +73,7 @@ public class PITArgumentsTab extends JavaLaunchTab {
 
 	private void createTestClassWidgets(Font font, Composite comp) {
 		Label testClassLabel = new Label(comp, SWT.NONE);
-		testClassLabel.setText("Project to mutate:");
+		testClassLabel.setText("Test Class:");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 1;
