@@ -29,7 +29,7 @@ public final class UIUpdate implements Runnable {
 			try {
 				Thread.sleep(POLL_FREQUENCY);
 			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
