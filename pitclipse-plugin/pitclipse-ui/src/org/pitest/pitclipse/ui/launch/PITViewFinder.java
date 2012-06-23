@@ -12,6 +12,14 @@ import org.pitest.pitclipse.ui.view.PITView;
 
 public final class PITViewFinder {
 
+	private static final class MissingViewException extends RuntimeException {
+		private static final long serialVersionUID = 6672829886156086528L;
+
+		public MissingViewException(Exception e) {
+			super(e);
+		}
+	}
+
 	public PITView getView() {
 		final AtomicReference<PITView> viewRef = new AtomicReference<PITView>();
 		Display.getDefault().syncExec(new Runnable() {
@@ -24,7 +32,7 @@ public final class PITViewFinder {
 					activePage.activate(view);
 					viewRef.set(view);
 				} catch (PartInitException e) {
-					e.printStackTrace();
+					throw new MissingViewException(e);
 				}
 			}
 		});
