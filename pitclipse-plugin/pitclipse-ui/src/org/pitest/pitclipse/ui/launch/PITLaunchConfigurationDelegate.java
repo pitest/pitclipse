@@ -85,6 +85,7 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		List<String> newClasspath = ImmutableList.<String> builder()
 				.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
 				.addAll(PITActivator.getPITClasspath()).build();
+		log("Classpath: " + newClasspath);
 		return newClasspath.toArray(new String[newClasspath.size()]);
 	}
 
