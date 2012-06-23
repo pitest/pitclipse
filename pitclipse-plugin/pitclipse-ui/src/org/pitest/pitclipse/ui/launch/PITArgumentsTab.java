@@ -55,11 +55,9 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 	}
 
 	private void createProjectWidgets(Font font, Composite comp) {
-		GridData gd;
 		Label projectLabel = new Label(comp, SWT.NONE);
 		projectLabel.setText("Project to mutate:");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 1;
 		projectLabel.setLayoutData(gd);
 		projectLabel.setFont(font);
@@ -74,16 +72,15 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 	private void createTestClassWidgets(Font font, Composite comp) {
 		Label testClassLabel = new Label(comp, SWT.NONE);
 		testClassLabel.setText("Test Class:");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 1;
-		testClassLabel.setLayoutData(gd);
+		GridData labelGrid = new GridData(GridData.FILL_HORIZONTAL);
+		labelGrid.horizontalSpan = 1;
+		testClassLabel.setLayoutData(labelGrid);
 		testClassLabel.setFont(font);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		GridData textGrid = new GridData(GridData.FILL_HORIZONTAL);
+		textGrid.horizontalSpan = 3;
 		testClassText = new Text(comp, SWT.SINGLE | SWT.BORDER);
-		testClassText.setLayoutData(gd);
+		testClassText.setLayoutData(textGrid);
 		testClassText.addModifyListener(new UpdateOnModifyListener());
 	}
 
