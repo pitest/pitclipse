@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class PITArgumentsTab extends JavaLaunchTab {
+public final class PITArgumentsTab extends JavaLaunchTab {
 	private final class UpdateOnModifyListener implements ModifyListener {
 		public void modifyText(ModifyEvent evt) {
 			updateLaunchConfigurationDialog();
