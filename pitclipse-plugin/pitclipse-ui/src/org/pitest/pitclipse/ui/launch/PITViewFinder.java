@@ -15,8 +15,8 @@ public final class PITViewFinder {
 	private static final class ViewSearch implements Runnable {
 		private final AtomicReference<PITView> viewRef;
 
-		private ViewSearch(AtomicReference<PITView> viewRef) {
-			this.viewRef = viewRef;
+		private ViewSearch() {
+			this.viewRef = new AtomicReference<PITView>();
 		}
 
 		public void run() {
@@ -31,6 +31,10 @@ public final class PITViewFinder {
 				throw new MissingViewException(e);
 			}
 		}
+
+		public PITView getView() {
+			return viewRef.get();
+		}
 	}
 
 	private static final class MissingViewException extends RuntimeException {
@@ -42,8 +46,8 @@ public final class PITViewFinder {
 	}
 
 	public PITView getView() {
-		final AtomicReference<PITView> viewRef = new AtomicReference<PITView>();
-		Display.getDefault().syncExec(new ViewSearch(viewRef));
-		return viewRef.get();
+		ViewSearch viewSearch = new ViewSearch();
+		Display.getDefault().syncExec(viewSearch);
+		return viewSearch.getView();
 	}
 }
