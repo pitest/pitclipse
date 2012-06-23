@@ -16,8 +16,6 @@ public class PITResults {
 
 		public PITResults build() {
 			validateResultsFile();
-			System.out.println(resultFile.getPath());
-			//validateResultsFile
 			return new PITResults() ;
 		}
 		public PITResultsBuilder withXmlResults(File resultFile) {
