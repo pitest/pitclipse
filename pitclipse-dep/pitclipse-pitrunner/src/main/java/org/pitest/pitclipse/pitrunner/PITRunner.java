@@ -18,14 +18,14 @@ public class PITRunner {
 
 	private File findResultFile(File reportDir) {
 		for (File file : reportDir.listFiles()) {
+			if ("index.html".equals(file.getName())) {
+				return file;
+			}
 			if (file.isDirectory()) {
 				File result = findResultFile(file);
 				if (null != result) {
 					return result;
 				}
-			}
-			if ("mutations.xml".equals(file.getName())) {
-				return file;
 			}
 		}
 		return null;
