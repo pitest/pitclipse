@@ -1,19 +1,18 @@
 package org.pitest.pitclipse.pitrunner;
 
+import static org.testng.AssertJUnit.assertArrayEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
 import static java.lang.Integer.toHexString;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
 
@@ -33,7 +32,7 @@ public class PITOptionsTest {
 	private static final String TEST_CLASS2 = PITRunner.class.getCanonicalName();
 	private static final List<String> CLASS_PATH = ImmutableList.of(TEST_CLASS1, TEST_CLASS2);
 	
-	@Before
+	@BeforeMethod
 	public void setup() {
 		for (File dir : ImmutableList.of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
 			dir.mkdirs();
@@ -46,12 +45,12 @@ public class PITOptionsTest {
 		
 	}
 	
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void defaultOptionsThrowException() throws IOException {
 		new PITOptionsBuilder().build();
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void validSourceDirButNoTestClassThrowsException() throws IOException {
 		new PITOptionsBuilder().withSourceDirectory(testSrcDir).build();
 	}
@@ -69,12 +68,12 @@ public class PITOptionsTest {
 		assertEquals(expectedArgsAsString(reportDir, testSrcDir, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 	
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void sourceDirectoryDoesNotExist() throws IOException {
 		new PITOptionsBuilder().withSourceDirectory(randomDir()).withClassUnderTest(TEST_CLASS1).build();
 	}
 	
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
 		new PITOptionsBuilder().withSourceDirectories(ImmutableList.of(testSrcDir, randomDir())).withClassUnderTest(TEST_CLASS1).build();
 	}
@@ -108,13 +107,13 @@ public class PITOptionsTest {
 		assertEquals(expectedArgsAsString(expectedDir, testSrcDir, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void useInvalidReportDirectory() {
 		new PITOptionsBuilder().withReportDirectory(REALLY_BAD_PATH).withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1).
 				build();
 	}
 	
-	@Test(expected = PITLaunchException.class)
+	@Test(expectedExceptions = PITLaunchException.class)
 	public void useInvalidSourceDirectory() {
 		new PITOptionsBuilder().withSourceDirectory(REALLY_BAD_PATH).withClassUnderTest(TEST_CLASS1).
 				build();
