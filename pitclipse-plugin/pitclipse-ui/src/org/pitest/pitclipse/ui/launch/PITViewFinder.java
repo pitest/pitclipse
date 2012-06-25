@@ -11,6 +11,14 @@ import org.eclipse.ui.PlatformUI;
 import org.pitest.pitclipse.ui.view.PITView;
 
 public final class PITViewFinder {
+	
+	private static final class MissingViewException extends RuntimeException {
+		private static final long serialVersionUID = 6672829886156086528L;
+		
+		public MissingViewException(Exception e) {
+			super(e);
+		}
+	}
 
 	private static final class ViewSearch implements Runnable {
 		private final AtomicReference<PITView> viewRef;
@@ -34,14 +42,6 @@ public final class PITViewFinder {
 
 		public PITView getView() {
 			return viewRef.get();
-		}
-	}
-
-	private static final class MissingViewException extends RuntimeException {
-		private static final long serialVersionUID = 6672829886156086528L;
-
-		public MissingViewException(Exception e) {
-			super(e);
 		}
 	}
 
