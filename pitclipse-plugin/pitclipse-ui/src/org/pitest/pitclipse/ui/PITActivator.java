@@ -47,7 +47,7 @@ public class PITActivator extends AbstractUIPlugin {
 	 * )
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(BundleContext context) throws Exception { //NOPMD - Base class defines signature
 		super.start(context);
 		setActivator(this);
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
@@ -73,7 +73,7 @@ public class PITActivator extends AbstractUIPlugin {
 	 * )
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context) throws Exception { //NOPMD - Base class defines signature
 		setActivator(null);
 		setPITClasspath(ImmutableList.<String> of());
 		super.stop(context);
