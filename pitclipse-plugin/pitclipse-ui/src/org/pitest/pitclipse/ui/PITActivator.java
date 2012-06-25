@@ -49,7 +49,7 @@ public class PITActivator extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		setActivator(this);
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
 		Builder<String> builder = ImmutableList.builder();
@@ -61,6 +61,10 @@ public class PITActivator extends AbstractUIPlugin {
 		setPITClasspath(builder.build());
 	}
 
+	private static void setActivator(PITActivator pitActivator) {
+		plugin = pitActivator;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -70,7 +74,7 @@ public class PITActivator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
+		setActivator(null);
 		setPITClasspath(ImmutableList.<String> of());
 		super.stop(context);
 	}
