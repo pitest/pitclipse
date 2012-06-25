@@ -1,13 +1,11 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static org.testng.AssertJUnit.assertArrayEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeMethod;
 import static java.lang.Integer.toHexString;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -15,6 +13,9 @@ import java.util.Random;
 
 import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -145,13 +146,15 @@ public class PITOptionsTest {
 			String... classpath) {
 		List<String> args = Lists.newArrayList("--outputFormats", "HTML", "--reportDir", reportDir.getPath(), "--targetTests", classUnderTest, "--targetClasses");
 		if (null != classpath) {
+			String result = "";
 			for (int i = 0; i < classpath.length; i++) {
 				if (i == (classpath.length - 1)) {
-					args.add(classpath[i]);
+					result += classpath[i];
 				} else {
-					args.add(classpath[i] + ",");
+					result += classpath[i] + ",";
 				}
 			}
+			args.add(result);
 		}
 		args.add("--sourceDirs");
 		if (null != sourceDirs) {

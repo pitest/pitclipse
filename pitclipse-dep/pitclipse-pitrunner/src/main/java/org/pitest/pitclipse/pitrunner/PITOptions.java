@@ -38,20 +38,12 @@ public final class PITOptions {
 	public String[] toCLIArgs() {
 		List<String> args = Lists.newArrayList("--outputFormats", "HTML",
 				"--reportDir", reportDir.getPath(), "--targetTests", classUnderTest,
-				"--targetClasses");
-		args.addAll(classpath());
-		args.add("--sourceDirs");
-		args.add(sourceDirs());
+				"--targetClasses", classpath(), "--sourceDirs", sourceDirs());
 		return args.toArray(new String[args.size()]);
 	}
 
 	private String sourceDirs() {
-		StringBuilder result = new StringBuilder();
-		List<String> srcDirs = commaSeperate(fileAsStrings(sourceDirs));
-		for (String src : srcDirs) {
-			result.append(src);
-		}
-		return result.toString();
+		return concat(commaSeperate(fileAsStrings(sourceDirs)));
 	}
 
 	private List<String> fileAsStrings(List<File> files) {
@@ -62,10 +54,18 @@ public final class PITOptions {
 		return builder.build();
 	}
 
-	private List<String> classpath() {
-		return commaSeperate(classesToMutate);
+	private String classpath() {
+		return concat(commaSeperate(classesToMutate));
 	}
 
+	private String concat(List<String> entries) {
+		StringBuilder result = new StringBuilder();
+		for (String entry : entries) {
+			result.append(entry);
+		}
+		return result.toString();
+	}
+	
 	private List<String> commaSeperate(List<String> candidates) {
 		List<String> formattedCandidates = Lists.newArrayList();
 		int size = candidates.size();
