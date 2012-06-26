@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public final class PITArgumentsTab extends JavaLaunchTab {
+	private static final int NUMBER_OF_COLUMNS = 3;
+
 	private final class UpdateOnModifyListener implements ModifyListener {
 		public void modifyText(ModifyEvent evt) {
 			updateLaunchConfigurationDialog();
@@ -37,14 +39,11 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 
 	public void createControl(Composite parent) {
 		Font font = parent.getFont();
-
 		Composite comp = new Composite(parent, SWT.NONE);
 		setControl(comp);
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
-		// IJavaDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_MAIN_TAB);
 		GridLayout topLayout = new GridLayout();
 		topLayout.verticalSpacing = 0;
-		topLayout.numColumns = 3;
+		topLayout.numColumns = NUMBER_OF_COLUMNS;
 		comp.setLayout(topLayout);
 		comp.setFont(font);
 
@@ -63,7 +62,7 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 		projectLabel.setFont(font);
 		
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd.horizontalSpan = NUMBER_OF_COLUMNS;
 		projectText = new Text(comp, SWT.SINGLE | SWT.BORDER);
 		projectText.setLayoutData(gd);
 		projectText.addModifyListener(new UpdateOnModifyListener());
@@ -78,7 +77,7 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 		testClassLabel.setFont(font);
 
 		GridData textGrid = new GridData(GridData.FILL_HORIZONTAL);
-		textGrid.horizontalSpan = 3;
+		textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
 		testClassText = new Text(comp, SWT.SINGLE | SWT.BORDER);
 		testClassText.setLayoutData(textGrid);
 		testClassText.addModifyListener(new UpdateOnModifyListener());
