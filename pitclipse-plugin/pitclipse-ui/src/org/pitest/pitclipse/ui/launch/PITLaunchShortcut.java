@@ -23,6 +23,13 @@ import com.google.common.collect.ImmutableList.Builder;
 
 public class PITLaunchShortcut extends JavaLaunchShortcut {
 	
+	private static final class ShortcutCreationException extends RuntimeException {
+		private static final long serialVersionUID = 5417603423928953693L;
+		public ShortcutCreationException(CoreException exception) {
+			super(exception);
+		}
+	}
+
 	private static final String EMPTY_SELECTION_MSG = "Empty Selection";
 	private static final String EMPTY_EDITOR_MSG = "Empty Editor";
 	private static final String TYPE_SELECTION_TITLE = "Type Selection wtf??";
@@ -44,7 +51,7 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 			wc.setMappedResources(new IResource[] {type.getUnderlyingResource()});
 			config = wc.doSave();
 		} catch (CoreException exception) {
-			//swallowed	
+			throw new ShortcutCreationException(exception);	
 		} 
 		return config;
 	}
