@@ -8,6 +8,8 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -20,6 +22,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
@@ -32,10 +35,15 @@ import org.pitest.pitclipse.ui.view.PITView;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
+
 public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
 	private static final String PIT_REPORT_GENERATOR = MutationCoverageReport.class
 			.getCanonicalName();
+
+	private static final int PROJECT_IS_CLOSED = -1;
+
+	private static final int BAD_PROJECT = -2;
 
 	private static final class UpdateView implements Runnable {
 		private final File reportDirectory;
@@ -46,10 +54,13 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		}
 
 		public void run() {
-			PITView view = viewFinder.getView() ;
+			PITView view = viewFinder.getView();
 			view.update(reportDirectory);
 		}
 	}
+
+	private final ExecutorService executorService = Executors
+			.newSingleThreadExecutor();
 
 	private PITOptions options = null;
 
@@ -62,15 +73,51 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		List<File> sourceDirs = ImmutableList
 				.copyOf(getSourceDirsForProject(launchConfig.getAttribute(
 						PIT_PROJECT, "")));
-		options = new PITOptionsBuilder()
-				.withClassUnderTest(
-						launchConfig.getAttribute(PIT_TEST_CLASS, ""))
+		
+		String testClass = getTestClass(launchConfig);
+
+		options = new PITOptionsBuilder().withClassUnderTest(testClass)
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs).build();
 		super.launch(launchConfig, mode, launch, progress);
 		UIUpdate updater = new UIUpdate(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateView(options.getReportDirectory()));
-		new Thread(updater).start();
+		executorService.execute(updater);
+	}
+
+	private IJavaProject getProject(ILaunchConfiguration launchConfig) throws CoreException {
+		return getProject(launchConfig.getAttribute(PIT_PROJECT, ""));
+	}
+
+	private IJavaProject getProject(String projectName) throws CoreException {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		for (IProject project : root.getProjects()) {
+			if (projectName.equals(project.getName())) {
+				if (project.isOpen()) {
+					IJavaProject javaProject = JavaCore.create(project);
+					return javaProject;
+				} else {
+					abort("Project: " + projectName + "is closed.", null, PROJECT_IS_CLOSED);
+				}
+			}
+		}
+		abort("Project: " + projectName + "could not be found.", null, BAD_PROJECT);
+		return null; // Never reached
+	}
+
+	
+	private String getTestClass(ILaunchConfiguration launchConfig)
+			throws CoreException {
+		String testClass = launchConfig.getAttribute(PIT_TEST_CLASS, "");
+		if (testClass.length() > 0) {
+			IJavaProject javaProject = getProject(launchConfig);
+			IType type= javaProject.findType(testClass);
+			if (type != null && type.exists()) {
+				return testClass;
+			}
+		}
+		abort("Test: " + testClass + " could not be found.", null, BAD_PROJECT);
+		return null; // Never reached
 	}
 
 	@Override
@@ -144,8 +191,8 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
-				URI location = getProjectLocation(project);
 				IJavaProject javaProject = JavaCore.create(project);
+				URI location = getProjectLocation(project);
 				IPackageFragmentRoot[] packageRoots = javaProject
 						.getPackageFragmentRoots();
 
