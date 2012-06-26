@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.launch;
 
+import static org.pitest.pitclipse.ui.PITActivator.log;
 import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_CONFIGURATION_TYPE;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 			wc = configType.newInstance(null, launchManager.generateLaunchConfigurationName(type.getTypeQualifiedName('.')));
 			wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, fullyQualifiedName);
 			wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, projectName);
+			log("Creating new configuration for project: " + projectName + " class: " + fullyQualifiedName);
 			wc.setAttribute(PITClipseConstants.PIT_TEST_CLASS, fullyQualifiedName);
 			wc.setAttribute(PITClipseConstants.PIT_PROJECT, projectName);
 			wc.setMappedResources(new IResource[] {type.getUnderlyingResource()});
@@ -64,7 +66,7 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 	 * @return corresponding Java elements
 	 * @since 3.5
 	 */
-	protected List<IType> getJavaElements(Object[] objects) {
+	private List<IType> getJavaElements(Object[] objects) {
 		Builder<IType> builder = ImmutableList.builder();
 		for (Object object : objects) {
 			if (object instanceof IAdaptable) {
