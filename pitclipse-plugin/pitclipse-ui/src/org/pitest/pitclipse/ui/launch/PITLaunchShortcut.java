@@ -5,7 +5,6 @@ import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_CONFIGURATIO
 
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugPlugin;
@@ -18,6 +17,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaLaunchShortcut;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.operation.IRunnableContext;
+import org.pitest.pitclipse.ui.core.PITMigrationDelegate;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
@@ -33,7 +33,7 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 
 	private static final String EMPTY_SELECTION_MSG = "Empty Selection";
 	private static final String EMPTY_EDITOR_MSG = "Empty Editor";
-	private static final String TYPE_SELECTION_TITLE = "Type Selection wtf??";
+	private static final String TYPE_SELECTION_TITLE = "Choose a Type";
 
 	@Override
 	protected ILaunchConfiguration createConfiguration(IType type) {
@@ -48,9 +48,7 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 			wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, fullyQualifiedName);
 			wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, projectName);
 			log("Creating new configuration for project: " + projectName + " class: " + fullyQualifiedName);
-			wc.setAttribute(PITClipseConstants.PIT_TEST_CLASS, fullyQualifiedName);
-			wc.setAttribute(PITClipseConstants.PIT_PROJECT, projectName);
-			wc.setMappedResources(new IResource[] {type.getUnderlyingResource()});
+			PITMigrationDelegate.mapResources(wc);
 			config = wc.doSave();
 		} catch (CoreException exception) {
 			throw new ShortcutCreationException(exception);	
@@ -117,4 +115,6 @@ public class PITLaunchShortcut extends JavaLaunchShortcut {
 	protected String getTypeSelectionTitle() {
 		return TYPE_SELECTION_TITLE;
 	}
+	
+
 }

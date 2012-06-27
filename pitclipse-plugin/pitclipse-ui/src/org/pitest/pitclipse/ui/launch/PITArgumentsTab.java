@@ -1,12 +1,11 @@
 package org.pitest.pitclipse.ui.launch;
 
-import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_PROJECT;
-import static org.pitest.pitclipse.ui.launch.PITClipseConstants.PIT_TEST_CLASS;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaLaunchTab;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -16,6 +15,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.pitest.pitclipse.ui.core.PITMigrationDelegate;
 
 public final class PITArgumentsTab extends JavaLaunchTab {
 	private static final int NUMBER_OF_COLUMNS = 3;
@@ -32,9 +32,8 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration config) {
 		super.initializeFrom(config);
-		testClassText
-				.setText(getAttributeFromConfig(config, PIT_TEST_CLASS, ""));
-		projectText.setText(getAttributeFromConfig(config, PIT_PROJECT, ""));
+		testClassText.setText(getAttributeFromConfig(config, IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, ""));
+		projectText.setText(getAttributeFromConfig(config, IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""));
 	}
 
 	public void createControl(Composite parent) {
@@ -88,13 +87,22 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy workingCopy) {
-		workingCopy.setAttribute(PIT_TEST_CLASS, testClassText.getText());
-		workingCopy.setAttribute(PIT_PROJECT, projectText.getText());
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, projectText.getText().trim());
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, testClassText.getText().trim());
+		try {
+			PITMigrationDelegate.mapResources(workingCopy);
+		} catch (CoreException ce) {
+			setErrorMessage(ce.getStatus().getMessage());
+		}		
 	}
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
-		workingCopy.setAttribute(PIT_TEST_CLASS, "");
-		workingCopy.setAttribute(PIT_PROJECT, "");
+		IJavaElement javaElement = getContext();
+		if (javaElement != null) {
+			initializeJavaProject(javaElement, workingCopy);
+		} else {
+			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, "");
+		}
 	}
 
 	public String getAttributeFromConfig(ILaunchConfiguration config,
@@ -107,5 +115,7 @@ public final class PITArgumentsTab extends JavaLaunchTab {
 		}
 		return result;
 	}
+	
+	
 
 }
