@@ -13,6 +13,12 @@
     <name>Pitest.org</name>
     <url>http://pitest.org/</url>
   </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
   <properties>
     <springsource.osgi.url>http://repository.springsource.com/maven/bundles/external</springsource.osgi.url>
   </properties>
