@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
 import org.testng.annotations.AfterClass;
@@ -28,7 +29,15 @@ public class PITOptionsTest {
 	private final File testTmpDir = randomDir();
 	private final File testSrcDir = randomDir();
 	private final File anotherTestSrcDir = randomDir();
-	private static final File REALLY_BAD_PATH = new File("BADDRIVE:\\");
+	private static final File REALLY_BAD_PATH = getBadPath();
+
+	private static File getBadPath() {
+		if (SystemUtils.IS_OS_WINDOWS) {
+			return new File("BADDRIVE:\\");
+		}
+		return new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
+	}
+	
 	private static final String TEST_CLASS1 = PITOptionsTest.class.getCanonicalName();
 	private static final String TEST_CLASS2 = PITRunner.class.getCanonicalName();
 	private static final List<String> CLASS_PATH = ImmutableList.of(TEST_CLASS1, TEST_CLASS2);
