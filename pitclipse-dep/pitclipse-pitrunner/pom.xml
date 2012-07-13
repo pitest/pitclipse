@@ -11,7 +11,7 @@
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
   <properties>
-    <guava.version>11.0.1</guava.version>
+    <guava.version>12.0</guava.version>
     <junit.version>4.10</junit.version>
   </properties>
   <dependencies>
@@ -21,9 +21,15 @@
       <version>${pitest.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.googlecode.guava-osgi</groupId>
-      <artifactId>guava-osgi</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
       <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
