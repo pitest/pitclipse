@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -177,14 +178,19 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		IPackageFragmentRoot[] packageRoots = javaProject
 				.getPackageFragmentRoots();
 
-		File workspaceRoot = new File(location).getParentFile();
+		File projectRoot = new File(location);
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
 			if (!packageRoot.isArchive()) {
-				sourceDirBuilder.add(new File(workspaceRoot, packageRoot
-						.getPath().toString()));
+				File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
+				sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
 			}
 		}
 		return ImmutableList.copyOf(sourceDirBuilder.build());
+	}
+
+	private File removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
+		IPath newPath = packagePath.removeFirstSegments(1);
+		return newPath.toFile();
 	}
 
 	private URI getProjectLocation(IProject project) throws CoreException {
