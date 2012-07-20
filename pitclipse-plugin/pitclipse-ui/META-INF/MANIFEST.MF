@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse UI
 Bundle-SymbolicName: org.pitest.pitclipse-ui;singleton:=true
-Bundle-Version: 0.27.1.20120718-1852
+Bundle-Version: 0.28.0.qualifier
 Bundle-Activator: org.pitest.pitclipse.ui.PITActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
-Bundle-ClassPath: lib/pitclipse-pitrunner-0.27.1.20120718-1852.jar,
+Bundle-ClassPath: lib/pitclipse-pitrunner-0.28.0-SNAPSHOT.jar,
  lib/guava-11.0.2.jar,
  lib/pitest-0.27.jar,
  lib/jsr305-2.0.0.jar,
