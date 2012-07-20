@@ -6,7 +6,7 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.28.0-SNAPSHOT</version>
+    <version>0.27.1.20120718-1852</version>
   </parent>
   <artifactId>pitest-osgi</artifactId>
   <name>pitest-osgi</name>

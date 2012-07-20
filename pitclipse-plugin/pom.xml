@@ -4,7 +4,7 @@
   <parent>
     <artifactId>pitclipse</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.28.0-SNAPSHOT</version>
+    <version>0.27.1.20120718-1852</version>
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
