@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.core;
 
+import javax.annotation.concurrent.Immutable;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -13,8 +15,12 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
+@Immutable
 public final class PITMigrationDelegate {
 
+	private PITMigrationDelegate() {
+	}
+	
 	public static void mapResources(ILaunchConfigurationWorkingCopy config) throws CoreException {
 		IResource resource = getResource(config);
 		if (resource == null) {
