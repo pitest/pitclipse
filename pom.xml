@@ -20,13 +20,6 @@
     </license>
   </licenses>
   <properties>
-    <springsource.osgi.url>http://repository.springsource.com/maven/bundles/external</springsource.osgi.url>
-    <forceContextQualifier>20120718-1852</forceContextQualifier>
+    <!-- <forceContextQualifier>20120718-1852</forceContextQualifier> -->
   </properties>
-  <repositories>
-    <repository>
-      <id>com.springsource.repository.bundles.external</id>
-      <url>${springsource.osgi.url}</url>
-    </repository>
-  </repositories>
 </project> 

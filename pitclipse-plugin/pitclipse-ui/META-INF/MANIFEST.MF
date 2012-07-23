@@ -20,7 +20,6 @@ Bundle-ClassPath: lib/pitclipse-pitrunner-0.28.0-SNAPSHOT.jar,
  lib/pitest-0.27.jar,
  lib/jsr305-2.0.0.jar,
  lib/bsh-2.0b4.jar,
- lib/hamcrest-core-1.1.jar,
  lib/jcommander-1.12.jar,
  lib/snakeyaml-1.6.jar,
  .
