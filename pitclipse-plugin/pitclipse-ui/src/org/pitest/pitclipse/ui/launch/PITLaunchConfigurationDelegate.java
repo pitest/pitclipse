@@ -92,8 +92,7 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
 				if (project.isOpen()) {
-					IJavaProject javaProject = JavaCore.create(project);
-					return javaProject;
+					return JavaCore.create(project);
 				} else {
 					abort("Project: " + projectName + "is closed.", null,
 							PROJECT_IS_CLOSED);
