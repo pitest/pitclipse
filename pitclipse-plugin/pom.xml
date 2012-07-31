@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>pitclipse</artifactId>
@@ -16,13 +16,25 @@
   </modules>
   <properties>
     <tycho.version>0.15.0</tycho.version>
-    <p2.url>http://download.eclipse.org/releases/indigo</p2.url>
+    <indigo.p2.url>http://download.eclipse.org/releases/indigo</indigo.p2.url>
+    <swtBot.p2.url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/</swtBot.p2.url>
+    <guava.p2.url>http://guava-osgi.googlecode.com/svn/trunk/repository/</guava.p2.url>
   </properties>
   <repositories>
     <repository>
       <id>indigo</id>
       <layout>p2</layout>
-      <url>${p2.url}</url>
+      <url>${indigo.p2.url}</url>
+    </repository>
+    <repository>
+      <id>swtBot</id>
+      <layout>p2</layout>
+      <url>${swtBot.p2.url}</url>
+    </repository>
+    <repository>
+      <id>guava</id>
+      <layout>p2</layout>
+      <url>${guava.p2.url}</url>
     </repository>
   </repositories>
   <build>

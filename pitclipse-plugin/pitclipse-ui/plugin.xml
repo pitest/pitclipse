@@ -48,11 +48,5 @@
           id="org.pitest.pitclipse-ui.PITView"
           name="PIT View"
           restorable="true"/>
-<!--    <stickyView
-      closeable="true"
-      id="org.pitest.pitclipse-ui.stickyPITView"
-      location="RIGHT"
-      moveable="true">
-     </stickyView> -->
   </extension>
 </plugin>
