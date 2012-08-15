@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static junit.framework.Assert.fail;
+import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class PackageExplorer {
 	}
 
 	public void selectProject(String projectName) {
-		openProject(getProject(projectName));
+		getProject(projectName);
 	}
 
 	private void openProject(SWTBotTreeItem project) {
@@ -42,6 +43,7 @@ public class PackageExplorer {
 				.tree().getAllItems();
 		for (SWTBotTreeItem treeItem : treeItems) {
 			if (projectName.equals(treeItem.getText())) {
+				openProject(treeItem);
 				return treeItem;
 			}
 		}
@@ -52,8 +54,7 @@ public class PackageExplorer {
 	public boolean doesPackageExistInProject(String packageName,
 			String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
-		openProject(project);
-		return null != getPackageFromProject(project, packageName);
+		return isNotNull(getPackageFromProject(project, packageName));
 	}
 
 	private SWTBotTreeItem getPackageFromProject(SWTBotTreeItem project,
@@ -69,22 +70,31 @@ public class PackageExplorer {
 		return null;
 	}
 
+	private SWTBotTreeItem getClassFromPackage(SWTBotTreeItem pkg,
+			String className) {
+		String fileName = className + ".java";
+		for (SWTBotTreeItem clazz : pkg.getItems()) {
+			if (fileName.equals(clazz.getText())) {
+				return clazz;
+			}
+		}
+		return null;
+	}
+
+	public void selectClass(String className, String packageName,
+			String projectName) {
+		SWTBotTreeItem project = getProject(projectName);
+		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
+		pkg.select().expand();
+		SWTBotTreeItem clazz = getClassFromPackage(pkg, className);
+		clazz.select().expand();
+	}
+
 	public boolean doesClassExistInProject(String className,
 			String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
-		openProject(project);
 		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
-		pkg.select();
-		pkg.expand();
-		if (null != pkg) {
-			String fileName = className + ".java";
-			for (SWTBotTreeItem clazz : pkg.getItems()) {
-				if (fileName.equals(clazz.getText())) {
-					return true;
-				}
-			}
-		}
-		return false;
+		pkg.select().expand();
+		return isNotNull(getClassFromPackage(pkg, className));
 	}
-
 }

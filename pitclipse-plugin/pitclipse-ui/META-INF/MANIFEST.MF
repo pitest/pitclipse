@@ -23,3 +23,4 @@ Bundle-ClassPath: lib/pitclipse-pitrunner-0.28.0-SNAPSHOT.jar,
  lib/jcommander-1.12.jar,
  lib/snakeyaml-1.6.jar,
  .
+Export-Package: org.pitest.pitclipse.ui.extension

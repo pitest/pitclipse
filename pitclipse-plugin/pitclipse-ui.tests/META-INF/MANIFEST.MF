@@ -5,6 +5,9 @@ Bundle-SymbolicName: org.pitest.pitclipse-ui.tests;singleton:=true
 Bundle-Version: 0.28.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core;bundle-version="3.6.2",
  com.google.guava;bundle-version="11.0.1",
  org.pitest.pitclipse-ui;bundle-version="0.28.0",
  org.junit4;bundle-version="4.8.1",
@@ -14,3 +17,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swtbot.eclipse.core;bundle-version="2.0.5",
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.5",
  org.eclipse.swtbot.junit4_x;bundle-version="2.0.5"
+Import-Package: org.eclipse.core.runtime

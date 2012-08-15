@@ -10,7 +10,7 @@ public class ProjectSteps {
 
 	@When("the user creates a project with name $projectName")
 	public void createJavaProject(String projectName) {
-		INSTANCE.getfileMenu().newJavaProject(projectName);
+		INSTANCE.getFileMenu().newJavaProject(projectName);
 	}
 
 	@Then("the project $projectName exists in the workspace")

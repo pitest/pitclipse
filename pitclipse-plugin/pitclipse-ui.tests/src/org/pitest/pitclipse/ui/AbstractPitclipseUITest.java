@@ -8,13 +8,11 @@ import org.pitest.pitclipse.ui.behaviours.steps.SetupSteps;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public abstract class AbstractPitclipseUITest {
-
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		SWTBotPreferences.PLAYBACK_DELAY = 10;
+		SWTBotPreferences.PLAYBACK_DELAY = 20L;
 		SetupSteps setupSteps = new SetupSteps();
 		setupSteps.acknowledgeWelcome();
 		setupSteps.openJavaPerspective();
 	}
-
 }
