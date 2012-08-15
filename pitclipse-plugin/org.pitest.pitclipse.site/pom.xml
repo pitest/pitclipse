@@ -8,7 +8,7 @@
  <!--  <packaging>eclipse-update-site</packaging> -->
   <parent>
     <groupId>org.pitest</groupId>
-    <version>0.27.1.20120718-1852</version>
+    <version>0.28.0.20120815-0702</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <dependencies>
