@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
@@ -47,7 +48,9 @@ public class PITActivator extends AbstractUIPlugin {
 	 * )
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception { //NOPMD - Base class defines signature
+	public void start(BundleContext context) throws Exception { // NOPMD - Base
+																// class defines
+																// signature
 		super.start(context);
 		setActivator(this);
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
@@ -55,10 +58,22 @@ public class PITActivator extends AbstractUIPlugin {
 		Builder<String> builder = ImmutableList.builder();
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
-			URI fileUri = FileLocator.toFileURL(jar).toURI();
-			builder.add(new File(fileUri).getCanonicalPath());
+
+			URI fileUri = locateAndEscapeUrl(jar).toURI();
+			File jarFile = new File(fileUri);
+			builder.add(jarFile.getCanonicalPath());
 		}
 		setPITClasspath(builder.build());
+	}
+
+	private URL locateAndEscapeUrl(URL url) throws IOException {
+		// Nasty hack thanks to the following 6 year old bug in Eclipse
+		// https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096
+		// Astonishingly, the reason given for not fixing is that many plugins
+		// expect invalid Urls so would be broken!!!
+		URL unescapedUrl = FileLocator.toFileURL(url);
+		String escaped = unescapedUrl.getPath().replace(" ", "%20");
+		return new URL("file", "", escaped);
 	}
 
 	private static void setActivator(PITActivator pitActivator) {
@@ -73,7 +88,9 @@ public class PITActivator extends AbstractUIPlugin {
 	 * )
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception { //NOPMD - Base class defines signature
+	public void stop(BundleContext context) throws Exception { // NOPMD - Base
+																// class defines
+																// signature
 		setActivator(null);
 		setPITClasspath(ImmutableList.<String> of());
 		super.stop(context);
@@ -111,8 +128,9 @@ public class PITActivator extends AbstractUIPlugin {
 	public static void warn(String msg, Exception e) {
 		log(Status.WARNING, msg, e);
 	}
-	
+
 	private static void log(int status, String msg, Exception e) {
-		getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, e));
+		getDefault().getLog().log(
+				new Status(status, PLUGIN_ID, Status.OK, msg, e));
 	}
 }

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.28.0.20120815-0702</version>
+  <version>0.28.1.20120816-1717</version>
   <packaging>pom</packaging>
   <modules>
     <module>pitclipse-dep</module>
@@ -21,7 +21,7 @@
   </licenses>
   <properties>
     <springsource.osgi.url>http://repository.springsource.com/maven/bundles/external</springsource.osgi.url>
-    <forceContextQualifier>20120718-1852</forceContextQualifier>
+    <forceContextQualifier>20120816-1717</forceContextQualifier>
   </properties>
   <repositories>
     <repository>
