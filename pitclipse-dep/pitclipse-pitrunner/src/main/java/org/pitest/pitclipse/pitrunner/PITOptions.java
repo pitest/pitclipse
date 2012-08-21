@@ -36,9 +36,10 @@ public final class PITOptions {
 	}
 
 	public String[] toCLIArgs() {
-		List<String> args = Lists.newArrayList("--outputFormats", "HTML",
-				"--reportDir", reportDir.getPath(), "--targetTests", classUnderTest,
-				"--targetClasses", classpath(), "--sourceDirs", sourceDirs());
+		List<String> args = ImmutableList.of("--failWhenNoMutations", "false",
+				"--outputFormats", "HTML", "--reportDir", reportDir.getPath(),
+				"--targetTests", classUnderTest, "--targetClasses",
+				classpath(), "--sourceDirs", sourceDirs());
 		return args.toArray(new String[args.size()]);
 	}
 
@@ -50,7 +51,7 @@ public final class PITOptions {
 		Builder<String> builder = ImmutableList.builder();
 		for (File file : files) {
 			builder.add(file.getPath());
-		}		
+		}
 		return builder.build();
 	}
 
@@ -65,13 +66,13 @@ public final class PITOptions {
 		}
 		return result.toString();
 	}
-	
+
 	private List<String> commaSeperate(List<String> candidates) {
 		List<String> formattedCandidates = Lists.newArrayList();
 		int size = candidates.size();
 		for (int i = 0; i < size; i++) {
 			String candidate = candidates.get(i).trim();
-			if (i != (size - 1)) {
+			if (i != size - 1) {
 				formattedCandidates.add(candidate + ",");
 			} else {
 				formattedCandidates.add(candidate);
@@ -91,7 +92,7 @@ public final class PITOptions {
 		}
 		return builder.build();
 	}
-	
+
 	public static final class PITOptionsBuilder {
 		private String classUnderTest = null;
 		private List<String> classesToMutate = ImmutableList.of();
@@ -108,10 +109,10 @@ public final class PITOptions {
 		}
 
 		public PITOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
-			this.sourceDirs = copyOf(sourceDirs); 
+			this.sourceDirs = copyOf(sourceDirs);
 			return this;
 		}
-		
+
 		public PITOptions build() {
 			validateSourceDir();
 			validateTestClass();
@@ -126,10 +127,10 @@ public final class PITOptions {
 			}
 			if (!reportDir.exists()) {
 				try {
-					Files.createParentDirs(this.reportDir);
+					Files.createParentDirs(reportDir);
 					if (!reportDir.mkdir()) {
-						throw new PITLaunchException("Directory could not be created: "
-								+ reportDir);
+						throw new PITLaunchException(
+								"Directory could not be created: " + reportDir);
 					}
 				} catch (IOException e) {
 					rethrow(reportDir, e);

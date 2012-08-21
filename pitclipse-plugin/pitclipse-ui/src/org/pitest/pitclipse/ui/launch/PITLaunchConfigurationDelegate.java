@@ -12,8 +12,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaElement;
@@ -29,6 +31,8 @@ import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.PITOptions;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
 import org.pitest.pitclipse.ui.PITActivator;
+import org.pitest.pitclipse.ui.extension.PitResultComponent;
+import org.pitest.pitclipse.ui.extension.handler.ExtensionPointHandler;
 import org.pitest.pitclipse.ui.view.PITView;
 
 import com.google.common.collect.ImmutableList;
@@ -55,6 +59,11 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		public void run() {
 			PITView view = viewFinder.getView();
 			view.update(reportDirectory);
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			PitResultComponent results = new PitResultComponent(
+					view.getBrowser(), view.getReportFile().toURI());
+			new ExtensionPointHandler<PitResultComponent>().execute(registry,
+					results);
 		}
 	}
 
@@ -92,8 +101,7 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		for (IProject project : root.getProjects()) {
 			if (projectName.equals(project.getName())) {
 				if (project.isOpen()) {
-					IJavaProject javaProject = JavaCore.create(project);
-					return javaProject;
+					return JavaCore.create(project);
 				} else {
 					abort("Project: " + projectName + "is closed.", null,
 							PROJECT_IS_CLOSED);
@@ -181,14 +189,17 @@ public class PITLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		File projectRoot = new File(location);
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
 			if (!packageRoot.isArchive()) {
-				File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
-				sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
+				File packagePath = removeProjectFromPackagePath(javaProject,
+						packageRoot.getPath());
+				sourceDirBuilder.add(new File(projectRoot, packagePath
+						.toString()));
 			}
 		}
 		return ImmutableList.copyOf(sourceDirBuilder.build());
 	}
 
-	private File removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
+	private File removeProjectFromPackagePath(IJavaProject javaProject,
+			IPath packagePath) {
 		IPath newPath = packagePath.removeFirstSegments(1);
 		return newPath.toFile();
 	}

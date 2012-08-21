@@ -2,11 +2,15 @@
 <feature
       id="org.pitest.pitclipse.feature"
       label="Pitclipse"
-      version="0.28.1.20120816-1717">
+      version="0.28.2.qualifier">
 
    <description url="http://pitest.org">
       PITest Eclipse plugin
    </description>
+
+   <includes
+         id="com.google.guava.runtime.feature"
+         version="0.0.0"/>
 
    <plugin
          id="org.pitest.pitclipse-ui"

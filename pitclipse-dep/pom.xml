@@ -5,13 +5,13 @@
   <parent>
     <artifactId>pitclipse</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.28.1.20120816-1717</version>
+    <version>0.28.2-SNAPSHOT</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
   <properties>
-    <pitest.version>0.28</pitest.version>
+    <pitest.version>0.27</pitest.version>
   </properties>
   <modules>
     

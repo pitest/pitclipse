@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.28.1.20120816-1717</version>
+  <version>0.28.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>pitclipse-dep</module>
@@ -20,13 +21,7 @@
     </license>
   </licenses>
   <properties>
-    <springsource.osgi.url>http://repository.springsource.com/maven/bundles/external</springsource.osgi.url>
-    <forceContextQualifier>20120816-1717</forceContextQualifier>
+    <guava.version>11.0.1</guava.version>
+    <!-- <forceContextQualifier>20120718-1852</forceContextQualifier> -->
   </properties>
-  <repositories>
-    <repository>
-      <id>com.springsource.repository.bundles.external</id>
-      <url>${springsource.osgi.url}</url>
-    </repository>
-  </repositories>
 </project> 

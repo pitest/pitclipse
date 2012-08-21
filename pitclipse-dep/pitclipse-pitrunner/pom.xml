@@ -6,12 +6,11 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.28.1.20120816-1717</version>
+    <version>0.28.2-SNAPSHOT</version>
   </parent>
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
   <properties>
-    <guava.version>12.0</guava.version>
     <junit.version>4.10</junit.version>
   </properties>
   <dependencies>
@@ -19,6 +18,16 @@
       <groupId>org.pitest</groupId>
       <artifactId>pitest</artifactId>
       <version>${pitest.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

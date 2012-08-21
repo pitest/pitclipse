@@ -13,6 +13,7 @@ public class PITView extends ViewPart {
 
 	private Browser browser = null;
 	private File currentReportDirectory = null;
+	private File reportFile;
 
 	@Override
 	public synchronized void createPartControl(Composite parent) {
@@ -34,7 +35,7 @@ public class PITView extends ViewPart {
 	public synchronized void update(File result) {
 		clearDown(currentReportDirectory);
 		currentReportDirectory = new File(result.toURI());
-		File reportFile = findResultFile(currentReportDirectory);
+		reportFile = findResultFile(currentReportDirectory);
 		if (reportFile == null) {
 			browser.setText("<html/>");
 		} else {
@@ -71,6 +72,14 @@ public class PITView extends ViewPart {
 			}
 		}
 		return null;
+	}
+
+	public synchronized File getReportFile() {
+		return reportFile;
+	}
+
+	public Browser getBrowser() {
+		return browser;
 	}
 
 }
