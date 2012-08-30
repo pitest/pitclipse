@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.ui.swtbot;
 
-
 public class PitResultsView {
 
 	private final double totalCoverage;
@@ -24,6 +23,13 @@ public class PitResultsView {
 
 	public double getTotalCoverage() {
 		return totalCoverage;
+	}
+
+	@Override
+	public String toString() {
+		return "PitResultsView [totalCoverage=" + totalCoverage
+				+ ", mutationCoverage=" + mutationCoverage + ", classesTested="
+				+ classesTested + "]";
 	}
 
 	public static final class Builder {

@@ -125,12 +125,12 @@ public class PITActivator extends AbstractUIPlugin {
 		warn(msg, null);
 	}
 
-	public static void warn(String msg, Exception e) {
-		log(Status.WARNING, msg, e);
+	public static void warn(String msg, Throwable t) {
+		log(Status.WARNING, msg, t);
 	}
 
-	private static void log(int status, String msg, Exception e) {
+	private static void log(int status, String msg, Throwable t) {
 		getDefault().getLog().log(
-				new Status(status, PLUGIN_ID, Status.OK, msg, e));
+				new Status(status, PLUGIN_ID, Status.OK, msg, t));
 	}
 }

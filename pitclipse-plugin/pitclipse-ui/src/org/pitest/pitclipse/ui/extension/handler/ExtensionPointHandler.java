@@ -1,5 +1,8 @@
 package org.pitest.pitclipse.ui.extension.handler;
 
+import static org.pitest.pitclipse.ui.PITActivator.log;
+import static org.pitest.pitclipse.ui.PITActivator.warn;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -33,7 +36,7 @@ public class ExtensionPointHandler<T> {
 				.getConfigurationElementsFor(EXTENSION_POINT_ID);
 		try {
 			for (IConfigurationElement e : config) {
-				System.out.println("Evaluating extension");
+				log("Evaluating extension: " + e.getName());
 				final Object o = e.createExecutableExtension("class");
 				if (o instanceof ResultNotifier) {
 					@SuppressWarnings("unchecked")
@@ -49,8 +52,7 @@ public class ExtensionPointHandler<T> {
 	private <U> void executeExtension(final Runnable extension) {
 		ISafeRunnable runnable = new ISafeRunnable() {
 			public void handleException(Throwable e) {
-				System.out.println("Exception in client");
-				e.printStackTrace();
+				warn("Exception in client", e);
 			}
 
 			public void run() throws Exception {

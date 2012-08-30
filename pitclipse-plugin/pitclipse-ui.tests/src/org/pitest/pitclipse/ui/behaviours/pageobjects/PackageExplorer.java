@@ -62,7 +62,8 @@ public class PackageExplorer {
 		for (SWTBotTreeItem srcDir : project.getItems()) {
 			srcDir.expand();
 			for (SWTBotTreeItem pkg : srcDir.getItems()) {
-				if (packageName.equals(pkg.getText())) {
+				String text = pkg.getText();
+				if (packageName.equals(text)) {
 					return pkg;
 				}
 			}
@@ -96,5 +97,15 @@ public class PackageExplorer {
 		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
 		pkg.select().expand();
 		return isNotNull(getClassFromPackage(pkg, className));
+	}
+
+	public void openClass(ClassContext context) {
+		SWTBotTreeItem project = getProject(context.getProjectName());
+		SWTBotTreeItem pkg = getPackageFromProject(project,
+				context.getPackageName());
+		pkg.select().expand();
+		SWTBotTreeItem clazz = getClassFromPackage(pkg, context.getClassName());
+		clazz.select().expand();
+		clazz.doubleClick();
 	}
 }

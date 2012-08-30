@@ -8,6 +8,14 @@
       PITest Eclipse plugin
    </description>
 
+   <copyright url="http://www.apache.org/licenses/LICENSE-2.0.txt">
+      Copyright (c) 2012 PITest.org
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
    <includes
          id="com.google.guava.runtime.feature"
          version="0.0.0"/>

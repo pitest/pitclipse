@@ -40,7 +40,7 @@ public class FileMenu {
 		try {
 			bot.menu(FILE).menu(NEW).menu(JUNIT_TEST_CASE).click();
 			newTestWizard.createClass(context.getPackageName(),
-					context.getTestClassName());
+					context.getClassName());
 		} catch (WidgetNotFoundException e) {
 			safeSleep(60000L);
 		}
