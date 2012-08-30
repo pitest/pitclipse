@@ -1,9 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 
 public class FileMenu {
 
@@ -37,13 +34,8 @@ public class FileMenu {
 	}
 
 	public void createJUnitTest(TestClassContext context) {
-		try {
-			bot.menu(FILE).menu(NEW).menu(JUNIT_TEST_CASE).click();
-			newTestWizard.createClass(context.getPackageName(),
-					context.getClassName());
-		} catch (WidgetNotFoundException e) {
-			safeSleep(60000L);
-		}
+		bot.menu(FILE).menu(NEW).menu(JUNIT_TEST_CASE).click();
+		newTestWizard.createClass(context);
 	}
 
 	public void saveAll() {

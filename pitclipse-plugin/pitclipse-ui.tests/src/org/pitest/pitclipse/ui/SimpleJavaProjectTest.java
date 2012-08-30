@@ -14,11 +14,11 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 			.builder().withProject(PROJECT_NAME).withPackage(PACKAGE_NAME)
 			.withClass("Foo").build();
 	private static final String NL = System.getProperty("line.separator");
-	/*
-	 * private static final TestClassMetaData BAR_META_DATA = TestClassMetaData
-	 * .builder().withProject(PROJECT_NAME).withPackage(PACKAGE_NAME)
-	 * .withClass("Bar").build();
-	 */
+
+	private static final TestClassMetaData BAR_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME).withPackage(PACKAGE_NAME)
+			.withClass("Bar").build();
+
 	private final ProjectSteps projectSteps = new ProjectSteps();
 	private final ClassSteps classSteps = new ClassSteps();
 	private final PitclipseSteps pitSteps = new PitclipseSteps();
@@ -92,6 +92,24 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 				FOO_META_DATA.getPackageName(),
 				FOO_META_DATA.getTestClassName());
 		pitSteps.coverageReportGenerated(1, 100, 100);
+
+		// Scenario: Create class Bar & it's Test
+		classSteps.createClass(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(), BAR_META_DATA.getClassName());
+		classSteps.verifyPackageExists(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName());
+		classSteps.verifyClassExists(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(), BAR_META_DATA.getClassName());
+		classSteps.createTestClass(FOO_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(),
+				BAR_META_DATA.getTestClassName());
+		classSteps.verifyClassExists(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(),
+				BAR_META_DATA.getTestClassName());
+		pitSteps.runTest(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(),
+				BAR_META_DATA.getTestClassName());
+		pitSteps.coverageReportGenerated(1, 0, 0);
 
 	}
 
