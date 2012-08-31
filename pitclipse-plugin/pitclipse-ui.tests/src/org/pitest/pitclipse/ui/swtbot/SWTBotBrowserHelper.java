@@ -7,8 +7,6 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 
 public class SWTBotBrowserHelper {
 
@@ -21,11 +19,6 @@ public class SWTBotBrowserHelper {
 
 		public Browser run() {
 			if (isPitView()) {
-				IViewReference viewRef = view.getReference();
-				IWorkbenchPage page = viewRef.getPage();
-				IWorkbenchPart part = viewRef.getPart(true);
-
-				System.out.println("GUIUG");
 			}
 			return null;
 		}

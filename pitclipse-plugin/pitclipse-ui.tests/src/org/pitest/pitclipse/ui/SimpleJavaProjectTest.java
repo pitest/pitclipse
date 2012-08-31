@@ -51,7 +51,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		classSteps.selectTestClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
 				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
-		classSteps.createTestCase("@Test" + NL + "public void testCase1() {"
+		classSteps.createTestCase("@Test" + NL + "public void fooTest1() {"
 				+ NL + "Foo foo = new Foo();" + NL + "}");
 		pitSteps.runTest(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
@@ -73,7 +73,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 				FOO_META_DATA.getPackageName(),
 				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
 		classSteps
-				.createTestCase("@Test" + NL + "public void testCase2() {" + NL
+				.createTestCase("@Test" + NL + "public void fooTest2() {" + NL
 						+ "Foo foo = new Foo();" + NL + "foo.doFoo(1);" + NL
 						+ "}");
 		pitSteps.runTest(FOO_META_DATA.getProjectName(),
@@ -85,7 +85,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		classSteps.selectTestClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
 				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
-		classSteps.createTestCase("@Test" + NL + "public void testCase3() {"
+		classSteps.createTestCase("@Test" + NL + "public void fooTest3() {"
 				+ NL + "Foo foo = new Foo();" + NL
 				+ "org.junit.Assert.assertEquals(2, foo.doFoo(1));" + NL + "}");
 		pitSteps.runTest(FOO_META_DATA.getProjectName(),
@@ -110,6 +110,22 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 				BAR_META_DATA.getPackageName(),
 				BAR_META_DATA.getTestClassName());
 		pitSteps.coverageReportGenerated(1, 0, 0);
+
+		// Scenario: Add a method doBar to class Bar and it's test
+		classSteps.selectClass(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(), BAR_META_DATA.getClassName());
+		classSteps.createMethod("public int doBar(int i) {" + NL
+				+ "return i - 1;" + NL + "}");
+		classSteps.selectTestClass(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(),
+				BAR_META_DATA.getTestClassName(), BAR_META_DATA.getClassName());
+		classSteps.createTestCase("@Test" + NL + "public void barTestCase1() {"
+				+ NL + "Bar bar = new Bar();" + NL
+				+ "org.junit.Assert.assertEquals(0, bar.doBar(1));" + NL + "}");
+		pitSteps.runTest(BAR_META_DATA.getProjectName(),
+				BAR_META_DATA.getPackageName(),
+				BAR_META_DATA.getTestClassName());
+		pitSteps.coverageReportGenerated(2, 50, 50);
 
 	}
 
