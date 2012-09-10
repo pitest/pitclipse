@@ -48,4 +48,8 @@ public class NewTestWizard {
 		}
 	}
 
+	public void resetProject(String projectName) {
+		projectsWithJunit.remove(projectName);
+	}
+
 }

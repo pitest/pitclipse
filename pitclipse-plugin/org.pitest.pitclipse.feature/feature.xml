@@ -21,7 +21,14 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.pitest.pitclipse-ui"
+         id="org.pitest.pitclipse.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.pitest.pitclipse.core"
          download-size="0"
          install-size="0"
          version="0.0.0"

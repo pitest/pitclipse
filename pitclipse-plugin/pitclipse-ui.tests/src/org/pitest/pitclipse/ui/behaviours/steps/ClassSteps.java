@@ -65,6 +65,7 @@ public final class ClassSteps {
 		INSTANCE.getPackageExplorer().openClass(testClassContext);
 		INSTANCE.getAbstractSyntaxTree().addTestMethod(testClassContext);
 		INSTANCE.getSourceMenu().organizeImports();
+		INSTANCE.getSourceMenu().format();
 		INSTANCE.getFileMenu().saveAll();
 		INSTANCE.getBuildProgress().waitForBuild();
 	}
@@ -96,7 +97,34 @@ public final class ClassSteps {
 		INSTANCE.getPackageExplorer().openClass(concreteClassContext);
 		INSTANCE.getAbstractSyntaxTree().addMethod(concreteClassContext);
 		INSTANCE.getSourceMenu().organizeImports();
+		INSTANCE.getSourceMenu().format();
 		INSTANCE.getFileMenu().saveAll();
+		INSTANCE.getBuildProgress().waitForBuild();
+	}
+
+	@When("the class is renamed to $newClassName")
+	public void renameClass(String newClassName) {
+		INSTANCE.getBuildProgress().listenForBuild();
+		INSTANCE.getPackageExplorer().selectClass(
+				concreteClassContext.getClassName(),
+				concreteClassContext.getPackageName(),
+				concreteClassContext.getProjectName());
+		INSTANCE.getRefactorMenu().renameClass(newClassName);
+		INSTANCE.getBuildProgress().waitForBuild();
+	}
+
+	@Given("the package $packageName in project $projectName is selected")
+	public void selectPackage(String projectName, String packageName) {
+		concreteClassContext = new ConcreteClassContext.Builder()
+				.withProjectName(projectName).withPackageName(packageName)
+				.build();
+	}
+
+	@When("the package is renamed to $packageName")
+	public void renamePackage(String packageName) {
+		INSTANCE.getBuildProgress().listenForBuild();
+		INSTANCE.getPackageExplorer().selectPackage(concreteClassContext);
+		INSTANCE.getRefactorMenu().renamePackage(packageName);
 		INSTANCE.getBuildProgress().waitForBuild();
 	}
 

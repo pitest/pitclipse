@@ -100,12 +100,19 @@ public class PackageExplorer {
 	}
 
 	public void openClass(ClassContext context) {
-		SWTBotTreeItem project = getProject(context.getProjectName());
-		SWTBotTreeItem pkg = getPackageFromProject(project,
-				context.getPackageName());
+		SWTBotTreeItem pkg = getPackage(context);
 		pkg.select().expand();
 		SWTBotTreeItem clazz = getClassFromPackage(pkg, context.getClassName());
 		clazz.select().expand();
 		clazz.doubleClick();
+	}
+
+	public void selectPackage(ClassContext context) {
+		getPackage(context).select();
+	}
+
+	private SWTBotTreeItem getPackage(ClassContext context) {
+		SWTBotTreeItem project = getProject(context.getProjectName());
+		return getPackageFromProject(project, context.getPackageName());
 	}
 }

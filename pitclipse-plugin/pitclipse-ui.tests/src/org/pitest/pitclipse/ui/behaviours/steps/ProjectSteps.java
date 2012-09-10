@@ -3,6 +3,7 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import static junit.framework.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
+import org.pitest.pitclipse.ui.behaviours.Given;
 import org.pitest.pitclipse.ui.behaviours.Then;
 import org.pitest.pitclipse.ui.behaviours.When;
 
@@ -25,4 +26,12 @@ public class ProjectSteps {
 		fail("Project: " + projectName + " not found.");
 	}
 
+	@Given("an empty workspace")
+	public void deleteAllProjects() {
+		for (String project : INSTANCE.getPackageExplorer()
+				.getProjectsInWorkspace()) {
+			INSTANCE.getAbstractSyntaxTree().deleteProject(project);
+			INSTANCE.getFileMenu().resetProject(project);
+		}
+	}
 }

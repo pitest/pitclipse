@@ -14,6 +14,7 @@ public enum PageObjects {
 	private final BuildProgress buildProgress;
 	private final AbstractSyntaxTree abstractSyntaxTree;
 	private final SourceMenu sourceMenu;
+	private final RefactorMenu refactorMenu;
 
 	private PageObjects() {
 		SWTWorkbenchBot bot = new SWTWorkbenchBot();
@@ -26,6 +27,7 @@ public enum PageObjects {
 		buildProgress = new BuildProgress(bot);
 		abstractSyntaxTree = new AbstractSyntaxTree();
 		sourceMenu = new SourceMenu(bot);
+		refactorMenu = new RefactorMenu(bot);
 	}
 
 	public FileMenu getFileMenu() {
@@ -62,5 +64,9 @@ public enum PageObjects {
 
 	public SourceMenu getSourceMenu() {
 		return sourceMenu;
+	}
+
+	public RefactorMenu getRefactorMenu() {
+		return refactorMenu;
 	}
 }

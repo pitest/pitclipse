@@ -4,13 +4,18 @@ import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.ui.behaviours.steps.ProjectSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.SetupSteps;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public abstract class AbstractPitclipseUITest {
+
+	private final ProjectSteps projectSteps = new ProjectSteps();
+
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		SWTBotPreferences.PLAYBACK_DELAY = 40L;
@@ -24,5 +29,10 @@ public abstract class AbstractPitclipseUITest {
 		// Sometimes SWTBot spawned eclipse gets it's knickers in a twist
 		// Hopefully a timing issue...
 		safeSleep(1000);
+	}
+
+	@After
+	public void cleanUp() {
+		projectSteps.deleteAllProjects();
 	}
 }

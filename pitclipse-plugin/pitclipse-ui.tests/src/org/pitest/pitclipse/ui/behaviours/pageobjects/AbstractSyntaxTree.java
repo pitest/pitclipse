@@ -2,6 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
@@ -54,6 +55,17 @@ public class AbstractSyntaxTree {
 			NullProgressMonitor progressMonitor = new NullProgressMonitor();
 			type.createMethod(context.getMethod(), null, false, progressMonitor);
 		} catch (JavaModelException e) {
+			throw new StepException(e);
+		}
+	}
+
+	public void deleteProject(String projectName) {
+		NullProgressMonitor progressMonitor = new NullProgressMonitor();
+		IProject project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(projectName);
+		try {
+			project.delete(true, progressMonitor);
+		} catch (CoreException e) {
 			throw new StepException(e);
 		}
 	}

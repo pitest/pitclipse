@@ -10,7 +10,8 @@
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>pitclipse-ui</module>
+    <module>org.pitest.pitclipse.core</module>
+    <module>org.pitest.pitclipse.ui</module>
     <module>org.pitest.pitclipse.feature</module>
     <module>org.pitest.pitclipse.site</module>
   </modules>

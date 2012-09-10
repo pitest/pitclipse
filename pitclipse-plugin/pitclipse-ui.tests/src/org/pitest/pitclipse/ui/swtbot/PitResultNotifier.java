@@ -1,29 +1,12 @@
 package org.pitest.pitclipse.ui.swtbot;
 
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.browser.ProgressListener;
-import org.pitest.pitclipse.ui.extension.PitResultComponent;
-import org.pitest.pitclipse.ui.extension.ResultNotifier;
+import org.pitest.pitclipse.core.extension.point.ResultNotifier;
+import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
 import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
 
-public class PitResultNotifier implements ResultNotifier<PitResultComponent>,
-		ProgressListener {
-	private Browser browser = null;
-
-	public synchronized void handleResults(PitResultComponent results) {
-		Browser browser = results.getBrowser();
-		attach(browser);
-	}
-
-	public void changed(ProgressEvent event) {
-		// Do nothing
-	}
-
-	public void completed(ProgressEvent event) {
-		String text = browser.getText();
-		detach();
-		ResultsParser parser = new ResultsParser(text);
+public class PitResultNotifier implements ResultNotifier<PitUiUpdate> {
+	public void handleResults(PitUiUpdate results) {
+		ResultsParser parser = new ResultsParser(results.getHtml());
 		Summary summary = parser.getSummary();
 		PitResultsView view = PitResultsView.builder()
 				.withClassesTested(summary.getClasses())
@@ -34,15 +17,5 @@ public class PitResultNotifier implements ResultNotifier<PitResultComponent>,
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private void attach(Browser browser) {
-		this.browser = browser;
-		this.browser.addProgressListener(this);
-	}
-
-	private void detach() {
-		browser.removeProgressListener(this);
-		browser = null;
 	}
 }

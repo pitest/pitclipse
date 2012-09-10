@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.pitest.pitclipse.ui.results" name="ResultsUpdated" schema="schema/org.pitest.pitclipse.ui.results.exsd"/>
+   <extension
+         point="org.pitest.pitclipse.core.results">
+      <results
+            class="org.pitest.pitclipse.ui.notify.PitResultsNotifier"></results>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+          allowMultiple="false"
+          class="org.pitest.pitclipse.ui.view.PitView"
+          icon="icons/pit.gif"
+          id="org.pitest.pitclipse.ui.view.PitView"
+          name="PIT View"
+          restorable="true"/>
+   </extension>
+</plugin>
