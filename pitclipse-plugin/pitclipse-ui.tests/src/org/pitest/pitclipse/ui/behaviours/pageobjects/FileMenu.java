@@ -41,8 +41,4 @@ public class FileMenu {
 	public void saveAll() {
 		bot.menu(FILE).menu(SAVE_ALL).click();
 	}
-
-	public void resetProject(String projectName) {
-		newTestWizard.resetProject(projectName);
-	}
 }

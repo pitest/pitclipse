@@ -12,6 +12,7 @@ public class ProjectSteps {
 	@When("the user creates a project with name $projectName")
 	public void createJavaProject(String projectName) {
 		INSTANCE.getFileMenu().newJavaProject(projectName);
+		INSTANCE.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
 	}
 
 	@Then("the project $projectName exists in the workspace")
@@ -31,7 +32,6 @@ public class ProjectSteps {
 		for (String project : INSTANCE.getPackageExplorer()
 				.getProjectsInWorkspace()) {
 			INSTANCE.getAbstractSyntaxTree().deleteProject(project);
-			INSTANCE.getFileMenu().resetProject(project);
 		}
 	}
 }
