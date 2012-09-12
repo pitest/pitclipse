@@ -23,7 +23,7 @@ public enum PageObjects {
 		packageExplorer = new PackageExplorer(bot);
 		windowsMenu = new WindowsMenu(bot);
 		runMenu = new RunMenu(bot);
-		pitView = new PitView(bot);
+		pitView = new PitView();
 		buildProgress = new BuildProgress(bot);
 		abstractSyntaxTree = new AbstractSyntaxTree();
 		sourceMenu = new SourceMenu(bot);

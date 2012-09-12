@@ -11,11 +11,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
-Bundle-ClassPath: lib/pitclipse-pitrunner-0.28.2-SNAPSHOT.jar,
- lib/pitest-0.28.jar,
- lib/jsr305-2.0.0.jar,
- lib/bsh-2.0b4.jar,
- lib/jcommander-1.12.jar,
- lib/snakeyaml-1.6.jar,
- .
+Bundle-ClassPath: .
 Export-Package: org.pitest.pitclipse.ui.extension.point

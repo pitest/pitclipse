@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -13,6 +15,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.pitest.pitclipse.ui.behaviours.StepException;
+
+import com.google.common.collect.ImmutableList;
 
 public class AbstractSyntaxTree {
 
@@ -79,31 +83,21 @@ public class AbstractSyntaxTree {
 	public void addJUnitToClassPath(String projectName) {
 		IJavaProject project = getJavaProject(projectName);
 		try {
-			IClasspathEntry[] entries = project.getRawClasspath();
-			IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
-
-			System.arraycopy(entries, 0, newEntries, 0, entries.length);
-
-			// add a new entry using the path to the container
 			Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4");
 			IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
-			newEntries[entries.length] = JavaCore.newContainerEntry(junitEntry
-					.getPath());
-			project.setRawClasspath(newEntries, null);
+			IClasspathEntry junitClasspath = JavaCore
+					.newContainerEntry(junitEntry.getPath());
+
+			List<IClasspathEntry> entries = ImmutableList
+					.<IClasspathEntry> builder().add(project.getRawClasspath())
+					.add(junitClasspath).build();
+
+			// add a new entry using the path to the container
+			project.setRawClasspath(
+					entries.toArray(new IClasspathEntry[entries.size()]), null);
 		} catch (JavaModelException e) {
 			throw new StepException(e);
 		}
 	}
-
-	/*
-	 * ASTParser parser = ASTParser.newParser(AST.JLS3);
-	 * parser.setKind(ASTParser.K_COMPILATION_UNIT);
-	 * parser.setSource(type.getCompilationUnit());
-	 * parser.setResolveBindings(true); ASTNode ast =
-	 * parser.createAST(progressMonitor); ASTVisitor visitor = new ASTVisitor()
-	 * {
-	 * 
-	 * }; ast.accept(visitor);
-	 */
 
 }
