@@ -32,6 +32,18 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 			.builder().withProject(PROJECT_NAME)
 			.withPackage(SLEBS_PACKAGE_NAME).withClass("Marilyn").build();
 
+	private static final TestClassMetaData TREVOR_BROOKES_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME)
+			.withPackage(PLEBS_PACKAGE_NAME).withClass("TrevorBrookes").build();
+
+	private static final TestClassMetaData BRUNO_AT_FIRST_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME)
+			.withPackage(PLEBS_PACKAGE_NAME).withClass("BrunoBrookes").build();
+
+	private static final TestClassMetaData BRUNO_BROOKES_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME)
+			.withPackage(SLEBS_PACKAGE_NAME).withClass("BrunoBrookes").build();
+
 	private final ProjectSteps projectSteps = new ProjectSteps();
 	private final ClassSteps classSteps = new ClassSteps();
 	private final PitclipseSteps pitSteps = new PitclipseSteps();
@@ -49,7 +61,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 				FOO_META_DATA.getPackageName());
 		classSteps.verifyClassExists(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(), FOO_META_DATA.getClassName());
-		classSteps.createTestClass(FOO_META_DATA.getProjectName(),
+		classSteps.createClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
 				FOO_META_DATA.getTestClassName());
 		classSteps.verifyClassExists(FOO_META_DATA.getProjectName(),
@@ -58,11 +70,11 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runTest(FOO_META_DATA, 0, 100, 100);
 
 		// Scenario: Add an empty unit test
-		classSteps.selectTestClass(FOO_META_DATA.getProjectName(),
+		classSteps.selectClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
-				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
+				FOO_META_DATA.getTestClassName());
 		classSteps
-				.createTestCase("@Test public void fooTest1() {Foo foo = new Foo();}");
+				.createMethod("@Test public void fooTest1() {Foo foo = new Foo();}");
 		runTest(FOO_META_DATA, 0, 100, 100);
 
 		// Scenario: Add a method doFoo to class Foo
@@ -75,20 +87,23 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		pitSteps.coverageReportGenerated(1, 50, 0);
 
 		// Scenario: Create a bad test for doFoo
-		classSteps.selectTestClass(FOO_META_DATA.getProjectName(),
+		classSteps.selectClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
-				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
+				FOO_META_DATA.getTestClassName());
 		classSteps
-				.createTestCase("@Test public void fooTest2() {new Foo().doFoo(1);}");
+				.createMethod("@Test public void fooTest2() {new Foo().doFoo(1);}");
 		runTest(FOO_META_DATA, 1, 100, 0);
 
 		// Scenario: Create a better test for doFoo
-		classSteps.selectTestClass(FOO_META_DATA.getProjectName(),
+		classSteps.selectClass(FOO_META_DATA.getProjectName(),
 				FOO_META_DATA.getPackageName(),
-				FOO_META_DATA.getTestClassName(), FOO_META_DATA.getClassName());
+				FOO_META_DATA.getTestClassName());
 		classSteps
-				.createTestCase("@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
+				.createMethod("@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
 		runTest(FOO_META_DATA, 1, 100, 100);
+
+		// Scenario: Run PIT testing at the package level
+		runPackageTest(FOO_META_DATA, 1, 100, 100);
 
 		// Scenario: Create class Bar & it's Test
 		createClassAndTest(BAR_META_DATA);
@@ -98,12 +113,15 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		classSteps.selectClass(BAR_META_DATA.getProjectName(),
 				BAR_META_DATA.getPackageName(), BAR_META_DATA.getClassName());
 		classSteps.createMethod("public int doBar(int i) {return i - 1;}");
-		classSteps.selectTestClass(BAR_META_DATA.getProjectName(),
+		classSteps.selectClass(BAR_META_DATA.getProjectName(),
 				BAR_META_DATA.getPackageName(),
-				BAR_META_DATA.getTestClassName(), BAR_META_DATA.getClassName());
+				BAR_META_DATA.getTestClassName());
 		classSteps
-				.createTestCase("@Test public void barTestCase1() {org.junit.Assert.assertEquals(0, new Bar().doBar(1));}");
+				.createMethod("@Test public void barTestCase1() {org.junit.Assert.assertEquals(0, new Bar().doBar(1));}");
 		runTest(BAR_META_DATA, 2, 50, 50);
+
+		// Scenario: Run PIT testing at the package level
+		runPackageTest(FOO_META_DATA, 2, 100, 100);
 	}
 
 	@Test
@@ -112,12 +130,11 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		projectSteps.createJavaProject(PROJECT_NAME);
 		// Scenario: Create Norma Jean
 		createClassAndTest(NORMA_JEAN_META_DATA);
-		classSteps.selectTestClass(NORMA_JEAN_META_DATA.getProjectName(),
+		classSteps.selectClass(NORMA_JEAN_META_DATA.getProjectName(),
 				NORMA_JEAN_META_DATA.getPackageName(),
-				NORMA_JEAN_META_DATA.getTestClassName(),
-				NORMA_JEAN_META_DATA.getClassName());
+				NORMA_JEAN_META_DATA.getTestClassName());
 		classSteps
-				.createTestCase("@Test public void njTestCase1() {org.junit.Assert.assertEquals(21, new NormaJean().doMyThing(1));}");
+				.createMethod("@Test public void njTestCase1() {org.junit.Assert.assertEquals(21, new NormaJean().doMyThing(1));}");
 		classSteps.selectClass(NORMA_JEAN_META_DATA.getProjectName(),
 				NORMA_JEAN_META_DATA.getPackageName(),
 				NORMA_JEAN_META_DATA.getClassName());
@@ -135,17 +152,53 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		classSteps.renameClass(MARILYN_AT_FIRST_META_DATA.getTestClassName());
 		runTest(MARILYN_AT_FIRST_META_DATA, 1, 100, 100);
 
+		// Create another class
+		createClassAndTest(TREVOR_BROOKES_META_DATA);
+		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
+				TREVOR_BROOKES_META_DATA.getPackageName(),
+				TREVOR_BROOKES_META_DATA.getTestClassName());
+		classSteps
+				.createMethod("@Test public void tbTestCase1() {org.junit.Assert.assertEquals(10, new TrevorBrookes().doMyThing(5));}");
+		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
+				TREVOR_BROOKES_META_DATA.getPackageName(),
+				TREVOR_BROOKES_META_DATA.getClassName());
+		classSteps.createMethod("public int doMyThing(int i) {return 2 * i;}");
+
+		runTest(TREVOR_BROOKES_META_DATA, 2, 50, 50);
+		runPackageTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
+
+		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
+				TREVOR_BROOKES_META_DATA.getPackageName(),
+				TREVOR_BROOKES_META_DATA.getClassName());
+		classSteps.renameClass(BRUNO_AT_FIRST_META_DATA.getClassName());
+		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
+				TREVOR_BROOKES_META_DATA.getPackageName(),
+				TREVOR_BROOKES_META_DATA.getTestClassName());
+		classSteps.renameClass(BRUNO_AT_FIRST_META_DATA.getTestClassName());
+
+		runTest(BRUNO_AT_FIRST_META_DATA, 2, 50, 50);
+		runPackageTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
+
 		// Refactor package and retest
 		classSteps.selectPackage(MARILYN_AT_FIRST_META_DATA.getProjectName(),
 				MARILYN_AT_FIRST_META_DATA.getPackageName());
 		classSteps.renamePackage(MARILYN_META_DATA.getPackageName());
-		runTest(MARILYN_META_DATA, 1, 100, 100);
+		runTest(MARILYN_META_DATA, 2, 50, 50);
+		runPackageTest(MARILYN_META_DATA, 2, 100, 100);
+		runTest(BRUNO_BROOKES_META_DATA, 2, 50, 50);
 	}
 
 	private void runTest(TestClassMetaData metaData, int classesTested,
 			int totalCoverage, int mutationCoverage) {
 		pitSteps.runTest(metaData.getProjectName(), metaData.getPackageName(),
 				metaData.getTestClassName());
+		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
+				mutationCoverage);
+	}
+
+	private void runPackageTest(TestClassMetaData metaData, int classesTested,
+			int totalCoverage, int mutationCoverage) {
+		pitSteps.runTest(metaData.getProjectName(), metaData.getPackageName());
 		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
 				mutationCoverage);
 	}
@@ -157,7 +210,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 				metaData.getPackageName());
 		classSteps.verifyClassExists(metaData.getProjectName(),
 				metaData.getPackageName(), metaData.getClassName());
-		classSteps.createTestClass(metaData.getProjectName(),
+		classSteps.createClass(metaData.getProjectName(),
 				metaData.getPackageName(), metaData.getTestClassName());
 		classSteps.verifyClassExists(metaData.getProjectName(),
 				metaData.getPackageName(), metaData.getTestClassName());

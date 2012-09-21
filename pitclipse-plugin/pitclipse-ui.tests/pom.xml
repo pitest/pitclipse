@@ -19,6 +19,34 @@
         <configuration>
           <useUIHarness>true</useUIHarness>
           <useUIThread>false</useUIThread>
+          <argLine>-Xms40m -Xmx512m</argLine>
+<!--           <dependencies>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.junit4</artifactId>
+              <version>0.0.0</version>
+            </dependency>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.jdt.junit</artifactId>
+              <version>0.0.0</version>
+            </dependency>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.pde.junit.runtime</artifactId>
+              <version>0.0.0</version>
+            </dependency>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.jdt.junit.runtime</artifactId>
+              <version>0.0.0</version>
+            </dependency>  
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.jdt.junit4.runtime</artifactId>
+              <version>0.0.0</version>
+            </dependency>
+          </dependencies>-->
         </configuration>
       </plugin>
     </plugins>
@@ -29,22 +57,10 @@
       <artifactId>guava-osgi</artifactId>
       <version>${guava.version}</version>
     </dependency>
-<!--    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>com.springsource.org.antlr.runtime</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.guava-osgi</groupId>
-      <artifactId>guava-osgi</artifactId>
-      <version>11.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pitest</groupId>
-      <artifactId>pitclipse-dep-bundle</artifactId>
-      <version>${pom.version}</version>
-    </dependency>
-    
-    -->
+    <!-- <dependency> <groupId>org.antlr</groupId> <artifactId>com.springsource.org.antlr.runtime</artifactId> 
+      <version>3.0.1</version> </dependency> <dependency> <groupId>com.googlecode.guava-osgi</groupId> 
+      <artifactId>guava-osgi</artifactId> <version>11.0.1</version> </dependency> 
+      <dependency> <groupId>org.pitest</groupId> <artifactId>pitclipse-dep-bundle</artifactId> 
+      <version>${pom.version}</version> </dependency> -->
   </dependencies>
 </project>

@@ -1,12 +1,15 @@
 package org.pitest.pitclipse.pitrunner;
 
+import static com.google.common.collect.ImmutableList.builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableList.of;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -18,11 +21,13 @@ public final class PITOptions {
 	private final String classUnderTest;
 	private final List<String> classesToMutate;
 	private final List<File> sourceDirs;
+	private final List<String> packages;
 
 	private PITOptions(String classUnderTest, List<String> classesToMutate,
-			List<File> sourceDirs, File reportDir) {
+			List<File> sourceDirs, File reportDir, List<String> packages) {
 		this.classUnderTest = classUnderTest;
-		this.classesToMutate = ImmutableList.copyOf(classesToMutate);
+		this.packages = copyOf(packages);
+		this.classesToMutate = copyOf(classesToMutate);
 		this.sourceDirs = sourceDirs;
 		this.reportDir = reportDir;
 	}
@@ -32,15 +37,23 @@ public final class PITOptions {
 	}
 
 	public List<File> getSourceDirectories() {
-		return copyOf(sourceDirs);
+		return copyOfFiles(sourceDirs);
 	}
 
 	public String[] toCLIArgs() {
-		List<String> args = ImmutableList.of("--failWhenNoMutations", "false",
+		List<String> args = of("--failWhenNoMutations", "false",
 				"--outputFormats", "HTML", "--reportDir", reportDir.getPath(),
-				"--targetTests", classUnderTest, "--targetClasses",
-				classpath(), "--sourceDirs", sourceDirs());
+				"--targetTests", toTest(), "--targetClasses", classpath(),
+				"--sourceDirs", sourceDirs());
 		return args.toArray(new String[args.size()]);
+	}
+
+	private String toTest() {
+		if (packages.isEmpty()) {
+			return classUnderTest;
+		} else {
+			return concat(commaSeperate(packages));
+		}
 	}
 
 	private String sourceDirs() {
@@ -48,7 +61,7 @@ public final class PITOptions {
 	}
 
 	private List<String> fileAsStrings(List<File> files) {
-		Builder<String> builder = ImmutableList.builder();
+		Builder<String> builder = builder();
 		for (File file : files) {
 			builder.add(file.getPath());
 		}
@@ -81,31 +94,32 @@ public final class PITOptions {
 		return formattedCandidates;
 	}
 
-	private static File copyOf(File sourceDir) {
+	private static File copyOfFile(File sourceDir) {
 		return new File(sourceDir.getPath());
 	}
 
-	private static List<File> copyOf(List<File> sourceDirs) {
-		Builder<File> builder = ImmutableList.builder();
+	private static List<File> copyOfFiles(List<File> sourceDirs) {
+		Builder<File> builder = builder();
 		for (File file : sourceDirs) {
-			builder.add(copyOf(file));
+			builder.add(copyOfFile(file));
 		}
 		return builder.build();
 	}
 
 	public static final class PITOptionsBuilder {
 		private String classUnderTest = null;
-		private List<String> classesToMutate = ImmutableList.of();
+		private List<String> classesToMutate = of();
 		private File reportDir = null;
-		private List<File> sourceDirs = ImmutableList.of();
+		private List<File> sourceDirs = of();
+		private List<String> packages = of();
 
 		public PITOptionsBuilder withReportDirectory(File reportDir) {
-			this.reportDir = copyOf(reportDir);
+			this.reportDir = copyOfFile(reportDir);
 			return this;
 		}
 
 		public PITOptionsBuilder withSourceDirectory(File sourceDir) {
-			return withSourceDirectories(ImmutableList.of(copyOf(sourceDir)));
+			return withSourceDirectories(of(copyOfFile(sourceDir)));
 		}
 
 		public PITOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
@@ -118,7 +132,7 @@ public final class PITOptions {
 			validateTestClass();
 			initialiseReportDir();
 			return new PITOptions(classUnderTest, classesToMutate, sourceDirs,
-					reportDir);
+					reportDir, packages);
 		}
 
 		private void initialiseReportDir() {
@@ -151,7 +165,7 @@ public final class PITOptions {
 		}
 
 		private void validateTestClass() {
-			if (null == classUnderTest) {
+			if (null == classUnderTest && packages.isEmpty()) {
 				throw new PITLaunchException("Class under test not set.");
 			}
 		}
@@ -166,7 +180,12 @@ public final class PITOptions {
 		}
 
 		public PITOptionsBuilder withClassesToMutate(List<String> classPath) {
-			classesToMutate = ImmutableList.copyOf(classPath);
+			classesToMutate = copyOf(classPath);
+			return this;
+		}
+
+		public PITOptionsBuilder withPackagesToTest(List<String> packages) {
+			this.packages = copyOf(packages);
 			return this;
 		}
 	}
@@ -194,5 +213,9 @@ public final class PITOptions {
 			argsBuilder.append(' ').append(arg);
 		}
 		return argsBuilder.toString().trim();
+	}
+
+	public List<String> getTestPackages() {
+		return packages;
 	}
 }

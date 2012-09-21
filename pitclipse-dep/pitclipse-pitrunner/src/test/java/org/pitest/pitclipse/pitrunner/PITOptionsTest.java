@@ -1,9 +1,11 @@
 package org.pitest.pitclipse.pitrunner;
 
+import static com.google.common.collect.ImmutableList.of;
 import static java.lang.Integer.toHexString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -12,12 +14,13 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
 import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public class PITOptionsTest {
@@ -41,19 +44,22 @@ public class PITOptionsTest {
 			.getCanonicalName();
 	private static final String TEST_CLASS2 = PITRunner.class
 			.getCanonicalName();
-	private static final List<String> CLASS_PATH = ImmutableList.of(
-			TEST_CLASS1, TEST_CLASS2);
+	private static final List<String> CLASS_PATH = of(TEST_CLASS1, TEST_CLASS2);
+	private static final String PACKAGE_1 = PITOptionsTest.class.getPackage()
+			.getName() + ".*";
+	private static final String PACKAGE_2 = ExampleTest.class.getPackage()
+			.getName() + ".*";
+	private static final List<String> PACKAGES = of(PACKAGE_1, PACKAGE_2);
 
 	@Before
 	public void setup() {
-		for (File dir : ImmutableList.of(testTmpDir, testSrcDir,
-				anotherTestSrcDir)) {
+		for (File dir : of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
 			dir.mkdirs();
 			dir.deleteOnExit();
 		}
 	}
 
-	@org.junit.AfterClass
+	@AfterClass
 	public static void cleanupFiles() {
 
 	}
@@ -94,14 +100,13 @@ public class PITOptionsTest {
 	@Test(expected = PITLaunchException.class)
 	public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
 		new PITOptionsBuilder()
-				.withSourceDirectories(
-						ImmutableList.of(testSrcDir, randomDir()))
+				.withSourceDirectories(of(testSrcDir, randomDir()))
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test
 	public void multipleSourceDirectoriesExist() throws IOException {
-		List<File> srcDirs = ImmutableList.of(testSrcDir, anotherTestSrcDir);
+		List<File> srcDirs = of(testSrcDir, anotherTestSrcDir);
 		PITOptions options = new PITOptionsBuilder()
 				.withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1)
 				.build();
@@ -167,14 +172,34 @@ public class PITOptionsTest {
 						TEST_CLASS1, TEST_CLASS2), options.toCLIArgsAsString());
 	}
 
+	@Test
+	public void testPackagesSupplied() {
+		PITOptions options = new PITOptionsBuilder()
+				.withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
+				.withClassesToMutate(CLASS_PATH).build();
+		File reportDir = options.getReportDirectory();
+		assertTrue(reportDir.isDirectory());
+		assertTrue(reportDir.exists());
+		assertEquals(TMP_DIR, reportDir.getParentFile());
+		assertNull(options.getClassUnderTest());
+		assertEquals(PACKAGES, options.getTestPackages());
+		assertArrayEquals(
+				expectedArgs(reportDir, testSrcDir,
+						PACKAGE_1 + "," + PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
+				options.toCLIArgs());
+		assertEquals(
+				expectedArgsAsString(reportDir, testSrcDir, PACKAGE_1 + ","
+						+ PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
+				options.toCLIArgsAsString());
+	}
+
 	private String randomString() {
 		return toHexString(random.nextInt());
 	}
 
 	private Object[] expectedArgs(File reportDir, File sourceDir,
 			String classUnderTest, String... classpath) {
-		return expectedArgs(reportDir, ImmutableList.of(sourceDir),
-				classUnderTest, classpath);
+		return expectedArgs(reportDir, of(sourceDir), classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
@@ -211,8 +236,8 @@ public class PITOptionsTest {
 
 	private String expectedArgsAsString(File reportDir, File sourceDir,
 			String classUnderTest, String... classpath) {
-		return expectedArgsAsString(reportDir, ImmutableList.of(sourceDir),
-				classUnderTest, classpath);
+		return expectedArgsAsString(reportDir, of(sourceDir), classUnderTest,
+				classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,

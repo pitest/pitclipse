@@ -1,5 +1,9 @@
 package org.pitest.pitclipse.core.launch;
 
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
+
 import javax.annotation.concurrent.Immutable;
 
 import org.eclipse.core.resources.IProject;
@@ -13,46 +17,54 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 @Immutable
 public final class PitMigrationDelegate {
 
 	private PitMigrationDelegate() {
 	}
-	
-	public static void mapResources(ILaunchConfigurationWorkingCopy config) throws CoreException {
+
+	public static void mapResources(ILaunchConfigurationWorkingCopy config)
+			throws CoreException {
 		IResource resource = getResource(config);
 		if (resource == null) {
 			config.setMappedResources(null);
 		} else {
-			config.setMappedResources(new IResource[]{resource});
+			config.setMappedResources(new IResource[] { resource });
 		}
 	}
 
 	/**
-	 * Returns a resource mapping for the given launch configuration, or <code>null</code>
-	 * if none.
-	 *
-	 * @param config working copy
+	 * Returns a resource mapping for the given launch configuration, or
+	 * <code>null</code> if none.
+	 * 
+	 * @param config
+	 *            working copy
 	 * @return resource or <code>null</code>
-	 * @throws CoreException if an exception occurs mapping resource
+	 * @throws CoreException
+	 *             if an exception occurs mapping resource
 	 */
-	private static IResource getResource(ILaunchConfiguration config) throws CoreException {
-		String projName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, (String)null);
-		String typeName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, (String)null);
+	private static IResource getResource(ILaunchConfiguration config)
+			throws CoreException {
+		String projName = config.getAttribute(ATTR_PROJECT_NAME, (String) null);
+		String typeName = config.getAttribute(ATTR_MAIN_TYPE_NAME,
+				(String) null);
+		String container = config.getAttribute(ATTR_TEST_CONTAINER,
+				(String) null);
 		IJavaElement element = null;
 		if (projName != null && Path.ROOT.isValidSegment(projName)) {
 			IJavaProject javaProject = getJavaModel().getJavaProject(projName);
 			if (javaProject.exists()) {
 				if (typeName != null && typeName.length() > 0) {
 					element = javaProject.findType(typeName);
+				} else if (container != null && container.length() > 0) {
+					element = JavaCore.create(container);
 				}
 				if (element == null) {
 					element = javaProject;
 				}
 			} else {
-				IProject project= javaProject.getProject();
+				IProject project = javaProject.getProject();
 				if (project.exists() && !project.isOpen()) {
 					return project;
 				}
@@ -64,7 +76,7 @@ public final class PitMigrationDelegate {
 		}
 		return resource;
 	}
-	
+
 	/*
 	 * Convenience method to get access to the java model.
 	 */

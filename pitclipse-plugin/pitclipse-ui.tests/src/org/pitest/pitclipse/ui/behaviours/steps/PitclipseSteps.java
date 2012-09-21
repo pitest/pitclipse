@@ -6,6 +6,7 @@ import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import org.pitest.pitclipse.ui.behaviours.Then;
 import org.pitest.pitclipse.ui.behaviours.When;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 
 public class PitclipseSteps {
 
@@ -27,5 +28,19 @@ public class PitclipseSteps {
 				.getOverallCoverage());
 		assertDoubleEquals(mutationCoverage, INSTANCE.getPitView()
 				.getMutationCoverage());
+	}
+
+	@When("tests in package $packageName are run for project $projectName")
+	public void runTest(final String projectName, final String packageName) {
+		INSTANCE.getPackageExplorer().selectPackage(new PackageContext() {
+			public String getPackageName() {
+				return packageName;
+			}
+
+			public String getProjectName() {
+				return projectName;
+			}
+		});
+		INSTANCE.getRunMenu().runPit();
 	}
 }

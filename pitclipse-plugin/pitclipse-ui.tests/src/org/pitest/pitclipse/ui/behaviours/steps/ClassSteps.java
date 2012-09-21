@@ -12,7 +12,7 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.TestClassContext;
 public final class ClassSteps {
 
 	private ConcreteClassContext concreteClassContext = null;
-	private TestClassContext testClassContext = null;
+	private final TestClassContext testClassContext = null;
 
 	@When("a class $className in package $packageName is created in project $projectName")
 	public void createClass(String projectName, String packageName,
@@ -40,45 +40,6 @@ public final class ClassSteps {
 				"Class: " + className + " not found",
 				INSTANCE.getPackageExplorer().doesClassExistInProject(
 						className, packageName, projectName));
-	}
-
-	@When("a test class $testClassName in package $packageName is created in project $projectName")
-	public void createTestClass(String projectName, String packageName,
-			String testClassName) {
-		testClassContext = new TestClassContext.Builder()
-				.withClassName(testClassName).withPackageName(packageName)
-				.withProjectName(projectName).build();
-		INSTANCE.getBuildProgress().listenForBuild();
-		INSTANCE.getPackageExplorer().selectProject(
-				testClassContext.getProjectName());
-		INSTANCE.getFileMenu().createJUnitTest(testClassContext);
-		INSTANCE.getBuildProgress().waitForBuild();
-		INSTANCE.getAbstractSyntaxTree().removeAllMethods(testClassContext);
-		INSTANCE.getFileMenu().saveAll();
-	}
-
-	@When("a test case $testCase is created")
-	public void createTestCase(String testCase) {
-		testClassContext = new TestClassContext.Builder()
-				.clone(testClassContext).withTestCase(testCase).build();
-		INSTANCE.getBuildProgress().listenForBuild();
-		INSTANCE.getPackageExplorer().openClass(testClassContext);
-		INSTANCE.getAbstractSyntaxTree().addTestMethod(testClassContext);
-		INSTANCE.getSourceMenu().organizeImports();
-		INSTANCE.getSourceMenu().format();
-		INSTANCE.getFileMenu().saveAll();
-		INSTANCE.getBuildProgress().waitForBuild();
-	}
-
-	@Given("the test $testClassName testing $classUnderTest in package $packageName in project $projectName is selected")
-	public void selectTestClass(String projectName, String packageName,
-			String testClassName, String classUnderTest) {
-		testClassContext = new TestClassContext.Builder()
-				.withClassUnderTest(classUnderTest)
-				.withClassName(testClassName).withPackageName(packageName)
-				.withProjectName(projectName)
-				.withClassUnderTest(classUnderTest).build();
-
 	}
 
 	@Given("the class $testClassName in package $packageName in project $projectName is selected")

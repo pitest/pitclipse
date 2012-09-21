@@ -107,11 +107,11 @@ public class PackageExplorer {
 		clazz.doubleClick();
 	}
 
-	public void selectPackage(ClassContext context) {
+	public void selectPackage(PackageContext context) {
 		getPackage(context).select();
 	}
 
-	private SWTBotTreeItem getPackage(ClassContext context) {
+	private SWTBotTreeItem getPackage(PackageContext context) {
 		SWTBotTreeItem project = getProject(context.getProjectName());
 		return getPackageFromProject(project, context.getPackageName());
 	}

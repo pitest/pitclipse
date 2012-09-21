@@ -1,5 +1,12 @@
 package org.pitest.pitclipse.core.launch;
 
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableSet.builder;
+import static org.eclipse.core.resources.IResource.FOLDER;
+import static org.eclipse.core.resources.IResource.NONE;
+import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getPITClasspath;
 import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
@@ -10,6 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -26,7 +36,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.core.extension.handler.ExtensionPointHandler;
@@ -58,8 +67,7 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 
 		public void run() {
 			IExtensionRegistry registry = Platform.getExtensionRegistry();
-			PitCoreResults results = new PitCoreResults(
-					reportDirectory.toURI());
+			PitCoreResults results = new PitCoreResults(reportDirectory.toURI());
 			new ExtensionPointHandler<PitCoreResults>(EXTENSION_POINT_ID)
 					.execute(registry, results);
 		}
@@ -73,15 +81,22 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 	@Override
 	public void launch(ILaunchConfiguration launchConfig, String mode,
 			ILaunch launch, IProgressMonitor progress) throws CoreException {
-		IType testClass = getTestClass(launchConfig);
 		IJavaProject project = getProject(launchConfig);
 		List<String> classPath = getClassesFromProject(project);
 		List<File> sourceDirs = getSourceDirsForProject(project);
+		if (isTestLaunch(launchConfig)) {
+			IType testClass = getTestClass(launchConfig);
+			options = new PITOptionsBuilder()
+					.withClassUnderTest(testClass.getFullyQualifiedName())
+					.withClassesToMutate(classPath)
+					.withSourceDirectories(sourceDirs).build();
+		} else {
+			List<String> packages = getPackagesToTest(launchConfig);
+			options = new PITOptionsBuilder().withPackagesToTest(packages)
+					.withClassesToMutate(classPath)
+					.withSourceDirectories(sourceDirs).build();
+		}
 
-		options = new PITOptionsBuilder()
-				.withClassUnderTest(testClass.getFullyQualifiedName())
-				.withClassesToMutate(classPath)
-				.withSourceDirectories(sourceDirs).build();
 		super.launch(launchConfig, mode, launch, progress);
 		ProcessPoller updater = new ProcessPoller(ImmutableList.copyOf(launch
 				.getProcesses()), new UpdateExtensions(
@@ -89,10 +104,37 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		executorService.execute(updater);
 	}
 
+	private List<String> getPackagesToTest(ILaunchConfiguration launchConfig)
+			throws CoreException {
+		final Builder<String> builder = builder();
+		IResource[] resources = launchConfig.getMappedResources();
+		IResourceProxyVisitor visitor = new IResourceProxyVisitor() {
+			public boolean visit(IResourceProxy proxy) throws CoreException {
+				if (proxy.getType() == FOLDER) {
+					IJavaElement element = JavaCore.create(proxy
+							.requestResource());
+					if (element.getElementType() == PACKAGE_FRAGMENT) {
+						builder.add(element.getElementName() + ".*");
+					}
+				}
+				return false;
+			}
+		};
+		for (IResource resource : resources) {
+			resource.accept(visitor, NONE);
+		}
+		return copyOf(builder.build());
+	}
+
+	private boolean isTestLaunch(ILaunchConfiguration launchConfig)
+			throws CoreException {
+		return !launchConfig.getAttribute(ATTR_MAIN_TYPE_NAME, "").trim()
+				.isEmpty();
+	}
+
 	private IJavaProject getProject(ILaunchConfiguration launchConfig)
 			throws CoreException {
-		return getProject(launchConfig.getAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""));
+		return getProject(launchConfig.getAttribute(ATTR_PROJECT_NAME, ""));
 	}
 
 	private IJavaProject getProject(String projectName) throws CoreException {
@@ -161,7 +203,7 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 				}
 			}
 		}
-		return ImmutableList.copyOf(classPathBuilder.build());
+		return copyOf(classPathBuilder.build());
 	}
 
 	/*

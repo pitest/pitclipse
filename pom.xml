@@ -6,10 +6,6 @@
   <artifactId>pitclipse</artifactId>
   <version>0.28.2-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <modules>
-    <module>pitclipse-dep</module>
-    <module>pitclipse-plugin</module>
-  </modules>
   <organization>
     <name>Pitest.org</name>
     <url>http://pitest.org/</url>
@@ -20,6 +16,20 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
+  <profiles>
+    <profile>
+      <id>bundle</id>
+      <modules>
+        <module>pitclipse-dep</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>plugin</id>
+      <modules>
+        <module>pitclipse-plugin</module>
+      </modules>
+    </profile>
+  </profiles>
   <properties>
     <guava.version>11.0.1</guava.version>
     <!-- <forceContextQualifier>20120718-1852</forceContextQualifier> -->
