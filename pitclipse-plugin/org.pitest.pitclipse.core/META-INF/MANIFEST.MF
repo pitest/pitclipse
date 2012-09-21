@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.debug.ui;bundle-version="3.5.2",
  org.eclipse.jdt.launching;bundle-version="3.5.200",
  com.google.guava;bundle-version="11.0.1",
- org.eclipse.jdt.ui;bundle-version="3.7.2"
+ org.eclipse.jdt.ui;bundle-version="3.6.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
