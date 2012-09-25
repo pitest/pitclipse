@@ -39,14 +39,14 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private Button testClassRadioButton;
 	private Button testDirectoryRadioButton;
 	private Text testDirText;
+	private String containerId;
 
 	public void initializeFrom(ILaunchConfiguration config) {
 		projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
 				""));
 		String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME,
 				"");
-		String containerId = getAttributeFromConfig(config,
-				ATTR_TEST_CONTAINER, "");
+		containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
 		testClassText.setText(testClass);
 		if (testClass.length() == 0 && containerId.length() > 0) {
 			testClassText.setText("");
@@ -61,7 +61,6 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 			testDirText.setText("");
 			testClassRadioButton.setSelection(true);
 			testDirectoryRadioButton.setSelection(false);
-
 		}
 		testModeChanged();
 	}
@@ -166,8 +165,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 			workingCopy.setAttribute(ATTR_TEST_CONTAINER, "");
 		} else {
 			workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
-			workingCopy.setAttribute(ATTR_TEST_CONTAINER, testDirText.getText()
-					.trim());
+			workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
 		}
 		try {
 			PitMigrationDelegate.mapResources(workingCopy);
