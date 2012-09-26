@@ -7,12 +7,10 @@ import org.pitest.pitclipse.ui.behaviours.Given;
 import org.pitest.pitclipse.ui.behaviours.Then;
 import org.pitest.pitclipse.ui.behaviours.When;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.ConcreteClassContext;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.TestClassContext;
 
 public final class ClassSteps {
 
 	private ConcreteClassContext concreteClassContext = null;
-	private final TestClassContext testClassContext = null;
 
 	@When("a class $className in package $packageName is created in project $projectName")
 	public void createClass(String projectName, String packageName,

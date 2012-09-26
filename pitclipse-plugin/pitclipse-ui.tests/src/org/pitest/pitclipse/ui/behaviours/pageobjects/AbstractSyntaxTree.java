@@ -44,19 +44,6 @@ public class AbstractSyntaxTree {
 		return JavaCore.create(project);
 	}
 
-	public void addTestMethod(TestClassContext context) {
-		IJavaProject javaProject = getJavaProject(context);
-		try {
-			IType type = javaProject.findType(context
-					.getFullyQualifiedTestClassName());
-			NullProgressMonitor progressMonitor = new NullProgressMonitor();
-			type.createMethod(context.getTestCase(), null, false,
-					progressMonitor);
-		} catch (JavaModelException e) {
-			throw new StepException(e);
-		}
-	}
-
 	public void addMethod(ConcreteClassContext context) {
 		IJavaProject javaProject = getJavaProject(context);
 		try {
