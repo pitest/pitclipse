@@ -46,4 +46,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.pitest.osgi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.pitest.pitclipse-pitrunner"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

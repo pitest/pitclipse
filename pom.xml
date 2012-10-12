@@ -16,6 +16,24 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <url>http://localhost:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>2.0.1</version>
+      </plugin>
+    </plugins>
+  </build>
   <profiles>
     <profile>
       <id>bundle</id>
@@ -32,6 +50,6 @@
   </profiles>
   <properties>
     <guava.version>11.0.1</guava.version>
-<!--     <forceContextQualifier>20120924-1842</forceContextQualifier> -->
+    <!-- <forceContextQualifier>20120924-1842</forceContextQualifier> -->
   </properties>
 </project> 

@@ -7,7 +7,7 @@ import static org.eclipse.core.resources.IResource.NONE;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.PitCoreActivator.getPITClasspath;
+import static org.pitest.pitclipse.core.PitCoreActivator.getPitClasspath;
 import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
 import java.io.File;
@@ -179,7 +179,7 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 			throws CoreException {
 		List<String> newClasspath = ImmutableList.<String> builder()
 				.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
-				.addAll(getPITClasspath()).build();
+				.addAll(getPitClasspath()).build();
 		log("Classpath: " + newClasspath);
 		return newClasspath.toArray(new String[newClasspath.size()]);
 	}

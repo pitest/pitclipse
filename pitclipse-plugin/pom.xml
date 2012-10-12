@@ -17,26 +17,19 @@
   </modules>
   <properties>
     <tycho.version>0.15.0</tycho.version>
-    <indigo.p2.url>http://download.eclipse.org/releases/indigo</indigo.p2.url>
-    <swtBot.p2.url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/</swtBot.p2.url>
-    <guava.p2.url>http://guava-osgi.googlecode.com/svn/trunk/repository/</guava.p2.url>
+    <local.p2.url>http://localhost:8081/nexus/content/groups/local-p2-mirror/</local.p2.url>
   </properties>
   <repositories>
     <repository>
-      <id>indigo</id>
+      <id>local.repo</id>
       <layout>p2</layout>
-      <url>${indigo.p2.url}</url>
+      <url>${local.p2.url}</url>
     </repository>
     <repository>
-      <id>swtBot</id>
+      <id>snaps</id>
       <layout>p2</layout>
-      <url>${swtBot.p2.url}</url>
-    </repository>
-    <repository>
-      <id>guava</id>
-      <layout>p2</layout>
-      <url>${guava.p2.url}</url>
-    </repository>
+      <url>http://localhost:8081/nexus/content/repositories/snapshots/.meta/p2/</url>
+    </repository>   
   </repositories>
   <build>
     <plugins>
@@ -45,6 +38,15 @@
         <artifactId>tycho-maven-plugin</artifactId>
         <version>${tycho.version}</version>
         <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>
+          <resolver>p2</resolver>
+          <pomDependencies>consider</pomDependencies>
+        </configuration>
       </plugin>
     </plugins>
   </build>

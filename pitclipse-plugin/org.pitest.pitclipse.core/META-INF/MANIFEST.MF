@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Pitclipse UI
+Bundle-Name: Pitclipse Core
 Bundle-SymbolicName: org.pitest.pitclipse.core;singleton:=true
 Bundle-Version: 0.28.3.qualifier
 Bundle-Activator: org.pitest.pitclipse.core.PitCoreActivator
@@ -12,16 +12,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.debug.ui;bundle-version="3.5.2",
  org.eclipse.jdt.launching;bundle-version="3.5.200",
  com.google.guava;bundle-version="11.0.1",
- org.eclipse.jdt.ui;bundle-version="3.6.2"
+ org.eclipse.jdt.ui;bundle-version="3.6.2",
+ org.pitest.pitclipse-pitrunner;bundle-version="0.28.3",
+ org.pitest.osgi;bundle-version="0.28.3"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
-Bundle-ClassPath: lib/pitclipse-pitrunner-0.28.3-SNAPSHOT.jar,
- lib/pitest-0.28.jar,
- lib/jsr305-2.0.0.jar,
- lib/bsh-2.0b4.jar,
- lib/jcommander-1.12.jar,
- lib/snakeyaml-1.6.jar,
+Bundle-ClassPath: lib/jsr305-2.0.0.jar,
  .
 Export-Package: org.pitest.pitclipse.core.extension.handler,
  org.pitest.pitclipse.core.extension.point

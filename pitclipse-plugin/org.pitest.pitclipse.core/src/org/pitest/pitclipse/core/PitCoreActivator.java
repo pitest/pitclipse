@@ -1,5 +1,11 @@
 package org.pitest.pitclipse.core;
 
+import static com.google.common.collect.ImmutableList.builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableList.of;
+import static org.eclipse.core.runtime.FileLocator.getBundleFile;
+import static org.eclipse.core.runtime.FileLocator.toFileURL;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -7,16 +13,16 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 
 /**
@@ -30,17 +36,17 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	// The shared instance
 	private static PitCoreActivator plugin;
 
-	private static List<String> pitClasspath = ImmutableList.of();
+	private static List<String> pitClasspath = of();
 
 	public PitCoreActivator() {
 	}
 
-	public static List<String> getPITClasspath() {
+	public static List<String> getPitClasspath() {
 		return pitClasspath;
 	}
 
 	private static void setPITClasspath(List<String> classpath) {
-		pitClasspath = ImmutableList.copyOf(classpath);
+		pitClasspath = copyOf(classpath);
 	}
 
 	/*
@@ -58,7 +64,9 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		setActivator(this);
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
-		Builder<String> builder = ImmutableList.builder();
+		Bundle bundle = Platform.getBundle("org.pitest.osgi");
+		Builder<String> builder = builder();
+		builder.add(getBundleFile(bundle).getCanonicalPath());
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
 
@@ -74,7 +82,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		// https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096
 		// Astonishingly, the reason given for not fixing is that many plugins
 		// expect invalid Urls so would be broken!!!
-		URL unescapedUrl = FileLocator.toFileURL(url);
+		URL unescapedUrl = toFileURL(url);
 		String escaped = unescapedUrl.getPath().replace(" ", "%20");
 		return new URL("file", "", escaped);
 	}
@@ -95,7 +103,8 @@ public class PitCoreActivator extends AbstractUIPlugin {
 																// class defines
 																// signature
 		setActivator(null);
-		setPITClasspath(ImmutableList.<String> of());
+		List<String> emptyPath = of();
+		setPITClasspath(emptyPath);
 		super.stop(context);
 	}
 
