@@ -1,21 +1,26 @@
 package org.pitest.pitclipse.ui;
 
-
 public final class TestClassMetaData {
 
 	private final String projectName;
 	private final String packageName;
 	private final String className;
+	private final String sourceDir;
 
-	private TestClassMetaData(String projectName, String packageName,
-			String className) {
+	private TestClassMetaData(String projectName, String sourceDir,
+			String packageName, String className) {
 		this.projectName = projectName;
+		this.sourceDir = sourceDir;
 		this.packageName = packageName;
 		this.className = className;
 	}
 
 	public String getProjectName() {
 		return projectName;
+	}
+
+	public String getSourceDir() {
+		return sourceDir;
 	}
 
 	public String getPackageName() {
@@ -38,9 +43,11 @@ public final class TestClassMetaData {
 		private String projectName;
 		private String packageName;
 		private String className;
+		private String sourceDir;
 
 		public TestClassMetaData build() {
-			return new TestClassMetaData(projectName, packageName, className);
+			return new TestClassMetaData(projectName, sourceDir, packageName,
+					className);
 		}
 
 		public Builder withClass(String className) {
@@ -55,6 +62,11 @@ public final class TestClassMetaData {
 
 		public Builder withPackage(String packageName) {
 			this.packageName = packageName;
+			return this;
+		}
+
+		public Builder withSrcDir(String sourceDir) {
+			this.sourceDir = sourceDir;
 			return this;
 		}
 	}

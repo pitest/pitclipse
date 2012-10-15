@@ -22,6 +22,7 @@ public class RunMenu {
 
 	public void runPit() {
 		SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
+
 		menuHelper.findMenu(bot.menu(RUN).menu(RUN_AS), PIT_MUTATION_TEST)
 				.click();
 	}

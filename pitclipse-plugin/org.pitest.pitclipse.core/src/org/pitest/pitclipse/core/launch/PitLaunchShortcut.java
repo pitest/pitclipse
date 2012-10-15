@@ -11,6 +11,9 @@ import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.core.IJavaElement.TYPE;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.eclipse.jdt.ui.JavaElementLabels.ALL_FULLY_QUALIFIED;
+import static org.eclipse.jdt.ui.JavaElementLabels.getTextLabel;
+import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 import static org.pitest.pitclipse.core.PitCoreActivator.getActiveWorkbenchShell;
 import static org.pitest.pitclipse.core.launch.PitMigrationDelegate.mapResources;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
@@ -43,8 +46,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaElementLabels;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -73,8 +74,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 	 * java.lang.String)
 	 */
 	public void launch(IEditorPart editor, String mode) {
-		ITypeRoot element = JavaUI.getEditorInputTypeRoot(editor
-				.getEditorInput());
+		ITypeRoot element = getEditorInputTypeRoot(editor.getEditorInput());
 		if (element == null) {
 			showNoTestsFoundDialog();
 		} else {
@@ -259,8 +259,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 		case JAVA_PROJECT:
 		case PACKAGE_FRAGMENT_ROOT:
 		case PACKAGE_FRAGMENT: {
-			String name = JavaElementLabels.getTextLabel(element,
-					JavaElementLabels.ALL_FULLY_QUALIFIED);
+			String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
 			containerHandleId = element.getHandleIdentifier();
 			mainTypeQualifiedName = EMPTY_STRING;
 			testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
@@ -405,7 +404,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 	 */
 	public ILaunchConfiguration[] getLaunchConfigurations(
 			final IEditorPart editor) {
-		final ITypeRoot element = JavaUI.getEditorInputTypeRoot(editor
+		final ITypeRoot element = getEditorInputTypeRoot(editor
 				.getEditorInput());
 		List<ILaunchConfiguration> configs = of();
 		if (element != null) {
@@ -425,17 +424,17 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 			IJavaElement elementToLaunch = null;
 			try {
 				switch (element.getElementType()) {
-				case IJavaElement.JAVA_PROJECT:
-				case IJavaElement.PACKAGE_FRAGMENT_ROOT:
-				case IJavaElement.PACKAGE_FRAGMENT:
-				case IJavaElement.TYPE:
-				case IJavaElement.METHOD:
+				case JAVA_PROJECT:
+				case PACKAGE_FRAGMENT_ROOT:
+				case PACKAGE_FRAGMENT:
+				case TYPE:
+				case METHOD:
 					elementToLaunch = element;
 					break;
-				case IJavaElement.CLASS_FILE:
+				case CLASS_FILE:
 					elementToLaunch = ((IClassFile) element).getType();
 					break;
-				case IJavaElement.COMPILATION_UNIT:
+				case COMPILATION_UNIT:
 					elementToLaunch = ((ICompilationUnit) element)
 							.findPrimaryType();
 					break;
@@ -480,8 +479,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 	 * @since 3.4
 	 */
 	public IResource getLaunchableResource(IEditorPart editor) {
-		ITypeRoot element = JavaUI.getEditorInputTypeRoot(editor
-				.getEditorInput());
+		ITypeRoot element = getEditorInputTypeRoot(editor.getEditorInput());
 		if (element != null) {
 			try {
 				return element.getCorrespondingResource();

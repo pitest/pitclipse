@@ -115,4 +115,16 @@ public class PackageExplorer {
 		SWTBotTreeItem project = getProject(context.getProjectName());
 		return getPackageFromProject(project, context.getPackageName());
 	}
+
+	public SWTBotTreeItem selectPackageRoot(PackageContext context) {
+		for (SWTBotTreeItem srcDir : getProject(context.getProjectName())
+				.getItems()) {
+			srcDir.select();
+			srcDir.expand();
+			if (srcDir.getText().equals(context.getSourceDir())) {
+				return srcDir;
+			}
+		}
+		return null;
+	}
 }

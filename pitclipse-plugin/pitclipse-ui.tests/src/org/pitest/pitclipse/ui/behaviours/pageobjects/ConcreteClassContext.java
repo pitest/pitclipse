@@ -1,13 +1,12 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-
 public class ConcreteClassContext extends AbstractClassContext {
 
 	private final String method;
 
 	protected ConcreteClassContext(String className, String packageName,
-			String projectName, String method) {
-		super(className, packageName, projectName);
+			String projectName, String method, String sourceDir) {
+		super(className, packageName, projectName, sourceDir);
 		this.method = method;
 	}
 
@@ -21,6 +20,7 @@ public class ConcreteClassContext extends AbstractClassContext {
 		private String packageName;
 		private String projectName;
 		private String method;
+		private String sourceDir;
 
 		public Builder() {
 		};
@@ -45,9 +45,14 @@ public class ConcreteClassContext extends AbstractClassContext {
 			return this;
 		}
 
+		public Builder withSourceDir(String sourceDir) {
+			this.sourceDir = sourceDir;
+			return this;
+		}
+
 		public ConcreteClassContext build() {
 			return new ConcreteClassContext(className, packageName,
-					projectName, method);
+					projectName, method, sourceDir);
 		}
 
 		public Builder clone(ConcreteClassContext context) {
@@ -55,6 +60,7 @@ public class ConcreteClassContext extends AbstractClassContext {
 			packageName = context.getPackageName();
 			projectName = context.getProjectName();
 			method = context.getMethod();
+			sourceDir = context.getSourceDir();
 			return this;
 		}
 

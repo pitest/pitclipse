@@ -13,35 +13,35 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 	private static final String SLEBS_PACKAGE_NAME = "foo.bar.slebs";
 
 	private static final TestClassMetaData FOO_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(FOO_BAR_PACKAGE_NAME).withClass("Foo").build();
 
 	private static final TestClassMetaData BAR_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(FOO_BAR_PACKAGE_NAME).withClass("Bar").build();
 
 	private static final TestClassMetaData NORMA_JEAN_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(PLEBS_PACKAGE_NAME).withClass("NormaJean").build();
 
 	private static final TestClassMetaData MARILYN_AT_FIRST_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(PLEBS_PACKAGE_NAME).withClass("Marilyn").build();
 
 	private static final TestClassMetaData MARILYN_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(SLEBS_PACKAGE_NAME).withClass("Marilyn").build();
 
 	private static final TestClassMetaData TREVOR_BROOKES_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(PLEBS_PACKAGE_NAME).withClass("TrevorBrookes").build();
 
 	private static final TestClassMetaData BRUNO_AT_FIRST_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(PLEBS_PACKAGE_NAME).withClass("BrunoBrookes").build();
 
 	private static final TestClassMetaData BRUNO_BROOKES_META_DATA = TestClassMetaData
-			.builder().withProject(PROJECT_NAME)
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(SLEBS_PACKAGE_NAME).withClass("BrunoBrookes").build();
 
 	private final ProjectSteps projectSteps = new ProjectSteps();
@@ -105,6 +105,9 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		// Scenario: Run PIT testing at the package level
 		runPackageTest(FOO_META_DATA, 1, 100, 100);
 
+		// Scenario: Run PIT at the package root level
+		runPackageRootTest(FOO_META_DATA, 1, 100, 100);
+
 		// Scenario: Create class Bar & it's Test
 		createClassAndTest(BAR_META_DATA);
 		runTest(BAR_META_DATA, 1, 0, 0);
@@ -122,6 +125,9 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
 		// Scenario: Run PIT testing at the package level
 		runPackageTest(FOO_META_DATA, 2, 100, 100);
+
+		// Scenario: Run PIT at the package root level
+		runPackageRootTest(FOO_META_DATA, 2, 100, 100);
 	}
 
 	@Test
@@ -166,6 +172,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
 		runTest(TREVOR_BROOKES_META_DATA, 2, 50, 50);
 		runPackageTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
+		runPackageRootTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
 
 		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
 				TREVOR_BROOKES_META_DATA.getPackageName(),
@@ -178,14 +185,16 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
 		runTest(BRUNO_AT_FIRST_META_DATA, 2, 50, 50);
 		runPackageTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
+		runPackageRootTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
 
 		// Refactor package and retest
 		classSteps.selectPackage(MARILYN_AT_FIRST_META_DATA.getProjectName(),
 				MARILYN_AT_FIRST_META_DATA.getPackageName());
 		classSteps.renamePackage(MARILYN_META_DATA.getPackageName());
 		runTest(MARILYN_META_DATA, 2, 50, 50);
-		runPackageTest(MARILYN_META_DATA, 2, 100, 100);
 		runTest(BRUNO_BROOKES_META_DATA, 2, 50, 50);
+		runPackageTest(MARILYN_META_DATA, 2, 100, 100);
+		runPackageRootTest(MARILYN_META_DATA, 2, 100, 100);
 	}
 
 	private void runTest(TestClassMetaData metaData, int classesTested,
@@ -198,7 +207,16 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
 	private void runPackageTest(TestClassMetaData metaData, int classesTested,
 			int totalCoverage, int mutationCoverage) {
-		pitSteps.runTest(metaData.getProjectName(), metaData.getPackageName());
+		pitSteps.runPackageTest(metaData.getProjectName(),
+				metaData.getPackageName());
+		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
+				mutationCoverage);
+	}
+
+	private void runPackageRootTest(TestClassMetaData metaData,
+			int classesTested, int totalCoverage, int mutationCoverage) {
+		pitSteps.runPackageRootTest(metaData.getProjectName(),
+				metaData.getSourceDir());
 		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
 				mutationCoverage);
 	}

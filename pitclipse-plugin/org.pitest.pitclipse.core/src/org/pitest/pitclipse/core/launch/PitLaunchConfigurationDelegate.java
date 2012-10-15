@@ -5,6 +5,7 @@ import static com.google.common.collect.ImmutableSet.builder;
 import static org.eclipse.core.resources.IResource.FOLDER;
 import static org.eclipse.core.resources.IResource.NONE;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
+import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getPitClasspath;
@@ -13,6 +14,7 @@ import static org.pitest.pitclipse.core.PitCoreActivator.log;
 import java.io.File;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -104,8 +106,8 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		executorService.execute(updater);
 	}
 
-	private List<String> getPackagesToTest(ILaunchConfiguration launchConfig)
-			throws CoreException {
+	private List<String> getPackagesToTest(
+			final ILaunchConfiguration launchConfig) throws CoreException {
 		final Builder<String> builder = builder();
 		IResource[] resources = launchConfig.getMappedResources();
 		IResourceProxyVisitor visitor = new IResourceProxyVisitor() {
@@ -115,15 +117,37 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 							.requestResource());
 					if (element.getElementType() == PACKAGE_FRAGMENT) {
 						builder.add(element.getElementName() + ".*");
+					} else if (element.getElementType() == PACKAGE_FRAGMENT_ROOT) {
+						builder.addAll(getPackagesFromRoot(
+								getProject(launchConfig),
+								element.getHandleIdentifier()));
 					}
 				}
 				return false;
 			}
+
 		};
 		for (IResource resource : resources) {
 			resource.accept(visitor, NONE);
 		}
 		return copyOf(builder.build());
+	}
+
+	private Set<String> getPackagesFromRoot(IJavaProject project,
+			String handleId) throws JavaModelException {
+		Builder<String> builder = builder();
+		IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
+		for (IPackageFragmentRoot root : roots) {
+			if (handleId.equals(root.getHandleIdentifier())) {
+				IJavaElement[] elements = root.getChildren();
+				for (IJavaElement element : elements) {
+					if (element.getElementType() == PACKAGE_FRAGMENT) {
+						builder.add(element.getElementName() + ".*");
+					}
+				}
+			}
+		}
+		return builder.build();
 	}
 
 	private boolean isTestLaunch(ILaunchConfiguration launchConfig)
@@ -236,7 +260,7 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 						.toString()));
 			}
 		}
-		return ImmutableList.copyOf(sourceDirBuilder.build());
+		return copyOf(sourceDirBuilder.build());
 	}
 
 	private File removeProjectFromPackagePath(IJavaProject javaProject,
