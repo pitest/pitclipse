@@ -7,10 +7,23 @@ import org.pitest.pitclipse.ui.behaviours.steps.ProjectSteps;
 
 public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
+	private static final String TREVOR_BROOKES_DO_MY_THING_TEST = "@Test public void tbTestCase1() {org.junit.Assert.assertEquals(10, new TrevorBrookes().doMyThing(5));}";
+	private static final String TREVOR_BROOKES_DO_MY_THING = "public int doMyThing(int i) {return 2 * i;}";
+	private static final String NORMA_JEAN_DO_MY_THING = "public int doMyThing(int i) {return i + 20;}";
+	private static final String NORMA_JEAN_DO_MY_THING_TEST = "@Test public void njTestCase1() {org.junit.Assert.assertEquals(21, new NormaJean().doMyThing(1));}";
+	private static final String COD_BOB = "public int doBob(int i) {return i;}";
+	private static final String TROUT_BOB = "public int doBob(int i) {return i;}";
+	private static final String COD_BOB_TEST = "@Test public void codTest() {org.junit.Assert.assertEquals(1, new Cod().doBob(1));}";
+	private static final String TROUT_BOB_TEST = "@Test public void troutTest() {org.junit.Assert.assertEquals(1, new Trout().doBob(1));}";
+	private static final String FROG_RIBBIT = "public int doRibbit() {return 0;}";
+	private static final String FROG_RIBBIT_TEST = "@Test public void frogTest() {org.junit.Assert.assertEquals(0, new Frog().doRibbit());}";
 	private static final String PROJECT_NAME = "SimpleProject";
 	private static final String FOO_BAR_PACKAGE_NAME = "foo.bar";
 	private static final String PLEBS_PACKAGE_NAME = "foo.bar.plebs";
 	private static final String SLEBS_PACKAGE_NAME = "foo.bar.slebs";
+	private static final String SEA_FISH_PACKAGE_NAME = "sea.fish";
+	private static final String FRESHWATER_FISH_PACKAGE_NAME = "lake.fish";
+	private static final String AMPHIBIAN_PACKAGE_NAME = "lake.amphibian";
 
 	private static final TestClassMetaData FOO_META_DATA = TestClassMetaData
 			.builder().withProject(PROJECT_NAME).withSrcDir("src")
@@ -43,6 +56,19 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 	private static final TestClassMetaData BRUNO_BROOKES_META_DATA = TestClassMetaData
 			.builder().withProject(PROJECT_NAME).withSrcDir("src")
 			.withPackage(SLEBS_PACKAGE_NAME).withClass("BrunoBrookes").build();
+
+	private static final TestClassMetaData COD_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
+			.withPackage(SEA_FISH_PACKAGE_NAME).withClass("Cod").build();
+
+	private static final TestClassMetaData TROUT_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
+			.withPackage(FRESHWATER_FISH_PACKAGE_NAME).withClass("Trout")
+			.build();
+
+	private static final TestClassMetaData FROG_META_DATA = TestClassMetaData
+			.builder().withProject(PROJECT_NAME).withSrcDir("src")
+			.withPackage(AMPHIBIAN_PACKAGE_NAME).withClass("Frog").build();
 
 	private final ProjectSteps projectSteps = new ProjectSteps();
 	private final ClassSteps classSteps = new ClassSteps();
@@ -131,20 +157,39 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 	}
 
 	@Test
+	public void runTestsInDifferentPackages() {
+		projectSteps.createJavaProject(PROJECT_NAME);
+		// Create some classes & tests in other packages
+		createClassAndTest(COD_META_DATA, COD_BOB_TEST, COD_BOB);
+		createClassAndTest(TROUT_META_DATA, TROUT_BOB_TEST, TROUT_BOB);
+		createClassAndTest(FROG_META_DATA, FROG_RIBBIT_TEST, FROG_RIBBIT);
+
+		// Scenario: Run PIT at the package root level
+		runPackageTest(COD_META_DATA, 3, 33, 33);
+		runPackageTest(TROUT_META_DATA, 3, 33, 33);
+		runPackageTest(FROG_META_DATA, 3, 33, 33);
+		runPackageRootTest(COD_META_DATA, 3, 100, 100);
+	}
+
+	private void createClassAndTest(TestClassMetaData metaData,
+			String testMethod, String methodUnderTest) {
+		createClassAndTest(metaData);
+		classSteps.selectClass(metaData.getProjectName(),
+				metaData.getPackageName(), metaData.getTestClassName());
+		classSteps.createMethod(testMethod);
+		classSteps.selectClass(metaData.getProjectName(),
+				metaData.getPackageName(), metaData.getClassName());
+		classSteps.createMethod(methodUnderTest);
+
+	}
+
+	@Test
 	public void checkPITLaunchesAfterRefactoringClasses() {
 		// Scenario: Create a project
 		projectSteps.createJavaProject(PROJECT_NAME);
 		// Scenario: Create Norma Jean
-		createClassAndTest(NORMA_JEAN_META_DATA);
-		classSteps.selectClass(NORMA_JEAN_META_DATA.getProjectName(),
-				NORMA_JEAN_META_DATA.getPackageName(),
-				NORMA_JEAN_META_DATA.getTestClassName());
-		classSteps
-				.createMethod("@Test public void njTestCase1() {org.junit.Assert.assertEquals(21, new NormaJean().doMyThing(1));}");
-		classSteps.selectClass(NORMA_JEAN_META_DATA.getProjectName(),
-				NORMA_JEAN_META_DATA.getPackageName(),
-				NORMA_JEAN_META_DATA.getClassName());
-		classSteps.createMethod("public int doMyThing(int i) {return i + 20;}");
+		createClassAndTest(NORMA_JEAN_META_DATA, NORMA_JEAN_DO_MY_THING_TEST,
+				NORMA_JEAN_DO_MY_THING);
 		runTest(NORMA_JEAN_META_DATA, 1, 100, 100);
 
 		// Refactor class and retest
@@ -159,16 +204,8 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runTest(MARILYN_AT_FIRST_META_DATA, 1, 100, 100);
 
 		// Create another class
-		createClassAndTest(TREVOR_BROOKES_META_DATA);
-		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
-				TREVOR_BROOKES_META_DATA.getPackageName(),
-				TREVOR_BROOKES_META_DATA.getTestClassName());
-		classSteps
-				.createMethod("@Test public void tbTestCase1() {org.junit.Assert.assertEquals(10, new TrevorBrookes().doMyThing(5));}");
-		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
-				TREVOR_BROOKES_META_DATA.getPackageName(),
-				TREVOR_BROOKES_META_DATA.getClassName());
-		classSteps.createMethod("public int doMyThing(int i) {return 2 * i;}");
+		createClassAndTest(TREVOR_BROOKES_META_DATA,
+				TREVOR_BROOKES_DO_MY_THING_TEST, TREVOR_BROOKES_DO_MY_THING);
 
 		runTest(TREVOR_BROOKES_META_DATA, 2, 50, 50);
 		runPackageTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
