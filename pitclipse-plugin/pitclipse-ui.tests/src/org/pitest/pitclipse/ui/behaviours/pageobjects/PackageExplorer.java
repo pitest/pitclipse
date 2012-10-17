@@ -35,7 +35,7 @@ public class PackageExplorer {
 	}
 
 	private void openProject(SWTBotTreeItem project) {
-		project.click().expand();
+		project.click().select().expand();
 	}
 
 	private SWTBotTreeItem getProject(String projectName) {

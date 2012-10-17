@@ -12,15 +12,111 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 
 public class PitclipseSteps {
 
+	public class SelectProject implements Runnable {
+
+		private final String projectName;
+
+		public SelectProject(String projectName) {
+			this.projectName = projectName;
+		}
+
+		public void run() {
+			INSTANCE.getPackageExplorer().selectProject(projectName);
+		}
+
+	}
+
+	private static final class SelectPackageRoot implements Runnable {
+		private static final class PackageRootSelector implements
+				PackageContext {
+			private final String projectName;
+			private final String packageRoot;
+
+			public PackageRootSelector(String projectName, String packageRoot) {
+				this.projectName = projectName;
+				this.packageRoot = packageRoot;
+			}
+
+			public String getPackageName() {
+				return null;
+			}
+
+			public String getProjectName() {
+				return projectName;
+			}
+
+			public String getSourceDir() {
+				return packageRoot;
+			}
+		}
+
+		private final PackageRootSelector context;
+
+		private SelectPackageRoot(String packageRoot, String projectName) {
+			context = new PackageRootSelector(projectName, packageRoot);
+		}
+
+		public void run() {
+			INSTANCE.getPackageExplorer().selectPackageRoot(context);
+		}
+	}
+
+	private static final class SelectPackage implements Runnable {
+		private static final class PackageSelector implements PackageContext {
+			private final String projectName;
+			private final String packageName;
+
+			public PackageSelector(String projectName, String packageName) {
+				this.projectName = projectName;
+				this.packageName = packageName;
+			}
+
+			public String getPackageName() {
+				return packageName;
+			}
+
+			public String getProjectName() {
+				return projectName;
+			}
+
+			public String getSourceDir() {
+				return null;
+			}
+		}
+
+		private final PackageSelector context;
+
+		private SelectPackage(String packageName, String projectName) {
+			context = new PackageSelector(projectName, packageName);
+		}
+
+		public void run() {
+			INSTANCE.getPackageExplorer().selectPackage(context);
+		}
+	}
+
+	private static final class SelectTestClass implements Runnable {
+		private final String testClassName;
+		private final String packageName;
+		private final String projectName;
+
+		private SelectTestClass(String testClassName, String packageName,
+				String projectName) {
+			this.testClassName = testClassName;
+			this.packageName = packageName;
+			this.projectName = projectName;
+		}
+
+		public void run() {
+			INSTANCE.getPackageExplorer().selectClass(testClassName,
+					packageName, projectName);
+		}
+	}
+
 	@When("test $testClassName in package $packageName is run for project $projectName")
 	public void runTest(final String projectName, final String packageName,
 			final String testClassName) {
-		runPit(new Runnable() {
-			public void run() {
-				INSTANCE.getPackageExplorer().selectClass(testClassName,
-						packageName, projectName);
-			}
-		});
+		runPit(new SelectTestClass(testClassName, packageName, projectName));
 
 	}
 
@@ -55,46 +151,17 @@ public class PitclipseSteps {
 	@When("tests in package $packageName are run for project $projectName")
 	public void runPackageTest(final String projectName,
 			final String packageName) {
-		runPit(new Runnable() {
-			public void run() {
-				INSTANCE.getPackageExplorer().selectPackage(
-						new PackageContext() {
-							public String getPackageName() {
-								return packageName;
-							}
-
-							public String getProjectName() {
-								return projectName;
-							}
-
-							public String getSourceDir() {
-								return null;
-							}
-						});
-			}
-		});
+		runPit(new SelectPackage(packageName, projectName));
 	}
 
+	@When("tests in package root $packageRoot are run for project $projectName")
 	public void runPackageRootTest(final String projectName,
 			final String packageRoot) {
-		runPit(new Runnable() {
-			public void run() {
-				INSTANCE.getPackageExplorer().selectPackageRoot(
-						new PackageContext() {
-							public String getPackageName() {
-								return null;
-							}
+		runPit(new SelectPackageRoot(packageRoot, projectName));
+	}
 
-							public String getProjectName() {
-								return projectName;
-							}
-
-							public String getSourceDir() {
-								return packageRoot;
-							}
-						});
-			}
-		});
-
+	@When("tests are run for project $projectName")
+	public void runProjectTest(String projectName, String sourceDir) {
+		runPit(new SelectProject(projectName));
 	}
 }

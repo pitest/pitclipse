@@ -154,6 +154,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 
 		// Scenario: Run PIT at the package root level
 		runPackageRootTest(FOO_META_DATA, 2, 100, 100);
+		runProjectTest(FOO_META_DATA, 2, 100, 100);
 	}
 
 	@Test
@@ -169,6 +170,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runPackageTest(TROUT_META_DATA, 3, 33, 33);
 		runPackageTest(FROG_META_DATA, 3, 33, 33);
 		runPackageRootTest(COD_META_DATA, 3, 100, 100);
+		runProjectTest(COD_META_DATA, 3, 100, 100);
 	}
 
 	private void createClassAndTest(TestClassMetaData metaData,
@@ -210,6 +212,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runTest(TREVOR_BROOKES_META_DATA, 2, 50, 50);
 		runPackageTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
 		runPackageRootTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
+		runProjectTest(TREVOR_BROOKES_META_DATA, 2, 100, 100);
 
 		classSteps.selectClass(TREVOR_BROOKES_META_DATA.getProjectName(),
 				TREVOR_BROOKES_META_DATA.getPackageName(),
@@ -223,6 +226,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runTest(BRUNO_AT_FIRST_META_DATA, 2, 50, 50);
 		runPackageTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
 		runPackageRootTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
+		runProjectTest(BRUNO_AT_FIRST_META_DATA, 2, 100, 100);
 
 		// Refactor package and retest
 		classSteps.selectPackage(MARILYN_AT_FIRST_META_DATA.getProjectName(),
@@ -232,6 +236,7 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 		runTest(BRUNO_BROOKES_META_DATA, 2, 50, 50);
 		runPackageTest(MARILYN_META_DATA, 2, 100, 100);
 		runPackageRootTest(MARILYN_META_DATA, 2, 100, 100);
+		runProjectTest(MARILYN_META_DATA, 2, 100, 100);
 	}
 
 	private void runTest(TestClassMetaData metaData, int classesTested,
@@ -253,6 +258,14 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 	private void runPackageRootTest(TestClassMetaData metaData,
 			int classesTested, int totalCoverage, int mutationCoverage) {
 		pitSteps.runPackageRootTest(metaData.getProjectName(),
+				metaData.getSourceDir());
+		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
+				mutationCoverage);
+	}
+
+	private void runProjectTest(TestClassMetaData metaData, int classesTested,
+			int totalCoverage, int mutationCoverage) {
+		pitSteps.runProjectTest(metaData.getProjectName(),
 				metaData.getSourceDir());
 		pitSteps.coverageReportGenerated(classesTested, totalCoverage,
 				mutationCoverage);

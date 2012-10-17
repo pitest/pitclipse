@@ -4,6 +4,7 @@ import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableSet.builder;
 import static org.eclipse.core.resources.IResource.FOLDER;
 import static org.eclipse.core.resources.IResource.NONE;
+import static org.eclipse.core.resources.IResource.PROJECT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
@@ -121,6 +122,16 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 						builder.addAll(getPackagesFromRoot(
 								getProject(launchConfig),
 								element.getHandleIdentifier()));
+					}
+				} else if (proxy.getType() == PROJECT) {
+					IJavaProject project = getProject(launchConfig);
+					IPackageFragmentRoot[] packageRoots = project
+							.getAllPackageFragmentRoots();
+					for (IPackageFragmentRoot packageRoot : packageRoots) {
+						if (!packageRoot.isArchive()) {
+							builder.addAll(getPackagesFromRoot(project,
+									packageRoot.getHandleIdentifier()));
+						}
 					}
 				}
 				return false;
