@@ -30,7 +30,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
-        <version>2.0.1</version>
+        <version>${maven.site.version}</version>
       </plugin>
     </plugins>
   </build>
@@ -50,6 +50,7 @@
   </profiles>
   <properties>
     <guava.version>11.0.1</guava.version>
-    <!-- <forceContextQualifier>20120924-1842</forceContextQualifier> -->
+    <maven.site.version>3.1</maven.site.version>
+    <!-- <forceContextQualifier>20121018-0834</forceContextQualifier> -->
   </properties>
 </project> 

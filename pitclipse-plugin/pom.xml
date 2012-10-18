@@ -26,9 +26,14 @@
       <url>${local.p2.url}</url>
     </repository>
     <repository>
-      <id>snaps</id>
+      <id>p2.snapsnots</id>
       <layout>p2</layout>
       <url>http://localhost:8081/nexus/content/repositories/snapshots/.meta/p2/</url>
+    </repository>   
+    <repository>
+      <id>p2.releases</id>
+      <layout>p2</layout>
+      <url>http://localhost:8081/nexus/content/repositories/releases/.meta/p2/</url>
     </repository>   
   </repositories>
   <build>
