@@ -6,7 +6,7 @@
   <artifactId>org.pitest.pitclipse-ui.tests</artifactId>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>0.28.3-SNAPSHOT</version>
+    <version>0.28.3.20121018-0834</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <packaging>eclipse-test-plugin</packaging>
