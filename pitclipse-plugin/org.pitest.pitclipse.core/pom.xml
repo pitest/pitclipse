@@ -7,7 +7,7 @@
   <packaging>eclipse-plugin</packaging>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>0.28.3.20121018-0834</version>
+    <version>0.28.4-SNAPSHOT</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <dependencies>
