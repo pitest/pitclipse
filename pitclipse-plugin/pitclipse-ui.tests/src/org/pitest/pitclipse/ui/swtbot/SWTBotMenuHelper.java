@@ -23,8 +23,7 @@ public class SWTBotMenuHelper {
 			if (bar != null) {
 				for (MenuItem item : bar.getItems()) {
 					// Remove any hotkey marking
-					String menuText = item.getText().replace("&",
-							"");
+					String menuText = item.getText().replace("&", "");
 					if (menuText.contains(searchString)) {
 						return item;
 					}
@@ -39,8 +38,8 @@ public class SWTBotMenuHelper {
 
 	public SWTBotMenu findMenu(final SWTBotMenu parentMenu,
 			final String searchString) {
-		MenuItem menuItem = UIThreadRunnable
-				.syncExec(new MenuFinder(parentMenu, searchString));
+		MenuItem menuItem = UIThreadRunnable.syncExec(new MenuFinder(
+				parentMenu, searchString));
 
 		if (menuItem == null) {
 			throw new WidgetNotFoundException("MenuItem \"" + searchString

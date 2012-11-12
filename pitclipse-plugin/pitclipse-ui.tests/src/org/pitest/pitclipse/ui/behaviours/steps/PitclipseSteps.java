@@ -6,8 +6,8 @@ import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.pitest.pitclipse.ui.behaviours.Then;
-import org.pitest.pitclipse.ui.behaviours.When;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 
 public class PitclipseSteps {
@@ -114,8 +114,8 @@ public class PitclipseSteps {
 	}
 
 	@When("test $testClassName in package $packageName is run for project $projectName")
-	public void runTest(final String projectName, final String packageName,
-			final String testClassName) {
+	public void runTest(final String testClassName, final String packageName,
+			final String projectName) {
 		runPit(new SelectTestClass(testClassName, packageName, projectName));
 
 	}
@@ -137,31 +137,40 @@ public class PitclipseSteps {
 
 	}
 
-	@Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage and mutation coverage of $mutationCoverage")
+	@Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
 	public void coverageReportGenerated(int classes, double totalCoverage,
 			double mutationCoverage) {
 		INSTANCE.getPitView().waitForUpdate();
-		assertEquals(classes, INSTANCE.getPitView().getClassesTested());
-		assertDoubleEquals(totalCoverage, INSTANCE.getPitView()
-				.getOverallCoverage());
-		assertDoubleEquals(mutationCoverage, INSTANCE.getPitView()
-				.getMutationCoverage());
+		try {
+			assertEquals(classes, INSTANCE.getPitView().getClassesTested());
+			assertDoubleEquals(totalCoverage, INSTANCE.getPitView()
+					.getOverallCoverage());
+			assertDoubleEquals(mutationCoverage, INSTANCE.getPitView()
+					.getMutationCoverage());
+		} catch (Error e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@When("tests in package $packageName are run for project $projectName")
-	public void runPackageTest(final String projectName,
-			final String packageName) {
+	public void runPackageTest(final String packageName,
+			final String projectName) {
 		runPit(new SelectPackage(packageName, projectName));
 	}
 
-	@When("tests in package root $packageRoot are run for project $projectName")
-	public void runPackageRootTest(final String projectName,
-			final String packageRoot) {
+	@When("tests in source root $packageRoot are run for project $projectName")
+	public void runPackageRootTest(final String packageRoot,
+			final String projectName) {
 		runPit(new SelectPackageRoot(packageRoot, projectName));
 	}
 
 	@When("tests are run for project $projectName")
-	public void runProjectTest(String projectName, String sourceDir) {
+	public void runProjectTest(String projectName) {
 		runPit(new SelectProject(projectName));
+	}
+
+	public void openPitConfig(String projectName) {
+		INSTANCE.getRunMenu().runConfigurations();
 	}
 }

@@ -10,6 +10,9 @@
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <packaging>eclipse-test-plugin</packaging>
+  <properties>
+    <jbehave.version>3.7</jbehave.version>
+  </properties>
   <build>
     <plugins>
       <plugin>
@@ -57,10 +60,10 @@
       <artifactId>guava-osgi</artifactId>
       <version>${guava.version}</version>
     </dependency>
-    <!-- <dependency> <groupId>org.antlr</groupId> <artifactId>com.springsource.org.antlr.runtime</artifactId> 
-      <version>3.0.1</version> </dependency> <dependency> <groupId>com.googlecode.guava-osgi</groupId> 
-      <artifactId>guava-osgi</artifactId> <version>11.0.1</version> </dependency> 
-      <dependency> <groupId>org.pitest</groupId> <artifactId>pitclipse-dep-bundle</artifactId> 
-      <version>${pom.version}</version> </dependency> -->
+    <dependency>
+      <groupId>org.jbehave</groupId>
+      <artifactId>jbehave-core</artifactId>
+      <version>${jbehave.version}</version>
+    </dependency>
   </dependencies>
 </project>

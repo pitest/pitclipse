@@ -3,9 +3,11 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import static junit.framework.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
-import org.pitest.pitclipse.ui.behaviours.Given;
-import org.pitest.pitclipse.ui.behaviours.Then;
-import org.pitest.pitclipse.ui.behaviours.When;
+import java.util.List;
+
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 
 public class ProjectSteps {
 
@@ -32,6 +34,14 @@ public class ProjectSteps {
 		for (String project : INSTANCE.getPackageExplorer()
 				.getProjectsInWorkspace()) {
 			INSTANCE.getAbstractSyntaxTree().deleteProject(project);
+		}
+	}
+
+	public void addToBuildPath(String projectName, List<String> projects) {
+		INSTANCE.getPackageExplorer().selectProject(projectName);
+		for (String project : projects) {
+			INSTANCE.getAbstractSyntaxTree().addProjectToClassPathOfProject(
+					projectName, project);
 		}
 	}
 }

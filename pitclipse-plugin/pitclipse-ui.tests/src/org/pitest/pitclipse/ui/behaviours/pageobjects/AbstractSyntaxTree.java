@@ -87,4 +87,24 @@ public class AbstractSyntaxTree {
 		}
 	}
 
+	public void addProjectToClassPathOfProject(String projectName,
+			String projectToAdd) {
+		IJavaProject project = getJavaProject(projectName);
+		try {
+			Path junitPath = new Path("/" + projectToAdd);
+			IClasspathEntry junitClasspath = JavaCore
+					.newProjectEntry(junitPath);
+
+			List<IClasspathEntry> entries = ImmutableList
+					.<IClasspathEntry> builder().add(project.getRawClasspath())
+					.add(junitClasspath).build();
+
+			// add a new entry using the path to the container
+			project.setRawClasspath(
+					entries.toArray(new IClasspathEntry[entries.size()]), null);
+		} catch (JavaModelException e) {
+			throw new StepException(e);
+		}
+	}
+
 }
