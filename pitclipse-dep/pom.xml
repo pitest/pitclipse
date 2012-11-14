@@ -6,13 +6,13 @@
   <parent>
     <artifactId>pitclipse</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.28.4-SNAPSHOT</version>
+    <version>0.29.1-SNAPSHOT</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
   <properties>
-    <pitest.version>0.28</pitest.version>
+    <pitest.version>0.29</pitest.version>
     <felix.version>2.3.7</felix.version>
   </properties>
   <modules>
