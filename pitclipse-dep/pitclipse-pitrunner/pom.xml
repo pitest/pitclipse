@@ -6,7 +6,7 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.29.0-SNAPSHOT</version>
+    <version>0.29.0.201211150837</version>
   </parent>
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
