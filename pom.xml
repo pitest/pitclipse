@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.29.2.201211171459</version>
+  <version>0.29.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <organization>
     <name>Pitest.org</name>
@@ -51,6 +51,6 @@
   <properties>
     <guava.version>11.0.1</guava.version>
     <maven.site.version>3.1</maven.site.version>
-    <forceContextQualifier>201211150837</forceContextQualifier> 
+<!--    <forceContextQualifier>201211150837</forceContextQualifier> --> 
   </properties>
 </project> 
