@@ -1,7 +1,7 @@
 Pitclipse
 =========
 
-Eclipse plugin for PIT.
+Eclipse plugin for PIT.  Update site: http://pitclipse.freehostingcloud.com/repository/
 
 Build Requirements
 ==================
@@ -14,6 +14,7 @@ You will need to setup p2 proxys for the following update sites:
 * http://download.eclipse.org/releases/indigo
 * http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
 * http://guava-osgi.googlecode.com/svn/trunk/repository/
+* http://jbehave.org/reference/eclipse/updates/
 
 
 Eclipse Build
@@ -23,7 +24,9 @@ Requirements
 ------------
 * Eclipse installation 3.6 or greater
 * Guava bundle - update site http://guava-osgi.googlecode.com/svn/trunk/repository/
-* SWTBot plugin (to run UI tests) - update site http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
+* SWTBot plugin (to drive UI testing) - update site http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
+* JBehave plugin (to run the UI stories) - update site http://jbehave.org/reference/eclipse/updates/
+
 
 Import the project as a maven project.  You may need to disable the maven nature from the org.pitest.pitclipse.core & org.pitest.pitclipse.ui modules (right-click Maven -> Disable Nature).  If you check the build properties of org.pitest.pitclipse.core & org.pitest.pitclipse.ui, ensure it has the Plug-in Manifest Builder enabled.
 
