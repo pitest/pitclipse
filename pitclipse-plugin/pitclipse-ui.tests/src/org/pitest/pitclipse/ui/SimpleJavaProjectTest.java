@@ -86,22 +86,6 @@ public class SimpleJavaProjectTest extends AbstractPitclipseUITest {
 	private final ClassSteps classSteps = new ClassSteps();
 	private final PitclipseSteps pitSteps = new PitclipseSteps();
 
-	@Test
-	public void runTestsInDifferentPackages() {
-		projectSteps.createJavaProject(THIRD_PROJECT_NAME);
-		// Create some classes & tests in other packages
-		createClassAndTest(COD_META_DATA, COD_BOB_TEST, COD_BOB);
-		createClassAndTest(TROUT_META_DATA, TROUT_BOB_TEST, TROUT_BOB);
-		createClassAndTest(FROG_META_DATA, FROG_RIBBIT_TEST, FROG_RIBBIT);
-
-		// Scenario: Run PIT at the package root level
-		runPackageTest(COD_META_DATA, 3, 33, 33);
-		runPackageTest(TROUT_META_DATA, 3, 33, 33);
-		runPackageTest(FROG_META_DATA, 3, 33, 33);
-		runPackageRootTest(COD_META_DATA, 3, 100, 100);
-		runProjectTest(COD_META_DATA, 3, 100, 100);
-	}
-
 	private void createClassAndTest(TestClassMetaData metaData,
 			String testMethod, String methodUnderTest) {
 		createClassAndTest(metaData);

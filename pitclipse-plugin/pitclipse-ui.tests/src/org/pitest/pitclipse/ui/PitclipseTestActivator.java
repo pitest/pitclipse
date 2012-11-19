@@ -36,8 +36,8 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 		return copyOf(stories);
 	}
 
-	private static void setStories(List<String> classpath) {
-		stories = copyOf(classpath);
+	private static void setStories(List<String> stories) {
+		PitclipseTestActivator.stories = copyOf(stories);
 	}
 
 	/*
