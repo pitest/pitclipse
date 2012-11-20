@@ -73,7 +73,7 @@ public final class ClassSteps {
 	}
 
 	@Given("the package $packageName in project $projectName is selected")
-	public void selectPackage(String projectName, String packageName) {
+	public void selectPackage(String packageName, String projectName) {
 		concreteClassContext = new ConcreteClassContext.Builder()
 				.withProjectName(projectName).withPackageName(packageName)
 				.build();
