@@ -3,6 +3,7 @@ package org.pitest.pitclipse.ui;
 import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
+import static com.google.common.collect.Sets.newTreeSet;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 	}
 
 	private static void setStories(List<String> stories) {
-		PitclipseTestActivator.stories = copyOf(stories);
+		PitclipseTestActivator.stories = copyOf(newTreeSet(stories));
 	}
 
 	/*
