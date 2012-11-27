@@ -9,7 +9,7 @@ import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.PitCoreActivator.getPitClasspath;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
 import java.io.File;
@@ -87,17 +87,20 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 		IJavaProject project = getProject(launchConfig);
 		List<String> classPath = getClassesFromProject(project);
 		List<File> sourceDirs = getSourceDirsForProject(project);
+		File reportDir = getDefault().emptyResultDir();
 		if (isTestLaunch(launchConfig)) {
 			IType testClass = getTestClass(launchConfig);
 			options = new PITOptionsBuilder()
 					.withClassUnderTest(testClass.getFullyQualifiedName())
 					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs).build();
+					.withSourceDirectories(sourceDirs)
+					.withReportDirectory(reportDir).build();
 		} else {
 			List<String> packages = getPackagesToTest(launchConfig);
 			options = new PITOptionsBuilder().withPackagesToTest(packages)
 					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs).build();
+					.withSourceDirectories(sourceDirs)
+					.withReportDirectory(reportDir).build();
 		}
 
 		super.launch(launchConfig, mode, launch, progress);
@@ -214,7 +217,7 @@ public class PitLaunchConfigurationDelegate extends JavaLaunchDelegate {
 			throws CoreException {
 		List<String> newClasspath = ImmutableList.<String> builder()
 				.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
-				.addAll(getPitClasspath()).build();
+				.addAll(getDefault().getPitClasspath()).build();
 		log("Classpath: " + newClasspath);
 		return newClasspath.toArray(new String[newClasspath.size()]);
 	}

@@ -11,8 +11,6 @@ import org.eclipse.ui.part.ViewPart;
 
 public class PitView extends ViewPart {
 	private Browser browser = null;
-	private File currentReportDirectory = null;
-	private File reportFile;
 	private PitUiUpdatePublisher publisher = null;
 
 	@Override
@@ -35,26 +33,12 @@ public class PitView extends ViewPart {
 	}
 
 	public synchronized void update(File result) {
-		clearDown(currentReportDirectory);
-		currentReportDirectory = new File(result.toURI());
-		reportFile = findResultFile(currentReportDirectory);
+		File currentReportDirectory = new File(result.toURI());
+		File reportFile = findResultFile(currentReportDirectory);
 		if (reportFile == null) {
 			browser.setText("<html/>");
 		} else {
 			browser.setUrl(reportFile.toURI().toString());
-		}
-	}
-
-	private void clearDown(File directory) {
-		if (null != directory) {
-			for (File file : directory.listFiles()) {
-				if (file.isDirectory()) {
-					clearDown(file);
-				}
-				if (!file.delete()) {
-					file.deleteOnExit();
-				}
-			}
 		}
 	}
 
@@ -74,13 +58,5 @@ public class PitView extends ViewPart {
 			}
 		}
 		return null;
-	}
-
-	public synchronized File getReportFile() {
-		return reportFile;
-	}
-
-	public Browser getBrowser() {
-		return browser;
 	}
 }

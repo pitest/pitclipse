@@ -3,6 +3,8 @@ package org.pitest.pitclipse.core;
 import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
+import static com.google.common.io.Files.createParentDirs;
+import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 
@@ -13,6 +15,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -30,22 +33,31 @@ import com.google.common.collect.ImmutableList.Builder;
  */
 public class PitCoreActivator extends AbstractUIPlugin {
 
+	private static final String HTML_RESULTS_DIR = "html_results";
+	private static final String HTML_FILE = "index.html";
+	private static final String STATE_FILE = "state.out";
+	private static final String HISTORY_DIR = "history";
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.pitest.pitclipse.core"; //$NON-NLS-1$
 
 	// The shared instance
 	private static PitCoreActivator plugin;
 
-	private static List<String> pitClasspath = of();
+	private List<String> pitClasspath = of();
+
+	private File resultDir;
+
+	private File historyFile;
 
 	public PitCoreActivator() {
 	}
 
-	public static List<String> getPitClasspath() {
-		return pitClasspath;
+	public List<String> getPitClasspath() {
+		return copyOf(pitClasspath);
 	}
 
-	private static void setPITClasspath(List<String> classpath) {
+	private void setPITClasspath(List<String> classpath) {
 		pitClasspath = copyOf(classpath);
 	}
 
@@ -64,6 +76,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		setActivator(this);
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
+		setupStateDirectories();
 		Bundle bundle = Platform.getBundle("org.pitest.osgi");
 		Builder<String> builder = builder();
 		builder.add(getBundleFile(bundle).getCanonicalPath());
@@ -75,6 +88,39 @@ public class PitCoreActivator extends AbstractUIPlugin {
 			builder.add(jarFile.getCanonicalPath());
 		}
 		setPITClasspath(builder.build());
+	}
+
+	private void setupStateDirectories() {
+		setupResultDir();
+		setupHistoryFile();
+	}
+
+	private void setupHistoryFile() {
+		IPath pluginLocation = getStateLocation();
+		File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE)
+				.toFile();
+		try {
+			createParentDirs(stateFile);
+			historyFile = stateFile;
+		} catch (IOException e) {
+			// Cannot write to workspace.
+			// Probably shouldn't happen but lets use a temp file instead
+			historyFile = new File(createTempDir(), STATE_FILE);
+		}
+	}
+
+	private void setupResultDir() {
+		IPath pluginLocation = getStateLocation();
+		File stateFile = pluginLocation.append(HTML_RESULTS_DIR)
+				.append(HTML_FILE).toFile();
+		try {
+			createParentDirs(stateFile);
+			resultDir = stateFile.getParentFile();
+		} catch (IOException e) {
+			// Cannot write to workspace.
+			// Probably shouldn't happen but lets use a temp dir instead
+			resultDir = createTempDir();
+		}
 	}
 
 	private URL locateAndEscapeUrl(URL url) throws IOException {
@@ -102,9 +148,9 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception { // NOPMD - Base
 																// class defines
 																// signature
-		setActivator(null);
 		List<String> emptyPath = of();
 		setPITClasspath(emptyPath);
+		setActivator(null);
 		super.stop(context);
 	}
 
@@ -170,4 +216,24 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		return workBench.getActiveWorkbenchWindow();
 	}
 
+	public File emptyResultDir() {
+		recursiveClean(resultDir);
+		return resultDir;
+	}
+
+	private void recursiveClean(File dir) {
+		File[] files = dir.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				recursiveClean(file);
+			}
+			if (!file.delete()) {
+				file.deleteOnExit();
+			}
+		}
+	}
+
+	public File getHistoryFile() {
+		return historyFile;
+	}
 }
