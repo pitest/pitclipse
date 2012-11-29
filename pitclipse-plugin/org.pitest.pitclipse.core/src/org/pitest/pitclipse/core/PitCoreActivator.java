@@ -222,8 +222,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	private void recursiveClean(File dir) {
-		File[] files = dir.listFiles();
-		for (File file : files) {
+		for (File file : dir.listFiles()) {
 			if (file.isDirectory()) {
 				recursiveClean(file);
 			}
