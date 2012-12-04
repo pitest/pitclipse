@@ -7,6 +7,7 @@ import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
+import static org.pitest.pitclipse.core.preferences.PitExecutionMode.values;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.pitest.pitclipse.core.preferences.PitExecutionMode;
+import org.pitest.pitclipse.core.preferences.PreferenceConstants;
 
 import com.google.common.collect.ImmutableList.Builder;
 
@@ -234,5 +237,17 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
 	public File getHistoryFile() {
 		return historyFile;
+	}
+
+	public PitConfiguration getConfiguration() {
+		String choice = getPreferenceStore().getString(
+				PreferenceConstants.P_CHOICE);
+		for (PitExecutionMode pitExecutionMode : values()) {
+			if (pitExecutionMode.getId().equals(choice)) {
+				return PitConfiguration.builder()
+						.withExecutionMode(pitExecutionMode).build();
+			}
+		}
+		return PitConfiguration.builder().build();
 	}
 }

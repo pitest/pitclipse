@@ -2,10 +2,13 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.junit.Assert.assertEquals;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
@@ -172,5 +175,15 @@ public class PitclipseSteps {
 
 	public void openPitConfig(String projectName) {
 		INSTANCE.getRunMenu().runConfigurations();
+	}
+
+	@Given("the isolate tests at a project level preference is selected")
+	public void testProjectsInIsolation() {
+		INSTANCE.getWindowsMenu().setPitExecutionMode(PROJECT_ISOLATION);
+	}
+
+	@Given("the run tests at a workspace level preference is selected")
+	public void testProjectsInWorkspace() {
+		INSTANCE.getWindowsMenu().setPitExecutionMode(WORKSPACE);
 	}
 }
