@@ -3,8 +3,14 @@ Pitclipse
 
 Eclipse plugin for PIT.  Update site: http://pitclipse.freehostingcloud.com/repository/
 
-Build Requirements
-==================
+
+
+
+
+
+
+Plugin Build Requirements
+=========================
 * Maven 3.0
 * Nexus OSS setup for P2 Repository support https://docs.sonatype.org/display/Nexus/Nexus+OSGi+Experimental+Features+-+P2+Repository+Plugin
 OR
