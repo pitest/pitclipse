@@ -11,6 +11,9 @@ Eclipse plugin for PIT.  Update site: http://pitclipse.freehostingcloud.com/repo
 
 Plugin Build Requirements
 =========================
+If you wish to build the plugin from source, you will need the following.
+
+
 * Maven 3.0
 * Nexus OSS setup for P2 Repository support https://docs.sonatype.org/display/Nexus/Nexus+OSGi+Experimental+Features+-+P2+Repository+Plugin
 OR
