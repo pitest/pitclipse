@@ -3,6 +3,7 @@ Scenario: Create some projects
 Given eclipse opens and the welcome screen is acknowledged
 And the java perspective is opened
 And an empty workspace
+And the isolate tests at a project level preference is selected
 
 When the user creates a project with name project1
 And the user creates a project with name project2
@@ -72,5 +73,15 @@ Then a coverage report is generated with 2 classes tested with overall coverage 
 When tests are run for project project4
 Then a coverage report is generated with 1 classes tested with overall coverage of 100% and mutation coverage of 100%
 
+Scenario: Run tests at a workspace level
+Given the run tests at a workspace level preference is selected
 
+When tests are run for project project1
+Then a coverage report is generated with 6 classes tested with overall coverage of 50% and mutation coverage of 0%
+When tests are run for project project2
+Then a coverage report is generated with 6 classes tested with overall coverage of 100% and mutation coverage of 100%
+When tests are run for project project3
+Then a coverage report is generated with 6 classes tested with overall coverage of 50% and mutation coverage of 50%
+When tests are run for project project4
+Then a coverage report is generated with 6 classes tested with overall coverage of 100% and mutation coverage of 100%
 

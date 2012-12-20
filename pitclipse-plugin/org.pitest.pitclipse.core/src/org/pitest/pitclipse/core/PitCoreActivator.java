@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.pitest.pitclipse.core.preferences.PitExecutionMode;
 import org.pitest.pitclipse.core.preferences.PreferenceConstants;
@@ -80,9 +79,14 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
 		setupStateDirectories();
-		Bundle bundle = Platform.getBundle("org.pitest.osgi");
 		Builder<String> builder = builder();
-		builder.add(getBundleFile(bundle).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi"))
+				.getCanonicalPath());
+		builder.add(getBundleFile(
+				Platform.getBundle("org.pitest.pitclipse-pitrunner"))
+				.getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("com.google.guava"))
+				.getCanonicalPath());
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
 

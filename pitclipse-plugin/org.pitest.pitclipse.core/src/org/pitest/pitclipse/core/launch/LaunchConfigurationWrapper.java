@@ -9,6 +9,7 @@ import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 import java.io.File;
 import java.net.URI;
@@ -30,6 +31,8 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
@@ -216,10 +219,29 @@ public class LaunchConfigurationWrapper {
 		return projLocation.toURI();
 	}
 
-	public boolean isTestLaunch(ILaunchConfiguration launchConfig)
-			throws CoreException {
+	public boolean isTestLaunch() throws CoreException {
 		return !launchConfig.getAttribute(ATTR_MAIN_TYPE_NAME, "").trim()
 				.isEmpty();
 	}
 
+	public PitOptions getPitOptions() throws CoreException {
+		IJavaProject project = getProject();
+		List<String> classPath = getClassesFromProject();
+		List<File> sourceDirs = getSourceDirsForProject(project);
+		File reportDir = getDefault().emptyResultDir();
+		if (isTestLaunch()) {
+			IType testClass = getTestClass();
+			return new PitOptionsBuilder()
+					.withClassUnderTest(testClass.getFullyQualifiedName())
+					.withClassesToMutate(classPath)
+					.withSourceDirectories(sourceDirs)
+					.withReportDirectory(reportDir).build();
+		} else {
+			List<String> packages = getPackagesToTest();
+			return new PitOptionsBuilder().withPackagesToTest(packages)
+					.withClassesToMutate(classPath)
+					.withSourceDirectories(sourceDirs)
+					.withReportDirectory(reportDir).build();
+		}
+	}
 }

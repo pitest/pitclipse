@@ -26,6 +26,55 @@
       <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>2.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.guava-osgi</groupId>
+        <artifactId>guava-osgi</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit-dep</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jbehave</groupId>
+        <artifactId>jbehave-core</artifactId>
+        <version>${jbehave.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>${hamcrest.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest</artifactId>
+        <version>${pitest.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <build>
     <plugins>
       <plugin>
@@ -50,7 +99,13 @@
   </profiles>
   <properties>
     <guava.version>11.0.1</guava.version>
+    <felix.version>2.3.7</felix.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <junit.version>4.10</junit.version>
+    <jbehave.version>3.7</jbehave.version>
     <maven.site.version>3.1</maven.site.version>
-<!--    <forceContextQualifier>201211150837</forceContextQualifier> --> 
+    <mockito.version>1.9.0</mockito.version>
+    <pitest.version>0.29</pitest.version>
+    <!-- <forceContextQualifier>201211150837</forceContextQualifier> -->
   </properties>
 </project> 

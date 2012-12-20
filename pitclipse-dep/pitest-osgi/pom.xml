@@ -15,7 +15,6 @@
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest</artifactId>
-      <version>${pitest.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.testng</groupId>

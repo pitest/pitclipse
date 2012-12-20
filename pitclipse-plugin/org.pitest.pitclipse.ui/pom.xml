@@ -14,12 +14,6 @@
     <dependency>
       <groupId>com.googlecode.guava-osgi</groupId>
       <artifactId>guava-osgi</artifactId>
-      <version>${guava.version}</version>
     </dependency>
-    <!-- <dependency> <groupId>org.antlr</groupId> <artifactId>com.springsource.org.antlr.runtime</artifactId> 
-      <version>3.0.1</version> </dependency> <dependency> <groupId>com.googlecode.guava-osgi</groupId> 
-      <artifactId>guava-osgi</artifactId> <version>11.0.1</version> </dependency> 
-      <dependency> <groupId>org.pitest</groupId> <artifactId>pitclipse-dep-bundle</artifactId> 
-      <version>${pom.version}</version> </dependency> -->
   </dependencies>
 </project>

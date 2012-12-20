@@ -14,7 +14,6 @@
     <dependency>
       <groupId>com.googlecode.guava-osgi</groupId>
       <artifactId>guava-osgi</artifactId>
-      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
