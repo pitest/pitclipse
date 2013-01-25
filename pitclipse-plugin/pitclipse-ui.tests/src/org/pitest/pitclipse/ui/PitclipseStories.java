@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui;
 
 import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.PLAYBACK_DELAY;
 import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.TIMEOUT;
-import static org.pitest.pitclipse.ui.PitclipseTestActivator.getStories;
+import static org.pitest.pitclipse.ui.PitclipseTestActivator.getDefault;
 
 import java.util.List;
 
@@ -28,15 +28,6 @@ public class PitclipseStories extends JUnitStories {
 
 	private static final long STORY_TIMEOUT = 10l * 60 * 1000;
 
-	/*
-	 * @Override protected List<String> storyPaths() { // String location =
-	 * codeLocationFromClass(this.getClass()).getFile(); Builder<String>
-	 * storyBuilder = builder();
-	 * storyBuilder.add("stories/simple_java_project.story");
-	 * 
-	 * return storyBuilder.build(); }
-	 */
-
 	@Override
 	public Configuration configuration() {
 		PLAYBACK_DELAY = 50L;
@@ -57,7 +48,7 @@ public class PitclipseStories extends JUnitStories {
 
 	@Override
 	protected List<String> storyPaths() {
-		return getStories();
+		return getDefault().getStories();
 	}
 
 	@Override

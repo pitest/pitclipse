@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.core.preferences;
 
+import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_CHOICE;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;

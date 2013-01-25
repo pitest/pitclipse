@@ -2,6 +2,8 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.PitExecutionMode;
 
 public class PitPreferenceSelector {
 
@@ -12,10 +14,47 @@ public class PitPreferenceSelector {
 	}
 
 	public void setPitExecutionMode(PitExecutionMode mode) {
-		SWTBotShell shell = bot.shell("Preferences");
-		shell.activate();
-		bot.tree().getTreeItem("Pitest").select().expand();
-		bot.radio(mode.getLabel()).click();
+		activatePreferenceShell();
+		expandPitPreferences();
+		selectExecutionMode(mode);
+		close();
+	}
+
+	private void selectExecutionMode(PitExecutionMode mode) {
+		// The workaround for Eclipse bug 344484.didn't seem to work here
+		// so for now we'll set the property directly. We have assertions
+		// on reading back the property which should suffice
+		PitCoreActivator.getDefault().setExecutionMode(mode);
+	}
+
+	private void close() {
 		bot.button("OK").click();
 	}
+
+	private void expandPitPreferences() {
+		bot.tree().getTreeItem("Pitest").select().expand();
+	}
+
+	private void activatePreferenceShell() {
+		SWTBotShell shell = bot.shell("Preferences");
+		shell.activate();
+	}
+
+	public PitExecutionMode getPitExecutionMode() {
+		activatePreferenceShell();
+		expandPitPreferences();
+		PitExecutionMode mode = getActiveExecutionMode();
+		close();
+		return mode;
+	}
+
+	private PitExecutionMode getActiveExecutionMode() {
+		for (PitExecutionMode mode : PitExecutionMode.values()) {
+			if (bot.radio(mode.getLabel()).isSelected()) {
+				return mode;
+			}
+		}
+		return null;
+	}
+
 }

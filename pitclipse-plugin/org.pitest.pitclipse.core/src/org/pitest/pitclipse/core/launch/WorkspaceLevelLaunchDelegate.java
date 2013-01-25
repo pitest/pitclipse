@@ -12,6 +12,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
+import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
+import org.pitest.pitclipse.core.launch.config.PackageFinder;
+import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitRunner;
 import org.pitest.pitclipse.pitrunner.SocketProvider;
@@ -32,7 +35,9 @@ public class WorkspaceLevelLaunchDelegate extends JavaLaunchDelegate {
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		generatePortNumber();
 		LaunchConfigurationWrapper configWrapper = new LaunchConfigurationWrapper(
-				configuration);
+				configuration, new PackageFinder(),
+				new WorkspaceLevelClassFinder(),
+				new WorkspaceLevelSourceDirFinder());
 
 		PitOptions options = configWrapper.getPitOptions();
 

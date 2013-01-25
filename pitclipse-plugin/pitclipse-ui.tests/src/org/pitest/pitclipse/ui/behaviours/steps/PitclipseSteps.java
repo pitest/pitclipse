@@ -1,17 +1,18 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PitExecutionMode.PROJECT_ISOLATION;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.pitest.pitclipse.core.PitExecutionMode;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitView;
 
 public class PitclipseSteps {
 
@@ -143,13 +144,12 @@ public class PitclipseSteps {
 	@Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
 	public void coverageReportGenerated(int classes, double totalCoverage,
 			double mutationCoverage) {
-		INSTANCE.getPitView().waitForUpdate();
+		PitView pitView = INSTANCE.getPitView();
+		pitView.waitForUpdate();
 		try {
-			assertEquals(classes, INSTANCE.getPitView().getClassesTested());
-			assertDoubleEquals(totalCoverage, INSTANCE.getPitView()
-					.getOverallCoverage());
-			assertDoubleEquals(mutationCoverage, INSTANCE.getPitView()
-					.getMutationCoverage());
+			assertEquals(classes, pitView.getClassesTested());
+			assertDoubleEquals(totalCoverage, pitView.getOverallCoverage());
+			assertDoubleEquals(mutationCoverage, pitView.getMutationCoverage());
 		} catch (Error e) {
 			e.printStackTrace();
 			throw e;
@@ -177,13 +177,26 @@ public class PitclipseSteps {
 		INSTANCE.getRunMenu().runConfigurations();
 	}
 
-	@Given("the isolate tests at a project level preference is selected")
+	@When("the isolate tests at project scope preference is selected")
 	public void testProjectsInIsolation() {
 		INSTANCE.getWindowsMenu().setPitExecutionMode(PROJECT_ISOLATION);
 	}
 
-	@Given("the run tests at a workspace level preference is selected")
+	@Then("the project level scope preference is selected")
+	public void projectScopePreferenceIsChosen() {
+		assertEquals(PROJECT_ISOLATION, INSTANCE.getWindowsMenu()
+				.getPitExecutionMode());
+	}
+
+	@When("the workspace level scope preference is selected")
 	public void testProjectsInWorkspace() {
 		INSTANCE.getWindowsMenu().setPitExecutionMode(WORKSPACE);
+	}
+
+	@Then("the workspace level scope preference is selected")
+	public void workspacePreferenceIsChosen() {
+		PitExecutionMode pitExecutionMode = INSTANCE.getWindowsMenu()
+				.getPitExecutionMode();
+		assertEquals(WORKSPACE, pitExecutionMode);
 	}
 }

@@ -20,5 +20,6 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: lib/jsr305-2.0.0.jar,
  .
-Export-Package: org.pitest.pitclipse.core.extension.handler,
+Export-Package: org.pitest.pitclipse.core,
+ org.pitest.pitclipse.core.extension.handler,
  org.pitest.pitclipse.core.extension.point

@@ -28,17 +28,17 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 	// The shared instance
 	private static PitclipseTestActivator plugin;
 
-	private static List<String> stories = of();
+	private List<String> stories = of();
 
 	public PitclipseTestActivator() {
 	}
 
-	public static List<String> getStories() {
+	public List<String> getStories() {
 		return copyOf(stories);
 	}
 
-	private static void setStories(List<String> stories) {
-		PitclipseTestActivator.stories = copyOf(newTreeSet(stories));
+	private void setStories(List<String> stories) {
+		this.stories = copyOf(newTreeSet(stories));
 	}
 
 	/*

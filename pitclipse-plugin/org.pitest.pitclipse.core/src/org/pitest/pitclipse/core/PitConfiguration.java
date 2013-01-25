@@ -1,8 +1,7 @@
 package org.pitest.pitclipse.core;
 
-import static org.pitest.pitclipse.core.preferences.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
 
-import org.pitest.pitclipse.core.preferences.PitExecutionMode;
 
 public class PitConfiguration {
 

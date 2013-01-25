@@ -1,12 +1,13 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.core.preferences.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.PitExecutionMode.values;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.PitExecutionMode;
 
 /**
  * This class represents a preference page that is contributed to the

@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.PitExecutionMode;
 
 public class WindowsMenu {
 
@@ -24,8 +26,19 @@ public class WindowsMenu {
 	}
 
 	public void setPitExecutionMode(PitExecutionMode mode) {
+		selectExecutionMode(mode);
+	}
+
+	public PitExecutionMode getPitExecutionMode() {
 		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		preferenceSelector.setPitExecutionMode(mode);
+		return preferenceSelector.getPitExecutionMode();
+	}
+
+	private void selectExecutionMode(PitExecutionMode mode) {
+		// The workaround for Eclipse bug 344484.didn't seem to work here
+		// so for now we'll set the property directly. We have assertions
+		// on reading back the property which should suffice
+		PitCoreActivator.getDefault().setExecutionMode(mode);
 	}
 
 }

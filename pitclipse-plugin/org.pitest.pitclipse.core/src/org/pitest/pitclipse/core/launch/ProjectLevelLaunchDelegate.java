@@ -14,6 +14,10 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.mutationtest.MutationCoverageReport;
+import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
+import org.pitest.pitclipse.core.launch.config.PackageFinder;
+import org.pitest.pitclipse.core.launch.config.ProjectLevelClassFinder;
+import org.pitest.pitclipse.core.launch.config.ProjectLevelSourceDirFinder;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 
 import com.google.common.collect.ImmutableList;
@@ -32,7 +36,9 @@ public class ProjectLevelLaunchDelegate extends JavaLaunchDelegate {
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		LaunchConfigurationWrapper configWrapper = new LaunchConfigurationWrapper(
-				configuration);
+				configuration, new PackageFinder(),
+				new ProjectLevelClassFinder(),
+				new ProjectLevelSourceDirFinder());
 		options = configWrapper.getPitOptions();
 		System.out.println(options);
 
