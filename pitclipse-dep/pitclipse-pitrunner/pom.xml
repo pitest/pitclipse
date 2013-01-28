@@ -6,19 +6,15 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.29.2.201211171459</version>
+    <version>0.29.3.201301280729</version>
   </parent>
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
   <packaging>bundle</packaging>
-  <properties>
-    <junit.version>4.10</junit.version>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest</artifactId>
-      <version>${pitest.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.testng</groupId>
@@ -33,24 +29,30 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
-      <version>2.0.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit-dep</artifactId>
-      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

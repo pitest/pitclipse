@@ -3,8 +3,6 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import static junit.framework.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
-import java.util.List;
-
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -37,11 +35,10 @@ public class ProjectSteps {
 		}
 	}
 
-	public void addToBuildPath(String projectName, List<String> projects) {
+	@When("the dependent project $dependentProject is added to the classpath of $project")
+	public void addToBuildPath(String dependentProject, String projectName) {
 		INSTANCE.getPackageExplorer().selectProject(projectName);
-		for (String project : projects) {
-			INSTANCE.getAbstractSyntaxTree().addProjectToClassPathOfProject(
-					projectName, project);
-		}
+		INSTANCE.getAbstractSyntaxTree().addProjectToClassPathOfProject(
+				projectName, dependentProject);
 	}
 }

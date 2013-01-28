@@ -2,6 +2,7 @@ package org.pitest.pitclipse.pitrunner;
 
 import static com.google.common.collect.ImmutableList.of;
 import static java.lang.Integer.toHexString;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,17 +14,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
-import org.pitest.pitclipse.pitrunner.PITOptions.PITLaunchException;
-import org.pitest.pitclipse.pitrunner.PITOptions.PITOptionsBuilder;
+import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
+import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 
 import com.google.common.collect.Lists;
 
-public class PITOptionsTest {
+public class PitOptionsTest {
 
 	private static final File TMP_DIR = new File(
 			System.getProperty("java.io.tmpdir"));
@@ -34,18 +34,18 @@ public class PITOptionsTest {
 	private static final File REALLY_BAD_PATH = getBadPath();
 
 	private static File getBadPath() {
-		if (SystemUtils.IS_OS_WINDOWS) {
+		if (IS_OS_WINDOWS) {
 			return new File("BADDRIVE:\\");
 		}
 		return new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
 	}
 
-	private static final String TEST_CLASS1 = PITOptionsTest.class
+	private static final String TEST_CLASS1 = PitOptionsTest.class
 			.getCanonicalName();
-	private static final String TEST_CLASS2 = PITRunner.class
+	private static final String TEST_CLASS2 = PitRunner.class
 			.getCanonicalName();
 	private static final List<String> CLASS_PATH = of(TEST_CLASS1, TEST_CLASS2);
-	private static final String PACKAGE_1 = PITOptionsTest.class.getPackage()
+	private static final String PACKAGE_1 = PitOptionsTest.class.getPackage()
 			.getName() + ".*";
 	private static final String PACKAGE_2 = ExampleTest.class.getPackage()
 			.getName() + ".*";
@@ -64,20 +64,20 @@ public class PITOptionsTest {
 
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void defaultOptionsThrowException() throws IOException {
-		new PITOptionsBuilder().build();
+		new PitOptionsBuilder().build();
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void validSourceDirButNoTestClassThrowsException()
 			throws IOException {
-		new PITOptionsBuilder().withSourceDirectory(testSrcDir).build();
+		new PitOptionsBuilder().withSourceDirectory(testSrcDir).build();
 	}
 
 	@Test
 	public void minimumOptionsSet() throws IOException {
-		PITOptions options = new PITOptionsBuilder()
+		PitOptions options = new PitOptionsBuilder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
 		File reportDir = options.getReportDirectory();
@@ -91,15 +91,15 @@ public class PITOptionsTest {
 				options.toCLIArgsAsString());
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void sourceDirectoryDoesNotExist() throws IOException {
-		new PITOptionsBuilder().withSourceDirectory(randomDir())
+		new PitOptionsBuilder().withSourceDirectory(randomDir())
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
-		new PITOptionsBuilder()
+		new PitOptionsBuilder()
 				.withSourceDirectories(of(testSrcDir, randomDir()))
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
@@ -107,7 +107,7 @@ public class PITOptionsTest {
 	@Test
 	public void multipleSourceDirectoriesExist() throws IOException {
 		List<File> srcDirs = of(testSrcDir, anotherTestSrcDir);
-		PITOptions options = new PITOptionsBuilder()
+		PitOptions options = new PitOptionsBuilder()
 				.withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1)
 				.build();
 		File reportDir = options.getReportDirectory();
@@ -125,7 +125,7 @@ public class PITOptionsTest {
 	public void useDifferentReportDirectory() {
 		File expectedDir = new File(testTmpDir, randomString());
 		assertFalse(expectedDir.exists());
-		PITOptions options = new PITOptionsBuilder()
+		PitOptions options = new PitOptionsBuilder()
 				.withReportDirectory(expectedDir)
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
@@ -140,22 +140,22 @@ public class PITOptionsTest {
 				options.toCLIArgsAsString());
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void useInvalidReportDirectory() {
-		new PITOptionsBuilder().withReportDirectory(REALLY_BAD_PATH)
+		new PitOptionsBuilder().withReportDirectory(REALLY_BAD_PATH)
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
-	@Test(expected = PITLaunchException.class)
+	@Test(expected = PitLaunchException.class)
 	public void useInvalidSourceDirectory() {
-		new PITOptionsBuilder().withSourceDirectory(REALLY_BAD_PATH)
+		new PitOptionsBuilder().withSourceDirectory(REALLY_BAD_PATH)
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test
 	public void useClasspath() throws IOException {
-		PITOptions options = new PITOptionsBuilder()
+		PitOptions options = new PitOptionsBuilder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).build();
@@ -174,7 +174,7 @@ public class PITOptionsTest {
 
 	@Test
 	public void testPackagesSupplied() {
-		PITOptions options = new PITOptionsBuilder()
+		PitOptions options = new PitOptionsBuilder()
 				.withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
 				.withClassesToMutate(CLASS_PATH).build();
 		File reportDir = options.getReportDirectory();
@@ -231,6 +231,7 @@ public class PITOptionsTest {
 			}
 			args.add(result);
 		}
+		args.add("--verbose");
 		return args.toArray();
 	}
 

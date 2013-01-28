@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui;
 
 import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.PLAYBACK_DELAY;
 import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.TIMEOUT;
-import static org.pitest.pitclipse.ui.PitclipseTestActivator.getStories;
+import static org.pitest.pitclipse.ui.PitclipseTestActivator.getDefault;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.jbehave.core.annotations.BeforeStories;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
+import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.io.LoadFromURL;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.Format;
@@ -25,14 +26,7 @@ import org.pitest.pitclipse.ui.behaviours.steps.SetupSteps;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class PitclipseStories extends JUnitStories {
 
-	/*
-	 * @Override protected List<String> storyPaths() { // String location =
-	 * codeLocationFromClass(this.getClass()).getFile(); Builder<String>
-	 * storyBuilder = builder();
-	 * storyBuilder.add("stories/simple_java_project.story");
-	 * 
-	 * return storyBuilder.build(); }
-	 */
+	private static final long STORY_TIMEOUT = 10l * 60 * 1000;
 
 	@Override
 	public Configuration configuration() {
@@ -46,8 +40,15 @@ public class PitclipseStories extends JUnitStories {
 	}
 
 	@Override
+	public Embedder configuredEmbedder() {
+		Embedder embedder = super.configuredEmbedder();
+		embedder.embedderControls().useStoryTimeoutInSecs(STORY_TIMEOUT);
+		return embedder;
+	}
+
+	@Override
 	protected List<String> storyPaths() {
-		return getStories();
+		return getDefault().getStories();
 	}
 
 	@Override

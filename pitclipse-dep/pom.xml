@@ -6,15 +6,11 @@
   <parent>
     <artifactId>pitclipse</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.29.2.201211171459</version>
+    <version>0.29.3.201301280729</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
-  <properties>
-    <pitest.version>0.29</pitest.version>
-    <felix.version>2.3.7</felix.version>
-  </properties>
   <modules>
     <module>pitest-osgi</module>
     <module>pitclipse-pitrunner</module>

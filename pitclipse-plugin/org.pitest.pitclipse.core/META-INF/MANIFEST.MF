@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse Core
 Bundle-SymbolicName: org.pitest.pitclipse.core;singleton:=true
-Bundle-Version: 0.29.2.201211171459
+Bundle-Version: 0.29.3.201301280729
 Bundle-Activator: org.pitest.pitclipse.core.PitCoreActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,12 +13,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching;bundle-version="3.5.200",
  com.google.guava;bundle-version="11.0.1",
  org.eclipse.jdt.ui;bundle-version="3.6.2",
- org.pitest.pitclipse-pitrunner;bundle-version="0.28.4",
- org.pitest.osgi;bundle-version="0.28.4"
+ org.pitest.pitclipse-pitrunner;bundle-version="0.29.3.201301280729",
+ org.pitest.osgi;bundle-version="0.29.3"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: lib/jsr305-2.0.0.jar,
  .
-Export-Package: org.pitest.pitclipse.core.extension.handler,
+Export-Package: org.pitest.pitclipse.core,
+ org.pitest.pitclipse.core.extension.handler,
  org.pitest.pitclipse.core.extension.point

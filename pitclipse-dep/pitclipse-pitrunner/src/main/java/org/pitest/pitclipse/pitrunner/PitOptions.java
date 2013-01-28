@@ -6,6 +6,7 @@ import static com.google.common.collect.ImmutableList.of;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
@@ -15,15 +16,16 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 @Immutable
-public final class PITOptions {
+public final class PitOptions implements Serializable {
 
+	private static final long serialVersionUID = 1543633254516962868L;
 	private final File reportDir;
 	private final String classUnderTest;
 	private final List<String> classesToMutate;
 	private final List<File> sourceDirs;
 	private final List<String> packages;
 
-	private PITOptions(String classUnderTest, List<String> classesToMutate,
+	private PitOptions(String classUnderTest, List<String> classesToMutate,
 			List<File> sourceDirs, File reportDir, List<String> packages) {
 		this.classUnderTest = classUnderTest;
 		this.packages = copyOf(packages);
@@ -44,7 +46,7 @@ public final class PITOptions {
 		List<String> args = of("--failWhenNoMutations", "false",
 				"--outputFormats", "HTML", "--reportDir", reportDir.getPath(),
 				"--targetTests", toTest(), "--targetClasses", classpath(),
-				"--sourceDirs", sourceDirs());
+				"--sourceDirs", sourceDirs(), "--verbose");
 		return args.toArray(new String[args.size()]);
 	}
 
@@ -106,32 +108,32 @@ public final class PITOptions {
 		return builder.build();
 	}
 
-	public static final class PITOptionsBuilder {
+	public static final class PitOptionsBuilder {
 		private String classUnderTest = null;
 		private List<String> classesToMutate = of();
 		private File reportDir = null;
 		private List<File> sourceDirs = of();
 		private List<String> packages = of();
 
-		public PITOptionsBuilder withReportDirectory(File reportDir) {
+		public PitOptionsBuilder withReportDirectory(File reportDir) {
 			this.reportDir = copyOfFile(reportDir);
 			return this;
 		}
 
-		public PITOptionsBuilder withSourceDirectory(File sourceDir) {
+		public PitOptionsBuilder withSourceDirectory(File sourceDir) {
 			return withSourceDirectories(of(copyOfFile(sourceDir)));
 		}
 
-		public PITOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
+		public PitOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
 			this.sourceDirs = copyOf(sourceDirs);
 			return this;
 		}
 
-		public PITOptions build() {
+		public PitOptions build() {
 			validateSourceDir();
 			validateTestClass();
 			initialiseReportDir();
-			return new PITOptions(classUnderTest, classesToMutate, sourceDirs,
+			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
 					reportDir, packages);
 		}
 
@@ -143,7 +145,7 @@ public final class PITOptions {
 				try {
 					Files.createParentDirs(reportDir);
 					if (!reportDir.mkdir()) {
-						throw new PITLaunchException(
+						throw new PitLaunchException(
 								"Directory could not be created: " + reportDir);
 					}
 				} catch (IOException e) {
@@ -154,11 +156,11 @@ public final class PITOptions {
 
 		private void validateSourceDir() {
 			if (sourceDirs.isEmpty()) {
-				throw new PITLaunchException("Source directory not set.");
+				throw new PitLaunchException("Source directory not set.");
 			}
 			for (File dir : sourceDirs) {
 				if (!dir.exists()) {
-					throw new PITLaunchException("Directory does not exist: "
+					throw new PitLaunchException("Directory does not exist: "
 							+ dir);
 				}
 			}
@@ -166,39 +168,39 @@ public final class PITOptions {
 
 		private void validateTestClass() {
 			if (null == classUnderTest && packages.isEmpty()) {
-				throw new PITLaunchException("Class under test not set.");
+				throw new PitLaunchException("Class under test not set.");
 			}
 		}
 
 		private void rethrow(File reportDir, IOException e) {
-			throw new PITLaunchException("Unable to use path: " + reportDir, e);
+			throw new PitLaunchException("Unable to use path: " + reportDir, e);
 		}
 
-		public PITOptionsBuilder withClassUnderTest(String testClass) {
+		public PitOptionsBuilder withClassUnderTest(String testClass) {
 			classUnderTest = testClass;
 			return this;
 		}
 
-		public PITOptionsBuilder withClassesToMutate(List<String> classPath) {
+		public PitOptionsBuilder withClassesToMutate(List<String> classPath) {
 			classesToMutate = copyOf(classPath);
 			return this;
 		}
 
-		public PITOptionsBuilder withPackagesToTest(List<String> packages) {
+		public PitOptionsBuilder withPackagesToTest(List<String> packages) {
 			this.packages = copyOf(packages);
 			return this;
 		}
 	}
 
-	public static final class PITLaunchException extends
+	public static final class PitLaunchException extends
 			IllegalArgumentException {
 		private static final long serialVersionUID = -8657782829090737433L;
 
-		public PITLaunchException(String msg, IOException e) {
+		public PitLaunchException(String msg, IOException e) {
 			super(msg, e);
 		}
 
-		public PITLaunchException(String msg) {
+		public PitLaunchException(String msg) {
 			super(msg);
 		}
 	}
@@ -218,4 +220,12 @@ public final class PITOptions {
 	public List<String> getTestPackages() {
 		return packages;
 	}
+
+	@Override
+	public String toString() {
+		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
+				+ classUnderTest + ", classesToMutate=" + classesToMutate
+				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages + "]";
+	}
+
 }

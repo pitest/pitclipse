@@ -6,13 +6,10 @@
   <artifactId>org.pitest.pitclipse-ui.tests</artifactId>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>0.29.2.201211171459</version>
+    <version>0.29.3.201301280729</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <packaging>eclipse-test-plugin</packaging>
-  <properties>
-    <jbehave.version>3.7</jbehave.version>
-  </properties>
   <build>
     <plugins>
       <plugin>
@@ -58,12 +55,10 @@
     <dependency>
       <groupId>com.googlecode.guava-osgi</groupId>
       <artifactId>guava-osgi</artifactId>
-      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jbehave</groupId>
       <artifactId>jbehave-core</artifactId>
-      <version>${jbehave.version}</version>
     </dependency>
   </dependencies>
 </project>
