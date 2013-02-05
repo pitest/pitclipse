@@ -199,4 +199,9 @@ public class PitclipseSteps {
 				.getPitExecutionMode();
 		assertEquals(WORKSPACE, pitExecutionMode);
 	}
+
+	@Then("the mutation tests run in parallel preference is selected")
+	public void runInParallelPreferenceIsChosen() {
+		assertEquals(true, INSTANCE.getWindowsMenu().isPitRunInParallel());
+	}
 }

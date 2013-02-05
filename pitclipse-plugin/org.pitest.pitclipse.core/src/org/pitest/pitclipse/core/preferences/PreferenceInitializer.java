@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_BOOLEAN;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_CHOICE;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
@@ -23,6 +23,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = PitCoreActivator.getDefault()
 				.getPreferenceStore();
 		store.setDefault(P_CHOICE, "containingProject");
+		store.setDefault(P_BOOLEAN, "true");
 	}
 
 }

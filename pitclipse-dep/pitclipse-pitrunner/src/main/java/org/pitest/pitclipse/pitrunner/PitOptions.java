@@ -24,10 +24,13 @@ public final class PitOptions implements Serializable {
 	private final List<String> classesToMutate;
 	private final List<File> sourceDirs;
 	private final List<String> packages;
+	private final int threads;
 
 	private PitOptions(String classUnderTest, List<String> classesToMutate,
-			List<File> sourceDirs, File reportDir, List<String> packages) {
+			List<File> sourceDirs, File reportDir, List<String> packages,
+			int threads) {
 		this.classUnderTest = classUnderTest;
+		this.threads = threads;
 		this.packages = copyOf(packages);
 		this.classesToMutate = copyOf(classesToMutate);
 		this.sourceDirs = sourceDirs;
@@ -44,7 +47,8 @@ public final class PitOptions implements Serializable {
 
 	public String[] toCLIArgs() {
 		List<String> args = of("--failWhenNoMutations", "false",
-				"--outputFormats", "HTML", "--reportDir", reportDir.getPath(),
+				"--outputFormats", "HTML,XML", "--threads",
+				Integer.toString(threads), "--reportDir", reportDir.getPath(),
 				"--targetTests", toTest(), "--targetClasses", classpath(),
 				"--sourceDirs", sourceDirs(), "--verbose");
 		return args.toArray(new String[args.size()]);
@@ -114,6 +118,7 @@ public final class PitOptions implements Serializable {
 		private File reportDir = null;
 		private List<File> sourceDirs = of();
 		private List<String> packages = of();
+		private int threads = 1;
 
 		public PitOptionsBuilder withReportDirectory(File reportDir) {
 			this.reportDir = copyOfFile(reportDir);
@@ -134,7 +139,7 @@ public final class PitOptions implements Serializable {
 			validateTestClass();
 			initialiseReportDir();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
-					reportDir, packages);
+					reportDir, packages, threads);
 		}
 
 		private void initialiseReportDir() {
@@ -188,6 +193,11 @@ public final class PitOptions implements Serializable {
 
 		public PitOptionsBuilder withPackagesToTest(List<String> packages) {
 			this.packages = copyOf(packages);
+			return this;
+		}
+
+		public PitOptionsBuilder withThreads(int threads) {
+			this.threads = threads;
 			return this;
 		}
 	}

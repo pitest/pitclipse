@@ -2,6 +2,7 @@ package org.pitest.pitclipse.core.preferences;
 
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -36,7 +37,17 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 	 */
 	@Override
 	public void createFieldEditors() {
+		createExecutionModeRadioButtons();
+		createRunInParallelOption();
+	}
 
+	private void createRunInParallelOption() {
+		addField(new BooleanFieldEditor(
+				PreferenceConstants.P_BOOLEAN,
+				"Mutation tests run in para&llel", getFieldEditorParent()));
+	}
+
+	private void createExecutionModeRadioButtons() {
 		PitExecutionMode[] values = values();
 		String[][] executionModeValues = new String[values.length][2];
 		for (int i = 0; i < values.length; i++) {

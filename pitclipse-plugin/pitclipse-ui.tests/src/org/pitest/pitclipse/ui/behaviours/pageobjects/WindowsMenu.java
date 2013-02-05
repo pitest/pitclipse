@@ -41,4 +41,9 @@ public class WindowsMenu {
 		PitCoreActivator.getDefault().setExecutionMode(mode);
 	}
 
+	public boolean isPitRunInParallel() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.isPitRunInParallel();
+	}
+
 }

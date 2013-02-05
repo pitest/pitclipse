@@ -16,6 +16,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
@@ -28,14 +29,16 @@ public class LaunchConfigurationWrapper {
 	private final PackageFinder packageFinder;
 	private final ClassFinder classFinder;
 	private final SourceDirFinder sourceDirFinder;
+	private final PitConfiguration pitConfiguration;
 
 	public LaunchConfigurationWrapper(ILaunchConfiguration launchConfig,
 			PackageFinder packageFinder, ClassFinder classFinder,
-			SourceDirFinder sourceDirFinder) {
+			SourceDirFinder sourceDirFinder, PitConfiguration pitConfiguration) {
 		this.launchConfig = launchConfig;
 		this.packageFinder = packageFinder;
 		this.classFinder = classFinder;
 		this.sourceDirFinder = sourceDirFinder;
+		this.pitConfiguration = pitConfiguration;
 	}
 
 	protected ILaunchConfiguration getLaunchConfig() {
@@ -85,21 +88,25 @@ public class LaunchConfigurationWrapper {
 	public PitOptions getPitOptions() throws CoreException {
 		List<String> classPath = getClassesFromProject();
 		List<File> sourceDirs = getSourceDirsForProject();
+		int threadCount = getThreadCount();
 		File reportDir = getDefault().emptyResultDir();
+		PitOptionsBuilder builder = new PitOptionsBuilder()
+				.withClassesToMutate(classPath)
+				.withSourceDirectories(sourceDirs)
+				.withReportDirectory(reportDir).withThreads(threadCount);
 		if (isTestLaunch()) {
 			IType testClass = getTestClass();
-			return new PitOptionsBuilder()
-					.withClassUnderTest(testClass.getFullyQualifiedName())
-					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs)
-					.withReportDirectory(reportDir).build();
+			builder.withClassUnderTest(testClass.getFullyQualifiedName());
 		} else {
 			List<String> packages = getPackagesToTest();
-			return new PitOptionsBuilder().withPackagesToTest(packages)
-					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs)
-					.withReportDirectory(reportDir).build();
+			builder.withPackagesToTest(packages);
 		}
+		return builder.build();
+	}
+
+	private int getThreadCount() {
+		return pitConfiguration.isParallelExecution() ? Runtime.getRuntime()
+				.availableProcessors() : 1;
 	}
 
 	private List<File> getSourceDirsForProject() throws CoreException {

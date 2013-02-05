@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.core;
 
-import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
 import static com.google.common.io.Files.createParentDirs;
@@ -8,6 +7,8 @@ import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_BOOLEAN;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_CHOICE;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +26,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.core.preferences.PreferenceConstants;
 
-import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.ImmutableList;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -78,7 +78,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
 		setupStateDirectories();
-		Builder<String> builder = builder();
+		ImmutableList.Builder<String> builder = ImmutableList.builder();
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi"))
 				.getCanonicalPath());
 		builder.add(getBundleFile(
@@ -243,19 +243,21 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public PitConfiguration getConfiguration() {
-		String choice = getPreferenceStore().getString(
-				PreferenceConstants.P_CHOICE);
+		String executionMode = getPreferenceStore().getString(P_CHOICE);
+		boolean parallelRun = getPreferenceStore().getBoolean(P_BOOLEAN);
+		PitConfiguration.Builder builder = PitConfiguration.builder()
+				.withParallelExecution(parallelRun);
 		for (PitExecutionMode pitExecutionMode : values()) {
-			if (pitExecutionMode.getId().equals(choice)) {
-				return PitConfiguration.builder()
-						.withExecutionMode(pitExecutionMode).build();
+			if (pitExecutionMode.getId().equals(executionMode)) {
+				builder.withExecutionMode(pitExecutionMode).build();
+				break;
 			}
 		}
-		return PitConfiguration.builder().build();
+
+		return builder.build();
 	}
 
 	public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-		getPreferenceStore().setValue(PreferenceConstants.P_CHOICE,
-				pitExecutionMode.getId());
+		getPreferenceStore().setValue(P_CHOICE, pitExecutionMode.getId());
 	}
 }

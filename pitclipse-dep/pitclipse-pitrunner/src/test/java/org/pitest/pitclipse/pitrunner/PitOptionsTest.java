@@ -205,9 +205,9 @@ public class PitOptionsTest {
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
 		List<String> args = Lists.newArrayList("--failWhenNoMutations",
-				"false", "--outputFormats", "HTML", "--reportDir",
-				reportDir.getPath(), "--targetTests", classUnderTest,
-				"--targetClasses");
+				"false", "--outputFormats", "HTML,XML", "--threads", "1",
+				"--reportDir", reportDir.getPath(), "--targetTests",
+				classUnderTest, "--targetClasses");
 		if (null != classpath) {
 			String result = "";
 			for (int i = 0; i < classpath.length; i++) {

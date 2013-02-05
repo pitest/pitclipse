@@ -42,10 +42,12 @@ public class PitPreferenceSelector {
 
 	public PitExecutionMode getPitExecutionMode() {
 		activatePreferenceShell();
-		expandPitPreferences();
-		PitExecutionMode mode = getActiveExecutionMode();
-		close();
-		return mode;
+		try {
+			expandPitPreferences();
+			return getActiveExecutionMode();
+		} finally {
+			close();
+		}
 	}
 
 	private PitExecutionMode getActiveExecutionMode() {
@@ -55,6 +57,16 @@ public class PitPreferenceSelector {
 			}
 		}
 		return null;
+	}
+
+	public boolean isPitRunInParallel() {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			return bot.checkBox("Mutation tests run in parallel").isChecked();
+		} finally {
+			close();
+		}
 	}
 
 }
