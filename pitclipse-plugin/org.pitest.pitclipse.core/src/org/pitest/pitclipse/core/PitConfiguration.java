@@ -2,15 +2,20 @@ package org.pitest.pitclipse.core;
 
 import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class PitConfiguration {
 
 	private final PitExecutionMode executionMode;
 	private final boolean parallelExecution;
+	private final boolean incrementalAnalysis;
 
 	private PitConfiguration(PitExecutionMode executionMode,
-			boolean parallelExecution) {
+			boolean parallelExecution, boolean incrementalAnalysis) {
 		this.executionMode = executionMode;
 		this.parallelExecution = parallelExecution;
+		this.incrementalAnalysis = incrementalAnalysis;
 	}
 
 	public void accept(PitConfigurationVisitor visitor) {
@@ -39,10 +44,15 @@ public class PitConfiguration {
 		return parallelExecution;
 	}
 
+	public boolean isIncrementalAnalysis() {
+		return incrementalAnalysis;
+	}
+
 	public static final class Builder {
 
 		private PitExecutionMode executionMode = PROJECT_ISOLATION;
 		private boolean parallelExecution = true;
+		private boolean incrementalAnalysis;
 
 		private Builder() {
 		}
@@ -57,8 +67,14 @@ public class PitConfiguration {
 			return this;
 		}
 
+		public Builder withIncrementalAnalysis(boolean incrementalAnalysis) {
+			this.incrementalAnalysis = incrementalAnalysis;
+			return this;
+		}
+
 		public PitConfiguration build() {
-			return new PitConfiguration(executionMode, parallelExecution);
+			return new PitConfiguration(executionMode, parallelExecution,
+					incrementalAnalysis);
 		}
 
 	}

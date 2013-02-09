@@ -7,8 +7,9 @@ import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_BOOLEAN;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.P_CHOICE;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
 
 import java.io.File;
 import java.io.IOException;
@@ -243,10 +244,14 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public PitConfiguration getConfiguration() {
-		String executionMode = getPreferenceStore().getString(P_CHOICE);
-		boolean parallelRun = getPreferenceStore().getBoolean(P_BOOLEAN);
+		String executionMode = getPreferenceStore().getString(
+				PIT_EXECUTION_MODE);
+		boolean parallelRun = getPreferenceStore().getBoolean(RUN_IN_PARALLEL);
+		boolean incrementalAnalysis = getPreferenceStore().getBoolean(
+				INCREMENTAL_ANALYSIS);
 		PitConfiguration.Builder builder = PitConfiguration.builder()
-				.withParallelExecution(parallelRun);
+				.withParallelExecution(parallelRun)
+				.withIncrementalAnalysis(incrementalAnalysis);
 		for (PitExecutionMode pitExecutionMode : values()) {
 			if (pitExecutionMode.getId().equals(executionMode)) {
 				builder.withExecutionMode(pitExecutionMode).build();
@@ -258,6 +263,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-		getPreferenceStore().setValue(P_CHOICE, pitExecutionMode.getId());
+		getPreferenceStore().setValue(PIT_EXECUTION_MODE,
+				pitExecutionMode.getId());
 	}
 }

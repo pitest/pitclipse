@@ -1,6 +1,9 @@
 package org.pitest.pitclipse.core.preferences;
 
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -39,11 +42,16 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 	public void createFieldEditors() {
 		createExecutionModeRadioButtons();
 		createRunInParallelOption();
+		createUseIncrementalAnalysisOption();
+	}
+
+	private void createUseIncrementalAnalysisOption() {
+		addField(new BooleanFieldEditor(INCREMENTAL_ANALYSIS,
+				"Use &incremental analaysis", getFieldEditorParent()));
 	}
 
 	private void createRunInParallelOption() {
-		addField(new BooleanFieldEditor(
-				PreferenceConstants.P_BOOLEAN,
+		addField(new BooleanFieldEditor(RUN_IN_PARALLEL,
 				"Mutation tests run in para&llel", getFieldEditorParent()));
 	}
 
@@ -54,7 +62,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 			executionModeValues[i] = new String[] { values[i].getLabel(),
 					values[i].getId() };
 		}
-		addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE,
+		addField(new RadioGroupFieldEditor(PIT_EXECUTION_MODE,
 				"Pit execution scope", 1, executionModeValues,
 				getFieldEditorParent()));
 	}

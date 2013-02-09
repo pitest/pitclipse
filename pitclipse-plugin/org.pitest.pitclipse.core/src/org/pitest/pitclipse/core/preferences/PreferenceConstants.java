@@ -5,9 +5,8 @@ package org.pitest.pitclipse.core.preferences;
  */
 public interface PreferenceConstants {
 
-	String P_PATH = "pathPreference";
-	String P_BOOLEAN = "booleanPreference";
-	String P_CHOICE = "choicePreference";
-	String P_STRING = "stringPreference";
+	String RUN_IN_PARALLEL = "runInParallel";
+	String PIT_EXECUTION_MODE = "pitExecutionMode";
+	String INCREMENTAL_ANALYSIS = "incrementalAnalysis";
 
 }

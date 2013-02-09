@@ -3,6 +3,8 @@ package org.pitest.pitclipse.pitrunner;
 import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
+import static com.google.common.io.Files.createParentDirs;
+import static com.google.common.io.Files.createTempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +13,9 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 
 @Immutable
 public final class PitOptions implements Serializable {
@@ -25,12 +27,14 @@ public final class PitOptions implements Serializable {
 	private final List<File> sourceDirs;
 	private final List<String> packages;
 	private final int threads;
+	private final File historyLocation;
 
 	private PitOptions(String classUnderTest, List<String> classesToMutate,
 			List<File> sourceDirs, File reportDir, List<String> packages,
-			int threads) {
+			int threads, File historyLocation) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
+		this.historyLocation = historyLocation;
 		this.packages = copyOf(packages);
 		this.classesToMutate = copyOf(classesToMutate);
 		this.sourceDirs = sourceDirs;
@@ -46,12 +50,26 @@ public final class PitOptions implements Serializable {
 	}
 
 	public String[] toCLIArgs() {
-		List<String> args = of("--failWhenNoMutations", "false",
-				"--outputFormats", "HTML,XML", "--threads",
-				Integer.toString(threads), "--reportDir", reportDir.getPath(),
-				"--targetTests", toTest(), "--targetClasses", classpath(),
-				"--sourceDirs", sourceDirs(), "--verbose");
+		Builder<String> builder = ImmutableList.builder();
+		builder.add("--failWhenNoMutations", "false", "--outputFormats",
+				"HTML,XML", "--threads", Integer.toString(threads),
+				"--reportDir", reportDir.getPath(), "--targetTests", toTest(),
+				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(),
+				"--verbose");
+		builder.addAll(historyLocation());
+		List<String> args = builder.build();
 		return args.toArray(new String[args.size()]);
+	}
+
+	private List<String> historyLocation() {
+		Builder<String> builder = ImmutableList.builder();
+		if (null != historyLocation) {
+			builder.add("--historyInputLocation");
+			builder.add(historyLocation.getPath());
+			builder.add("--historyOutputLocation");
+			builder.add(historyLocation.getPath());
+		}
+		return builder.build();
 	}
 
 	private String toTest() {
@@ -119,6 +137,7 @@ public final class PitOptions implements Serializable {
 		private List<File> sourceDirs = of();
 		private List<String> packages = of();
 		private int threads = 1;
+		private File historyLocation = null;
 
 		public PitOptionsBuilder withReportDirectory(File reportDir) {
 			this.reportDir = copyOfFile(reportDir);
@@ -138,21 +157,33 @@ public final class PitOptions implements Serializable {
 			validateSourceDir();
 			validateTestClass();
 			initialiseReportDir();
+			initialiseHistoryLocation();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
-					reportDir, packages, threads);
+					reportDir, packages, threads, historyLocation);
 		}
 
 		private void initialiseReportDir() {
 			if (null == reportDir) {
-				reportDir = Files.createTempDir();
+				reportDir = createTempDir();
 			}
 			if (!reportDir.exists()) {
 				try {
-					Files.createParentDirs(reportDir);
+					createParentDirs(reportDir);
 					if (!reportDir.mkdir()) {
 						throw new PitLaunchException(
 								"Directory could not be created: " + reportDir);
 					}
+				} catch (IOException e) {
+					rethrow(reportDir, e);
+				}
+			}
+		}
+
+		private void initialiseHistoryLocation() {
+			if (null != historyLocation
+					&& !historyLocation.getParentFile().exists()) {
+				try {
+					createParentDirs(historyLocation);
 				} catch (IOException e) {
 					rethrow(reportDir, e);
 				}
@@ -200,6 +231,11 @@ public final class PitOptions implements Serializable {
 			this.threads = threads;
 			return this;
 		}
+
+		public PitOptionsBuilder withHistoryLocation(File historyLocation) {
+			this.historyLocation = historyLocation;
+			return this;
+		}
 	}
 
 	public static final class PitLaunchException extends
@@ -235,7 +271,13 @@ public final class PitOptions implements Serializable {
 	public String toString() {
 		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
 				+ classUnderTest + ", classesToMutate=" + classesToMutate
-				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages + "]";
+				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
+				+ ", threads=" + threads + ", historyLocation="
+				+ historyLocation + "]";
+	}
+
+	public File getHistoryLocation() {
+		return historyLocation;
 	}
 
 }

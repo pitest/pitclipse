@@ -90,10 +90,14 @@ public class LaunchConfigurationWrapper {
 		List<File> sourceDirs = getSourceDirsForProject();
 		int threadCount = getThreadCount();
 		File reportDir = getDefault().emptyResultDir();
+
 		PitOptionsBuilder builder = new PitOptionsBuilder()
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs)
 				.withReportDirectory(reportDir).withThreads(threadCount);
+		if (pitConfiguration.isIncrementalAnalysis()) {
+			builder.withHistoryLocation(getDefault().getHistoryFile());
+		}
 		if (isTestLaunch()) {
 			IType testClass = getTestClass();
 			builder.withClassUnderTest(testClass.getFullyQualifiedName());

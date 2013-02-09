@@ -46,4 +46,9 @@ public class WindowsMenu {
 		return preferenceSelector.isPitRunInParallel();
 	}
 
+	public boolean isIncrementalAnalysisEnabled() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.isIncrementalAnalysisEnabled();
+	}
+
 }

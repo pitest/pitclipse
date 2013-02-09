@@ -50,6 +50,7 @@ public class PitOptionsTest {
 	private static final String PACKAGE_2 = ExampleTest.class.getPackage()
 			.getName() + ".*";
 	private static final List<String> PACKAGES = of(PACKAGE_1, PACKAGE_2);
+	private final File historyLocation = randomFile();
 
 	@Before
 	public void setup() {
@@ -193,17 +194,57 @@ public class PitOptionsTest {
 				options.toCLIArgsAsString());
 	}
 
+	@Test(expected = PitLaunchException.class)
+	public void invalidHistoryFileSupplied() {
+		new PitOptionsBuilder().withSourceDirectory(testSrcDir)
+				.withPackagesToTest(PACKAGES).withClassesToMutate(CLASS_PATH)
+				.withHistoryLocation(getBadPath()).build();
+	}
+
+	@Test
+	public void validHistoryLocationSupplied() {
+		PitOptions options = new PitOptionsBuilder()
+				.withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
+				.withClassesToMutate(CLASS_PATH)
+				.withHistoryLocation(historyLocation).build();
+		File location = options.getHistoryLocation();
+		assertFalse(location.isDirectory());
+		assertTrue(location.getParentFile().exists());
+		File reportDir = options.getReportDirectory();
+		assertArrayEquals(
+				expectedArgs(reportDir, testSrcDir, historyLocation, PACKAGE_1
+						+ "," + PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
+				options.toCLIArgs());
+		assertEquals(
+				expectedArgsAsString(reportDir, testSrcDir, historyLocation,
+						PACKAGE_1 + "," + PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
+				options.toCLIArgsAsString());
+	}
+
 	private String randomString() {
 		return toHexString(random.nextInt());
 	}
 
 	private Object[] expectedArgs(File reportDir, File sourceDir,
 			String classUnderTest, String... classpath) {
-		return expectedArgs(reportDir, of(sourceDir), classUnderTest, classpath);
+		return expectedArgs(reportDir, sourceDir, null, classUnderTest,
+				classpath);
+	}
+
+	private Object[] expectedArgs(File reportDir, File sourceDir,
+			File historyLocation, String classUnderTest, String... classpath) {
+		return expectedArgs(reportDir, of(sourceDir), historyLocation,
+				classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
+		return expectedArgs(reportDir, sourceDirs, null, classUnderTest,
+				classpath);
+	}
+
+	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
+			File historyLocation, String classUnderTest, String... classpath) {
 		List<String> args = Lists.newArrayList("--failWhenNoMutations",
 				"false", "--outputFormats", "HTML,XML", "--threads", "1",
 				"--reportDir", reportDir.getPath(), "--targetTests",
@@ -232,19 +273,37 @@ public class PitOptionsTest {
 			args.add(result);
 		}
 		args.add("--verbose");
+		if (null != historyLocation) {
+			args.add("--historyInputLocation");
+			args.add(historyLocation.getPath());
+			args.add("--historyOutputLocation");
+			args.add(historyLocation.getPath());
+		}
 		return args.toArray();
 	}
 
 	private String expectedArgsAsString(File reportDir, File sourceDir,
 			String classUnderTest, String... classpath) {
-		return expectedArgsAsString(reportDir, of(sourceDir), classUnderTest,
-				classpath);
+		return expectedArgsAsString(reportDir, of(sourceDir), null,
+				classUnderTest, classpath);
+	}
+
+	private String expectedArgsAsString(File reportDir, File sourceDir,
+			File historyLocation, String classUnderTest, String... classpath) {
+		return expectedArgsAsString(reportDir, of(sourceDir), historyLocation,
+				classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
-		Object[] args = expectedArgs(reportDir, sourceDirs, classUnderTest,
-				classpath);
+		return expectedArgsAsString(reportDir, sourceDirs, null,
+				classUnderTest, classpath);
+	}
+
+	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
+			File historyLocation, String classUnderTest, String... classpath) {
+		Object[] args = expectedArgs(reportDir, sourceDirs, historyLocation,
+				classUnderTest, classpath);
 		StringBuilder argsBuilder = new StringBuilder();
 		for (Object arg : args) {
 			argsBuilder.append(' ').append(arg);
@@ -256,5 +315,11 @@ public class PitOptionsTest {
 		File randomDir = new File(TMP_DIR, randomString());
 		randomDir.deleteOnExit();
 		return randomDir;
+	}
+
+	private File randomFile() {
+		File randomFile = new File(randomDir(), randomString());
+		randomFile.deleteOnExit();
+		return randomFile;
 	}
 }

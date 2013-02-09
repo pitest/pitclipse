@@ -69,4 +69,14 @@ public class PitPreferenceSelector {
 		}
 	}
 
+	public boolean isIncrementalAnalysisEnabled() {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			return bot.checkBox("Use incremental analaysis").isChecked();
+		} finally {
+			close();
+		}
+	}
+
 }

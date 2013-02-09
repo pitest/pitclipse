@@ -1,11 +1,15 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
+
+import java.io.File;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.pitest.pitclipse.core.PitCoreActivator;
 
 public class ProjectSteps {
 
@@ -32,6 +36,10 @@ public class ProjectSteps {
 		for (String project : INSTANCE.getPackageExplorer()
 				.getProjectsInWorkspace()) {
 			INSTANCE.getAbstractSyntaxTree().deleteProject(project);
+		}
+		File historyFile = PitCoreActivator.getDefault().getHistoryFile();
+		if (historyFile.exists()) {
+			assertTrue(historyFile.delete());
 		}
 	}
 

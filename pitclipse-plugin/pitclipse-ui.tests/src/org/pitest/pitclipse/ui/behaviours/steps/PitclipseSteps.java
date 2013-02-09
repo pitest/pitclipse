@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
@@ -202,6 +204,11 @@ public class PitclipseSteps {
 
 	@Then("the mutation tests run in parallel preference is selected")
 	public void runInParallelPreferenceIsChosen() {
-		assertEquals(true, INSTANCE.getWindowsMenu().isPitRunInParallel());
+		assertTrue(INSTANCE.getWindowsMenu().isPitRunInParallel());
+	}
+
+	@Then("the use incremental analysis preference is not selected")
+	public void useIncrementalAnalysis() {
+		assertFalse(INSTANCE.getWindowsMenu().isIncrementalAnalysisEnabled());
 	}
 }
