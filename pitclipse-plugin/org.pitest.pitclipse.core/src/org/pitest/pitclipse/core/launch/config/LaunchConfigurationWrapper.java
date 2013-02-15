@@ -3,6 +3,8 @@ package org.pitest.pitclipse.core.launch.config;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 
 import java.io.File;
 import java.util.List;
@@ -95,7 +97,7 @@ public class LaunchConfigurationWrapper {
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs)
 				.withReportDirectory(reportDir).withThreads(threadCount);
-		if (pitConfiguration.isIncrementalAnalysis()) {
+		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}
 		if (isTestLaunch()) {
@@ -108,9 +110,15 @@ public class LaunchConfigurationWrapper {
 		return builder.build();
 	}
 
-	private int getThreadCount() {
-		return pitConfiguration.isParallelExecution() ? Runtime.getRuntime()
-				.availableProcessors() : 1;
+	private boolean isIncrementalAnalysis() throws CoreException {
+		return launchConfig.getAttribute(ATTR_TEST_INCREMENTALLY, false)
+				|| pitConfiguration.isIncrementalAnalysis();
+	}
+
+	private int getThreadCount() throws CoreException {
+		return launchConfig.getAttribute(ATTR_TEST_IN_PARALLEL, false)
+				|| pitConfiguration.isParallelExecution() ? Runtime
+				.getRuntime().availableProcessors() : 1;
 	}
 
 	private List<File> getSourceDirsForProject() throws CoreException {

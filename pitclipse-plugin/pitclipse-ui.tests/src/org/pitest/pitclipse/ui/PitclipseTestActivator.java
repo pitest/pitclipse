@@ -55,7 +55,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 		super.start(context);
 		setActivator(this);
 		Enumeration<URL> stories = context.getBundle().findEntries("/",
-				"u*.story", true);
+				"u05*.story", true);
 		Builder<String> builder = builder();
 		while (stories.hasMoreElements()) {
 			URL storyUrl = stories.nextElement();

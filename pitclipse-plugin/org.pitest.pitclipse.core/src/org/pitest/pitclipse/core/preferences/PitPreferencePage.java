@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.core.preferences;
 
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
@@ -47,12 +49,12 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 
 	private void createUseIncrementalAnalysisOption() {
 		addField(new BooleanFieldEditor(INCREMENTAL_ANALYSIS,
-				"Use &incremental analaysis", getFieldEditorParent()));
+				USE_INCREMENTAL_ANALYSIS, getFieldEditorParent()));
 	}
 
 	private void createRunInParallelOption() {
 		addField(new BooleanFieldEditor(RUN_IN_PARALLEL,
-				"Mutation tests run in para&llel", getFieldEditorParent()));
+				MUTATION_TESTS_RUN_IN_PARALLEL, getFieldEditorParent()));
 	}
 
 	private void createExecutionModeRadioButtons() {

@@ -4,6 +4,10 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_M
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -24,9 +28,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.pitest.pitclipse.core.PitConfiguration;
+import org.pitest.pitclipse.core.PitCoreActivator;
 
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private static final int NUMBER_OF_COLUMNS = 3;
+
+	private class ButtonSelectionAdapter extends SelectionAdapter {
+		private final Button button;
+
+		private ButtonSelectionAdapter(Button button) {
+			this.button = button;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if (button.getSelection()) {
+				testModeChanged();
+			}
+		}
+	}
 
 	private final class UpdateOnModifyListener implements ModifyListener {
 		public void modifyText(ModifyEvent evt) {
@@ -40,6 +61,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private Button testDirectoryRadioButton;
 	private Text testDirText;
 	private String containerId;
+	private Button runInParallel;
+	private Button incrementalAnalysis;
 
 	public void initializeFrom(ILaunchConfiguration config) {
 		projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
@@ -62,7 +85,22 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 			testClassRadioButton.setSelection(true);
 			testDirectoryRadioButton.setSelection(false);
 		}
+		initialiseWithPreferenceDefaults(config);
 		testModeChanged();
+
+	}
+
+	private void initialiseWithPreferenceDefaults(ILaunchConfiguration config) {
+		PitConfiguration preferences = PitCoreActivator.getDefault()
+				.getConfiguration();
+		runInParallel.setSelection(Boolean
+				.valueOf(getBooleanAttributeFromConfig(config,
+						ATTR_TEST_IN_PARALLEL,
+						preferences.isParallelExecution())));
+		incrementalAnalysis.setSelection(Boolean
+				.valueOf(getBooleanAttributeFromConfig(config,
+						ATTR_TEST_INCREMENTALLY,
+						preferences.isIncrementalAnalysis())));
 	}
 
 	public void createControl(Composite parent) {
@@ -81,6 +119,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 		createTestClassWidgets(font, comp);
 		createSpacer(comp);
 		createTestDirWidgets(font, comp);
+		createSpacer(comp);
+		createPreferences(font, comp);
 	}
 
 	private void createProjectWidgets(Font font, Composite comp) {
@@ -119,16 +159,9 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private Button createTestRadioButton(Composite comp, String label) {
-		final Button button = new Button(comp, SWT.RADIO);
+		Button button = new Button(comp, SWT.RADIO);
 		button.setText(label);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (button.getSelection()) {
-					testModeChanged();
-				}
-			}
-		});
+		button.addSelectionListener(new ButtonSelectionAdapter(button));
 		return button;
 	}
 
@@ -152,6 +185,24 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 		testDirText.addModifyListener(new UpdateOnModifyListener());
 	}
 
+	private void createPreferences(Font font, Composite comp) {
+		runInParallel = createNewCheckBox(font, comp,
+				MUTATION_TESTS_RUN_IN_PARALLEL);
+
+		incrementalAnalysis = createNewCheckBox(font, comp,
+				USE_INCREMENTAL_ANALYSIS);
+	}
+
+	private Button createNewCheckBox(Font font, Composite comp, String label) {
+		Button checkBox = new Button(comp, SWT.CHECK);
+		checkBox.setText(label);
+		GridData labelGrid = new GridData(FILL_HORIZONTAL);
+		labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+		checkBox.setLayoutData(labelGrid);
+		checkBox.setFont(font);
+		return checkBox;
+	}
+
 	public String getName() {
 		return "PIT";
 	}
@@ -167,6 +218,10 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 			workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
 			workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
 		}
+		workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
+				runInParallel.getSelection());
+		workingCopy.setAttribute(ATTR_TEST_INCREMENTALLY,
+				incrementalAnalysis.getSelection());
 		try {
 			PitMigrationDelegate.mapResources(workingCopy);
 		} catch (CoreException ce) {
@@ -186,6 +241,17 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	public String getAttributeFromConfig(ILaunchConfiguration config,
 			String attribute, String defaultValue) {
 		String result = defaultValue;
+		try {
+			result = config.getAttribute(attribute, defaultValue);
+		} catch (CoreException e) {
+			// Swallowed
+		}
+		return result;
+	}
+
+	public boolean getBooleanAttributeFromConfig(ILaunchConfiguration config,
+			String attribute, boolean defaultValue) {
+		boolean result = defaultValue;
 		try {
 			result = config.getAttribute(attribute, defaultValue);
 		} catch (CoreException e) {

@@ -7,6 +7,8 @@ import org.pitest.pitclipse.core.PitExecutionMode;
 
 public class PitPreferenceSelector {
 
+	private static final String USE_INCREMENTAL_ANALAYSIS_LABEL = "Use incremental analaysis";
+	private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
 	private final SWTWorkbenchBot bot;
 
 	public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -63,7 +65,7 @@ public class PitPreferenceSelector {
 		activatePreferenceShell();
 		try {
 			expandPitPreferences();
-			return bot.checkBox("Mutation tests run in parallel").isChecked();
+			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).isChecked();
 		} finally {
 			close();
 		}
@@ -73,7 +75,21 @@ public class PitPreferenceSelector {
 		activatePreferenceShell();
 		try {
 			expandPitPreferences();
-			return bot.checkBox("Use incremental analaysis").isChecked();
+			return bot.checkBox(USE_INCREMENTAL_ANALAYSIS_LABEL).isChecked();
+		} finally {
+			close();
+		}
+	}
+
+	public void setPitRunInParallel(boolean inParallel) {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			if (inParallel) {
+				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).select();
+			} else {
+				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).deselect();
+			}
 		} finally {
 			close();
 		}

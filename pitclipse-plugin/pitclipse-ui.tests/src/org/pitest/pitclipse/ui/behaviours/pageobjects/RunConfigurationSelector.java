@@ -27,19 +27,29 @@ public class RunConfigurationSelector {
 
 	public List<PitRunConfiguration> getConfigurations() {
 		activateShell();
-		ImmutableList.Builder<PitRunConfiguration> builder = builder();
-		SWTBotTreeItem[] configurations = activateShell().getItems();
-		for (SWTBotTreeItem treeItem : configurations) {
-			treeItem.select();
-			builder.add(getPitConfiguration(treeItem));
+		try {
+			ImmutableList.Builder<PitRunConfiguration> builder = builder();
+			SWTBotTreeItem[] configurations = activateShell().getItems();
+			for (SWTBotTreeItem treeItem : configurations) {
+				treeItem.select();
+				builder.add(getPitConfiguration(treeItem));
+			}
+			return builder.build();
+		} finally {
+			bot.button("Close").click();
 		}
-		return builder.build();
 	}
 
 	private PitRunConfiguration getPitConfiguration(SWTBotTreeItem treeItem) {
 		String name = treeItem.getText();
 		String project = bot.textWithLabel("Project to mutate:").getText();
-		Builder builder = new Builder().withName(name).withProjects(project);
+		boolean runInParallel = bot.checkBox("Mutation tests run in parallel")
+				.isChecked();
+		boolean incrementalAnalysis = bot.checkBox("Use incremental analysis")
+				.isChecked();
+		Builder builder = new Builder().withName(name).withProjects(project)
+				.withRunInParallel(runInParallel)
+				.withIncrementalAnalysis(incrementalAnalysis);
 		return builder.build();
 	}
 

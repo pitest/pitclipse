@@ -46,6 +46,11 @@ public class WindowsMenu {
 		return preferenceSelector.isPitRunInParallel();
 	}
 
+	public void setPitRunInParallel(boolean inParallel) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setPitRunInParallel(inParallel);
+	}
+
 	public boolean isIncrementalAnalysisEnabled() {
 		bot.menu(WINDOWS).menu(PREFERENCES).click();
 		return preferenceSelector.isIncrementalAnalysisEnabled();
