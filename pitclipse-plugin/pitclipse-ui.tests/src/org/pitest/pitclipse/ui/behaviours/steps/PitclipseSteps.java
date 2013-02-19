@@ -233,6 +233,16 @@ public class PitclipseSteps {
 		INSTANCE.getWindowsMenu().setPitRunInParallel(false);
 	}
 
+	@When("the mutation tests use incremental analysis preference is selected")
+	public void setPreferenceToRunIncrementalAnalysis() {
+		INSTANCE.getWindowsMenu().setIncrementalAnalysisEnabled(true);
+	}
+
+	@When("the mutation tests use incremental analysis preference is deselected")
+	public void setPreferenceToNotRunIncrementalAnalysis() {
+		INSTANCE.getWindowsMenu().setIncrementalAnalysisEnabled(false);
+	}
+
 	@Then("the use incremental analysis preference is not selected")
 	public void useIncrementalAnalysis() {
 		assertFalse(INSTANCE.getWindowsMenu().isIncrementalAnalysisEnabled());
@@ -257,12 +267,16 @@ public class PitclipseSteps {
 
 	@Then("the run in parallel option on the launch configuration is not selected")
 	public void launchConfigurationDoesNotRunInParallel() {
-		assertTrue(launchConfig.isRunInParallel());
+		assertFalse(launchConfig.isRunInParallel());
 	}
 
 	@Then("the use incremental analysis option on the launch configuration is not selected")
-	public void launchConfigurationAnalysesIncrementally() {
+	public void launchConfigurationDoesNotAnalyseIncrementally() {
 		assertFalse(launchConfig.isIncrementalAnalysis());
 	}
 
+	@Then("the use incremental analysis option on the launch configuration is selected")
+	public void launchConfigurationAnalysesIncrementally() {
+		assertTrue(launchConfig.isIncrementalAnalysis());
+	}
 }

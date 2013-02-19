@@ -56,4 +56,9 @@ public class WindowsMenu {
 		return preferenceSelector.isIncrementalAnalysisEnabled();
 	}
 
+	public void setIncrementalAnalysisEnabled(boolean incremental) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setPitIncrementalAnalysisEnabled(incremental);
+	}
+
 }

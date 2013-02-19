@@ -7,7 +7,7 @@ import org.pitest.pitclipse.core.PitExecutionMode;
 
 public class PitPreferenceSelector {
 
-	private static final String USE_INCREMENTAL_ANALAYSIS_LABEL = "Use incremental analaysis";
+	private static final String USE_INCREMENTAL_ANALYSIS_LABEL = "Use incremental analysis";
 	private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
 	private final SWTWorkbenchBot bot;
 
@@ -65,7 +65,8 @@ public class PitPreferenceSelector {
 		activatePreferenceShell();
 		try {
 			expandPitPreferences();
-			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).isChecked();
+			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL)
+					.isChecked();
 		} finally {
 			close();
 		}
@@ -75,7 +76,7 @@ public class PitPreferenceSelector {
 		activatePreferenceShell();
 		try {
 			expandPitPreferences();
-			return bot.checkBox(USE_INCREMENTAL_ANALAYSIS_LABEL).isChecked();
+			return bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).isChecked();
 		} finally {
 			close();
 		}
@@ -89,6 +90,20 @@ public class PitPreferenceSelector {
 				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).select();
 			} else {
 				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).deselect();
+			}
+		} finally {
+			close();
+		}
+	}
+
+	public void setPitIncrementalAnalysisEnabled(boolean incremental) {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			if (incremental) {
+				bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).select();
+			} else {
+				bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).deselect();
 			}
 		} finally {
 			close();
