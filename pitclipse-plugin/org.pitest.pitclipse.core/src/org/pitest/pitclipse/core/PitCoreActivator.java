@@ -7,6 +7,7 @@ import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
@@ -249,9 +250,12 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		boolean parallelRun = getPreferenceStore().getBoolean(RUN_IN_PARALLEL);
 		boolean incrementalAnalysis = getPreferenceStore().getBoolean(
 				INCREMENTAL_ANALYSIS);
+		String excludedClasses = getPreferenceStore().getString(
+				EXCLUDED_CLASSES);
 		PitConfiguration.Builder builder = PitConfiguration.builder()
 				.withParallelExecution(parallelRun)
-				.withIncrementalAnalysis(incrementalAnalysis);
+				.withIncrementalAnalysis(incrementalAnalysis)
+				.withExcludedClasses(excludedClasses);
 		for (PitExecutionMode pitExecutionMode : values()) {
 			if (pitExecutionMode.getId().equals(executionMode)) {
 				builder.withExecutionMode(pitExecutionMode).build();

@@ -47,10 +47,12 @@ public class RunConfigurationSelector {
 				.isChecked();
 		boolean incrementalAnalysis = bot.checkBox("Use incremental analysis")
 				.isChecked();
-		Builder builder = new Builder().withName(name).withProjects(project)
+		String excludedClasses = bot.textWithLabel(
+				"Excluded classes (e.g.*IntTest)").getText();
+		return new Builder().withName(name).withProjects(project)
 				.withRunInParallel(runInParallel)
-				.withIncrementalAnalysis(incrementalAnalysis);
-		return builder.build();
+				.withIncrementalAnalysis(incrementalAnalysis)
+				.withExcludedClasses(excludedClasses).build();
 	}
 
 	private SWTBotTreeItem activateShell() {

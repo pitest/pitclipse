@@ -61,4 +61,14 @@ public class WindowsMenu {
 		preferenceSelector.setPitIncrementalAnalysisEnabled(incremental);
 	}
 
+	public String getExcludedClasses() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getExcludedClasses();
+	}
+
+	public void setExcludedClasses(String excludedClasses) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setExcludedClasses(excludedClasses);
+	}
+
 }

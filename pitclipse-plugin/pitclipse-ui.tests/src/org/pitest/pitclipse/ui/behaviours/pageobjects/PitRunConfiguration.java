@@ -11,13 +11,16 @@ public class PitRunConfiguration {
 	private final List<String> projects;
 	private final boolean runInParallel;
 	private final boolean incrementalAnalysis;
+	private final String excludedClasses;
 
 	private PitRunConfiguration(String name, List<String> projects,
-			boolean runInParallel, boolean incrementalAnalysis) {
+			boolean runInParallel, boolean incrementalAnalysis,
+			String excludedClasses) {
 		this.name = name;
 		this.projects = projects;
 		this.runInParallel = runInParallel;
 		this.incrementalAnalysis = incrementalAnalysis;
+		this.excludedClasses = excludedClasses;
 	}
 
 	public String getName() {
@@ -33,10 +36,11 @@ public class PitRunConfiguration {
 		private List<String> projects = of();
 		private boolean runInParallel = false;
 		private boolean incrementalAnalysis = false;
+		private String excludedClasses;
 
 		public PitRunConfiguration build() {
 			return new PitRunConfiguration(name, projects, runInParallel,
-					incrementalAnalysis);
+					incrementalAnalysis, excludedClasses);
 		}
 
 		public Builder withName(String name) {
@@ -58,6 +62,11 @@ public class PitRunConfiguration {
 			this.incrementalAnalysis = incrementalAnalysis;
 			return this;
 		}
+
+		public Builder withExcludedClasses(String excludedClasses) {
+			this.excludedClasses = excludedClasses;
+			return this;
+		}
 	}
 
 	public boolean isRunInParallel() {
@@ -67,4 +76,9 @@ public class PitRunConfiguration {
 	public boolean isIncrementalAnalysis() {
 		return incrementalAnalysis;
 	}
+
+	public String getExcludedClasses() {
+		return excludedClasses;
+	}
+
 }

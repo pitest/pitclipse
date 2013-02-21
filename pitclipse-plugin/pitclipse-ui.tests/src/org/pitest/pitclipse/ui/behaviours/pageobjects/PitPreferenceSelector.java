@@ -1,14 +1,17 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.io.Closeable;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitExecutionMode;
 
-public class PitPreferenceSelector {
+public class PitPreferenceSelector implements Closeable {
 
 	private static final String USE_INCREMENTAL_ANALYSIS_LABEL = "Use incremental analysis";
 	private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
+	private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
 	private final SWTWorkbenchBot bot;
 
 	public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -29,7 +32,7 @@ public class PitPreferenceSelector {
 		PitCoreActivator.getDefault().setExecutionMode(mode);
 	}
 
-	private void close() {
+	public void close() {
 		bot.button("OK").click();
 	}
 
@@ -105,6 +108,26 @@ public class PitPreferenceSelector {
 			} else {
 				bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).deselect();
 			}
+		} finally {
+			close();
+		}
+	}
+
+	public String getExcludedClasses() {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			return bot.textWithLabel(EXCLUDED_CLASSES_LABEL).getText();
+		} finally {
+			close();
+		}
+	}
+
+	public void setExcludedClasses(String excludedClasses) {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			bot.textWithLabel(EXCLUDED_CLASSES_LABEL).setText(excludedClasses);
 		} finally {
 			close();
 		}

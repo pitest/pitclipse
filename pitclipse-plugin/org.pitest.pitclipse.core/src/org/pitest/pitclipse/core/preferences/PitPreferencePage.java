@@ -1,8 +1,10 @@
 package org.pitest.pitclipse.core.preferences;
 
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_CLASSES_FROM_PIT;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
@@ -10,6 +12,7 @@ import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_P
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
@@ -45,6 +48,12 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 		createExecutionModeRadioButtons();
 		createRunInParallelOption();
 		createUseIncrementalAnalysisOption();
+		createExcludeClassesField();
+	}
+
+	private void createExcludeClassesField() {
+		addField(new StringFieldEditor(EXCLUDED_CLASSES,
+				EXCLUDE_CLASSES_FROM_PIT, getFieldEditorParent()));
 	}
 
 	private void createUseIncrementalAnalysisOption() {

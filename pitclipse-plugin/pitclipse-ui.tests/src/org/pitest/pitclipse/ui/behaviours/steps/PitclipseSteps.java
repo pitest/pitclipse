@@ -1,11 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
-import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
@@ -13,9 +8,7 @@ import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.pitest.pitclipse.core.PitExecutionMode;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitView;
 
 public class PitclipseSteps {
@@ -121,8 +114,6 @@ public class PitclipseSteps {
 		}
 	}
 
-	private PitRunConfiguration launchConfig;
-
 	@When("test $testClassName in package $packageName is run for project $projectName")
 	public void runTest(final String testClassName, final String packageName,
 			final String projectName) {
@@ -179,104 +170,4 @@ public class PitclipseSteps {
 		runPit(new SelectProject(projectName));
 	}
 
-	@Then("no PIT launch configurations exist")
-	public void noPitConfigurationsExist() {
-		assertTrue(INSTANCE.getRunMenu().runConfigurations().isEmpty());
-	}
-
-	@Then("a launch configuration with name $name is created")
-	public void openPitConfig(String name) {
-		for (PitRunConfiguration pitRunConfiguration : INSTANCE.getRunMenu()
-				.runConfigurations()) {
-			if (name.equals(pitRunConfiguration.getName())) {
-				return;
-			}
-		}
-		fail("Configuration not found: " + name);
-	}
-
-	@When("the isolate tests at project scope preference is selected")
-	public void testProjectsInIsolation() {
-		INSTANCE.getWindowsMenu().setPitExecutionMode(PROJECT_ISOLATION);
-	}
-
-	@Then("the project level scope preference is selected")
-	public void projectScopePreferenceIsChosen() {
-		assertEquals(PROJECT_ISOLATION, INSTANCE.getWindowsMenu()
-				.getPitExecutionMode());
-	}
-
-	@When("the workspace level scope preference is selected")
-	public void testProjectsInWorkspace() {
-		INSTANCE.getWindowsMenu().setPitExecutionMode(WORKSPACE);
-	}
-
-	@Then("the workspace level scope preference is selected")
-	public void workspacePreferenceIsChosen() {
-		PitExecutionMode pitExecutionMode = INSTANCE.getWindowsMenu()
-				.getPitExecutionMode();
-		assertEquals(WORKSPACE, pitExecutionMode);
-	}
-
-	@Then("the mutation tests run in parallel preference is selected")
-	public void runInParallelPreferenceIsChosen() {
-		assertTrue(INSTANCE.getWindowsMenu().isPitRunInParallel());
-	}
-
-	@When("the mutation tests run in parallel preference is selected")
-	public void setPreferenceToRunInParallel() {
-		INSTANCE.getWindowsMenu().setPitRunInParallel(true);
-	}
-
-	@When("the mutation tests run in parallel preference is deselected")
-	public void setPreferenceToNotRunInParallel() {
-		INSTANCE.getWindowsMenu().setPitRunInParallel(false);
-	}
-
-	@When("the mutation tests use incremental analysis preference is selected")
-	public void setPreferenceToRunIncrementalAnalysis() {
-		INSTANCE.getWindowsMenu().setIncrementalAnalysisEnabled(true);
-	}
-
-	@When("the mutation tests use incremental analysis preference is deselected")
-	public void setPreferenceToNotRunIncrementalAnalysis() {
-		INSTANCE.getWindowsMenu().setIncrementalAnalysisEnabled(false);
-	}
-
-	@Then("the use incremental analysis preference is not selected")
-	public void useIncrementalAnalysis() {
-		assertFalse(INSTANCE.getWindowsMenu().isIncrementalAnalysisEnabled());
-	}
-
-	@When("the launch configuration with name $name is selected")
-	public void selectConfig(String name) {
-		for (PitRunConfiguration pitRunConfiguration : INSTANCE.getRunMenu()
-				.runConfigurations()) {
-			if (name.equals(pitRunConfiguration.getName())) {
-				launchConfig = pitRunConfiguration;
-				return;
-			}
-		}
-		fail("Configuration not found: " + name);
-	}
-
-	@Then("the run in parallel option on the launch configuration is selected")
-	public void launchConfigurationRunsInParallel() {
-		assertTrue(launchConfig.isRunInParallel());
-	}
-
-	@Then("the run in parallel option on the launch configuration is not selected")
-	public void launchConfigurationDoesNotRunInParallel() {
-		assertFalse(launchConfig.isRunInParallel());
-	}
-
-	@Then("the use incremental analysis option on the launch configuration is not selected")
-	public void launchConfigurationDoesNotAnalyseIncrementally() {
-		assertFalse(launchConfig.isIncrementalAnalysis());
-	}
-
-	@Then("the use incremental analysis option on the launch configuration is selected")
-	public void launchConfigurationAnalysesIncrementally() {
-		assertTrue(launchConfig.isIncrementalAnalysis());
-	}
 }
