@@ -3,6 +3,7 @@ package org.pitest.pitclipse.core.launch.config;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 
@@ -24,6 +25,10 @@ import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 public class LaunchConfigurationWrapper {
 
@@ -92,11 +97,13 @@ public class LaunchConfigurationWrapper {
 		List<File> sourceDirs = getSourceDirsForProject();
 		int threadCount = getThreadCount();
 		File reportDir = getDefault().emptyResultDir();
+		List<String> excludedClasses = getExcludedClasses();
 
 		PitOptionsBuilder builder = new PitOptionsBuilder()
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs)
-				.withReportDirectory(reportDir).withThreads(threadCount);
+				.withReportDirectory(reportDir).withThreads(threadCount)
+				.withExcludedClasses(excludedClasses);
 		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}
@@ -108,6 +115,19 @@ public class LaunchConfigurationWrapper {
 			builder.withPackagesToTest(packages);
 		}
 		return builder.build();
+	}
+
+	private List<String> getExcludedClasses() throws CoreException {
+		Builder<String> results = ImmutableList.builder();
+		String excludedClasses;
+		if (launchConfig.hasAttribute(ATTR_EXCLUDE_CLASSES)) {
+			excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_CLASSES,
+					"");
+		} else {
+			excludedClasses = pitConfiguration.getExcludedClasses();
+		}
+		results.addAll(Splitter.on(',').trimResults().split(excludedClasses));
+		return results.build();
 	}
 
 	private boolean isIncrementalAnalysis() throws CoreException {
