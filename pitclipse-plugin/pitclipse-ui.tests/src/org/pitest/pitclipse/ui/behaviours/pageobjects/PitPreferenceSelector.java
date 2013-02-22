@@ -12,6 +12,7 @@ public class PitPreferenceSelector implements Closeable {
 	private static final String USE_INCREMENTAL_ANALYSIS_LABEL = "Use incremental analysis";
 	private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
 	private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
+	private static final String EXCLUDED_METHODS_LABEL = "Excluded methods (e.g.*toString*)";
 	private final SWTWorkbenchBot bot;
 
 	public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -128,6 +129,26 @@ public class PitPreferenceSelector implements Closeable {
 		try {
 			expandPitPreferences();
 			bot.textWithLabel(EXCLUDED_CLASSES_LABEL).setText(excludedClasses);
+		} finally {
+			close();
+		}
+	}
+
+	public String getExcludedMethods() {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			return bot.textWithLabel(EXCLUDED_METHODS_LABEL).getText();
+		} finally {
+			close();
+		}
+	}
+
+	public void setExcludedMethods(String excludedMethods) {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			bot.textWithLabel(EXCLUDED_METHODS_LABEL).setText(excludedMethods);
 		} finally {
 			close();
 		}

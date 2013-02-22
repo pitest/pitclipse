@@ -71,4 +71,14 @@ public class WindowsMenu {
 		preferenceSelector.setExcludedClasses(excludedClasses);
 	}
 
+	public String getExcludedMethods() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getExcludedMethods();
+	}
+
+	public void setExcludedMethods(String excludedMethods) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setExcludedMethods(excludedMethods);
+	}
+
 }

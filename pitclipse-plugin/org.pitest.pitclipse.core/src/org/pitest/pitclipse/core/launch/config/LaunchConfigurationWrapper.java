@@ -126,7 +126,8 @@ public class LaunchConfigurationWrapper {
 		} else {
 			excludedClasses = pitConfiguration.getExcludedClasses();
 		}
-		results.addAll(Splitter.on(',').trimResults().split(excludedClasses));
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(excludedClasses));
 		return results.build();
 	}
 

@@ -11,14 +11,16 @@ public class PitConfiguration {
 	private final boolean parallelExecution;
 	private final boolean incrementalAnalysis;
 	private final String excludedClasses;
+	private final String excludedMethods;
 
 	private PitConfiguration(PitExecutionMode executionMode,
 			boolean parallelExecution, boolean incrementalAnalysis,
-			String excludedClasses) {
+			String excludedClasses, String excludedMethods) {
 		this.executionMode = executionMode;
 		this.parallelExecution = parallelExecution;
 		this.incrementalAnalysis = incrementalAnalysis;
 		this.excludedClasses = excludedClasses;
+		this.excludedMethods = excludedMethods;
 	}
 
 	public void accept(PitConfigurationVisitor visitor) {
@@ -57,6 +59,7 @@ public class PitConfiguration {
 		private boolean parallelExecution = true;
 		private boolean incrementalAnalysis = false;
 		private String excludedClasses = "";
+		private String excludedMethods = "";
 
 		private Builder() {
 		}
@@ -81,15 +84,24 @@ public class PitConfiguration {
 			return this;
 		}
 
+		public Builder withExcludedMethods(String excludedMethods) {
+			this.excludedMethods = excludedMethods;
+			return this;
+		}
+
 		public PitConfiguration build() {
 			return new PitConfiguration(executionMode, parallelExecution,
-					incrementalAnalysis, excludedClasses);
+					incrementalAnalysis, excludedClasses, excludedMethods);
 		}
 
 	}
 
 	public String getExcludedClasses() {
 		return excludedClasses;
+	}
+
+	public String getExcludedMethods() {
+		return excludedMethods;
 	}
 
 }

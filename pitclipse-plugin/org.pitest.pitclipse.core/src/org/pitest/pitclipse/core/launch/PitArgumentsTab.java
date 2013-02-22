@@ -4,10 +4,12 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_M
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_METHODS;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_CLASSES_FROM_PIT;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_METHODS_FROM_PIT;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
 
@@ -66,6 +68,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private Button runInParallel;
 	private Button incrementalAnalysis;
 	private Text excludedClassesText;
+	private Text excludedMethodsText;
 
 	public void initializeFrom(ILaunchConfiguration config) {
 		projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
@@ -106,6 +109,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 						preferences.isIncrementalAnalysis())));
 		excludedClassesText.setText(getAttributeFromConfig(config,
 				ATTR_EXCLUDE_CLASSES, preferences.getExcludedClasses()));
+		excludedMethodsText.setText(getAttributeFromConfig(config,
+				ATTR_EXCLUDE_METHODS, preferences.getExcludedMethods()));
 	}
 
 	public void createControl(Composite parent) {
@@ -197,20 +202,28 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 		incrementalAnalysis = createNewCheckBox(font, comp,
 				USE_INCREMENTAL_ANALYSIS);
 
+		excludedClassesText = createTextPreference(font, comp,
+				EXCLUDE_CLASSES_FROM_PIT);
+		excludedMethodsText = createTextPreference(font, comp,
+				EXCLUDE_METHODS_FROM_PIT);
+	}
+
+	private Text createTextPreference(Font font, Composite comp, String label) {
 		GridData labelGrid = new GridData(FILL_HORIZONTAL);
 		labelGrid.horizontalIndent = 25;
 		labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
 		Label testDirectoryLabel = new Label(comp, SWT.NONE);
-		testDirectoryLabel.setText(EXCLUDE_CLASSES_FROM_PIT);
+		testDirectoryLabel.setText(label);
 		testDirectoryLabel.setLayoutData(labelGrid);
 		testDirectoryLabel.setFont(font);
 
 		GridData textGrid = new GridData(FILL_HORIZONTAL);
 		textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
 		textGrid.horizontalIndent = 25;
-		excludedClassesText = new Text(comp, SWT.SINGLE | SWT.BORDER);
-		excludedClassesText.setLayoutData(textGrid);
-		excludedClassesText.addModifyListener(new UpdateOnModifyListener());
+		Text textBox = new Text(comp, SWT.SINGLE | SWT.BORDER);
+		textBox.setLayoutData(textGrid);
+		textBox.addModifyListener(new UpdateOnModifyListener());
+		return textBox;
 	}
 
 	private Button createNewCheckBox(Font font, Composite comp, String label) {
@@ -244,6 +257,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 				incrementalAnalysis.getSelection());
 		workingCopy.setAttribute(ATTR_EXCLUDE_CLASSES,
 				excludedClassesText.getText());
+		workingCopy.setAttribute(ATTR_EXCLUDE_METHODS,
+				excludedMethodsText.getText());
 		try {
 			PitMigrationDelegate.mapResources(workingCopy);
 		} catch (CoreException ce) {
