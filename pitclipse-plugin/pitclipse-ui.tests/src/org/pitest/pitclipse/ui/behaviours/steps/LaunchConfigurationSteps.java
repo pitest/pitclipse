@@ -7,8 +7,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
+import java.util.List;
+import java.util.Map;
+
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.jbehave.core.model.ExamplesTable;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 
 public class LaunchConfigurationSteps {
@@ -75,5 +79,33 @@ public class LaunchConfigurationSteps {
 	@Then("the use incremental analysis option on the launch configuration is selected")
 	public void launchConfigurationAnalysesIncrementally() {
 		assertTrue(launchConfig.isIncrementalAnalysis());
+	}
+
+	@Then("the launch configurations are configured as: $configTable")
+	public void launchConfigurationsMatch(ExamplesTable configTable) {
+		List<PitRunConfiguration> launchConfigurations = INSTANCE.getRunMenu()
+				.runConfigurations();
+		configurationsMatch(configTable.getRows(), launchConfigurations);
+	}
+
+	private void configurationsMatch(List<Map<String, String>> expectedRows,
+			List<PitRunConfiguration> launchConfigurations) {
+		assertEquals(expectedRows.size(), launchConfigurations.size());
+		for (int i = 0; i < expectedRows.size(); i++) {
+			assertEquivalent(expectedRows.get(i), launchConfigurations.get(i));
+		}
+	}
+
+	private void assertEquivalent(Map<String, String> tableRow,
+			PitRunConfiguration pitRunConfiguration) {
+		assertEquals(tableRow.get("name"), pitRunConfiguration.getName());
+		assertEquals(Boolean.valueOf(tableRow.get("runInParallel")),
+				pitRunConfiguration.isRunInParallel());
+		assertEquals(Boolean.valueOf(tableRow.get("useIncrementalAnalysis")),
+				pitRunConfiguration.isIncrementalAnalysis());
+		assertEquals(tableRow.get("excludedClasses"),
+				pitRunConfiguration.getExcludedClasses());
+		assertEquals(tableRow.get("excludedMethods"),
+				pitRunConfiguration.getExcludedMethods());
 	}
 }

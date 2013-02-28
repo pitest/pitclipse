@@ -29,10 +29,12 @@ public final class PitOptions implements Serializable {
 	private final int threads;
 	private final File historyLocation;
 	private final List<String> excludedClasses;
+	private final List<String> excludedMethods;
 
 	private PitOptions(String classUnderTest, List<String> classesToMutate,
 			List<File> sourceDirs, File reportDir, List<String> packages,
-			int threads, File historyLocation, List<String> excludedClasses) {
+			int threads, File historyLocation, List<String> excludedClasses,
+			List<String> excludedMethods) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
 		this.historyLocation = historyLocation;
@@ -41,6 +43,7 @@ public final class PitOptions implements Serializable {
 		this.sourceDirs = sourceDirs;
 		this.reportDir = reportDir;
 		this.excludedClasses = copyOf(excludedClasses);
+		this.excludedMethods = copyOf(excludedMethods);
 	}
 
 	public File getReportDirectory() {
@@ -60,6 +63,7 @@ public final class PitOptions implements Serializable {
 				"--verbose");
 		builder.addAll(historyLocation());
 		builder.addAll(excludedClasses());
+		builder.addAll(excludedMethods());
 		List<String> args = builder.build();
 		return args.toArray(new String[args.size()]);
 	}
@@ -69,6 +73,15 @@ public final class PitOptions implements Serializable {
 		if (!excludedClasses.isEmpty()) {
 			builder.add("--excludedClasses");
 			builder.add(concat(commaSeperate(excludedClasses)));
+		}
+		return builder.build();
+	}
+
+	private List<String> excludedMethods() {
+		Builder<String> builder = ImmutableList.builder();
+		if (!excludedMethods.isEmpty()) {
+			builder.add("--excludedMethods");
+			builder.add(concat(commaSeperate(excludedMethods)));
 		}
 		return builder.build();
 	}
@@ -151,6 +164,7 @@ public final class PitOptions implements Serializable {
 		private int threads = 1;
 		private File historyLocation = null;
 		private List<String> excludedClasses = of();
+		private List<String> excludedMethods = of();
 
 		public PitOptionsBuilder withReportDirectory(File reportDir) {
 			this.reportDir = copyOfFile(reportDir);
@@ -173,7 +187,7 @@ public final class PitOptions implements Serializable {
 			initialiseHistoryLocation();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
 					reportDir, packages, threads, historyLocation,
-					excludedClasses);
+					excludedClasses, excludedMethods);
 		}
 
 		private void initialiseReportDir() {
@@ -254,6 +268,12 @@ public final class PitOptions implements Serializable {
 		public PitOptionsBuilder withExcludedClasses(
 				List<String> excludedClasses) {
 			this.excludedClasses = copyOf(excludedClasses);
+			return this;
+		}
+
+		public PitOptionsBuilder withExcludedMethods(
+				List<String> excludedMethods) {
+			this.excludedMethods = copyOf(excludedMethods);
 			return this;
 		}
 	}

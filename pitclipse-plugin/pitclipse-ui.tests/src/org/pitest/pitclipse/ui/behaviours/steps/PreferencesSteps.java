@@ -83,4 +83,22 @@ public class PreferencesSteps {
 		assertNotNull(excludedClasses);
 		assertTrue(excludedClasses.isEmpty());
 	}
+
+	@Then("the excluded methods preference is not set")
+	public void noMethodsAreExcluded() {
+		String excludedMethods = INSTANCE.getWindowsMenu().getExcludedMethods();
+		assertNotNull(excludedMethods);
+		assertTrue(excludedMethods.isEmpty());
+	}
+
+	@When("the excluded methods preference is not set")
+	public void setNoMethodsAreExcluded() {
+		INSTANCE.getWindowsMenu().setExcludedMethods("");
+	}
+
+	@When("the excluded methods preference is set to \"$excludedMethods\"")
+	public void setExcludedMethods(String excludedMethods) {
+		INSTANCE.getWindowsMenu().setExcludedMethods(excludedMethods);
+	}
+
 }

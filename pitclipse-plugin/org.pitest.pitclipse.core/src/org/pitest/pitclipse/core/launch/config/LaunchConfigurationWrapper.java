@@ -4,6 +4,7 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_M
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_METHODS;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 
@@ -98,12 +99,14 @@ public class LaunchConfigurationWrapper {
 		int threadCount = getThreadCount();
 		File reportDir = getDefault().emptyResultDir();
 		List<String> excludedClasses = getExcludedClasses();
+		List<String> excludedMethods = getExcludedMethods();
 
 		PitOptionsBuilder builder = new PitOptionsBuilder()
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs)
 				.withReportDirectory(reportDir).withThreads(threadCount)
-				.withExcludedClasses(excludedClasses);
+				.withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods);
 		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}
@@ -117,6 +120,20 @@ public class LaunchConfigurationWrapper {
 		return builder.build();
 	}
 
+	private List<String> getExcludedMethods() throws CoreException {
+		Builder<String> results = ImmutableList.builder();
+		String excludedClasses;
+		if (launchConfig.hasAttribute(ATTR_EXCLUDE_METHODS)) {
+			excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS,
+					"");
+		} else {
+			excludedClasses = pitConfiguration.getExcludedMethods();
+		}
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(excludedClasses));
+		return results.build();
+	}
+
 	private List<String> getExcludedClasses() throws CoreException {
 		Builder<String> results = ImmutableList.builder();
 		String excludedClasses;
@@ -126,7 +143,8 @@ public class LaunchConfigurationWrapper {
 		} else {
 			excludedClasses = pitConfiguration.getExcludedClasses();
 		}
-		results.addAll(Splitter.on(',').trimResults().split(excludedClasses));
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(excludedClasses));
 		return results.build();
 	}
 

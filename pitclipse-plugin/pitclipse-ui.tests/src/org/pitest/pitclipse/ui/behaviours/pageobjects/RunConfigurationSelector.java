@@ -49,10 +49,13 @@ public class RunConfigurationSelector {
 				.isChecked();
 		String excludedClasses = bot.textWithLabel(
 				"Excluded classes (e.g.*IntTest)").getText();
+		String excludedMethods = bot.textWithLabel(
+				"Excluded methods (e.g.*toString*)").getText();
 		return new Builder().withName(name).withProjects(project)
 				.withRunInParallel(runInParallel)
 				.withIncrementalAnalysis(incrementalAnalysis)
-				.withExcludedClasses(excludedClasses).build();
+				.withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods).build();
 	}
 
 	private SWTBotTreeItem activateShell() {

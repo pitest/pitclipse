@@ -9,5 +9,6 @@ public interface PreferenceConstants {
 	String PIT_EXECUTION_MODE = "pitExecutionMode";
 	String INCREMENTAL_ANALYSIS = "incrementalAnalysis";
 	String EXCLUDED_CLASSES = "excludedClasses";
+	String EXCLUDED_METHODS = "excludedMethods";
 
 }

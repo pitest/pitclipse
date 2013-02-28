@@ -21,7 +21,6 @@ import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public class PitOptionsTest {
@@ -53,6 +52,10 @@ public class PitOptionsTest {
 	private static final List<String> PACKAGES = of(PACKAGE_1, PACKAGE_2);
 	private static final List<String> EXCLUDED_CLASSES = of("com*ITest",
 			"*IntTest");
+	private static final List<String> EXCLUDED_METHODS = of("*toString*",
+			"leaveMeAlone*");
+
+	private static final List<String> EMPTY_LIST = of();
 	private final File historyLocation = randomFile();
 
 	@Before
@@ -92,9 +95,8 @@ public class PitOptionsTest {
 		assertArrayEquals(expectedArgs(reportDir, testSrcDir, TEST_CLASS1),
 				options.toCLIArgs());
 		assertEquals(
-				expectedArgsAsString(reportDir, testSrcDir,
-						ImmutableList.<String> of(), TEST_CLASS1),
-				options.toCLIArgsAsString());
+				expectedArgsAsString(reportDir, testSrcDir, EMPTY_LIST,
+						TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
 	@Test(expected = PitLaunchException.class)
@@ -142,9 +144,8 @@ public class PitOptionsTest {
 		assertArrayEquals(expectedArgs(expectedDir, testSrcDir, TEST_CLASS1),
 				options.toCLIArgs());
 		assertEquals(
-				expectedArgsAsString(expectedDir, testSrcDir,
-						ImmutableList.<String> of(), TEST_CLASS1),
-				options.toCLIArgsAsString());
+				expectedArgsAsString(expectedDir, testSrcDir, EMPTY_LIST,
+						TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
 	@Test(expected = PitLaunchException.class)
@@ -175,9 +176,9 @@ public class PitOptionsTest {
 				expectedArgs(reportDir, testSrcDir, TEST_CLASS1, TEST_CLASS1,
 						TEST_CLASS2), options.toCLIArgs());
 		assertEquals(
-				expectedArgsAsString(reportDir, testSrcDir,
-						ImmutableList.<String> of(), TEST_CLASS1, TEST_CLASS1,
-						TEST_CLASS2), options.toCLIArgsAsString());
+				expectedArgsAsString(reportDir, testSrcDir, EMPTY_LIST,
+						TEST_CLASS1, TEST_CLASS1, TEST_CLASS2),
+				options.toCLIArgsAsString());
 	}
 
 	@Test
@@ -196,9 +197,8 @@ public class PitOptionsTest {
 						PACKAGE_1 + "," + PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
 				options.toCLIArgs());
 		assertEquals(
-				expectedArgsAsString(reportDir, testSrcDir,
-						ImmutableList.<String> of(), PACKAGE_1 + ","
-								+ PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
+				expectedArgsAsString(reportDir, testSrcDir, EMPTY_LIST,
+						PACKAGE_1 + "," + PACKAGE_2, TEST_CLASS1, TEST_CLASS2),
 				options.toCLIArgsAsString());
 	}
 
@@ -241,11 +241,33 @@ public class PitOptionsTest {
 		assertEquals(TMP_DIR, reportDir.getParentFile());
 		assertEquals(TEST_CLASS1, options.getClassUnderTest());
 		assertArrayEquals(
-				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES, null,
-						TEST_CLASS1), options.toCLIArgs());
+				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES,
+						EMPTY_LIST, null, TEST_CLASS1), options.toCLIArgs());
 		assertEquals(
 				expectedArgsAsString(reportDir, of(testSrcDir),
-						EXCLUDED_CLASSES, null, TEST_CLASS1),
+						EXCLUDED_CLASSES, EMPTY_LIST, null, TEST_CLASS1),
+				options.toCLIArgsAsString());
+	}
+
+	@Test
+	public void excludedClassesAndMethodsSet() throws IOException {
+		PitOptions options = new PitOptionsBuilder()
+				.withSourceDirectory(testSrcDir)
+				.withClassUnderTest(TEST_CLASS1)
+				.withExcludedClasses(EXCLUDED_CLASSES)
+				.withExcludedMethods(EXCLUDED_METHODS).build();
+		File reportDir = options.getReportDirectory();
+		assertTrue(reportDir.isDirectory());
+		assertTrue(reportDir.exists());
+		assertEquals(TMP_DIR, reportDir.getParentFile());
+		assertEquals(TEST_CLASS1, options.getClassUnderTest());
+		assertArrayEquals(
+				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES,
+						EXCLUDED_METHODS, null, TEST_CLASS1),
+				options.toCLIArgs());
+		assertEquals(
+				expectedArgsAsString(reportDir, of(testSrcDir),
+						EXCLUDED_CLASSES, EXCLUDED_METHODS, null, TEST_CLASS1),
 				options.toCLIArgsAsString());
 	}
 
@@ -261,20 +283,19 @@ public class PitOptionsTest {
 
 	private Object[] expectedArgs(File reportDir, File sourceDir,
 			File historyLocation, String classUnderTest, String... classpath) {
-		return expectedArgs(reportDir, of(sourceDir),
-				ImmutableList.<String> of(), historyLocation, classUnderTest,
-				classpath);
+		return expectedArgs(reportDir, of(sourceDir), EMPTY_LIST, EMPTY_LIST,
+				historyLocation, classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
-		return expectedArgs(reportDir, sourceDirs, null, null, classUnderTest,
-				classpath);
+		return expectedArgs(reportDir, sourceDirs, null, null, null,
+				classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
-			List<String> excludedClasses, File historyLocation,
-			String classUnderTest, String... classpath) {
+			List<String> excludedClasses, List<String> excludedMethods,
+			File historyLocation, String classUnderTest, String... classpath) {
 		List<String> args = Lists.newArrayList("--failWhenNoMutations",
 				"false", "--outputFormats", "HTML,XML", "--threads", "1",
 				"--reportDir", reportDir.getPath(), "--targetTests",
@@ -322,6 +343,18 @@ public class PitOptionsTest {
 			}
 			args.add(result);
 		}
+		if (null != excludedMethods && !excludedMethods.isEmpty()) {
+			args.add("--excludedMethods");
+			String result = "";
+			for (int i = 0; i < excludedMethods.size(); i++) {
+				if (i == excludedMethods.size() - 1) {
+					result += excludedMethods.get(i);
+				} else {
+					result += excludedMethods.get(i) + ",";
+				}
+			}
+			args.add(result);
+		}
 		return args.toArray();
 	}
 
@@ -329,27 +362,26 @@ public class PitOptionsTest {
 			List<String> excludedClasses, String classUnderTest,
 			String... classpath) {
 		return expectedArgsAsString(reportDir, of(sourceDir), excludedClasses,
-				null, classUnderTest, classpath);
+				EMPTY_LIST, null, classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, File sourceDir,
 			File historyLocation, String classUnderTest, String... classpath) {
-		return expectedArgsAsString(reportDir, of(sourceDir),
-				ImmutableList.<String> of(), historyLocation, classUnderTest,
-				classpath);
+		return expectedArgsAsString(reportDir, of(sourceDir), EMPTY_LIST,
+				EMPTY_LIST, historyLocation, classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
-		return expectedArgsAsString(reportDir, sourceDirs,
-				ImmutableList.<String> of(), null, classUnderTest, classpath);
+		return expectedArgsAsString(reportDir, sourceDirs, EMPTY_LIST,
+				EMPTY_LIST, null, classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
-			List<String> excludedClasses, File historyLocation,
-			String classUnderTest, String... classpath) {
+			List<String> excludedClasses, List<String> excludedMethods,
+			File historyLocation, String classUnderTest, String... classpath) {
 		Object[] args = expectedArgs(reportDir, sourceDirs, excludedClasses,
-				historyLocation, classUnderTest, classpath);
+				excludedMethods, historyLocation, classUnderTest, classpath);
 		StringBuilder argsBuilder = new StringBuilder();
 		for (Object arg : args) {
 			argsBuilder.append(' ').append(arg);

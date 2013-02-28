@@ -6,6 +6,7 @@ public interface PitclipseConstants {
 	String ATTR_TEST_IN_PARALLEL = "org.pitest.pitclipse.core.test.parallel";
 	String ATTR_TEST_INCREMENTALLY = "org.pitest.pitclipse.core.test.incrementalAnalysis";
 	String ATTR_EXCLUDE_CLASSES = "org.pitest.pitclipse.core.test.excludeClasses";
+	String ATTR_EXCLUDE_METHODS = "org.pitest.pitclipse.core.test.excludeMethods";
 	String LAUNCH_SHORTCUT_TITLE = "Test Selection";
 	String TEST_TO_RUN = "Select Test To Run";
 	String TEST_CONFIGURATION = "Select a Test Configuration";
@@ -13,4 +14,5 @@ public interface PitclipseConstants {
 	String MUTATION_TESTS_RUN_IN_PARALLEL = "Mutation tests run in para&llel";
 	String USE_INCREMENTAL_ANALYSIS = "Use &incremental analysis";
 	String EXCLUDE_CLASSES_FROM_PIT = "E&xcluded classes (e.g.*IntTest)";
+	String EXCLUDE_METHODS_FROM_PIT = "Excluded &methods (e.g.*toString*)";
 }
