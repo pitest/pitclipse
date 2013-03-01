@@ -19,7 +19,9 @@ import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.ui.behaviours.steps.ClassSteps;
+import org.pitest.pitclipse.ui.behaviours.steps.LaunchConfigurationSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
+import org.pitest.pitclipse.ui.behaviours.steps.PreferencesSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.ProjectSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.SetupSteps;
 
@@ -54,7 +56,8 @@ public class PitclipseStories extends JUnitStories {
 	@Override
 	public InjectableStepsFactory stepsFactory() {
 		return new InstanceStepsFactory(configuration(), new SetupSteps(),
-				new ProjectSteps(), new ClassSteps(), new PitclipseSteps());
+				new ProjectSteps(), new ClassSteps(), new PitclipseSteps(),
+				new PreferencesSteps(), new LaunchConfigurationSteps());
 	}
 
 	@BeforeStories

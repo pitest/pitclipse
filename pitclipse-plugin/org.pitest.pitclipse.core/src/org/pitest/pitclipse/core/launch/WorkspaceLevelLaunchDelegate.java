@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
+import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
 import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
@@ -30,6 +31,12 @@ public class WorkspaceLevelLaunchDelegate extends JavaLaunchDelegate {
 
 	private int portNumber;
 
+	private final PitConfiguration pitConfiguration;
+
+	public WorkspaceLevelLaunchDelegate(PitConfiguration pitConfiguration) {
+		this.pitConfiguration = pitConfiguration;
+	}
+
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -37,7 +44,7 @@ public class WorkspaceLevelLaunchDelegate extends JavaLaunchDelegate {
 		LaunchConfigurationWrapper configWrapper = new LaunchConfigurationWrapper(
 				configuration, new PackageFinder(),
 				new WorkspaceLevelClassFinder(),
-				new WorkspaceLevelSourceDirFinder());
+				new WorkspaceLevelSourceDirFinder(), pitConfiguration);
 
 		PitOptions options = configWrapper.getPitOptions();
 

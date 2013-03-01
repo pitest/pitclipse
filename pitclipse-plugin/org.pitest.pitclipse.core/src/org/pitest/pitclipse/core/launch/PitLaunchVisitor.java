@@ -2,12 +2,16 @@ package org.pitest.pitclipse.core.launch;
 
 import static org.eclipse.debug.core.ILaunchManager.RUN_MODE;
 
+import javax.annotation.concurrent.Immutable;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.PitConfigurationVisitor;
 
+@Immutable
 public class PitLaunchVisitor implements PitConfigurationVisitor {
 
 	public class LaunchFailedException extends RuntimeException {
@@ -29,19 +33,20 @@ public class PitLaunchVisitor implements PitConfigurationVisitor {
 		this.monitor = monitor;
 	}
 
-	public void visitProjectLevelConfiguration() {
+	public void visitProjectLevelConfiguration(PitConfiguration pitConfiguration) {
 		try {
-			new ProjectLevelLaunchDelegate().launch(configuration, RUN_MODE,
-					launch, monitor);
+			new ProjectLevelLaunchDelegate(pitConfiguration).launch(
+					configuration, RUN_MODE, launch, monitor);
 		} catch (CoreException e) {
 			throw new LaunchFailedException(configuration.getName());
 		}
 	}
 
-	public void visitWorkspaceLevelConfiguration() {
+	public void visitWorkspaceLevelConfiguration(
+			PitConfiguration pitConfiguration) {
 		try {
-			new WorkspaceLevelLaunchDelegate().launch(configuration, RUN_MODE,
-					launch, monitor);
+			new WorkspaceLevelLaunchDelegate(pitConfiguration).launch(
+					configuration, RUN_MODE, launch, monitor);
 		} catch (CoreException e) {
 			throw new LaunchFailedException(configuration.getName());
 		}

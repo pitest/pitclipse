@@ -17,6 +17,8 @@ import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 import static org.pitest.pitclipse.core.PitCoreActivator.getActiveWorkbenchShell;
 import static org.pitest.pitclipse.core.launch.PitMigrationDelegate.mapResources;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.PIT_CONFIGURATION_TYPE;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.TEST_CONFIGURATION;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.TEST_RUN_CONFIGURATION;
@@ -53,6 +55,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.pitest.pitclipse.core.PitConfiguration;
+import org.pitest.pitclipse.core.PitCoreActivator;
 
 import com.google.common.collect.ImmutableList.Builder;
 
@@ -296,6 +300,13 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 		wc.setAttribute(ATTR_PROJECT_NAME, element.getJavaProject()
 				.getElementName());
 		wc.setAttribute(ATTR_TEST_CONTAINER, containerHandleId);
+
+		PitConfiguration preferences = PitCoreActivator.getDefault()
+				.getConfiguration();
+		wc.setAttribute(ATTR_TEST_IN_PARALLEL,
+				preferences.isParallelExecution());
+		wc.setAttribute(ATTR_TEST_INCREMENTALLY,
+				preferences.isIncrementalAnalysis());
 		mapResources(wc);
 		// JUnitMigrationDelegate.mapResources(wc);
 		// AssertionVMArg.setArgDefault(wc);

@@ -14,6 +14,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.mutationtest.MutationCoverageReport;
+import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
 import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.ProjectLevelClassFinder;
@@ -32,13 +33,19 @@ public class ProjectLevelLaunchDelegate extends JavaLaunchDelegate {
 
 	private PitOptions options = null;
 
+	private final PitConfiguration pitConfiguration;
+
+	public ProjectLevelLaunchDelegate(PitConfiguration pitConfiguration) {
+		this.pitConfiguration = pitConfiguration;
+	}
+
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		LaunchConfigurationWrapper configWrapper = new LaunchConfigurationWrapper(
 				configuration, new PackageFinder(),
 				new ProjectLevelClassFinder(),
-				new ProjectLevelSourceDirFinder());
+				new ProjectLevelSourceDirFinder(), pitConfiguration);
 		options = configWrapper.getPitOptions();
 		System.out.println(options);
 

@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.core;
 
-import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
 import static com.google.common.io.Files.createParentDirs;
@@ -8,6 +7,11 @@ import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.PitExecutionMode.values;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +29,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.core.preferences.PreferenceConstants;
 
-import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.ImmutableList;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -78,7 +81,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
 				false);
 		setupStateDirectories();
-		Builder<String> builder = builder();
+		ImmutableList.Builder<String> builder = ImmutableList.builder();
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi"))
 				.getCanonicalPath());
 		builder.add(getBundleFile(
@@ -243,19 +246,32 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public PitConfiguration getConfiguration() {
-		String choice = getPreferenceStore().getString(
-				PreferenceConstants.P_CHOICE);
+		String executionMode = getPreferenceStore().getString(
+				PIT_EXECUTION_MODE);
+		boolean parallelRun = getPreferenceStore().getBoolean(RUN_IN_PARALLEL);
+		boolean incrementalAnalysis = getPreferenceStore().getBoolean(
+				INCREMENTAL_ANALYSIS);
+		String excludedClasses = getPreferenceStore().getString(
+				EXCLUDED_CLASSES);
+		String excludedMethods = getPreferenceStore().getString(
+				EXCLUDED_METHODS);
+		PitConfiguration.Builder builder = PitConfiguration.builder()
+				.withParallelExecution(parallelRun)
+				.withIncrementalAnalysis(incrementalAnalysis)
+				.withExcludedClasses(excludedClasses);
 		for (PitExecutionMode pitExecutionMode : values()) {
-			if (pitExecutionMode.getId().equals(choice)) {
-				return PitConfiguration.builder()
-						.withExecutionMode(pitExecutionMode).build();
+			if (pitExecutionMode.getId().equals(executionMode)) {
+				builder.withExecutionMode(pitExecutionMode)
+						.withExcludedMethods(excludedMethods).build();
+				break;
 			}
 		}
-		return PitConfiguration.builder().build();
+
+		return builder.build();
 	}
 
 	public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-		getPreferenceStore().setValue(PreferenceConstants.P_CHOICE,
+		getPreferenceStore().setValue(PIT_EXECUTION_MODE,
 				pitExecutionMode.getId());
 	}
 }

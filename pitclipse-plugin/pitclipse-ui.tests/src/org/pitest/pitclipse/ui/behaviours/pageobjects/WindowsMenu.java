@@ -41,4 +41,44 @@ public class WindowsMenu {
 		PitCoreActivator.getDefault().setExecutionMode(mode);
 	}
 
+	public boolean isPitRunInParallel() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.isPitRunInParallel();
+	}
+
+	public void setPitRunInParallel(boolean inParallel) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setPitRunInParallel(inParallel);
+	}
+
+	public boolean isIncrementalAnalysisEnabled() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.isIncrementalAnalysisEnabled();
+	}
+
+	public void setIncrementalAnalysisEnabled(boolean incremental) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setPitIncrementalAnalysisEnabled(incremental);
+	}
+
+	public String getExcludedClasses() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getExcludedClasses();
+	}
+
+	public void setExcludedClasses(String excludedClasses) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setExcludedClasses(excludedClasses);
+	}
+
+	public String getExcludedMethods() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getExcludedMethods();
+	}
+
+	public void setExcludedMethods(String excludedMethods) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setExcludedMethods(excludedMethods);
+	}
+
 }

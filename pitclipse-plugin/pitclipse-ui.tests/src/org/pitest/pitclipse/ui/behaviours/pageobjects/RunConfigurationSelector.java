@@ -27,20 +27,35 @@ public class RunConfigurationSelector {
 
 	public List<PitRunConfiguration> getConfigurations() {
 		activateShell();
-		ImmutableList.Builder<PitRunConfiguration> builder = builder();
-		SWTBotTreeItem[] configurations = activateShell().getItems();
-		for (SWTBotTreeItem treeItem : configurations) {
-			treeItem.select();
-			builder.add(getPitConfiguration(treeItem));
+		try {
+			ImmutableList.Builder<PitRunConfiguration> builder = builder();
+			SWTBotTreeItem[] configurations = activateShell().getItems();
+			for (SWTBotTreeItem treeItem : configurations) {
+				treeItem.select();
+				builder.add(getPitConfiguration(treeItem));
+			}
+			return builder.build();
+		} finally {
+			bot.button("Close").click();
 		}
-		return builder.build();
 	}
 
 	private PitRunConfiguration getPitConfiguration(SWTBotTreeItem treeItem) {
 		String name = treeItem.getText();
 		String project = bot.textWithLabel("Project to mutate:").getText();
-		Builder builder = new Builder().withName(name).withProjects(project);
-		return builder.build();
+		boolean runInParallel = bot.checkBox("Mutation tests run in parallel")
+				.isChecked();
+		boolean incrementalAnalysis = bot.checkBox("Use incremental analysis")
+				.isChecked();
+		String excludedClasses = bot.textWithLabel(
+				"Excluded classes (e.g.*IntTest)").getText();
+		String excludedMethods = bot.textWithLabel(
+				"Excluded methods (e.g.*toString*)").getText();
+		return new Builder().withName(name).withProjects(project)
+				.withRunInParallel(runInParallel)
+				.withIncrementalAnalysis(incrementalAnalysis)
+				.withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods).build();
 	}
 
 	private SWTBotTreeItem activateShell() {

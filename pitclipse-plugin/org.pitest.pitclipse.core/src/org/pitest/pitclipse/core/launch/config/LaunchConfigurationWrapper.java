@@ -3,6 +3,10 @@ package org.pitest.pitclipse.core.launch.config;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 
 import java.io.File;
 import java.util.List;
@@ -16,11 +20,16 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 public class LaunchConfigurationWrapper {
 
@@ -28,14 +37,16 @@ public class LaunchConfigurationWrapper {
 	private final PackageFinder packageFinder;
 	private final ClassFinder classFinder;
 	private final SourceDirFinder sourceDirFinder;
+	private final PitConfiguration pitConfiguration;
 
 	public LaunchConfigurationWrapper(ILaunchConfiguration launchConfig,
 			PackageFinder packageFinder, ClassFinder classFinder,
-			SourceDirFinder sourceDirFinder) {
+			SourceDirFinder sourceDirFinder, PitConfiguration pitConfiguration) {
 		this.launchConfig = launchConfig;
 		this.packageFinder = packageFinder;
 		this.classFinder = classFinder;
 		this.sourceDirFinder = sourceDirFinder;
+		this.pitConfiguration = pitConfiguration;
 	}
 
 	protected ILaunchConfiguration getLaunchConfig() {
@@ -85,21 +96,67 @@ public class LaunchConfigurationWrapper {
 	public PitOptions getPitOptions() throws CoreException {
 		List<String> classPath = getClassesFromProject();
 		List<File> sourceDirs = getSourceDirsForProject();
+		int threadCount = getThreadCount();
 		File reportDir = getDefault().emptyResultDir();
+		List<String> excludedClasses = getExcludedClasses();
+		List<String> excludedMethods = getExcludedMethods();
+
+		PitOptionsBuilder builder = new PitOptionsBuilder()
+				.withClassesToMutate(classPath)
+				.withSourceDirectories(sourceDirs)
+				.withReportDirectory(reportDir).withThreads(threadCount)
+				.withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods);
+		if (isIncrementalAnalysis()) {
+			builder.withHistoryLocation(getDefault().getHistoryFile());
+		}
 		if (isTestLaunch()) {
 			IType testClass = getTestClass();
-			return new PitOptionsBuilder()
-					.withClassUnderTest(testClass.getFullyQualifiedName())
-					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs)
-					.withReportDirectory(reportDir).build();
+			builder.withClassUnderTest(testClass.getFullyQualifiedName());
 		} else {
 			List<String> packages = getPackagesToTest();
-			return new PitOptionsBuilder().withPackagesToTest(packages)
-					.withClassesToMutate(classPath)
-					.withSourceDirectories(sourceDirs)
-					.withReportDirectory(reportDir).build();
+			builder.withPackagesToTest(packages);
 		}
+		return builder.build();
+	}
+
+	private List<String> getExcludedMethods() throws CoreException {
+		Builder<String> results = ImmutableList.builder();
+		String excludedClasses;
+		if (launchConfig.hasAttribute(ATTR_EXCLUDE_METHODS)) {
+			excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS,
+					"");
+		} else {
+			excludedClasses = pitConfiguration.getExcludedMethods();
+		}
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(excludedClasses));
+		return results.build();
+	}
+
+	private List<String> getExcludedClasses() throws CoreException {
+		Builder<String> results = ImmutableList.builder();
+		String excludedClasses;
+		if (launchConfig.hasAttribute(ATTR_EXCLUDE_CLASSES)) {
+			excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_CLASSES,
+					"");
+		} else {
+			excludedClasses = pitConfiguration.getExcludedClasses();
+		}
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(excludedClasses));
+		return results.build();
+	}
+
+	private boolean isIncrementalAnalysis() throws CoreException {
+		return launchConfig.getAttribute(ATTR_TEST_INCREMENTALLY, false)
+				|| pitConfiguration.isIncrementalAnalysis();
+	}
+
+	private int getThreadCount() throws CoreException {
+		return launchConfig.getAttribute(ATTR_TEST_IN_PARALLEL, false)
+				|| pitConfiguration.isParallelExecution() ? Runtime
+				.getRuntime().availableProcessors() : 1;
 	}
 
 	private List<File> getSourceDirsForProject() throws CoreException {
