@@ -18,7 +18,7 @@ import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitRunner;
-import org.pitest.pitclipse.pitrunner.SocketProvider;
+import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
 import com.google.common.collect.ImmutableList;
 

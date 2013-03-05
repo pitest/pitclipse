@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.pitrunner.io;
 
 import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;

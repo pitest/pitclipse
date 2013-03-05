@@ -65,7 +65,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.pitest.pitclipse.pitrunner</Export-Package>
+            <Export-Package>org.pitest.pitclipse.pitrunner.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>

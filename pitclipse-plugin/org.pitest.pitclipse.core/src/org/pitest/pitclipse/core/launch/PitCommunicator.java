@@ -3,9 +3,9 @@ package org.pitest.pitclipse.core.launch;
 import javax.annotation.concurrent.Immutable;
 
 import org.eclipse.swt.widgets.Display;
-import org.pitest.pitclipse.pitrunner.PitClient;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.client.PitClient;
 
 @Immutable
 public class PitCommunicator implements Runnable {

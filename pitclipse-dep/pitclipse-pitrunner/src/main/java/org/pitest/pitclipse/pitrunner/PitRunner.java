@@ -10,6 +10,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.PitResults.PitResultsBuilder;
+import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 @ThreadSafe
 public class PitRunner {

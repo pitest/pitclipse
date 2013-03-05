@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.pitrunner.client;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
@@ -16,6 +16,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
+import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
+import org.pitest.pitclipse.pitrunner.client.PitClient;
+import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitClientTest extends AbstractPitRunnerTest {

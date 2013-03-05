@@ -12,6 +12,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.PitResults.PitResultsBuilder;
+import org.pitest.pitclipse.pitrunner.server.PitServerTest;
 
 public abstract class AbstractPitRunnerTest {
 
