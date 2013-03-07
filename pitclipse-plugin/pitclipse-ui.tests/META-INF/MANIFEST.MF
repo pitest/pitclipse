@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.5",
  org.eclipse.swtbot.junit4_x;bundle-version="2.0.5",
  org.jbehave.eclipse;bundle-version="1.0.0",
- org.jbehave.osgi.core;bundle-version="0.0.3"
+ org.jbehave.osgi.core;bundle-version="0.0.3",
+ org.pitest.pitclipse-pitrunner;bundle-version="0.29.5"
 Import-Package: org.eclipse.core.runtime
 Bundle-Activator: org.pitest.pitclipse.ui.PitclipseTestActivator
 Bundle-ActivationPolicy: lazy

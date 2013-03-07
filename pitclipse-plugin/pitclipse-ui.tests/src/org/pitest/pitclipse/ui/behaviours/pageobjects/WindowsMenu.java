@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitExecutionMode;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class WindowsMenu {
 

@@ -14,12 +14,12 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.mutationtest.MutationCoverageReport;
-import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
 import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.ProjectLevelClassFinder;
 import org.pitest.pitclipse.core.launch.config.ProjectLevelSourceDirFinder;
 import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 import com.google.common.collect.ImmutableList;
 

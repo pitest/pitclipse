@@ -55,8 +55,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 import com.google.common.collect.ImmutableList.Builder;
 

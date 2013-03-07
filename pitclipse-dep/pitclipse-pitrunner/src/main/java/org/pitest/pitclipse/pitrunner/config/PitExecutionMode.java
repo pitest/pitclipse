@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core;
+package org.pitest.pitclipse.pitrunner.config;
 
 public enum PitExecutionMode {
 	PROJECT_ISOLATION("containingProject", "&Project containing test only"), WORKSPACE(

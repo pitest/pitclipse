@@ -32,8 +32,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private static final int NUMBER_OF_COLUMNS = 3;

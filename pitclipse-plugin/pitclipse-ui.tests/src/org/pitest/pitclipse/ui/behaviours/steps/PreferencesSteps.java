@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
-import static org.pitest.pitclipse.core.PitExecutionMode.WORKSPACE;
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.pitest.pitclipse.core.PitExecutionMode;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class PreferencesSteps {
 
