@@ -3,8 +3,17 @@ Pitclipse
 
 Eclipse plugin for PIT.  Update site: http://pitclipse.freehostingcloud.com/repository/
 
-Build Requirements
-==================
+
+
+
+
+
+
+Plugin Build Requirements
+=========================
+If you wish to build the plugin from source, you will need the following.
+
+
 * Maven 3.0
 * Nexus OSS setup for P2 Repository support https://docs.sonatype.org/display/Nexus/Nexus+OSGi+Experimental+Features+-+P2+Repository+Plugin
 OR
@@ -30,7 +39,7 @@ Requirements
 
 Import the project as a maven project.  You may need to disable the maven nature from the org.pitest.pitclipse.core & org.pitest.pitclipse.ui modules (right-click Maven -> Disable Nature).  If you check the build properties of org.pitest.pitclipse.core & org.pitest.pitclipse.ui, ensure it has the Plug-in Manifest Builder enabled.
 
-The UI tests use SWTBot to drive the UI interactions.  To run the UI tests, open SimpleJavaProjectTest and Run As -> SWTBot Test.  The intention is to run this from JBehave once JBehave can be run from OSGI (hence why some of the test code is annotated @Given, @When< @Then).
+The UI tests use SWTBot to drive the UI interactions.  To run the UI tests, open SimpleJavaProjectTest and Run As -> SWTBot Test.  This launches JBehave and runs stories matching the file name pattern u*.story.
 
 Command line build
 ==================
