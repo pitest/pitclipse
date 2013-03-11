@@ -17,6 +17,10 @@ import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitRunner;
+import org.pitest.pitclipse.pitrunner.client.PitClient;
+import org.pitest.pitclipse.pitrunner.client.PitClientProvider;
+import org.pitest.pitclipse.pitrunner.client.PitCommunicator;
+import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
@@ -50,7 +54,10 @@ public class WorkspaceLevelLaunchDelegate extends JavaLaunchDelegate {
 
 		super.launch(configuration, mode, launch, monitor);
 
-		executorService.execute(new PitCommunicator(portNumber, options));
+		PitResultHandler resultHandler = new ExtensionPointResultHandler();
+		PitClient client = new PitClientProvider().getClient(portNumber);
+		executorService.execute(new PitCommunicator(client, options,
+				resultHandler));
 	}
 
 	private void generatePortNumber() {

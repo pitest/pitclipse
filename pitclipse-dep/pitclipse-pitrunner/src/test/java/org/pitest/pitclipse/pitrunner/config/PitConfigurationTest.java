@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,28 +16,57 @@ public class PitConfigurationTest {
 
 	@Mock
 	private PitConfigurationVisitor visitor;
+	private PitConfiguration config;
 
 	@Test
 	public void noScopeDefinedDefaultsToProject() {
-		PitConfiguration config = PitConfiguration.builder().build();
-		config.accept(visitor);
-		verify(visitor, only()).visitProjectLevelConfiguration(config);
+		givenNoExecutionScopeIsSupplied();
+		whenTheVisitorIsCalled();
+		thenTheProjectLevelVisitorMethodIsCalled();
 	}
 
 	@Test
 	public void projectScopeDefined() {
-		PitConfiguration config = PitConfiguration.builder()
-				.withExecutionMode(PROJECT_ISOLATION).build();
-		config.accept(visitor);
-		verify(visitor, only()).visitProjectLevelConfiguration(config);
+		givenProjectLevelExecutionScopeIsSpecified();
+		whenTheVisitorIsCalled();
+		thenTheProjectLevelVisitorMethodIsCalled();
 	}
 
 	@Test
 	public void workspaceScopeDefined() {
-		PitConfiguration config = PitConfiguration.builder()
-				.withExecutionMode(WORKSPACE).build();
-		config.accept(visitor);
+		givenWorkspaceLevelExecutionScopeIsSpecified();
+		whenTheVisitorIsCalled();
+		thenTheWorkspaceLevelVisitorMethodIsCalled();
+	}
+
+	private void thenTheWorkspaceLevelVisitorMethodIsCalled() {
 		verify(visitor, only()).visitWorkspaceLevelConfiguration(config);
 	}
 
+	private void givenNoExecutionScopeIsSupplied() {
+		config = PitConfiguration.builder().build();
+	}
+
+	private void givenProjectLevelExecutionScopeIsSpecified() {
+		config = PitConfiguration.builder()
+				.withExecutionMode(PROJECT_ISOLATION).build();
+	}
+
+	private void givenWorkspaceLevelExecutionScopeIsSpecified() {
+		config = PitConfiguration.builder().withExecutionMode(WORKSPACE)
+				.build();
+	}
+
+	private void whenTheVisitorIsCalled() {
+		config.accept(visitor);
+	}
+
+	private void thenTheProjectLevelVisitorMethodIsCalled() {
+		verify(visitor, only()).visitProjectLevelConfiguration(config);
+	}
+
+	@Before
+	public void cleanup() {
+		config = null;
+	}
 }
