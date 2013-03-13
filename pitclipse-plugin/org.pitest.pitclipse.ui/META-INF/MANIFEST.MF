@@ -7,7 +7,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.google.guava;bundle-version="11.0.1",
- org.pitest.pitclipse.core;bundle-version="0.28.5.qualifier"
+ org.pitest.pitclipse.core;bundle-version="0.28.5.qualifier",
+ org.pitest.pitclipse-pitrunner;bundle-version="0.29.5"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Pitest.org
