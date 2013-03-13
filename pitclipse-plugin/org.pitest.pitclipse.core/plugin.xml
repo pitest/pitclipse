@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.pitest.pitclipse.core.results" name="PitResults" schema="schema/org.pitest.pitclipse.core.results.exsd"/>
+   <extension-point id="org.pitest.pitclipse.core.executePit" name="PitExecutor" schema="schema/org.pitest.pitclipse.core.executePit.exsd"/>
 <extension
       point="org.eclipse.debug.core.launchConfigurationTypes">
     <launchConfigurationType
@@ -53,5 +54,11 @@
      <initializer
            class="org.pitest.pitclipse.core.preferences.PreferenceInitializer">
      </initializer>
+  </extension>
+  <extension
+        point="org.pitest.pitclipse.core.executePit">
+     <pit_options
+           class="org.pitest.pitclipse.core.launch.PitExecutionNotifier">
+     </pit_options>
   </extension>
 </plugin>
