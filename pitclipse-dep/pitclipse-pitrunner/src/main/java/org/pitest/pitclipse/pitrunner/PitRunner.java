@@ -18,19 +18,21 @@ public class PitRunner {
 	public PitResults runPIT(PitOptions options) {
 		MutationCoverageReport.main(options.toCLIArgs());
 		File reportDir = options.getReportDirectory();
-		File resultFile = findResultFile(reportDir);
-		return new PitResultsBuilder().withResults(resultFile).build();
+		File htmlResultFile = findResultFile(reportDir, "index.html");
+		File xmlResultFile = findResultFile(reportDir, "mutations.xml");
+		return new PitResultsBuilder().withHtmlResults(htmlResultFile)
+				.withXmlResults(xmlResultFile).build();
 	}
 
-	private File findResultFile(File reportDir) {
+	private File findResultFile(File reportDir, String fileName) {
 		for (File file : reportDir.listFiles()) {
-			if ("index.html".equals(file.getName())) {
+			if (fileName.equals(file.getName())) {
 				return file;
 			}
 		}
 		for (File file : reportDir.listFiles()) {
 			if (file.isDirectory()) {
-				File result = findResultFile(file);
+				File result = findResultFile(file, fileName);
 				if (null != result) {
 					return result;
 				}

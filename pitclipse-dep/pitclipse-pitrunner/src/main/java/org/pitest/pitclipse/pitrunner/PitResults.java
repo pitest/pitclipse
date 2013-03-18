@@ -11,43 +11,59 @@ import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 public final class PitResults implements Serializable {
 
 	private static final long serialVersionUID = 5271802933404287709L;
-	private final File resultFile;
+	private final File htmlResultFile;
+	private final File xmlResultFile;
 
-	private PitResults(File resultFile) {
-		this.resultFile = resultFile;
+	private PitResults(File htmlResultFile, File xmlResultFile) {
+		this.htmlResultFile = htmlResultFile;
+		this.xmlResultFile = xmlResultFile;
 	};
 
-	public File getResultFile() {
-		return resultFile;
+	public File getHtmlResultFile() {
+		return htmlResultFile;
 	}
 
 	public static final class PitResultsBuilder {
-		private File resultFile = null;
+		private File htmlResultFile = null;
+		private File xmlResultFile = null;
 
 		public PitResults build() {
 			validateResultsFile();
-			return new PitResults(resultFile);
+			return new PitResults(htmlResultFile, xmlResultFile);
 		}
 
-		public PitResultsBuilder withResults(File resultFile) {
-			this.resultFile = new File(resultFile.getPath());
+		public PitResultsBuilder withHtmlResults(File htmlResultFile) {
+			this.htmlResultFile = new File(htmlResultFile.getPath());
+			return this;
+		}
+
+		public PitResultsBuilder withXmlResults(File xmlResultFile) {
+			this.xmlResultFile = new File(xmlResultFile.getPath());
 			return this;
 		}
 
 		private void validateResultsFile() {
-			if (null == resultFile) {
-				throw new PitLaunchException("PIT Result File not set");
+			if (null == htmlResultFile) {
+				throw new PitLaunchException("PIT HTML Result File not set");
 			}
-			if (!resultFile.exists()) {
+			if (null == xmlResultFile) {
+				throw new PitLaunchException("PIT XML Result File not set");
+			}
+			if (!htmlResultFile.exists()) {
 				throw new PitLaunchException("File does not exist: "
-						+ resultFile);
+						+ htmlResultFile);
+			}
+			if (!xmlResultFile.exists()) {
+				throw new PitLaunchException("File does not exist: "
+						+ xmlResultFile);
 			}
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "PitResults [resultFile=" + resultFile + "]";
+		return "PitResults [htmlResultFile=" + htmlResultFile
+				+ ", xmlResultFile=" + xmlResultFile + "]";
 	}
 
 }

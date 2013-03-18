@@ -36,6 +36,22 @@
       <url>http://localhost:8081/nexus/content/repositories/releases/.meta/p2/</url>
     </repository>   
   </repositories>
+    <dependencies>
+    <dependency>
+      <groupId>com.googlecode.guava-osgi</groupId>
+      <artifactId>guava-osgi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-osgi</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitclipse-pitrunner</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>
