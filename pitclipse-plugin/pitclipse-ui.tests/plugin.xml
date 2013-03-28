@@ -7,5 +7,10 @@
             class="org.pitest.pitclipse.ui.swtbot.PitResultNotifier">
       </update>
    </extension>
-
+   <extension
+         point="org.pitest.pitclipse.core.executePit">
+      <pit_options
+            class="org.pitest.pitclipse.ui.swtbot.PitOptionsTestNotifier">
+      </pit_options>
+   </extension>
 </plugin>

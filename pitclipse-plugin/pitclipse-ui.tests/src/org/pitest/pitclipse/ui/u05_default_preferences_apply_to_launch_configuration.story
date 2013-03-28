@@ -16,6 +16,10 @@ Scenario: Launching PIT creates a configuration
 When test SomeNewClassTest in package foo.bar is run for project project5
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
 
+Then the options passed to Pit match:
+|classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|
+|foo.bar.SomeNewClassTest|foo.bar.*|project5|||true|false|
+
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|
 |SomeNewClassTest|true|false|||
@@ -28,6 +32,10 @@ And test AnotherNewClassTest in package foo.bar is run for project project5
 
 !-- The new test should inherit that test should not run in parallel
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+
+Then the options passed to Pit match:
+|classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|
+|foo.bar.AnotherNewClassTest|foo.bar.*|project5|||false|false|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|
@@ -43,6 +51,11 @@ And test YetAnotherClassTest in package foo.bar is run for project project5
 
 !-- The new test should inherit that test should run incremental analysis
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+
+Then the options passed to Pit match:
+|classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|
+|foo.bar.YetAnotherClassTest|foo.bar.*|project5|||true|true|
+
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|
 |AnotherNewClassTest|false|false|||
@@ -57,6 +70,11 @@ When a class NoNotAnotherClass in package foo.bar is created in project project5
 And test NoNotAnotherClass in package foo.bar is run for project project5
 
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+
+Then the options passed to Pit match:
+|classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|
+|foo.bar.NoNotAnotherClass|foo.bar.*|project5|org.foo.*IntTest, *DbTest||true|false|
+
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|
 |AnotherNewClassTest|false|false|||
@@ -72,6 +90,11 @@ When a class ClassMadnessTest in package foo.bar is created in project project5
 And test ClassMadnessTest in package foo.bar is run for project project5
 
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+
+Then the options passed to Pit match:
+|classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|
+|foo.bar.ClassMadnessTest|foo.bar.*|project5||*toString*, doNotMutateMe*|true|false|
+
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|
 |AnotherNewClassTest|false|false|||

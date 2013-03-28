@@ -320,4 +320,23 @@ public final class PitOptions implements Serializable {
 		return historyLocation;
 	}
 
+	public List<File> getSourceDirs() {
+		return sourceDirs;
+	}
+
+	public int getThreads() {
+		return threads;
+	}
+
+	public List<String> getExcludedClasses() {
+		return copyOf(excludedClasses);
+	}
+
+	public List<String> getExcludedMethods() {
+		return copyOf(excludedMethods);
+	}
+
+	public List<String> getClassesToMutate() {
+		return copyOf(classesToMutate);
+	}
 }
