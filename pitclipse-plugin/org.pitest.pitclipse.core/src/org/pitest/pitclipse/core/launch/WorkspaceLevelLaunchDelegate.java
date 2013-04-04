@@ -4,6 +4,7 @@ import org.pitest.pitclipse.core.launch.config.ClassFinder;
 import org.pitest.pitclipse.core.launch.config.PackageFinder;
 import org.pitest.pitclipse.core.launch.config.SourceDirFinder;
 import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
+import org.pitest.pitclipse.core.launch.config.WorkspaceLevelSourceDirFinder;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 public class WorkspaceLevelLaunchDelegate extends AbstractPitLaunchDelegate {

@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
@@ -67,9 +68,13 @@ public class PackageFinder {
 				if (handleId.equals(root.getHandleIdentifier())) {
 					IJavaElement[] elements = root.getChildren();
 					for (IJavaElement element : elements) {
-						if (element.getElementType() == PACKAGE_FRAGMENT) {
-							builder.add(element.getElementName() + ".*");
+						if (element instanceof IPackageFragment) {
+							IPackageFragment packge = (IPackageFragment) element;
+							if (packge.getCompilationUnits().length > 0) {
+								builder.add(element.getElementName() + ".*");
+							}
 						}
+
 					}
 				}
 			}
@@ -78,7 +83,7 @@ public class PackageFinder {
 	}
 
 	public List<String> getPackages(
-			final LaunchConfigurationWrapper configurationWrapper)
+			LaunchConfigurationWrapper configurationWrapper)
 			throws CoreException {
 
 		final Builder<String> builder = builder();

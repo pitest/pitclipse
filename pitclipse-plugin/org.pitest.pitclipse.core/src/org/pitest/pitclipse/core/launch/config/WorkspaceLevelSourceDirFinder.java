@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.core.launch.config;
 
 import static com.google.common.collect.ImmutableList.copyOf;
 
@@ -15,8 +15,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
-import org.pitest.pitclipse.core.launch.config.SourceDirFinder;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -28,9 +26,13 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 			LaunchConfigurationWrapper configurationWrapper)
 			throws CoreException {
 		Builder<File> sourceDirBuilder = ImmutableSet.builder();
+		IJavaProject testProject = configurationWrapper.getProject();
 		List<IJavaProject> projects = getOpenJavaProjects();
 		for (IJavaProject project : projects) {
-			sourceDirBuilder.addAll(getSourceDirsFromProject(project));
+			if (sameProject(testProject, project)
+					|| onClassPathOf(testProject, project)) {
+				sourceDirBuilder.addAll(getSourceDirsFromProject(project));
+			}
 		}
 		return copyOf(sourceDirBuilder.build());
 	}
@@ -83,4 +85,11 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 		return resultBuilder.build();
 	}
 
+	private boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
+		return testProject.isOnClasspath(project);
+	}
+
+	private boolean sameProject(IJavaProject testProject, IJavaProject project) {
+		return testProject.getElementName().equals(project.getElementName());
+	}
 }
