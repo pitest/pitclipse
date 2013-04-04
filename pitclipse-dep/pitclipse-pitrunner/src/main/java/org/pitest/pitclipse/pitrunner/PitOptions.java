@@ -307,15 +307,6 @@ public final class PitOptions implements Serializable {
 		return packages;
 	}
 
-	@Override
-	public String toString() {
-		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
-				+ classUnderTest + ", classesToMutate=" + classesToMutate
-				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
-				+ ", threads=" + threads + ", historyLocation="
-				+ historyLocation + "]";
-	}
-
 	public File getHistoryLocation() {
 		return historyLocation;
 	}
@@ -338,5 +329,19 @@ public final class PitOptions implements Serializable {
 
 	public List<String> getClassesToMutate() {
 		return copyOf(classesToMutate);
+	}
+
+	public List<String> getPackages() {
+		return copyOf(packages);
+	}
+
+	@Override
+	public String toString() {
+		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
+				+ classUnderTest + ", classesToMutate=" + classesToMutate
+				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
+				+ ", threads=" + threads + ", historyLocation="
+				+ historyLocation + ", excludedClasses=" + excludedClasses
+				+ ", excludedMethods=" + excludedMethods + "]";
 	}
 }

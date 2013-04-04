@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
+import static com.google.common.collect.ImmutableSet.copyOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -10,6 +11,7 @@ import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
@@ -203,14 +205,16 @@ public class PitclipseSteps {
 				boolean match = true;
 				match &= checkStringMatch(match, optionRow, "classUnderTest",
 						options.getClassUnderTest());
-				match &= checkListMatch(match, optionRow, "classesToMutate",
+				match &= checkSetMatch(match, optionRow, "classesToMutate",
 						options.getClassesToMutate());
 				match &= checkClasspathMatch(match, optionRow, "projects",
 						options.getSourceDirectories());
-				match &= checkListMatch(match, optionRow, "excludedClasses",
+				match &= checkSetMatch(match, optionRow, "excludedClasses",
 						options.getExcludedClasses());
-				match &= checkListMatch(match, optionRow, "excludedMethods",
+				match &= checkSetMatch(match, optionRow, "excludedMethods",
 						options.getExcludedMethods());
+				match &= checkSetMatch(match, optionRow, "packagesUnderTest",
+						options.getPackages());
 				match &= checkBooleanMatch(match, optionRow, "runInParallel",
 						options.getThreads() == Runtime.getRuntime()
 								.availableProcessors());
@@ -257,14 +261,14 @@ public class PitclipseSteps {
 				return match;
 			}
 
-			private boolean checkListMatch(boolean match,
+			private boolean checkSetMatch(boolean match,
 					Map<String, String> optionRow, String key,
 					List<String> actualValues) {
 				if (match && optionRow.containsKey(key)) {
-					List<String> expectedValues = ImmutableList.copyOf(Splitter
-							.on(',').trimResults().omitEmptyStrings()
+					Set<String> expectedValues = copyOf(Splitter.on(',')
+							.trimResults().omitEmptyStrings()
 							.split(optionRow.get(key)));
-					return expectedValues.equals(actualValues);
+					return expectedValues.equals(copyOf(actualValues));
 				}
 				return match;
 			}
