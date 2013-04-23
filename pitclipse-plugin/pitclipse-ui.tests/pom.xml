@@ -48,7 +48,16 @@
             </dependency>
           </dependencies>-->
         </configuration>
-      </plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-maven-plugin</artifactId>
+          <configuration>
+            <dependency-resolution>
+              <optionalDependencies>ignore</optionalDependencies>
+            </dependency-resolution>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
   <dependencies>

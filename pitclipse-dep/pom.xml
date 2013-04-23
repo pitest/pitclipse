@@ -15,5 +15,6 @@
     <module>pitest-osgi</module>
     <module>pitclipse-pitrunner</module>
     <!-- <module>pitclipse-dep-bundle</module> -->
+    <module>jbehave-osgi</module>
   </modules>
 </project>

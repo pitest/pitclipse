@@ -102,7 +102,7 @@
     <felix.version>2.3.7</felix.version>
     <hamcrest.version>1.3</hamcrest.version>
     <junit.version>4.10</junit.version>
-    <jbehave.version>3.7</jbehave.version>
+    <jbehave.version>3.7.5</jbehave.version>
     <maven.site.version>3.1</maven.site.version>
     <mockito.version>1.9.0</mockito.version>
     <pitest.version>0.29</pitest.version>
