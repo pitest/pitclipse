@@ -1,7 +1,7 @@
 Pitclipse
 =========
 
-Eclipse plugin for PIT.  Update site: http://pitclipse.freehostingcloud.com/repository/
+Eclipse plugin for PIT.  Update site: http://eclipse.pitest.org/release/
 
 
 
