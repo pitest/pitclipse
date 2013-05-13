@@ -8,8 +8,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.pitest.pitclipse.core.PitConfiguration;
-import org.pitest.pitclipse.core.PitConfigurationVisitor;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.pitrunner.config.PitConfigurationVisitor;
 
 @Immutable
 public class PitLaunchVisitor implements PitConfigurationVisitor {

@@ -1,6 +1,6 @@
-package org.pitest.pitclipse.core;
+package org.pitest.pitclipse.pitrunner.config;
 
-import static org.pitest.pitclipse.core.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
 
 import javax.annotation.concurrent.Immutable;
 

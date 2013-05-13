@@ -3,6 +3,8 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.ui.swtbot.PitOptionsNotifier;
 import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
 
 public class RunMenu {
@@ -35,6 +37,10 @@ public class RunMenu {
 		SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
 		menuHelper.findMenu(bot.menu(RUN), RUN_CONFIGURATIONS).click();
 		return runConfigurationSelector.getConfigurations();
+	}
+
+	public PitOptions getLastUsedPitOptions() {
+		return PitOptionsNotifier.INSTANCE.getLastUsedOptions();
 	}
 
 }

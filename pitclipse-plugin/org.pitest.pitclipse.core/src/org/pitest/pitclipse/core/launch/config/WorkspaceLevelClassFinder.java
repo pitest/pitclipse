@@ -30,10 +30,22 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 			throws CoreException {
 		Builder<String> classPathBuilder = builder();
 		List<IJavaProject> projects = getOpenJavaProjects();
+		IJavaProject testProject = configurationWrapper.getProject();
 		for (IJavaProject project : projects) {
-			classPathBuilder.addAll(getClassesFromProject(project));
+			if (sameProject(testProject, project)
+					|| onClassPathOf(testProject, project)) {
+				classPathBuilder.addAll(getClassesFromProject(project));
+			}
 		}
 		return copyOf(classPathBuilder.build());
+	}
+
+	private boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
+		return testProject.isOnClasspath(project);
+	}
+
+	private boolean sameProject(IJavaProject testProject, IJavaProject project) {
+		return testProject.getElementName().equals(project.getElementName());
 	}
 
 	private Set<String> getClassesFromProject(IJavaProject project)

@@ -6,12 +6,12 @@ import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
-import static org.pitest.pitclipse.core.PitExecutionMode.values;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_METHODS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +29,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 import com.google.common.collect.ImmutableList;
 

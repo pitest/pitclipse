@@ -20,12 +20,12 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.pitest.pitclipse.core.PitConfiguration;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;

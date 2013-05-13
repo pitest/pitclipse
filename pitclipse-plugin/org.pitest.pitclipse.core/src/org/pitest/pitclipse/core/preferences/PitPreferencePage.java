@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.core.PitExecutionMode.values;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_CLASSES_FROM_PIT;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_METHODS_FROM_PIT;
 import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
@@ -10,6 +9,7 @@ import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -18,7 +18,7 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitExecutionMode;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 /**
  * This class represents a preference page that is contributed to the

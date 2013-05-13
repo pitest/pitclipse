@@ -6,7 +6,7 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.29.4.201304231312</version>
+    <version>0.29.5.201305130754</version>
   </parent>
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
@@ -65,7 +65,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.pitest.pitclipse.pitrunner</Export-Package>
+            <Export-Package>org.pitest.pitclipse.pitrunner.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>

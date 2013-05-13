@@ -1,10 +1,14 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.pitrunner.client;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
 public class PitClient implements Closeable {
 

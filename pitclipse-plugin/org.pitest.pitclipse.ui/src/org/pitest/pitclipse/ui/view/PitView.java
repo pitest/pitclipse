@@ -33,30 +33,10 @@ public class PitView extends ViewPart {
 	}
 
 	public synchronized void update(File result) {
-		File currentReportDirectory = new File(result.toURI());
-		File reportFile = findResultFile(currentReportDirectory);
-		if (reportFile == null) {
+		if (result == null) {
 			browser.setText("<html/>");
 		} else {
-			browser.setUrl(reportFile.toURI().toString());
+			browser.setUrl(result.toURI().toString());
 		}
-	}
-
-	private File findResultFile(File reportDir) {
-		// Does this directory contain the file?
-		for (File file : reportDir.listFiles()) {
-			if (!file.isDirectory() && "index.html".equals(file.getName())) {
-				return file;
-			}
-		}
-		for (File file : reportDir.listFiles()) {
-			if (file.isDirectory()) {
-				File result = findResultFile(file);
-				if (null != result) {
-					return result;
-				}
-			}
-		}
-		return null;
 	}
 }

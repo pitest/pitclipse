@@ -1,5 +1,8 @@
 package org.pitest.pitclipse.pitrunner;
 
+import org.pitest.pitclipse.pitrunner.client.PitClient;
+import org.pitest.pitclipse.pitrunner.server.PitServer;
+
 public final class PitRunnerTestContext {
 
 	private int portNumber;

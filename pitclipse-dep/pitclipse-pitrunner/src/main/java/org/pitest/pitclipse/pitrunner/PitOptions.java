@@ -307,17 +307,41 @@ public final class PitOptions implements Serializable {
 		return packages;
 	}
 
+	public File getHistoryLocation() {
+		return historyLocation;
+	}
+
+	public List<File> getSourceDirs() {
+		return sourceDirs;
+	}
+
+	public int getThreads() {
+		return threads;
+	}
+
+	public List<String> getExcludedClasses() {
+		return copyOf(excludedClasses);
+	}
+
+	public List<String> getExcludedMethods() {
+		return copyOf(excludedMethods);
+	}
+
+	public List<String> getClassesToMutate() {
+		return copyOf(classesToMutate);
+	}
+
+	public List<String> getPackages() {
+		return copyOf(packages);
+	}
+
 	@Override
 	public String toString() {
 		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
 				+ classUnderTest + ", classesToMutate=" + classesToMutate
 				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
 				+ ", threads=" + threads + ", historyLocation="
-				+ historyLocation + "]";
+				+ historyLocation + ", excludedClasses=" + excludedClasses
+				+ ", excludedMethods=" + excludedMethods + "]";
 	}
-
-	public File getHistoryLocation() {
-		return historyLocation;
-	}
-
 }

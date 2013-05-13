@@ -5,7 +5,7 @@ import java.io.Closeable;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitExecutionMode;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class PitPreferenceSelector implements Closeable {
 
