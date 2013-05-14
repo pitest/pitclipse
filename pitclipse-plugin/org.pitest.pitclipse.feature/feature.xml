@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.feature"
       label="Pitclipse"
-      version="0.29.5.201304302313">
+      version="0.30.1.qualifier">
 
    <description url="http://pitest.org">
       PITest Eclipse plugin

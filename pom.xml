@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.29.5.201304302313</version>
+  <version>0.30.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <organization>
     <name>Pitest.org</name>
@@ -105,7 +105,7 @@
     <jbehave.version>3.7</jbehave.version>
     <maven.site.version>3.1</maven.site.version>
     <mockito.version>1.9.0</mockito.version>
-    <pitest.version>0.29</pitest.version>
+    <pitest.version>0.30</pitest.version>
 <!--    <forceContextQualifier>201303010815</forceContextQualifier> -->
   </properties>
 </project> 
