@@ -9,7 +9,7 @@ public class PitResultsNotifier implements ResultNotifier<PitResults> {
 
 	public void handleResults(PitResults results) {
 		PitView view = new PitViewFinder().getView();
-		view.update(results.getResultFile());
+		view.update(results.getHtmlResultFile());
 	}
 
 }

@@ -106,6 +106,7 @@
     <maven.site.version>3.1</maven.site.version>
     <mockito.version>1.9.0</mockito.version>
     <pitest.version>0.30</pitest.version>
+    <xjc.version>1.5</xjc.version>
 <!--    <forceContextQualifier>201303010815</forceContextQualifier> -->
   </properties>
 </project> 
