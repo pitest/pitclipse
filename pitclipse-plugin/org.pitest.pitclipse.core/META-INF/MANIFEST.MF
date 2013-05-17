@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.pitest.pitclipse-pitrunner;bundle-version="0.30.1",
  org.pitest.osgi;bundle-version="0.30.1"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: lib/jsr305-2.0.0.jar,
  .
