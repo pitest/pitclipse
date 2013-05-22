@@ -57,8 +57,8 @@ public final class PitOptions implements Serializable {
 	public String[] toCLIArgs() {
 		Builder<String> builder = ImmutableList.builder();
 		builder.add("--failWhenNoMutations", "false", "--outputFormats",
-				"HTML,XML", "--threads", Integer.toString(threads),
-				"--reportDir", reportDir.getPath(), "--targetTests", toTest(),
+				"HTML", "--threads", Integer.toString(threads), "--reportDir",
+				reportDir.getPath(), "--targetTests", toTest(),
 				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(),
 				"--verbose");
 		builder.addAll(historyLocation());
