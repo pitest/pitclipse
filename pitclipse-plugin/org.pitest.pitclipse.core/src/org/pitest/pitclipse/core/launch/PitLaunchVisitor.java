@@ -36,25 +36,6 @@ public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 		this.monitor = monitor;
 	}
 
-	public void visitProjectLevelConfiguration(PitConfiguration pitConfiguration) {
-		try {
-			new ProjectLevelLaunchDelegate(pitConfiguration).launch(
-					configuration, RUN_MODE, launch, monitor);
-		} catch (CoreException e) {
-			throw new LaunchFailedException(configuration.getName());
-		}
-	}
-
-	public void visitWorkspaceLevelConfiguration(
-			PitConfiguration pitConfiguration) {
-		try {
-			new WorkspaceLevelLaunchDelegate(pitConfiguration).launch(
-					configuration, RUN_MODE, launch, monitor);
-		} catch (CoreException e) {
-			throw new LaunchFailedException(configuration.getName());
-		}
-	}
-
 	public Void visitProjectLevelConfiguration() {
 		try {
 			new ProjectLevelLaunchDelegate(pitConfiguration).launch(
@@ -66,8 +47,13 @@ public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 	}
 
 	public Void visitWorkspaceLevelConfiguration() {
+		try {
+			new WorkspaceLevelLaunchDelegate(pitConfiguration).launch(
+					configuration, RUN_MODE, launch, monitor);
+		} catch (CoreException e) {
+			throw new LaunchFailedException(configuration.getName());
+		}
 		return null;
-		// TODO Auto-generated method stub
 	}
 
 }
