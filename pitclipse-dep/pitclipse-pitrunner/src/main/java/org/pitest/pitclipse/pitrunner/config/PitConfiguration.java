@@ -23,20 +23,6 @@ public class PitConfiguration {
 		this.excludedMethods = excludedMethods;
 	}
 
-	public void accept(PitConfigurationVisitor visitor) {
-		switch (executionMode) {
-		case PROJECT_ISOLATION:
-			visitor.visitProjectLevelConfiguration(this);
-			break;
-		case WORKSPACE:
-			visitor.visitWorkspaceLevelConfiguration(this);
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected execution mode: "
-					+ executionMode);
-		}
-	}
-
 	public static Builder builder() {
 		return new Builder();
 	}

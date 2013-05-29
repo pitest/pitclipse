@@ -297,7 +297,7 @@ public class PitOptionsTest {
 			List<String> excludedClasses, List<String> excludedMethods,
 			File historyLocation, String classUnderTest, String... classpath) {
 		List<String> args = Lists.newArrayList("--failWhenNoMutations",
-				"false", "--outputFormats", "HTML,XML", "--threads", "1",
+				"false", "--outputFormats", "HTML", "--threads", "1",
 				"--reportDir", reportDir.getPath(), "--targetTests",
 				classUnderTest, "--targetClasses");
 		if (null != classpath) {

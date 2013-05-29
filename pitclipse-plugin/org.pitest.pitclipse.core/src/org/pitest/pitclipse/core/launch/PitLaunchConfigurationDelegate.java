@@ -7,14 +7,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class PitLaunchConfigurationDelegate extends
 		AbstractJavaLaunchConfigurationDelegate {
 
 	public void launch(ILaunchConfiguration launchConfig, String mode,
 			ILaunch launch, IProgressMonitor progress) throws CoreException {
-		getDefault().getConfiguration().accept(
-				new PitLaunchVisitor(launchConfig, launch, progress));
+
+		pluginExecutionMode().accept(
+				new PitLaunchVisitor(pluginConfiguration(), launchConfig,
+						launch, progress));
+	}
+
+	private PitExecutionMode pluginExecutionMode() {
+		return pluginConfiguration().getExecutionMode();
+	}
+
+	private PitConfiguration pluginConfiguration() {
+		return getDefault().getConfiguration();
 	}
 
 }
