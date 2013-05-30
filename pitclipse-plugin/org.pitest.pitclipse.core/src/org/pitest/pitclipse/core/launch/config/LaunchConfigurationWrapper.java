@@ -3,10 +3,6 @@ package org.pitest.pitclipse.core.launch.config;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_METHODS;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
 
 import java.io.File;
 import java.util.List;
@@ -38,6 +34,10 @@ public class LaunchConfigurationWrapper {
 	private final ClassFinder classFinder;
 	private final SourceDirFinder sourceDirFinder;
 	private final PitConfiguration pitConfiguration;
+	public static final String ATTR_TEST_INCREMENTALLY = "org.pitest.pitclipse.core.test.incrementalAnalysis";
+	public static final String ATTR_TEST_IN_PARALLEL = "org.pitest.pitclipse.core.test.parallel";
+	public static final String ATTR_EXCLUDE_CLASSES = "org.pitest.pitclipse.core.test.excludeClasses";
+	public static final String ATTR_EXCLUDE_METHODS = "org.pitest.pitclipse.core.test.excludeMethods";
 
 	public LaunchConfigurationWrapper(ILaunchConfiguration launchConfig,
 			PackageFinder packageFinder, ClassFinder classFinder,

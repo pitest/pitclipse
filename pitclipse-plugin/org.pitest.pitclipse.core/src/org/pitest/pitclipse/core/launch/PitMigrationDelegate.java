@@ -2,7 +2,7 @@ package org.pitest.pitclipse.core.launch;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
+import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
 
 import javax.annotation.concurrent.Immutable;
 

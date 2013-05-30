@@ -3,15 +3,14 @@ package org.pitest.pitclipse.core.launch;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_CLASSES;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_EXCLUDE_METHODS;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_METHODS_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.USE_INCREMENTAL_ANALYSIS;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -69,13 +68,15 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private Button incrementalAnalysis;
 	private Text excludedClassesText;
 	private Text excludedMethodsText;
+	public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
 
 	public void initializeFrom(ILaunchConfiguration config) {
 		projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
 				""));
 		String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME,
 				"");
-		containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
+		containerId = getAttributeFromConfig(config,
+				PitArgumentsTab.ATTR_TEST_CONTAINER, "");
 		testClassText.setText(testClass);
 		if (testClass.length() == 0 && containerId.length() > 0) {
 			testClassText.setText("");
@@ -246,10 +247,11 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 		if (testClassRadioButton.getSelection()) {
 			workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, testClassText
 					.getText().trim());
-			workingCopy.setAttribute(ATTR_TEST_CONTAINER, "");
+			workingCopy.setAttribute(PitArgumentsTab.ATTR_TEST_CONTAINER, "");
 		} else {
 			workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
-			workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
+			workingCopy.setAttribute(PitArgumentsTab.ATTR_TEST_CONTAINER,
+					containerId);
 		}
 		workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
 				runInParallel.getSelection());

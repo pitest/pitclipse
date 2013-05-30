@@ -1,9 +1,5 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.USE_INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_METHODS;
 import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
@@ -34,6 +30,11 @@ import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 public class PitPreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
+	public static final String USE_INCREMENTAL_ANALYSIS = "Use &incremental analysis";
+	public static final String EXCLUDE_CLASSES_FROM_PIT = "E&xcluded classes (e.g.*IntTest)";
+	public static final String MUTATION_TESTS_RUN_IN_PARALLEL = "Mutation tests run in para&llel";
+	public static final String EXCLUDE_METHODS_FROM_PIT = "Excluded &methods (e.g.*toString*)";
+
 	public PitPreferencePage() {
 		super(GRID);
 		setPreferenceStore(PitCoreActivator.getDefault().getPreferenceStore());
@@ -56,22 +57,26 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements
 
 	private void createExcludeClassesField() {
 		addField(new StringFieldEditor(EXCLUDED_CLASSES,
-				EXCLUDE_CLASSES_FROM_PIT, getFieldEditorParent()));
+				PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT,
+				getFieldEditorParent()));
 	}
 
 	private void createExcludeMethodsField() {
 		addField(new StringFieldEditor(EXCLUDED_METHODS,
-				EXCLUDE_METHODS_FROM_PIT, getFieldEditorParent()));
+				PitPreferencePage.EXCLUDE_METHODS_FROM_PIT,
+				getFieldEditorParent()));
 	}
 
 	private void createUseIncrementalAnalysisOption() {
 		addField(new BooleanFieldEditor(INCREMENTAL_ANALYSIS,
-				USE_INCREMENTAL_ANALYSIS, getFieldEditorParent()));
+				PitPreferencePage.USE_INCREMENTAL_ANALYSIS,
+				getFieldEditorParent()));
 	}
 
 	private void createRunInParallelOption() {
 		addField(new BooleanFieldEditor(RUN_IN_PARALLEL,
-				MUTATION_TESTS_RUN_IN_PARALLEL, getFieldEditorParent()));
+				PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL,
+				getFieldEditorParent()));
 	}
 
 	private void createExecutionModeRadioButtons() {

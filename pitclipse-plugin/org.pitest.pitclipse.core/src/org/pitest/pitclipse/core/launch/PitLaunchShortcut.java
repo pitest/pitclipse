@@ -15,13 +15,12 @@ import static org.eclipse.jdt.ui.JavaElementLabels.ALL_FULLY_QUALIFIED;
 import static org.eclipse.jdt.ui.JavaElementLabels.getTextLabel;
 import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 import static org.pitest.pitclipse.core.PitCoreActivator.getActiveWorkbenchShell;
+import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.core.launch.PitMigrationDelegate.mapResources;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_CONTAINER;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.PIT_CONFIGURATION_TYPE;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.TEST_CONFIGURATION;
-import static org.pitest.pitclipse.core.launch.PitclipseConstants.TEST_RUN_CONFIGURATION;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -63,6 +62,9 @@ import com.google.common.collect.ImmutableList.Builder;
 public class PitLaunchShortcut implements ILaunchShortcut2 {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	public static final String TEST_CONFIGURATION = "Select a Test Configuration";
+	public static final String TEST_RUN_CONFIGURATION = "Select JUnit configuration to run";
+	public static final String PIT_CONFIGURATION_TYPE = "org.pitest.pitclipse.core.mutationTest";
 
 	/**
 	 * Default constructor.
@@ -213,8 +215,8 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
 				getShell(), labelProvider);
 		dialog.setElements(configList.toArray());
-		dialog.setTitle(TEST_CONFIGURATION);
-		dialog.setMessage(TEST_RUN_CONFIGURATION);
+		dialog.setTitle(PitLaunchShortcut.TEST_CONFIGURATION);
+		dialog.setMessage(PitLaunchShortcut.TEST_RUN_CONFIGURATION);
 
 		dialog.setMultipleSelection(false);
 		int result = dialog.open();
@@ -307,6 +309,8 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 				preferences.isParallelExecution());
 		wc.setAttribute(ATTR_TEST_INCREMENTALLY,
 				preferences.isIncrementalAnalysis());
+		wc.setAttribute(ATTR_EXCLUDE_CLASSES, preferences.getExcludedClasses());
+		wc.setAttribute(ATTR_EXCLUDE_METHODS, preferences.getExcludedMethods());
 		mapResources(wc);
 		// JUnitMigrationDelegate.mapResources(wc);
 		// AssertionVMArg.setArgDefault(wc);
@@ -321,8 +325,8 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 	 * @return the attribute names of the attributes that are compared
 	 */
 	protected String[] getAttributeNamesToCompare() {
-		return new String[] { ATTR_PROJECT_NAME, ATTR_TEST_CONTAINER,
-				ATTR_MAIN_TYPE_NAME };
+		return new String[] { ATTR_PROJECT_NAME,
+				PitArgumentsTab.ATTR_TEST_CONTAINER, ATTR_MAIN_TYPE_NAME };
 		// JUnitLaunchConfigurationConstants.ATTR_TEST_METHOD_NAME };
 	}
 
