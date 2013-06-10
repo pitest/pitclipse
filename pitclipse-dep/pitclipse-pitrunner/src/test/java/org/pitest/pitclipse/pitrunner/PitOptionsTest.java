@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public class PitOptionsTest {
@@ -56,6 +58,9 @@ public class PitOptionsTest {
 			"leaveMeAlone*");
 
 	private static final List<String> EMPTY_LIST = of();
+	private static final List<String> DEFAULT_AVOID_LIST = ImmutableList
+			.copyOf(Splitter.on(',').trimResults().omitEmptyStrings()
+					.split(DEFAULT_AVOID_CALLS_TO_LIST));
 	private final File historyLocation = randomFile();
 
 	@Before
@@ -73,18 +78,18 @@ public class PitOptionsTest {
 
 	@Test(expected = PitLaunchException.class)
 	public void defaultOptionsThrowException() throws IOException {
-		new PitOptionsBuilder().build();
+		PitOptions.builder().build();
 	}
 
 	@Test(expected = PitLaunchException.class)
 	public void validSourceDirButNoTestClassThrowsException()
 			throws IOException {
-		new PitOptionsBuilder().withSourceDirectory(testSrcDir).build();
+		PitOptions.builder().withSourceDirectory(testSrcDir).build();
 	}
 
 	@Test
 	public void minimumOptionsSet() throws IOException {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
 		File reportDir = options.getReportDirectory();
@@ -101,21 +106,20 @@ public class PitOptionsTest {
 
 	@Test(expected = PitLaunchException.class)
 	public void sourceDirectoryDoesNotExist() throws IOException {
-		new PitOptionsBuilder().withSourceDirectory(randomDir())
+		PitOptions.builder().withSourceDirectory(randomDir())
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test(expected = PitLaunchException.class)
 	public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
-		new PitOptionsBuilder()
-				.withSourceDirectories(of(testSrcDir, randomDir()))
+		PitOptions.builder().withSourceDirectories(of(testSrcDir, randomDir()))
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test
 	public void multipleSourceDirectoriesExist() throws IOException {
 		List<File> srcDirs = of(testSrcDir, anotherTestSrcDir);
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1)
 				.build();
 		File reportDir = options.getReportDirectory();
@@ -133,7 +137,7 @@ public class PitOptionsTest {
 	public void useDifferentReportDirectory() {
 		File expectedDir = new File(testTmpDir, randomString());
 		assertFalse(expectedDir.exists());
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withReportDirectory(expectedDir)
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
@@ -150,20 +154,20 @@ public class PitOptionsTest {
 
 	@Test(expected = PitLaunchException.class)
 	public void useInvalidReportDirectory() {
-		new PitOptionsBuilder().withReportDirectory(REALLY_BAD_PATH)
+		PitOptions.builder().withReportDirectory(REALLY_BAD_PATH)
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test(expected = PitLaunchException.class)
 	public void useInvalidSourceDirectory() {
-		new PitOptionsBuilder().withSourceDirectory(REALLY_BAD_PATH)
+		PitOptions.builder().withSourceDirectory(REALLY_BAD_PATH)
 				.withClassUnderTest(TEST_CLASS1).build();
 	}
 
 	@Test
 	public void useClasspath() throws IOException {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).build();
@@ -183,7 +187,7 @@ public class PitOptionsTest {
 
 	@Test
 	public void testPackagesSupplied() {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
 				.withClassesToMutate(CLASS_PATH).build();
 		File reportDir = options.getReportDirectory();
@@ -204,14 +208,14 @@ public class PitOptionsTest {
 
 	@Test(expected = PitLaunchException.class)
 	public void invalidHistoryFileSupplied() {
-		new PitOptionsBuilder().withSourceDirectory(testSrcDir)
+		PitOptions.builder().withSourceDirectory(testSrcDir)
 				.withPackagesToTest(PACKAGES).withClassesToMutate(CLASS_PATH)
 				.withHistoryLocation(getBadPath()).build();
 	}
 
 	@Test
 	public void validHistoryLocationSupplied() {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
 				.withClassesToMutate(CLASS_PATH)
 				.withHistoryLocation(historyLocation).build();
@@ -231,7 +235,7 @@ public class PitOptionsTest {
 
 	@Test
 	public void excludedClassesSet() throws IOException {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1)
 				.withExcludedClasses(EXCLUDED_CLASSES).build();
@@ -242,16 +246,17 @@ public class PitOptionsTest {
 		assertEquals(TEST_CLASS1, options.getClassUnderTest());
 		assertArrayEquals(
 				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES,
-						EMPTY_LIST, null, TEST_CLASS1), options.toCLIArgs());
+						EMPTY_LIST, DEFAULT_AVOID_LIST, null, TEST_CLASS1),
+				options.toCLIArgs());
 		assertEquals(
 				expectedArgsAsString(reportDir, of(testSrcDir),
-						EXCLUDED_CLASSES, EMPTY_LIST, null, TEST_CLASS1),
-				options.toCLIArgsAsString());
+						EXCLUDED_CLASSES, EMPTY_LIST, DEFAULT_AVOID_LIST, null,
+						TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
 	@Test
 	public void excludedClassesAndMethodsSet() throws IOException {
-		PitOptions options = new PitOptionsBuilder()
+		PitOptions options = PitOptions.builder()
 				.withSourceDirectory(testSrcDir)
 				.withClassUnderTest(TEST_CLASS1)
 				.withExcludedClasses(EXCLUDED_CLASSES)
@@ -263,12 +268,36 @@ public class PitOptionsTest {
 		assertEquals(TEST_CLASS1, options.getClassUnderTest());
 		assertArrayEquals(
 				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES,
-						EXCLUDED_METHODS, null, TEST_CLASS1),
+						EXCLUDED_METHODS, DEFAULT_AVOID_LIST, null, TEST_CLASS1),
 				options.toCLIArgs());
 		assertEquals(
 				expectedArgsAsString(reportDir, of(testSrcDir),
-						EXCLUDED_CLASSES, EXCLUDED_METHODS, null, TEST_CLASS1),
-				options.toCLIArgsAsString());
+						EXCLUDED_CLASSES, EXCLUDED_METHODS, DEFAULT_AVOID_LIST,
+						null, TEST_CLASS1), options.toCLIArgsAsString());
+	}
+
+	@Test
+	public void alternatveAvoidListUsed() throws IOException {
+		ImmutableList<String> alternativeAvoidList = ImmutableList
+				.of("org.springframework");
+		PitOptions options = PitOptions.builder()
+				.withSourceDirectory(testSrcDir)
+				.withClassUnderTest(TEST_CLASS1)
+				.withExcludedClasses(EXCLUDED_CLASSES)
+				.withAvoidCallsTo(alternativeAvoidList).build();
+		File reportDir = options.getReportDirectory();
+		assertTrue(reportDir.isDirectory());
+		assertTrue(reportDir.exists());
+		assertEquals(TMP_DIR, reportDir.getParentFile());
+		assertEquals(TEST_CLASS1, options.getClassUnderTest());
+		assertArrayEquals(
+				expectedArgs(reportDir, of(testSrcDir), EXCLUDED_CLASSES,
+						EMPTY_LIST, alternativeAvoidList, null, TEST_CLASS1),
+				options.toCLIArgs());
+		assertEquals(
+				expectedArgsAsString(reportDir, of(testSrcDir),
+						EXCLUDED_CLASSES, EMPTY_LIST, alternativeAvoidList,
+						null, TEST_CLASS1), options.toCLIArgsAsString());
 	}
 
 	private String randomString() {
@@ -284,18 +313,19 @@ public class PitOptionsTest {
 	private Object[] expectedArgs(File reportDir, File sourceDir,
 			File historyLocation, String classUnderTest, String... classpath) {
 		return expectedArgs(reportDir, of(sourceDir), EMPTY_LIST, EMPTY_LIST,
-				historyLocation, classUnderTest, classpath);
+				DEFAULT_AVOID_LIST, historyLocation, classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
-		return expectedArgs(reportDir, sourceDirs, null, null, null,
-				classUnderTest, classpath);
+		return expectedArgs(reportDir, sourceDirs, null, null,
+				DEFAULT_AVOID_LIST, null, classUnderTest, classpath);
 	}
 
 	private Object[] expectedArgs(File reportDir, List<File> sourceDirs,
 			List<String> excludedClasses, List<String> excludedMethods,
-			File historyLocation, String classUnderTest, String... classpath) {
+			List<String> avoidCallsTo, File historyLocation,
+			String classUnderTest, String... classpath) {
 		List<String> args = Lists.newArrayList("--failWhenNoMutations",
 				"false", "--outputFormats", "HTML", "--threads", "1",
 				"--reportDir", reportDir.getPath(), "--targetTests",
@@ -355,6 +385,18 @@ public class PitOptionsTest {
 			}
 			args.add(result);
 		}
+		if (null != avoidCallsTo && !avoidCallsTo.isEmpty()) {
+			args.add("--avoidCallsTo");
+			String result = "";
+			for (int i = 0; i < avoidCallsTo.size(); i++) {
+				if (i == avoidCallsTo.size() - 1) {
+					result += avoidCallsTo.get(i);
+				} else {
+					result += avoidCallsTo.get(i) + ",";
+				}
+			}
+			args.add(result);
+		}
 		return args.toArray();
 	}
 
@@ -362,26 +404,29 @@ public class PitOptionsTest {
 			List<String> excludedClasses, String classUnderTest,
 			String... classpath) {
 		return expectedArgsAsString(reportDir, of(sourceDir), excludedClasses,
-				EMPTY_LIST, null, classUnderTest, classpath);
+				EMPTY_LIST, DEFAULT_AVOID_LIST, null, classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, File sourceDir,
 			File historyLocation, String classUnderTest, String... classpath) {
 		return expectedArgsAsString(reportDir, of(sourceDir), EMPTY_LIST,
-				EMPTY_LIST, historyLocation, classUnderTest, classpath);
+				EMPTY_LIST, DEFAULT_AVOID_LIST, historyLocation,
+				classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
 			String classUnderTest, String... classpath) {
 		return expectedArgsAsString(reportDir, sourceDirs, EMPTY_LIST,
-				EMPTY_LIST, null, classUnderTest, classpath);
+				EMPTY_LIST, DEFAULT_AVOID_LIST, null, classUnderTest, classpath);
 	}
 
 	private String expectedArgsAsString(File reportDir, List<File> sourceDirs,
 			List<String> excludedClasses, List<String> excludedMethods,
-			File historyLocation, String classUnderTest, String... classpath) {
+			List<String> avoidCallsTo, File historyLocation,
+			String classUnderTest, String... classpath) {
 		Object[] args = expectedArgs(reportDir, sourceDirs, excludedClasses,
-				excludedMethods, historyLocation, classUnderTest, classpath);
+				excludedMethods, avoidCallsTo, historyLocation, classUnderTest,
+				classpath);
 		StringBuilder argsBuilder = new StringBuilder();
 		for (Object arg : args) {
 			argsBuilder.append(' ').append(arg);

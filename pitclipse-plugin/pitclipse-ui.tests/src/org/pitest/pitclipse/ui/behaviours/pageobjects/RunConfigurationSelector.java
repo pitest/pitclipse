@@ -51,11 +51,13 @@ public class RunConfigurationSelector {
 				"Excluded classes (e.g.*IntTest)").getText();
 		String excludedMethods = bot.textWithLabel(
 				"Excluded methods (e.g.*toString*)").getText();
+		String avoidCallsTo = bot.textWithLabel("Avoid calls to").getText();
 		return new Builder().withName(name).withProjects(project)
 				.withRunInParallel(runInParallel)
 				.withIncrementalAnalysis(incrementalAnalysis)
 				.withExcludedClasses(excludedClasses)
-				.withExcludedMethods(excludedMethods).build();
+				.withExcludedMethods(excludedMethods)
+				.withAvoidCallsTo(avoidCallsTo).build();
 	}
 
 	private SWTBotTreeItem activateShell() {

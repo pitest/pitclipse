@@ -13,6 +13,7 @@ public class PitPreferenceSelector implements Closeable {
 	private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
 	private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
 	private static final String EXCLUDED_METHODS_LABEL = "Excluded methods (e.g.*toString*)";
+	private static final String AVOID_CALLS_TO_LABEL = "Avoid calls to";
 	private final SWTWorkbenchBot bot;
 
 	public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -149,6 +150,26 @@ public class PitPreferenceSelector implements Closeable {
 		try {
 			expandPitPreferences();
 			bot.textWithLabel(EXCLUDED_METHODS_LABEL).setText(excludedMethods);
+		} finally {
+			close();
+		}
+	}
+
+	public String getAvoidCallsTo() {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			return bot.textWithLabel(AVOID_CALLS_TO_LABEL).getText();
+		} finally {
+			close();
+		}
+	}
+
+	public void setAvoidCallsTo(String avoidCallsTo) {
+		activatePreferenceShell();
+		try {
+			expandPitPreferences();
+			bot.textWithLabel(AVOID_CALLS_TO_LABEL).setText(avoidCallsTo);
 		} finally {
 			close();
 		}

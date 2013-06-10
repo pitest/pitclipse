@@ -107,5 +107,7 @@ public class LaunchConfigurationSteps {
 				pitRunConfiguration.getExcludedClasses());
 		assertEquals(tableRow.get("excludedMethods"),
 				pitRunConfiguration.getExcludedMethods());
+		assertEquals(tableRow.get("avoidCallsTo"),
+				pitRunConfiguration.getAvoidCallsTo());
 	}
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.PitResults.PitResultsBuilder;
 import org.pitest.pitclipse.pitrunner.server.PitServerTest;
 
@@ -27,7 +26,7 @@ public abstract class AbstractPitRunnerTest {
 	protected static final PitResults RESULTS = new PitResultsBuilder()
 			.withResults(TMP_DIR).build();
 
-	protected static final PitOptions OPTIONS = new PitOptionsBuilder()
+	protected static final PitOptions OPTIONS = PitOptions.builder()
 			.withSourceDirectory(TMP_DIR)
 			.withClassUnderTest(PitServerTest.class.getCanonicalName())
 			.withClassesToMutate(CLASS_PATH).build();

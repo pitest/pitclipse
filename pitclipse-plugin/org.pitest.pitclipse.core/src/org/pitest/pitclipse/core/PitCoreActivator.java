@@ -6,11 +6,12 @@ import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_CLASSES;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.EXCLUDED_METHODS;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_CLASSES;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
 
 import java.io.File;
@@ -257,14 +258,16 @@ public class PitCoreActivator extends AbstractUIPlugin {
 				EXCLUDED_CLASSES);
 		String excludedMethods = getPreferenceStore().getString(
 				EXCLUDED_METHODS);
+		String avoidCallsTo = getPreferenceStore().getString(AVOID_CALLS_TO);
 		PitConfiguration.Builder builder = PitConfiguration.builder()
 				.withParallelExecution(parallelRun)
 				.withIncrementalAnalysis(incrementalAnalysis)
-				.withExcludedClasses(excludedClasses);
+				.withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods)
+				.withAvoidCallsTo(avoidCallsTo);
 		for (PitExecutionMode pitExecutionMode : values()) {
 			if (pitExecutionMode.getId().equals(executionMode)) {
-				builder.withExecutionMode(pitExecutionMode)
-						.withExcludedMethods(excludedMethods).build();
+				builder.withExecutionMode(pitExecutionMode);
 				break;
 			}
 		}

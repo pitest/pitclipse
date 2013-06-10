@@ -1,10 +1,10 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static com.google.common.collect.ImmutableList.builder;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
 import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
@@ -30,11 +31,12 @@ public final class PitOptions implements Serializable {
 	private final File historyLocation;
 	private final List<String> excludedClasses;
 	private final List<String> excludedMethods;
+	private final List<String> avoidCallsTo;
 
 	private PitOptions(String classUnderTest, List<String> classesToMutate,
 			List<File> sourceDirs, File reportDir, List<String> packages,
 			int threads, File historyLocation, List<String> excludedClasses,
-			List<String> excludedMethods) {
+			List<String> excludedMethods, List<String> avoidCallsTo) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
 		this.historyLocation = historyLocation;
@@ -44,6 +46,7 @@ public final class PitOptions implements Serializable {
 		this.reportDir = reportDir;
 		this.excludedClasses = copyOf(excludedClasses);
 		this.excludedMethods = copyOf(excludedMethods);
+		this.avoidCallsTo = copyOf(avoidCallsTo);
 	}
 
 	public File getReportDirectory() {
@@ -64,6 +67,7 @@ public final class PitOptions implements Serializable {
 		builder.addAll(historyLocation());
 		builder.addAll(excludedClasses());
 		builder.addAll(excludedMethods());
+		builder.addAll(avoidedCalls());
 		List<String> args = builder.build();
 		return args.toArray(new String[args.size()]);
 	}
@@ -82,6 +86,15 @@ public final class PitOptions implements Serializable {
 		if (!excludedMethods.isEmpty()) {
 			builder.add("--excludedMethods");
 			builder.add(concat(commaSeperate(excludedMethods)));
+		}
+		return builder.build();
+	}
+
+	private List<String> avoidedCalls() {
+		Builder<String> builder = ImmutableList.builder();
+		if (!avoidCallsTo.isEmpty()) {
+			builder.add("--avoidCallsTo");
+			builder.add(concat(commaSeperate(avoidCallsTo)));
 		}
 		return builder.build();
 	}
@@ -110,7 +123,7 @@ public final class PitOptions implements Serializable {
 	}
 
 	private List<String> fileAsStrings(List<File> files) {
-		Builder<String> builder = builder();
+		Builder<String> builder = ImmutableList.builder();
 		for (File file : files) {
 			builder.add(file.getPath());
 		}
@@ -148,11 +161,15 @@ public final class PitOptions implements Serializable {
 	}
 
 	private static List<File> copyOfFiles(List<File> sourceDirs) {
-		Builder<File> builder = builder();
+		Builder<File> builder = ImmutableList.builder();
 		for (File file : sourceDirs) {
 			builder.add(copyOfFile(file));
 		}
 		return builder.build();
+	}
+
+	public static PitOptionsBuilder builder() {
+		return new PitOptionsBuilder();
 	}
 
 	public static final class PitOptionsBuilder {
@@ -165,6 +182,12 @@ public final class PitOptions implements Serializable {
 		private File historyLocation = null;
 		private List<String> excludedClasses = of();
 		private List<String> excludedMethods = of();
+		private List<String> avoidCallsTo = ImmutableList.copyOf(Splitter
+				.on(',').trimResults().omitEmptyStrings()
+				.split(DEFAULT_AVOID_CALLS_TO_LIST));
+
+		private PitOptionsBuilder() {
+		}
 
 		public PitOptionsBuilder withReportDirectory(File reportDir) {
 			this.reportDir = copyOfFile(reportDir);
@@ -187,7 +210,7 @@ public final class PitOptions implements Serializable {
 			initialiseHistoryLocation();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
 					reportDir, packages, threads, historyLocation,
-					excludedClasses, excludedMethods);
+					excludedClasses, excludedMethods, avoidCallsTo);
 		}
 
 		private void initialiseReportDir() {
@@ -276,6 +299,11 @@ public final class PitOptions implements Serializable {
 			this.excludedMethods = copyOf(excludedMethods);
 			return this;
 		}
+
+		public PitOptionsBuilder withAvoidCallsTo(List<String> avoidCallsTo) {
+			this.avoidCallsTo = copyOf(avoidCallsTo);
+			return this;
+		}
 	}
 
 	public static final class PitLaunchException extends
@@ -335,6 +363,10 @@ public final class PitOptions implements Serializable {
 		return copyOf(packages);
 	}
 
+	public List<String> getAvoidCallsTo() {
+		return avoidCallsTo;
+	}
+
 	@Override
 	public String toString() {
 		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
@@ -342,6 +374,7 @@ public final class PitOptions implements Serializable {
 				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
 				+ ", threads=" + threads + ", historyLocation="
 				+ historyLocation + ", excludedClasses=" + excludedClasses
-				+ ", excludedMethods=" + excludedMethods + "]";
+				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo="
+				+ avoidCallsTo + "]";
 	}
 }

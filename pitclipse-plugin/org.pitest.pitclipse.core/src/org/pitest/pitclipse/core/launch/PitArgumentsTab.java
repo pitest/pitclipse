@@ -3,10 +3,12 @@ package org.pitest.pitclipse.core.launch;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_METHODS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL;
@@ -68,6 +70,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private Button incrementalAnalysis;
 	private Text excludedClassesText;
 	private Text excludedMethodsText;
+	private Text avoidCallsTo;
 	public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
 
 	public void initializeFrom(ILaunchConfiguration config) {
@@ -112,6 +115,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 				ATTR_EXCLUDE_CLASSES, preferences.getExcludedClasses()));
 		excludedMethodsText.setText(getAttributeFromConfig(config,
 				ATTR_EXCLUDE_METHODS, preferences.getExcludedMethods()));
+		avoidCallsTo.setText(getAttributeFromConfig(config,
+				ATTR_AVOID_CALLS_TO, preferences.getExcludedMethods()));
 	}
 
 	public void createControl(Composite parent) {
@@ -199,14 +204,13 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 	private void createPreferences(Font font, Composite comp) {
 		runInParallel = createNewCheckBox(font, comp,
 				MUTATION_TESTS_RUN_IN_PARALLEL);
-
 		incrementalAnalysis = createNewCheckBox(font, comp,
 				USE_INCREMENTAL_ANALYSIS);
-
 		excludedClassesText = createTextPreference(font, comp,
 				EXCLUDE_CLASSES_FROM_PIT);
 		excludedMethodsText = createTextPreference(font, comp,
 				EXCLUDE_METHODS_FROM_PIT);
+		avoidCallsTo = createTextPreference(font, comp, AVOID_CALLS_FROM_PIT);
 	}
 
 	private Text createTextPreference(Font font, Composite comp, String label) {
@@ -261,6 +265,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 				excludedClassesText.getText());
 		workingCopy.setAttribute(ATTR_EXCLUDE_METHODS,
 				excludedMethodsText.getText());
+		workingCopy.setAttribute(ATTR_AVOID_CALLS_TO, avoidCallsTo.getText());
 		try {
 			PitMigrationDelegate.mapResources(workingCopy);
 		} catch (CoreException ce) {

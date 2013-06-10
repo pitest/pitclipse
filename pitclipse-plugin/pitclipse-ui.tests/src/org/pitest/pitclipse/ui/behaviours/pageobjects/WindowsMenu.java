@@ -81,4 +81,13 @@ public class WindowsMenu {
 		preferenceSelector.setExcludedMethods(excludedMethods);
 	}
 
+	public String getAvoidCallsTo() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getAvoidCallsTo();
+	}
+
+	public void setAvoidCallsTo(String avoidCallsTo) {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		preferenceSelector.setAvoidCallsTo(avoidCallsTo);
+	}
 }

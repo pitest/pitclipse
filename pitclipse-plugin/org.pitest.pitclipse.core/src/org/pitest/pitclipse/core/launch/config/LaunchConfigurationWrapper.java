@@ -38,6 +38,7 @@ public class LaunchConfigurationWrapper {
 	public static final String ATTR_TEST_IN_PARALLEL = "org.pitest.pitclipse.core.test.parallel";
 	public static final String ATTR_EXCLUDE_CLASSES = "org.pitest.pitclipse.core.test.excludeClasses";
 	public static final String ATTR_EXCLUDE_METHODS = "org.pitest.pitclipse.core.test.excludeMethods";
+	public static final String ATTR_AVOID_CALLS_TO = "org.pitest.pitclipse.core.test.avoidCallsTo";
 
 	public LaunchConfigurationWrapper(ILaunchConfiguration launchConfig,
 			PackageFinder packageFinder, ClassFinder classFinder,
@@ -100,13 +101,15 @@ public class LaunchConfigurationWrapper {
 		File reportDir = getDefault().emptyResultDir();
 		List<String> excludedClasses = getExcludedClasses();
 		List<String> excludedMethods = getExcludedMethods();
+		List<String> avoidCallsTo = getAvoidCallsTo();
 
-		PitOptionsBuilder builder = new PitOptionsBuilder()
+		PitOptionsBuilder builder = PitOptions.builder()
 				.withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs)
 				.withReportDirectory(reportDir).withThreads(threadCount)
 				.withExcludedClasses(excludedClasses)
-				.withExcludedMethods(excludedMethods);
+				.withExcludedMethods(excludedMethods)
+				.withAvoidCallsTo(avoidCallsTo);
 		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}
@@ -122,15 +125,28 @@ public class LaunchConfigurationWrapper {
 
 	private List<String> getExcludedMethods() throws CoreException {
 		Builder<String> results = ImmutableList.builder();
-		String excludedClasses;
+		String excludedMethods;
 		if (launchConfig.hasAttribute(ATTR_EXCLUDE_METHODS)) {
-			excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS,
+			excludedMethods = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS,
 					"");
 		} else {
-			excludedClasses = pitConfiguration.getExcludedMethods();
+			excludedMethods = pitConfiguration.getExcludedMethods();
 		}
 		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
-				.split(excludedClasses));
+				.split(excludedMethods));
+		return results.build();
+	}
+
+	private List<String> getAvoidCallsTo() throws CoreException {
+		Builder<String> results = ImmutableList.builder();
+		String avoidCallsTo;
+		if (launchConfig.hasAttribute(ATTR_AVOID_CALLS_TO)) {
+			avoidCallsTo = launchConfig.getAttribute(ATTR_AVOID_CALLS_TO, "");
+		} else {
+			avoidCallsTo = pitConfiguration.getAvoidCallsTo();
+		}
+		results.addAll(Splitter.on(',').trimResults().omitEmptyStrings()
+				.split(avoidCallsTo));
 		return results.build();
 	}
 

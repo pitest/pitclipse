@@ -7,3 +7,4 @@ Then the mutation tests run in parallel preference is selected
 Then the use incremental analysis preference is not selected
 Then the excluded classes preference is not set
 Then the excluded methods preference is not set
+Then the avoid calls to preference is set to the PIT defaults

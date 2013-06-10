@@ -1,9 +1,13 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
@@ -91,6 +95,12 @@ public class PreferencesSteps {
 		assertTrue(excludedMethods.isEmpty());
 	}
 
+	@Then("the avoid calls to preference is set to the PIT defaults")
+	public void defaultAvoidCallsToList() {
+		String avoidCallsTo = INSTANCE.getWindowsMenu().getAvoidCallsTo();
+		assertThat(avoidCallsTo, is(equalTo(DEFAULT_AVOID_CALLS_TO_LIST)));
+	}
+
 	@When("the excluded methods preference is not set")
 	public void setNoMethodsAreExcluded() {
 		INSTANCE.getWindowsMenu().setExcludedMethods("");
@@ -99,6 +109,11 @@ public class PreferencesSteps {
 	@When("the excluded methods preference is set to \"$excludedMethods\"")
 	public void setExcludedMethods(String excludedMethods) {
 		INSTANCE.getWindowsMenu().setExcludedMethods(excludedMethods);
+	}
+
+	@When("the avoid calls to preference is set to \"$avoidCallsTo\"")
+	public void setAvoidCalls(String avoidCallsTo) {
+		INSTANCE.getWindowsMenu().setAvoidCallsTo(avoidCallsTo);
 	}
 
 }

@@ -12,13 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.PitResults;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitCommunicatorTest {
 
-	private static final PitOptions OPTIONS = new PitOptionsBuilder()
+	private static final PitOptions OPTIONS = PitOptions
+			.builder()
 			.withSourceDirectory(new File(System.getProperty("java.io.tmpdir")))
 			.withClassUnderTest("Test Class").build();
 

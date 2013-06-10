@@ -1,8 +1,10 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PreferenceConstants.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -26,6 +28,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PIT_EXECUTION_MODE, "containingProject");
 		store.setDefault(RUN_IN_PARALLEL, "true");
 		store.setDefault(INCREMENTAL_ANALYSIS, "false");
+		store.setDefault(AVOID_CALLS_TO, DEFAULT_AVOID_CALLS_TO_LIST);
 	}
 
 }

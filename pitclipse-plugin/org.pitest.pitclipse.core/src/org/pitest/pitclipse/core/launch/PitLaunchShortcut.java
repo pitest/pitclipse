@@ -17,6 +17,7 @@ import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 import static org.pitest.pitclipse.core.PitCoreActivator.getActiveWorkbenchShell;
 import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.core.launch.PitMigrationDelegate.mapResources;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
 import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
@@ -311,6 +312,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 				preferences.isIncrementalAnalysis());
 		wc.setAttribute(ATTR_EXCLUDE_CLASSES, preferences.getExcludedClasses());
 		wc.setAttribute(ATTR_EXCLUDE_METHODS, preferences.getExcludedMethods());
+		wc.setAttribute(ATTR_AVOID_CALLS_TO, preferences.getAvoidCallsTo());
 		mapResources(wc);
 		// JUnitMigrationDelegate.mapResources(wc);
 		// AssertionVMArg.setArgDefault(wc);

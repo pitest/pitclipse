@@ -2,6 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import java.util.List;
 
@@ -13,16 +14,18 @@ public class PitRunConfiguration {
 	private final boolean incrementalAnalysis;
 	private final String excludedClasses;
 	private final String excludedMethods;
+	private final String avoidCallsTo;
 
 	private PitRunConfiguration(String name, List<String> projects,
 			boolean runInParallel, boolean incrementalAnalysis,
-			String excludedClasses, String excludedMethods) {
+			String excludedClasses, String excludedMethods, String avoidCallsTo) {
 		this.name = name;
 		this.projects = projects;
 		this.runInParallel = runInParallel;
 		this.incrementalAnalysis = incrementalAnalysis;
 		this.excludedClasses = excludedClasses;
 		this.excludedMethods = excludedMethods;
+		this.avoidCallsTo = avoidCallsTo;
 	}
 
 	public String getName() {
@@ -40,10 +43,12 @@ public class PitRunConfiguration {
 		private boolean incrementalAnalysis = false;
 		private String excludedClasses = "";
 		private String excludedMethods = "";
+		private String avoidCallsTo = DEFAULT_AVOID_CALLS_TO_LIST;
 
 		public PitRunConfiguration build() {
 			return new PitRunConfiguration(name, projects, runInParallel,
-					incrementalAnalysis, excludedClasses, excludedMethods);
+					incrementalAnalysis, excludedClasses, excludedMethods,
+					avoidCallsTo);
 		}
 
 		public Builder withName(String name) {
@@ -75,6 +80,11 @@ public class PitRunConfiguration {
 			this.excludedMethods = excludedMethods;
 			return this;
 		}
+
+		public Builder withAvoidCallsTo(String avoidCallsTo) {
+			this.avoidCallsTo = avoidCallsTo;
+			return this;
+		}
 	}
 
 	public boolean isRunInParallel() {
@@ -93,4 +103,7 @@ public class PitRunConfiguration {
 		return excludedMethods;
 	}
 
+	public String getAvoidCallsTo() {
+		return avoidCallsTo;
+	}
 }
