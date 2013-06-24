@@ -16,7 +16,6 @@
     <module>org.pitest.pitclipse.site</module>
   </modules>
   <properties>
-    <tycho.version>0.15.0</tycho.version>
     <local.p2.url>http://localhost:8081/nexus/content/groups/local-p2-mirror/</local.p2.url>
   </properties>
   <repositories>
@@ -59,7 +58,8 @@
     <profile>
       <id>ui-test</id>
       <modules>
-        <module>pitclipse-ui.tests</module>
+<!--    <module>pitclipse-ui.tests</module> -->
+        <module>org.pitest.pitclipse.test-feature</module>
       </modules>
     </profile>
   </profiles>

@@ -13,10 +13,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching;bundle-version="3.5.200",
  com.google.guava;bundle-version="11.0.1",
  org.eclipse.jdt.ui;bundle-version="3.6.2",
- org.pitest.pitclipse-pitrunner;bundle-version="0.30.1",
- org.pitest.osgi;bundle-version="0.30.1"
+ org.pitest.pitclipse-pitrunner;bundle-version="0.30.2",
+ org.pitest.osgi;bundle-version="0.30.2"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: lib/jsr305-2.0.0.jar,
  .

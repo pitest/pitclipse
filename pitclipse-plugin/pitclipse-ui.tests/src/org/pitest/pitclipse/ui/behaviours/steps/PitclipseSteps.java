@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
 
 public class PitclipseSteps {
 
-	public class SelectProject implements Runnable {
+	private static class SelectProject implements Runnable {
 
 		private final String projectName;
 

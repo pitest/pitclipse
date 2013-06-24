@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.pitest</groupId>
+    <artifactId>pitclipse-dep</artifactId>
+    <version>0.30.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>jbehave-osgi</artifactId>
+  <name>JBehave OSGi : Core Bundle</name>
+  <description>Provides OSGi services used to interact with JBehave core features.</description>
+  <packaging>bundle</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jbehave</groupId>
+      <artifactId>jbehave-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>4.3.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-integration</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xpp3</groupId>
+      <artifactId>xpp3_min</artifactId>
+      <version>1.1.4c</version>
+    </dependency>
+  </dependencies>
+
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-p2-plugin</artifactId>
+          <version>${tycho.version}</version>
+          <executions>
+            <execution>
+              <id>p2-metadata</id>
+              <goals>
+                <goal>p2-metadata</goal>
+                <goal>update-local-index</goal>
+              </goals>
+              <phase>package</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Build helper maven plugin sets the parsedVersion.osgiVersion 
+          property -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.7</version>
+          <executions>
+            <execution>
+              <id>parse-version</id>
+              <goals>
+                <goal>parse-version</goal>
+              </goals>
+              <phase>validate</phase>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+
+          <unpackBundle>true</unpackBundle>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+            <Embed-Directory>jars</Embed-Directory>
+            <Embed-Transitive>true</Embed-Transitive>
+            <_failok>true</_failok>
+            <_nouses>true</_nouses>
+            <_nodefaultversion>true</_nodefaultversion>
+            <_snapshot>${osgi-version-qualifier}</_snapshot>
+            <_sources>false</_sources>
+            <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+
+            <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
+            <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+
+            <Export-Package>org.jbehave.core.annotation</Export-Package>
+            <Service-Component>OSGI-INF/*.xml</Service-Component>
+            <Eclipse-ExtensibleAPI>true</Eclipse-ExtensibleAPI>
+            <Import-Package>
+              !com.sun.org.apache.xml.internal.utils,
+              !com.sun.org.apache.xpath.internal,
+              !com.sun.org.apache.xpath.internal.objects,
+              com.thoughtworks.xstream, com.thoughtworks.xstream.io,
+              com.thoughtworks.xstream.io.json, !groovy.lang, !javax.el,
+              javax.inject, !javax.servlet, !javax.servlet.http,
+              !javax.servlet.jsp, !javax.servlet.jsp.el,
+              !javax.servlet.jsp.tagext,
+              !javax.swing, !javax.swing.tree,
+              javax.xml.parsers,
+              javax.xml.transform, !org.apache.log,
+              !org.apache.log4j,
+              !org.apache.tools.ant,
+              !org.apache.tools.ant.taskdefs,
+              !org.apache.xml.utils,
+              !org.apache.xpath, !org.apache.xpath.objects,
+              !org.dom4j,
+              !org.dom4j.tree, org.hamcrest, !org.jaxen,
+              !org.jaxen.dom,
+              !org.jaxen.dom4j, !org.jaxen.jdom, !org.jdom,
+              !org.jdom.input,
+              !org.jdom.output, org.junit, org.junit.runner,
+              org.junit.runner.notification, org.junit.runners,
+              org.junit.runners.model, !org.mozilla.javascript,
+              org.osgi.framework;version="[1.6, 2)",
+              org.osgi.framework.wiring;version="[1.0, 2)",
+              !org.osgi.service.blueprint;version="[1.0.0, 2.0.0)",
+              !org.python.core, !org.python.util, org.slf4j;version="[1.6, 2)",
+              org.w3c.dom, org.w3c.dom.traversal, org.xml.sax,
+              org.xml.sax.helpers, !org.zeroturnaround.javarebel
+            </Import-Package>
+            <Embed-Dependency>
+              commons-lang;scope=compile;inline=false,
+              commons-io;scope=compile;inline=false,
+              commons-collections;scope=compile;inline=false,
+              jbehave-core;scope=compile;inline=false,
+              plexus-utils;scope=compile;inline=false,
+              freemarker;scope=compile;inline=false,
+              paranamer;scope=compile;inline=false
+            </Embed-Dependency>
+            <_exportcontents>
+              org.jbehave.core.*;version="${jbehave.version}",
+              com.thoughtworks.paranamer.*;version="2.4",
+              freemarker.*;version="2.3.16",
+              org.apache.commons.lang.*;version="2.5.0",
+              org.apache.commons.collections.*;version="3.2.1",
+              org.apache.commons.io.*;version="2.1.0"
+            </_exportcontents>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-p2-plugin</artifactId>
+      </plugin>
+
+      <!-- Build helper maven plugin sets the parsedVersion.osgiVersion property -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- enable source bundle generation -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <osgi-version-qualifier>qualifier</osgi-version-qualifier>
+  </properties>
+</project>

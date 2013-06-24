@@ -48,17 +48,33 @@
             </dependency>
           </dependencies>-->
         </configuration>
-      </plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-maven-plugin</artifactId>
+          <configuration>
+            <dependency-resolution>
+              <optionalDependencies>ignore</optionalDependencies>
+            </dependency-resolution>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
-      <groupId>com.googlecode.guava-osgi</groupId>
-      <artifactId>guava-osgi</artifactId>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-osgi</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jbehave</groupId>
-      <artifactId>jbehave-core</artifactId>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitclipse-pitrunner</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>jbehave-osgi</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
