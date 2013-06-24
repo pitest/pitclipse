@@ -24,6 +24,7 @@ You will need to setup p2 proxys for the following update sites:
 * http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
 * http://guava-osgi.googlecode.com/svn/trunk/repository/
 * http://jbehave.org/reference/eclipse/updates/
+* http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/
 
 
 Eclipse Build
