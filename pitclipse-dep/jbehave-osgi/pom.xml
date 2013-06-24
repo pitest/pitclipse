@@ -5,13 +5,12 @@
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.pitest</groupId>
     <artifactId>pitclipse-dep</artifactId>
+    <groupId>org.pitest</groupId>
     <version>0.30.2-SNAPSHOT</version>
   </parent>
   <artifactId>jbehave-osgi</artifactId>
-  <name>JBehave OSGi : Core Bundle</name>
-  <description>Provides OSGi services used to interact with JBehave core features.</description>
+  <name>jbehave-osgi</name>
   <packaging>bundle</packaging>
 
   <dependencies>
@@ -129,17 +128,14 @@
 
           <unpackBundle>true</unpackBundle>
           <instructions>
-            <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
             <Embed-Directory>jars</Embed-Directory>
             <Embed-Transitive>true</Embed-Transitive>
             <_failok>true</_failok>
             <_nouses>true</_nouses>
             <_nodefaultversion>true</_nodefaultversion>
-            <_snapshot>${osgi-version-qualifier}</_snapshot>
             <_sources>false</_sources>
             <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 
-            <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
 
             <Export-Package>org.jbehave.core.annotation</Export-Package>
