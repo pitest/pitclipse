@@ -58,8 +58,9 @@
     <profile>
       <id>ui-test</id>
       <modules>
-<!--    <module>pitclipse-ui.tests</module> -->
+<!--	<module>pitclipse-ui.tests</module> -->
         <module>org.pitest.pitclipse.test-feature</module>
+        <module>org.pitest.pitclipse.test-site</module>
       </modules>
     </profile>
   </profiles>

@@ -6,7 +6,9 @@
    <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.30.2.qualifier">
       <category name="Dependencies"/>
    </feature>
-  
+   <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.qualifier.jar" id="org.pitest.pitclipse.test-feature" version="0.30.2.qualifier">
+      <category name="Pitclipse Test"/>
+   </feature>
    <category-def name="Pitclipse Test" label="Pitclipse Test"/>
-   <category-def name="Test Dependencies" label="Test Dependencies"/>
+   <category-def name="Pitclipse" label="Pitclipse"/>
 </site>

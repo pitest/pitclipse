@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Pitest" url="http://pitest.org/pitclipse/update-site/">
+   <description name="Pitest" url="http://eclipse.pitest.org/release/">
       Pitclipse update site
    </description>
    <feature url="features/org.pitest.pitclipse.feature_0.30.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.30.2.qualifier">
    <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.qualifier.jar" id="org.pitest.pitclipse.test-feature" version="0.30.2.qualifier">
-      <category name="Pitclipse"/>
+      <category name="PitclipseTest"/>
    </feature>
-   <category-def name="Pitclipse" label="Pitclipse"/>
+   <category-def name="PitclipseTest" label="Pitclipse Test"/>
 </site>

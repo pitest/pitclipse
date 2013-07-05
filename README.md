@@ -22,7 +22,6 @@ OR
 You will need to setup p2 proxys for the following update sites:
 * http://download.eclipse.org/releases/indigo
 * http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
-* http://guava-osgi.googlecode.com/svn/trunk/repository/
 * http://jbehave.org/reference/eclipse/updates/
 * http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/
 
@@ -33,7 +32,6 @@ Eclipse Build
 Requirements
 ------------
 * Eclipse installation 3.6 or greater
-* Guava bundle - update site http://guava-osgi.googlecode.com/svn/trunk/repository/
 * SWTBot plugin (to drive UI testing) - update site http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
 * JBehave plugin (to run the UI stories) - update site http://jbehave.org/reference/eclipse/updates/
 

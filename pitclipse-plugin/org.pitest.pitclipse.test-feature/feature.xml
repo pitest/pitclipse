@@ -28,10 +28,6 @@
       %license
    </license>
 
-   <includes
-         id="org.pitest.pitclipse.feature"
-         version="0.0.0"/>
-
    <plugin
          id="com.thoughtworks.xstream"
          download-size="0"

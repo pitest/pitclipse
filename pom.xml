@@ -39,11 +39,6 @@
         <version>${guava.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.googlecode.guava-osgi</groupId>
-        <artifactId>guava-osgi</artifactId>
-        <version>${guava.version}</version>
-      </dependency>
-      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit-dep</artifactId>
         <version>${junit.version}</version>
@@ -111,7 +106,7 @@
     </profile>
   </profiles>
   <properties>
-    <guava.version>11.0.1</guava.version>
+    <guava.version>12.0</guava.version>
     <felix.version>2.3.7</felix.version>
     <hamcrest.version>1.3</hamcrest.version>
     <junit.version>4.10</junit.version>

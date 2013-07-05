@@ -6,7 +6,7 @@ Bundle-Version: 0.30.2.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- com.google.guava;bundle-version="11.0.1",
+ com.google.guava;bundle-version="12.0.0",
  org.pitest.pitclipse.core;bundle-version="0.30.2",
  org.pitest.pitclipse-pitrunner;bundle-version="0.30.2"
 Bundle-ActivationPolicy: lazy

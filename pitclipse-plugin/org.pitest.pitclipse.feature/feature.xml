@@ -28,10 +28,6 @@
       %license
    </license>
 
-   <includes
-         id="com.google.guava.runtime.feature"
-         version="0.0.0"/>
-
    <plugin
          id="org.pitest.pitclipse.ui"
          download-size="0"
@@ -55,6 +51,13 @@
 
    <plugin
          id="org.pitest.pitclipse-pitrunner"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.google.guava"
          download-size="0"
          install-size="0"
          version="0.0.0"
