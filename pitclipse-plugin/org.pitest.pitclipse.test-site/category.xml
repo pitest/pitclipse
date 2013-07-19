@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.pitest.pitclipse.feature_0.30.2.201307081826.jar" id="org.pitest.pitclipse.feature" version="0.30.2.201307081826">
+   <feature url="features/org.pitest.pitclipse.feature_0.30.3.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.30.3.qualifier">
       <category name="Pitclipse"/>
    </feature>
-   <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.201307081826.jar" id="org.pitest.pitclipse.feature" version="0.30.2.201307081826">
-      <category name="Dependencies"/>
-   </feature>
-   <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.201307081826.jar" id="org.pitest.pitclipse.test-feature" version="0.30.2.201307081826">
+   <feature url="features/org.pitest.pitclipse.test-feature_0.30.3.qualifier.jar" id="org.pitest.pitclipse.test-feature" version="0.30.3.qualifier">
       <category name="Pitclipse Test"/>
    </feature>
    <category-def name="Pitclipse Test" label="Pitclipse Test"/>

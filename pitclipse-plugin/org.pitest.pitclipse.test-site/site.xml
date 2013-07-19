@@ -3,9 +3,12 @@
    <description name="Pitest" url="http://eclipse.pitest.org/release/">
       Pitclipse update site
    </description>
-   <feature url="features/org.pitest.pitclipse.feature_0.30.2.201307081826.jar" id="org.pitest.pitclipse.feature" version="0.30.2.201307081826">
-   <feature url="features/org.pitest.pitclipse.test-feature_0.30.2.201307081826.jar" id="org.pitest.pitclipse.test-feature" version="0.30.2.201307081826">
+   <feature url="features/org.pitest.pitclipse.feature_0.30.3.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.30.3.qualifier">
+   	<category name="Pitclipse"/>
+   </feature>
+   <feature url="features/org.pitest.pitclipse.test-feature_0.30.3.qualifier.jar" id="org.pitest.pitclipse.test-feature" version="0.30.3.qualifier">
       <category name="PitclipseTest"/>
    </feature>
+   <category-def name="Pitclipse" label="Pitclipse"/>
    <category-def name="PitclipseTest" label="Pitclipse Test"/>
 </site>
