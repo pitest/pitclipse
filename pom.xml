@@ -116,5 +116,6 @@
     <pitest.version>0.30</pitest.version>
     <tycho.version>0.15.0</tycho.version>
     <!-- <forceContextQualifier>201305281719</forceContextQualifier> -->
+    <xjc.version>1.5</xjc.version>
   </properties>
 </project> 

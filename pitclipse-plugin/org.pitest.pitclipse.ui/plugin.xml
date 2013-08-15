@@ -14,7 +14,7 @@
           class="org.pitest.pitclipse.ui.view.PitView"
           icon="icons/pit.gif"
           id="org.pitest.pitclipse.ui.view.PitView"
-          name="PIT View"
+          name="PIT Summary"
           restorable="true"/>
    </extension>
 </plugin>

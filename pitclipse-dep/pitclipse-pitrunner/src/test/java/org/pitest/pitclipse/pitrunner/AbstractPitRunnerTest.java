@@ -24,7 +24,7 @@ public abstract class AbstractPitRunnerTest {
 			.getCanonicalName());
 
 	protected static final PitResults RESULTS = new PitResultsBuilder()
-			.withResults(TMP_DIR).build();
+			.withHtmlResults(TMP_DIR).withXmlResults(TMP_DIR).build();
 
 	protected static final PitOptions OPTIONS = PitOptions.builder()
 			.withSourceDirectory(TMP_DIR)

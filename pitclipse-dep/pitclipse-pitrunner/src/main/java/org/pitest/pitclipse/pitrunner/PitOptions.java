@@ -60,7 +60,7 @@ public final class PitOptions implements Serializable {
 	public String[] toCLIArgs() {
 		Builder<String> builder = ImmutableList.builder();
 		builder.add("--failWhenNoMutations", "false", "--outputFormats",
-				"HTML", "--threads", Integer.toString(threads), "--reportDir",
+				"HTML,XML", "--threads", Integer.toString(threads), "--reportDir",
 				reportDir.getPath(), "--targetTests", toTest(),
 				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(),
 				"--verbose");
@@ -310,7 +310,7 @@ public final class PitOptions implements Serializable {
 			IllegalArgumentException {
 		private static final long serialVersionUID = -8657782829090737433L;
 
-		public PitLaunchException(String msg, IOException e) {
+		public PitLaunchException(String msg, Exception e) {
 			super(msg, e);
 		}
 

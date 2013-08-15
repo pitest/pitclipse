@@ -1,6 +1,11 @@
 package org.pitest.pitclipse.pitrunner;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
@@ -29,6 +34,15 @@ public class PitRunnerTest {
 				.build();
 		PitResults results = runner.runPIT(options);
 		assertNotNull(results);
+		assertTrue(fileExists(results.getHtmlResultFile()));
+		assertTrue(fileExists(results.getXmlResultFile()));
+		assertThat(results.getMutations(), is(notNullValue()));
+		assertThat(results.getPitOptions(), is(equalTo(options)));
 	}
+
+	private boolean fileExists(File file) {
+		return null != file && file.exists();
+	}
+
 
 }
