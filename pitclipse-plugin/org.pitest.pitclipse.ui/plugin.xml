@@ -9,12 +9,22 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category id="org.pitest.pitclipse.ui.view.category" name="PIT"/>
       <view
           allowMultiple="false"
           class="org.pitest.pitclipse.ui.view.PitView"
           icon="icons/pit.gif"
           id="org.pitest.pitclipse.ui.view.PitView"
+          category="org.pitest.pitclipse.ui.view.category"
           name="PIT Summary"
           restorable="true"/>
+       <view
+          allowMultiple="false"
+          class="org.pitest.pitclipse.ui.view.PitMutationsView"
+          icon="icons/pit.gif"
+          id="org.pitest.pitclipse.ui.view.PitMutationsView"
+          category="org.pitest.pitclipse.ui.view.category"
+          name="PIT Mutations"
+          restorable="true"/>   
    </extension>
 </plugin>

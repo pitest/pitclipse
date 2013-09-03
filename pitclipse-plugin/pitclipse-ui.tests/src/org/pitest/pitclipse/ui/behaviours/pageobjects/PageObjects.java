@@ -10,7 +10,8 @@ public enum PageObjects {
 	private final PackageExplorer packageExplorer;
 	private final WindowsMenu windowsMenu;
 	private final RunMenu runMenu;
-	private final PitView pitView;
+	private final PitSummaryView pitSummaryView;
+	private final PitMutationsView pitMutationsView;
 	private final BuildProgress buildProgress;
 	private final AbstractSyntaxTree abstractSyntaxTree;
 	private final SourceMenu sourceMenu;
@@ -23,7 +24,8 @@ public enum PageObjects {
 		packageExplorer = new PackageExplorer(bot);
 		windowsMenu = new WindowsMenu(bot);
 		runMenu = new RunMenu(bot);
-		pitView = new PitView();
+		pitSummaryView = new PitSummaryView();
+		pitMutationsView = new PitMutationsView(bot);
 		buildProgress = new BuildProgress(bot);
 		abstractSyntaxTree = new AbstractSyntaxTree();
 		sourceMenu = new SourceMenu(bot);
@@ -50,8 +52,8 @@ public enum PageObjects {
 		return runMenu;
 	}
 
-	public PitView getPitView() {
-		return pitView;
+	public PitSummaryView getPitSummaryView() {
+		return pitSummaryView;
 	}
 
 	public BuildProgress getBuildProgress() {
@@ -68,5 +70,9 @@ public enum PageObjects {
 
 	public RefactorMenu getRefactorMenu() {
 		return refactorMenu;
+	}
+
+	public PitMutationsView getPitMutationsView() {
+		return pitMutationsView;
 	}
 }

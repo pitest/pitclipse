@@ -9,10 +9,13 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANC
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import java.io.File;
+import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
@@ -21,12 +24,17 @@ import org.hamcrest.TypeSafeMatcher;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
+import org.jbehave.core.steps.Parameters;
 import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.results.Mutations.Mutation;
+import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.PitView;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 
 public class PitclipseSteps {
 
@@ -41,7 +49,6 @@ public class PitclipseSteps {
 		public void run() {
 			INSTANCE.getPackageExplorer().selectProject(projectName);
 		}
-
 	}
 
 	private static final class SelectPackageRoot implements Runnable {
@@ -158,7 +165,7 @@ public class PitclipseSteps {
 	@Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
 	public void coverageReportGenerated(int classes, double totalCoverage,
 			double mutationCoverage) {
-		PitView pitView = INSTANCE.getPitView();
+		PitSummaryView pitView = INSTANCE.getPitSummaryView();
 		pitView.waitForUpdate();
 		try {
 			assertEquals(classes, pitView.getClassesTested());
@@ -168,6 +175,128 @@ public class PitclipseSteps {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	@Then("the mutation results are $tableOfMutations")
+	public void mutationsAre(ExamplesTable tableOfMutations) {
+		WorkspaceMutations expectedMutations = mutationsFromExampleTable(tableOfMutations);
+		WorkspaceMutations actualMutations = INSTANCE.getPitMutationsView()
+				.getMutations();
+		assertThat(actualMutations.getProjectMutations(),
+				is(equivalentTo(expectedMutations.getProjectMutations())));
+	}
+
+	private Matcher<List<ProjectMutations>> equivalentTo(
+			final List<ProjectMutations> expectedMutations) {
+		return new TypeSafeMatcher<List<ProjectMutations>>() {
+
+			public void describeTo(Description description) {
+				description.appendText(" is equivalent to ").appendValue(
+						expectedMutations);
+			}
+
+			@Override
+			protected boolean matchesSafely(
+					List<ProjectMutations> actualMutations) {
+				boolean match = false;
+				if (listsAreTheSameSize(expectedMutations, actualMutations)) {
+					Iterator<ProjectMutations> actualMutationsIterator = actualMutations
+							.iterator();
+					for (ProjectMutations expectedMutation : expectedMutations) {
+						ProjectMutations actualMutation = actualMutationsIterator
+								.next();
+						match &= isSameProject(expectedMutation, actualMutation)
+								&& areMutationsEquivalent(
+										expectedMutation.getMutations(),
+										actualMutation.getMutations());
+					}
+				}
+				return match;
+			}
+
+			private boolean areMutationsEquivalent(
+					List<Mutation> expectedMutations,
+					List<Mutation> actualMutations) {
+				boolean match = false;
+				if (listsAreTheSameSize(expectedMutations, actualMutations)) {
+					Iterator<Mutation> actualMutationsIterator = actualMutations
+							.iterator();
+					for (Mutation expectedMutation : expectedMutations) {
+						Mutation actualMutation = actualMutationsIterator
+								.next();
+						match &= areTheSame(expectedMutation, actualMutation);
+					}
+				}
+				return match;
+			}
+
+			private boolean areTheSame(Mutation expectedMutation,
+					Mutation actualMutation) {
+				return new EqualsBuilder()
+						.append(expectedMutation.getMutatedClass(),
+								actualMutation.getMutatedClass())
+						.append(expectedMutation.getLineNumber(),
+								actualMutation.getLineNumber())
+						.append(expectedMutation.getMutator(),
+								actualMutation.getMutator()).isEquals();
+
+			}
+
+			private boolean isSameProject(ProjectMutations expectedMutation,
+					ProjectMutations actualMutation) {
+				return expectedMutation.getProject().equals(
+						actualMutation.getProject());
+			}
+
+			private <T> boolean listsAreTheSameSize(List<T> expectedMutations,
+					List<T> actualMutations) {
+				return expectedMutations.size() == actualMutations.size();
+			}
+		};
+	}
+
+	private static Set<String> projectsFrom(ExamplesTable examplesTable) {
+		Builder<String> builder = ImmutableSet.builder();
+		for (int i = 0; i < examplesTable.getRowCount(); i++) {
+			builder.add(examplesTable.getRow(i).get("project"));
+		}
+		return builder.build();
+	}
+
+	private WorkspaceMutations mutationsFromExampleTable(
+			ExamplesTable tableOfMutations) {
+		Set<String> projects = projectsFrom(tableOfMutations);
+		ImmutableList.Builder<ProjectMutations> projectsBuilder = ImmutableList
+				.builder();
+		ObjectFactory objectFactory = new ObjectFactory();
+		for (String project : projects) {
+			ProjectMutations.Builder projectBuilder = ProjectMutations
+					.builder().withProjectName(project);
+			for (Parameters mutationRow : tableOfMutations
+					.getRowsAsParameters()) {
+				long lines = mutationRow.valueAs("line", Long.class);
+				// String mutation = mutationRow.valueAs("mutation",
+				// String.class);
+
+				Mutation mutation = objectFactory.createMutationsMutation();
+
+				mutation.setLineNumber(BigInteger.valueOf(lines));
+				mutation.setMutator(mutationRow.valueAs("mutation",
+						String.class));
+				projectBuilder.addMutation(mutation);
+			}
+			projectsBuilder.add(projectBuilder.build());
+		}
+		return WorkspaceMutations.builder()
+				.withProjectMutations(projectsBuilder.build()).build();
+
+	}
+
+	@When("the PIT views are opened")
+	public void thePitViewsAreOpened() {
+		INSTANCE.getWindowsMenu().openPitSummaryView();
+		INSTANCE.getWindowsMenu().openPitMutationsView();
+
 	}
 
 	@When("tests in package $packageName are run for project $projectName")
@@ -188,7 +317,7 @@ public class PitclipseSteps {
 	}
 
 	@Then("the options passed to Pit match: $configTable")
-	public void runtimeOPtionsMatch(ExamplesTable configTable) {
+	public void runtimeOptionsMatch(ExamplesTable configTable) {
 		PitOptions options = INSTANCE.getRunMenu().getLastUsedPitOptions();
 		assertThat(configTable.getRowCount(), is(greaterThan(0)));
 		assertThat(options, match(configTable.getRow(0)));
@@ -274,4 +403,5 @@ public class PitclipseSteps {
 			}
 		};
 	}
+
 }

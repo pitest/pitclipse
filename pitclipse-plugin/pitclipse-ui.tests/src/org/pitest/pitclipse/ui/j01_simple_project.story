@@ -4,6 +4,9 @@ Given eclipse opens and the welcome screen is acknowledged
 And the java perspective is opened
 And an empty workspace
 
+When the PIT views are opened
+
+
 When the user creates a project with name project1
 Then the project project1 exists in the workspace
 
@@ -17,6 +20,9 @@ Then class FooTest exists in package foo.bar in project project1
 
 When test FooTest in package foo.bar is run for project project1
 Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+!-- Then the mutation results are
+!-- |project|class|line|mutation|
+!-- |project1|Foo|1||
 
 Scenario: Create an empty test
 Given the class FooTest in package foo.bar in project project1 is selected

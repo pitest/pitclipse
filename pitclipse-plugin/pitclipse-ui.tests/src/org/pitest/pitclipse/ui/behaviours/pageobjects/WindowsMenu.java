@@ -10,14 +10,17 @@ public class WindowsMenu {
 	private static final String OPEN_PERSPECTIVES = "Open Perspective";
 	private static final String OTHER = "Other...";
 	private static final String PREFERENCES = "Preferences";
+	private static final String SHOW_VIEW = "Show View";
 	private final SWTWorkbenchBot bot;
 	private final PerspectiveSelector perspectiveSelector;
 	private final PitPreferenceSelector preferenceSelector;
+	private final ViewSelector viewSelector;
 
 	public WindowsMenu(SWTWorkbenchBot bot) {
 		this.bot = bot;
 		perspectiveSelector = new PerspectiveSelector(bot);
 		preferenceSelector = new PitPreferenceSelector(bot);
+		viewSelector = new ViewSelector(bot);
 	}
 
 	public void openJavaPerspective() {
@@ -90,4 +93,15 @@ public class WindowsMenu {
 		bot.menu(WINDOWS).menu(PREFERENCES).click();
 		preferenceSelector.setAvoidCallsTo(avoidCallsTo);
 	}
+
+	public void openPitSummaryView() {
+		bot.menu(WINDOWS).menu(SHOW_VIEW).menu(OTHER).click();
+		viewSelector.selectView("PIT", "PIT Summary");
+	}
+
+	public void openPitMutationsView() {
+		bot.menu(WINDOWS).menu(SHOW_VIEW).menu(OTHER).click();
+		viewSelector.selectView("PIT", "PIT Mutations");
+	}
+
 }

@@ -4,11 +4,11 @@ import org.pitest.pitclipse.ui.behaviours.StepException;
 import org.pitest.pitclipse.ui.swtbot.PitNotifier;
 import org.pitest.pitclipse.ui.swtbot.PitResultsView;
 
-public class PitView {
+public class PitSummaryView {
 
 	private PitResultsView lastResults = null;
 
-	public PitView() {
+	public PitSummaryView() {
 	}
 
 	public void waitForUpdate() {
