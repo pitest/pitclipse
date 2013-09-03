@@ -295,7 +295,7 @@ public class PitclipseSteps {
 	@When("the PIT views are opened")
 	public void thePitViewsAreOpened() {
 		INSTANCE.getWindowsMenu().openPitSummaryView();
-		INSTANCE.getWindowsMenu().openPitMutationsView();
+		// INSTANCE.getWindowsMenu().openPitMutationsView();
 
 	}
 

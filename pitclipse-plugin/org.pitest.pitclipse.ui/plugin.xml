@@ -18,13 +18,13 @@
           category="org.pitest.pitclipse.ui.view.category"
           name="PIT Summary"
           restorable="true"/>
-       <view
+<!--       <view
           allowMultiple="false"
           class="org.pitest.pitclipse.ui.view.PitMutationsView"
           icon="icons/pit.gif"
           id="org.pitest.pitclipse.ui.view.PitMutationsView"
           category="org.pitest.pitclipse.ui.view.category"
           name="PIT Mutations"
-          restorable="true"/>   
+          restorable="true"/> -->   
    </extension>
 </plugin>
