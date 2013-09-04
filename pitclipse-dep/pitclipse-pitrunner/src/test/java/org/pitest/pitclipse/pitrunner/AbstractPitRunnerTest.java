@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToStrin
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -34,6 +35,7 @@ public abstract class AbstractPitRunnerTest {
 	protected Matcher<PitOptions> areEqualTo(final PitOptions results) {
 		return new TypeSafeMatcher<PitOptions>() {
 
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("is equal to").appendValue(
 						reflectionToString(results));
@@ -46,16 +48,21 @@ public abstract class AbstractPitRunnerTest {
 		};
 	}
 
-	protected Matcher<PitResults> areEqualTo(final PitResults results) {
+	protected Matcher<PitResults> areEqualTo(final PitResults expectedResult) {
 		return new TypeSafeMatcher<PitResults>() {
+			@Override
 			public void describeTo(Description description) {
 				description.appendText("is equal to").appendValue(
-						reflectionToString(results));
+						reflectionToString(expectedResult));
 			}
 
 			@Override
-			protected boolean matchesSafely(PitResults item) {
-				return reflectionEquals(results, item);
+			protected boolean matchesSafely(PitResults actualResult) {
+				return new EqualsBuilder()
+						.append(expectedResult.getHtmlResultFile(),
+								actualResult.getHtmlResultFile())
+						.append(expectedResult.getXmlResultFile(),
+								actualResult.getXmlResultFile()).isEquals();
 			}
 		};
 	}

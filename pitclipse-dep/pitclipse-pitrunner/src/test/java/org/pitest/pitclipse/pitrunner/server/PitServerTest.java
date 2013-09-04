@@ -23,7 +23,6 @@ import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitServerTest extends AbstractPitRunnerTest {
