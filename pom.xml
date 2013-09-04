@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.31.1-SNAPSHOT</version>
+  <version>0.31.1.201309040720</version>
   <packaging>pom</packaging>
   <organization>
     <name>Pitest.org</name>
@@ -115,7 +115,7 @@
     <mockito.version>1.9.0</mockito.version>
     <pitest.version>0.31</pitest.version>
     <tycho.version>0.15.0</tycho.version>
-    <!-- <forceContextQualifier>201305281719</forceContextQualifier> -->
+    <forceContextQualifier>201309040720</forceContextQualifier>
     <xjc.version>1.5</xjc.version>
   </properties>
 </project> 
