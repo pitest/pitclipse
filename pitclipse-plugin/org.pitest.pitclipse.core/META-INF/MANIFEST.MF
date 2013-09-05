@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse Core
 Bundle-SymbolicName: org.pitest.pitclipse.core;singleton:=true
-Bundle-Version: 0.31.1.201309050652
+Bundle-Version: 0.31.1.201309051729
 Bundle-Activator: org.pitest.pitclipse.core.PitCoreActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  com.google.guava;bundle-version="12.0.0",
  org.eclipse.jdt.ui;bundle-version="3.6.2",
  org.pitest.pitclipse-pitrunner;bundle-version="0.31.1",
- org.pitest.osgi;bundle-version="0.31.1"
+ org.pitest.osgi;bundle-version="0.31.1",
+ org.jdom;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org

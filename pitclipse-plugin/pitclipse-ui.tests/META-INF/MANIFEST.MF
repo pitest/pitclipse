@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse UI Tests
 Bundle-SymbolicName: org.pitest.pitclipse-ui.tests;singleton:=true
-Bundle-Version: 0.31.1.201309050652
+Bundle-Version: 0.31.1.201309051729
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
