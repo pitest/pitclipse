@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse UI Tests
 Bundle-SymbolicName: org.pitest.pitclipse-ui.tests;singleton:=true
-Bundle-Version: 0.31.1.201309051729
+Bundle-Version: 0.31.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
@@ -12,16 +12,16 @@ Require-Bundle: org.eclipse.ui,
  org.junit4;bundle-version="4.8.1",
  org.apache.log4j;bundle-version="1.2.15",
  org.hamcrest;bundle-version="1.1.0",
- org.pitest.pitclipse.core;bundle-version="0.31.1",
- org.pitest.pitclipse.ui;bundle-version="0.31.1",
+ org.pitest.pitclipse.core;bundle-version="0.31.2",
+ org.pitest.pitclipse.ui;bundle-version="0.31.2",
  org.apache.commons.collections;bundle-version="3.2.0",
  org.eclipse.swtbot.eclipse.core;bundle-version="2.0.5",
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.5",
  org.eclipse.swtbot.junit4_x;bundle-version="2.0.5",
  org.jbehave.eclipse;bundle-version="1.0.0",
- org.pitest.jbehave-osgi;bundle-version="0.31.1",
+ org.pitest.jbehave-osgi;bundle-version="0.31.2",
  com.thoughtworks.xstream,
- org.pitest.pitclipse-pitrunner;bundle-version="0.31.1"
+ org.pitest.pitclipse-pitrunner;bundle-version="0.31.2"
 Import-Package: org.eclipse.core.runtime
 Bundle-Activator: org.pitest.pitclipse.ui.PitclipseTestActivator
 Bundle-ActivationPolicy: lazy

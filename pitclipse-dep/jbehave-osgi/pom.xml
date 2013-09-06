@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pitclipse-dep</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.31.1.201309051729</version>
+    <version>0.31.2-SNAPSHOT</version>
   </parent>
   <artifactId>jbehave-osgi</artifactId>
   <name>jbehave-osgi</name>
