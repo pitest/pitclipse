@@ -13,8 +13,9 @@ import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
 public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
 
 	private static final ExecutorService executorService = Executors
-			.newSingleThreadExecutor();
+			.newCachedThreadPool();
 
+	@Override
 	public void handleResults(PitRuntimeOptions runtimeOptions) {
 		PitResultHandler resultHandler = new ExtensionPointResultHandler();
 		PitClient client = new PitClientProvider().getClient(runtimeOptions
