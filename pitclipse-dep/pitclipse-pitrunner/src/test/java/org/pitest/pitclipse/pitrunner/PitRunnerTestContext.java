@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner;
 
+import java.io.ByteArrayOutputStream;
+
 import org.pitest.pitclipse.pitrunner.client.PitClient;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
@@ -12,6 +14,7 @@ public final class PitRunnerTestContext {
 	private PitClient client;
 	private PitResults results;
 	private PitResults transmittedResults;
+	private ByteArrayOutputStream outputStream;
 
 	public PitOptions getOptions() {
 		return options;
@@ -67,6 +70,15 @@ public final class PitRunnerTestContext {
 
 	public void setTransmittedResults(PitResults transmittedResults) {
 		this.transmittedResults = transmittedResults;
+	}
+
+	public void setOutputStream(ByteArrayOutputStream byteOutputStream) {
+		this.outputStream = byteOutputStream;
+
+	}
+
+	public ByteArrayOutputStream getOutputStream() {
+		return outputStream;
 	}
 
 }

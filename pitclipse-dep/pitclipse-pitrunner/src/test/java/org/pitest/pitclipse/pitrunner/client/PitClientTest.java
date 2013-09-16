@@ -20,7 +20,6 @@ import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
-import org.pitest.pitclipse.pitrunner.client.PitClient;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,10 +52,10 @@ public class PitClientTest extends AbstractPitRunnerTest {
 		whenThePitClientIsStarted();
 		thenTheClientConnectsOnThePort();
 		givenTheOptions(OPTIONS);
-		whenTheClientSendsOptions();
+		whenTheClientReceivesOptions();
 		thenTheOptionsAreSent();
 		givenTheResults(RESULTS);
-		whenTheClientWaitsForResults();
+		whenTheClientSendsResults();
 		thenTheResultsAreReceived();
 	}
 
@@ -81,25 +80,26 @@ public class PitClientTest extends AbstractPitRunnerTest {
 		client.connect();
 	}
 
-	private void whenTheClientSendsOptions() throws IOException,
-			ClassNotFoundException {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		when(connectionSocket.getOutputStream()).thenReturn(outputStream);
-		context.getPitClient().sendOptions(context.getOptions());
-		ObjectInputStream inputStream = new ObjectInputStream(
-				new ByteArrayInputStream(outputStream.toByteArray()));
-		context.setTransmittedOptions((PitOptions) inputStream.readObject());
-	}
-
-	private void whenTheClientWaitsForResults() throws IOException {
+	private void whenTheClientReceivesOptions() throws IOException {
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		new ObjectOutputStream(byteOutputStream).writeObject(context
-				.getResults());
+				.getOptions());
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(
 				byteOutputStream.toByteArray());
 		when(connectionSocket.getInputStream()).thenReturn(inputStream);
-		PitResults results = context.getPitClient().receiveResults();
-		context.setTransmittedResults(results);
+		PitClient client = context.getPitClient();
+		context.setTransmittedOptions(client.readOptions());
+	}
+
+	private void whenTheClientSendsResults() throws IOException,
+			ClassNotFoundException {
+		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+		when(connectionSocket.getOutputStream()).thenReturn(byteOutputStream);
+		context.getPitClient().sendResults(context.getResults());
+		PitResults transmittedResults = (PitResults) new ObjectInputStream(
+				new ByteArrayInputStream(byteOutputStream.toByteArray()))
+				.readObject();
+		context.setTransmittedResults(transmittedResults);
 	}
 
 	private void thenTheResultsAreReceived() {

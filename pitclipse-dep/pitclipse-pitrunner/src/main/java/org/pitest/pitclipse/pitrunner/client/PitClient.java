@@ -25,6 +25,8 @@ public class PitClient implements Closeable {
 	private final int portNumber;
 	private final SocketProvider socketProvider;
 	private Socket socket;
+	private ObjectInputStream inputStream;
+	private ObjectOutputStream outputStream;
 
 	public PitClient(int portNumber) {
 		this(portNumber, new SocketProvider());
@@ -39,36 +41,45 @@ public class PitClient implements Closeable {
 		socket = socketProvider.createClientSocket(portNumber);
 	}
 
-	public void sendOptions(PitOptions options) {
+	public void sendResults(PitResults results) {
 		try {
-			ObjectOutputStream stream = new ObjectOutputStream(
-					socket.getOutputStream());
-			stream.writeObject(options);
-		} catch (IOException e) {
-			throw new PitClientException(e);
-		}
-	}
-
-	public void close() {
-		if (null != socket) {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				throw new PitClientException(e);
-			} finally {
-				socket = null;
+			if (null == outputStream) {
+				outputStream = new ObjectOutputStream(socket.getOutputStream());
 			}
-		}
-	}
-
-	public PitResults receiveResults() {
-		try {
-			ObjectInputStream stream = new ObjectInputStream(
-					socket.getInputStream());
-			return (PitResults) stream.readObject();
+			outputStream.writeObject(results);
+			outputStream.flush();
 		} catch (Exception e) {
 			throw new PitClientException(e);
 		}
 	}
 
+	public PitOptions readOptions() {
+		try {
+			if (null == inputStream) {
+				inputStream = new ObjectInputStream(socket.getInputStream());
+			}
+			return (PitOptions) inputStream.readObject();
+		} catch (Exception e) {
+			throw new PitClientException(e);
+		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		try {
+			if (null != inputStream) {
+				inputStream.close();
+			}
+			if (null != outputStream) {
+				outputStream.close();
+			}
+			if (null != socket) {
+				socket.close();
+			}
+		} finally {
+			inputStream = null;
+			outputStream = null;
+			socket = null;
+		}
+	}
 }

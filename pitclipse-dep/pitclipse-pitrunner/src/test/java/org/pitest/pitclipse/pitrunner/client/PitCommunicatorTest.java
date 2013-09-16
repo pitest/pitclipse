@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitCommunicatorTest {
@@ -25,48 +27,48 @@ public class PitCommunicatorTest {
 	private static final PitResults RESULTS = null;
 
 	@Mock
-	private PitClient client;
+	private PitServer server;
 
 	@Mock
 	private PitResultHandler handler;
 
 	@Test
-	public void runCommunicator() {
+	public void runCommunicator() throws IOException {
 		whenPitCommunicatorIsRun();
-		thenTheClientIsCalled();
+		thenTheServerIsCalled();
 		thenTheResultsAreHandled();
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void clientIsClosedOnException() {
+	public void clientIsClosedOnException() throws IOException {
 		try {
 			whenPitCommunicatorGetsAnError();
 		} finally {
-			thenTheClientIsCalled();
+			thenTheServerIsCalled();
 			thenResultsAreNotHandled();
 		}
 	}
 
 	private void whenPitCommunicatorIsRun() {
-		when(client.receiveResults()).thenReturn(RESULTS);
-		PitCommunicator communicator = new PitCommunicator(client, OPTIONS,
+		when(server.receiveResults()).thenReturn(RESULTS);
+		PitCommunicator communicator = new PitCommunicator(server, OPTIONS,
 				handler);
 		communicator.run();
 	}
 
 	private void whenPitCommunicatorGetsAnError() {
-		when(client.receiveResults()).thenThrow(new RuntimeException("Boom"));
-		PitCommunicator communicator = new PitCommunicator(client, OPTIONS,
+		when(server.receiveResults()).thenThrow(new RuntimeException("Boom"));
+		PitCommunicator communicator = new PitCommunicator(server, OPTIONS,
 				handler);
 		communicator.run();
 	}
 
-	private void thenTheClientIsCalled() {
-		verify(client).connect();
-		verify(client).sendOptions(OPTIONS);
-		verify(client).receiveResults();
-		verify(client).close();
-		verifyNoMoreInteractions(client);
+	private void thenTheServerIsCalled() throws IOException {
+		verify(server).listen();
+		verify(server).sendOptions(OPTIONS);
+		verify(server).receiveResults();
+		verify(server).close();
+		verifyNoMoreInteractions(server);
 	}
 
 	private void thenTheResultsAreHandled() {

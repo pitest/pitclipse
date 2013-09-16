@@ -10,7 +10,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.pitest.mutationtest.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.PitResults.PitResultsBuilder;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
+import org.pitest.pitclipse.pitrunner.client.PitClient;
 
 @ThreadSafe
 public class PitRunner {
@@ -20,8 +20,9 @@ public class PitRunner {
 		File reportDir = options.getReportDirectory();
 		File htmlResultFile = findResultFile(reportDir, "index.html");
 		File xmlResultFile = findResultFile(reportDir, "mutations.xml");
-		return new PitResultsBuilder().withPitOptions(options).withHtmlResults(htmlResultFile)
-				.withXmlResults(xmlResultFile).build();
+		return new PitResultsBuilder().withPitOptions(options)
+				.withHtmlResults(htmlResultFile).withXmlResults(xmlResultFile)
+				.build();
 	}
 
 	private File findResultFile(File reportDir, String fileName) {
@@ -47,9 +48,9 @@ public class PitRunner {
 
 		System.out.println("Starting on port: " + port);
 
-		PitServer server = new PitServer(port);
+		PitClient server = new PitClient(port);
 		try {
-			server.listen();
+			server.connect();
 			System.out.println("Connected");
 			PitOptions options = server.readOptions();
 			System.out.println("Received options: " + options);

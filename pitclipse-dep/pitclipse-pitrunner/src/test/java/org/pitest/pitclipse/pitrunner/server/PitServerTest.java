@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -56,10 +55,10 @@ public class PitServerTest extends AbstractPitRunnerTest {
 		whenThePitServerIsStarted();
 		thenTheServerListensOnThePort();
 		givenTheOptions(OPTIONS);
-		whenTheServerGetsOptions();
+		whenTheServerSendsOptions();
 		thenTheOptionsAreReceived();
 		givenTheResults(RESULTS);
-		whenTheServerSendsResults();
+		whenTheServerReceivesResults();
 		thenTheResultsAreSent();
 	}
 
@@ -82,28 +81,33 @@ public class PitServerTest extends AbstractPitRunnerTest {
 		when(socketProvider.createServerSocket(context.getPortNumber()))
 				.thenReturn(serverSocket);
 		when(serverSocket.accept()).thenReturn(connectionSocket);
+		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+		when(connectionSocket.getOutputStream()).thenReturn(byteOutputStream);
+		context.setOutputStream(byteOutputStream);
 		server.listen();
 	}
 
-	private void whenTheServerGetsOptions() throws IOException {
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		new ObjectOutputStream(byteOutputStream).writeObject(context
-				.getOptions());
-		InputStream inputStream = new ByteArrayInputStream(
-				byteOutputStream.toByteArray());
-		when(connectionSocket.getInputStream()).thenReturn(inputStream);
-		PitOptions results = context.getPitServer().readOptions();
-		context.setTransmittedOptions(results);
+	private void whenTheServerSendsOptions() throws IOException,
+			ClassNotFoundException {
+
+		PitServer server = context.getPitServer();
+		server.sendOptions(context.getOptions());
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(context
+				.getOutputStream().toByteArray());
+		PitOptions sentOptions = (PitOptions) new ObjectInputStream(inputStream)
+				.readObject();
+		context.setTransmittedOptions(sentOptions);
 	}
 
-	private void whenTheServerSendsResults() throws Exception {
+	private void whenTheServerReceivesResults() throws Exception {
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		when(connectionSocket.getOutputStream()).thenReturn(byteOutputStream);
-		context.getPitServer().sendResults(context.getResults());
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(
+		new ObjectOutputStream(byteOutputStream).writeObject(context
+				.getResults());
+		ByteArrayInputStream byteIntputStream = new ByteArrayInputStream(
 				byteOutputStream.toByteArray());
-		PitResults results = (PitResults) new ObjectInputStream(inputStream)
-				.readObject();
+		when(connectionSocket.getInputStream()).thenReturn(byteIntputStream);
+		PitResults results = context.getPitServer().receiveResults();
 		context.setTransmittedResults(results);
 	}
 

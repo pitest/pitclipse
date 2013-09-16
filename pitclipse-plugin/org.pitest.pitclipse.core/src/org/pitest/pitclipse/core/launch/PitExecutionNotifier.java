@@ -5,10 +5,9 @@ import java.util.concurrent.Executors;
 
 import org.pitest.pitclipse.core.extension.point.PitRuntimeOptions;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
-import org.pitest.pitclipse.pitrunner.client.PitClient;
-import org.pitest.pitclipse.pitrunner.client.PitClientProvider;
 import org.pitest.pitclipse.pitrunner.client.PitCommunicator;
 import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
+import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
 
@@ -18,10 +17,8 @@ public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
 	@Override
 	public void handleResults(PitRuntimeOptions runtimeOptions) {
 		PitResultHandler resultHandler = new ExtensionPointResultHandler();
-		PitClient client = new PitClientProvider().getClient(runtimeOptions
-				.getPortNumber());
-		executorService.execute(new PitCommunicator(client, runtimeOptions
+		PitServer server = new PitServer(runtimeOptions.getPortNumber());
+		executorService.execute(new PitCommunicator(server, runtimeOptions
 				.getOptions(), resultHandler));
 	}
-
 }

@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.client.PitClient.PitClientException;
 import org.pitest.pitclipse.pitrunner.io.SocketCreationException;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
@@ -28,6 +29,7 @@ public class PitServer implements Closeable {
 	private final SocketProvider socketProvider;
 	private ServerSocket serverSocket;
 	private Socket connection;
+	private ObjectOutputStream objectOutputStream;
 
 	public PitServer(int port, SocketProvider socketProvider) {
 		this.port = port;
@@ -42,40 +44,64 @@ public class PitServer implements Closeable {
 		serverSocket = socketProvider.createServerSocket(port);
 		try {
 			connection = serverSocket.accept();
+			objectOutputStream = new ObjectOutputStream(
+					connection.getOutputStream());
 		} catch (IOException e) {
 			throw new SocketCreationException(e);
 		}
 	}
 
-	public PitOptions readOptions() {
+	public void sendOptions(PitOptions options) {
 		try {
-			ObjectInputStream inputStream = new ObjectInputStream(
-					connection.getInputStream());
-			return (PitOptions) inputStream.readObject();
-		} catch (Exception e) {
-			throw new PitServerException(e);
+			objectOutputStream.writeObject(options);
+			objectOutputStream.flush();
+		} catch (IOException e) {
+			throw new PitClientException(e);
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
+		if (null != objectOutputStream) {
+			try {
+				objectOutputStream.close();
+			} finally {
+				objectOutputStream = null;
+			}
+		}
+
 		if (null != connection) {
-			connection.close();
-			connection = null;
+			try {
+				connection.close();
+			} finally {
+				connection = null;
+			}
 		}
 
 		if (null != serverSocket) {
-			serverSocket.close();
-			serverSocket = null;
+			try {
+				serverSocket.close();
+			} finally {
+				serverSocket = null;
+			}
 		}
 	}
 
-	public void sendResults(PitResults results) {
+	public PitResults receiveResults() {
+		ObjectInputStream stream = null;
 		try {
-			ObjectOutputStream outputStream = new ObjectOutputStream(
-					connection.getOutputStream());
-			outputStream.writeObject(results);
+			stream = new ObjectInputStream(connection.getInputStream());
+			return (PitResults) stream.readObject();
 		} catch (Exception e) {
 			throw new PitServerException(e);
+		} finally {
+			if (null != stream) {
+				try {
+					stream.close();
+				} catch (IOException e) {
+					throw new PitServerException(e);
+				}
+			}
 		}
 	}
 
