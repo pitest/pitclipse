@@ -22,6 +22,8 @@ public class PitClient implements Closeable {
 
 	}
 
+	private static final long SHORT_SLEEP = 100L;
+
 	private final int portNumber;
 	private final SocketProvider socketProvider;
 	private Socket socket;
@@ -48,6 +50,7 @@ public class PitClient implements Closeable {
 			}
 			outputStream.writeObject(results);
 			outputStream.flush();
+			Thread.sleep(SHORT_SLEEP);
 		} catch (Exception e) {
 			throw new PitClientException(e);
 		}
