@@ -9,7 +9,6 @@ import java.net.Socket;
 
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.client.PitClient.PitClientException;
 import org.pitest.pitclipse.pitrunner.io.SocketCreationException;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
@@ -44,8 +43,7 @@ public class PitServer implements Closeable {
 		serverSocket = socketProvider.createServerSocket(port);
 		try {
 			connection = serverSocket.accept();
-			objectOutputStream = new ObjectOutputStream(
-					connection.getOutputStream());
+			objectOutputStream = new ObjectOutputStream(connection.getOutputStream());
 		} catch (IOException e) {
 			throw new SocketCreationException(e);
 		}
@@ -56,7 +54,7 @@ public class PitServer implements Closeable {
 			objectOutputStream.writeObject(options);
 			objectOutputStream.flush();
 		} catch (IOException e) {
-			throw new PitClientException(e);
+			throw new PitServerException(e);
 		}
 	}
 

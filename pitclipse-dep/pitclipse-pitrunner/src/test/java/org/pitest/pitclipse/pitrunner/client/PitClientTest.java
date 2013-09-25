@@ -4,12 +4,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +15,7 @@ import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
+import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +25,7 @@ public class PitClientTest extends AbstractPitRunnerTest {
 	private SocketProvider socketProvider;
 
 	@Mock
-	private Socket connectionSocket;
+	private ObjectStreamSocket connectionSocket;
 
 	private PitRunnerTestContext context;
 
@@ -46,17 +42,24 @@ public class PitClientTest extends AbstractPitRunnerTest {
 	}
 
 	@Test
-	public void clientSendsOptionsAndReceivesResults() throws IOException,
-			ClassNotFoundException {
+	public void clientSendsOptionsAndReceivesResults() throws IOException, ClassNotFoundException {
 		givenThePortNumber(PORT);
 		whenThePitClientIsStarted();
 		thenTheClientConnectsOnThePort();
 		givenTheOptions(OPTIONS);
 		whenTheClientReceivesOptions();
-		thenTheOptionsAreSent();
+		thenTheOptionsAreReceived();
 		givenTheResults(RESULTS);
 		whenTheClientSendsResults();
-		thenTheResultsAreReceived();
+		thenTheResultsAreSent();
+	}
+
+	@Test
+	public void closingClientClosesTheSocket() throws IOException {
+		givenThePortNumber(PORT);
+		whenThePitClientIsStarted();
+		whenTheClientIsClosed();
+		thenTheSocketIsClosed();
 	}
 
 	private void givenTheOptions(PitOptions options) {
@@ -71,47 +74,42 @@ public class PitClientTest extends AbstractPitRunnerTest {
 		context.setResults(results);
 	}
 
-	private void whenThePitClientIsStarted() throws IOException {
-		PitClient client = new PitClient(context.getPortNumber(),
-				socketProvider);
+	private void whenThePitClientIsStarted() {
+		PitClient client = new PitClient(context.getPortNumber(), socketProvider);
 		context.setPitClient(client);
-		when(socketProvider.createClientSocket(context.getPortNumber()))
-				.thenReturn(connectionSocket);
+		when(socketProvider.createClientSocket(context.getPortNumber())).thenReturn(connectionSocket);
 		client.connect();
 	}
 
-	private void whenTheClientReceivesOptions() throws IOException {
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		new ObjectOutputStream(byteOutputStream).writeObject(context
-				.getOptions());
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(
-				byteOutputStream.toByteArray());
-		when(connectionSocket.getInputStream()).thenReturn(inputStream);
+	private void whenTheClientReceivesOptions() {
+		when(connectionSocket.read()).thenReturn(context.getOptions());
 		PitClient client = context.getPitClient();
 		context.setTransmittedOptions(client.readOptions());
 	}
 
-	private void whenTheClientSendsResults() throws IOException,
-			ClassNotFoundException {
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		when(connectionSocket.getOutputStream()).thenReturn(byteOutputStream);
+	private void whenTheClientSendsResults() {
 		context.getPitClient().sendResults(context.getResults());
-		PitResults transmittedResults = (PitResults) new ObjectInputStream(
-				new ByteArrayInputStream(byteOutputStream.toByteArray()))
-				.readObject();
-		context.setTransmittedResults(transmittedResults);
 	}
 
-	private void thenTheResultsAreReceived() {
-		assertThat(context.getTransmittedResults(), areEqualTo(RESULTS));
+	private void whenTheClientIsClosed() throws IOException {
+		context.getPitClient().close();
 	}
 
-	private void thenTheOptionsAreSent() throws IOException {
-		assertThat(context.getTransmittedOptions(), areEqualTo(OPTIONS));
+	private void thenTheResultsAreSent() {
+		verify(connectionSocket).write(context.getResults());
+	}
+
+	private void thenTheOptionsAreReceived() {
+		verify(connectionSocket).read();
+		assertThat(context.getTransmittedOptions(), areEqualTo(context.getOptions()));
 	}
 
 	private void thenTheClientConnectsOnThePort() {
 		verify(socketProvider).createClientSocket(context.getPortNumber());
+	}
+
+	private void thenTheSocketIsClosed() throws IOException {
+		verify(connectionSocket).close();
 	}
 
 }

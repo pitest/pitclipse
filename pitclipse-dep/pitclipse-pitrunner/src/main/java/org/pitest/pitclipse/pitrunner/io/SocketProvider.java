@@ -26,16 +26,15 @@ public class SocketProvider {
 		}
 	}
 
-	public Socket createClientSocket(int portNumber) {
+	public ObjectStreamSocket createClientSocket(int portNumber) {
 		int retryCount = 0;
 		while (true) {
 			try {
 				InetAddress localhost = InetAddress.getLocalHost();
 				Socket socket = new Socket();
-				SocketAddress endpoint = new InetSocketAddress(localhost,
-						portNumber);
+				SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
 				socket.connect(endpoint, DEFAULT_TIMEOUT);
-				return socket;
+				return ObjectStreamSocket.make(socket);
 			} catch (Exception e) {
 				if (retryCount < MAX_RETRIES) {
 					try {
