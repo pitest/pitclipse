@@ -8,6 +8,8 @@ import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class PitClient implements Closeable {
 
 	private final int portNumber;
@@ -18,7 +20,8 @@ public class PitClient implements Closeable {
 		this(portNumber, new SocketProvider());
 	}
 
-	public PitClient(int portNumber, SocketProvider socketProvider) {
+	@VisibleForTesting
+	PitClient(int portNumber, SocketProvider socketProvider) {
 		this.portNumber = portNumber;
 		this.socketProvider = socketProvider;
 	}
