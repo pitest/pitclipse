@@ -16,22 +16,17 @@ import com.google.common.collect.ImmutableList;
 
 public class PitRunnerTest {
 
-	private static final String TEST_CLASS = PitOptionsTest.class
-			.getCanonicalName();
-	private static final List<String> CLASS_PATH = ImmutableList
-			.of("org.pitest.pitclipse.pitrunner.*");// ;PITOptions.class.getCanonicalName(),
-													// PITRunner.class.getCanonicalName(),
-													// PITResults.class.getCanonicalName());
+	private static final String TEST_CLASS = PitOptionsTest.class.getCanonicalName();
+	private static final List<String> CLASS_PATH = ImmutableList.of("org.pitest.pitclipse.pitrunner.*");
 	private final PitRunner runner = new PitRunner();
 
 	@Test
 	public void runPIT() {
-		File srcDir = new File(System.getProperty("user.dir") + File.separator
-				+ "src" + File.separator + "main" + File.separator + "java");
+		File srcDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main"
+				+ File.separator + "java");
 
-		PitOptions options = PitOptions.builder().withSourceDirectory(srcDir)
-				.withClassUnderTest(TEST_CLASS).withClassesToMutate(CLASS_PATH)
-				.build();
+		PitOptions options = PitOptions.builder().withSourceDirectory(srcDir).withClassUnderTest(TEST_CLASS)
+				.withClassesToMutate(CLASS_PATH).build();
 		PitResults results = runner.runPIT(options);
 		assertNotNull(results);
 		assertTrue(fileExists(results.getHtmlResultFile()));
@@ -43,6 +38,5 @@ public class PitRunnerTest {
 	private boolean fileExists(File file) {
 		return null != file && file.exists();
 	}
-
 
 }

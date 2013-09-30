@@ -20,9 +20,8 @@ public class PitRunner {
 		File reportDir = options.getReportDirectory();
 		File htmlResultFile = findResultFile(reportDir, "index.html");
 		File xmlResultFile = findResultFile(reportDir, "mutations.xml");
-		return new PitResultsBuilder().withPitOptions(options)
-				.withHtmlResults(htmlResultFile).withXmlResults(xmlResultFile)
-				.build();
+		return new PitResultsBuilder().withPitOptions(options).withHtmlResults(htmlResultFile)
+				.withXmlResults(xmlResultFile).build();
 	}
 
 	private File findResultFile(File reportDir, String fileName) {
@@ -45,22 +44,19 @@ public class PitRunner {
 	public static void main(String[] args) {
 		validateArgs(args);
 		int port = valueOf(args[0]);
-
-		System.out.println("Starting on port: " + port);
-
-		PitClient server = new PitClient(port);
+		PitClient client = new PitClient(port);
 		try {
-			server.connect();
+			client.connect();
 			System.out.println("Connected");
-			PitOptions options = server.readOptions();
+			PitOptions options = client.readOptions();
 			System.out.println("Received options: " + options);
 			PitResults results = new PitRunner().runPIT(options);
 			System.out.println("Sending results: " + results);
-			server.sendResults(results);
+			client.sendResults(results);
 		} finally {
 			try {
 				System.out.println("Closing server");
-				server.close();
+				client.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

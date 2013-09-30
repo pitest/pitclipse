@@ -1,12 +1,12 @@
 package org.pitest.pitclipse.pitrunner.client;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.annotation.concurrent.Immutable;
 
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
-import org.pitest.pitclipse.pitrunner.server.PitServer.PitServerException;
 
 @Immutable
 public class PitCommunicator implements Runnable {
@@ -15,8 +15,7 @@ public class PitCommunicator implements Runnable {
 	private final PitResultHandler resultHandler;
 	private final PitServer server;
 
-	public PitCommunicator(PitServer server, PitOptions options,
-			PitResultHandler resultHandler) {
+	public PitCommunicator(PitServer server, PitOptions options, PitResultHandler resultHandler) {
 		this.server = server;
 		this.options = options;
 		this.resultHandler = resultHandler;
@@ -32,9 +31,18 @@ public class PitCommunicator implements Runnable {
 			try {
 				server.close();
 			} catch (IOException e) {
-				throw new PitServerException(e);
+				throw new CloseException(e);
 			}
 		}
+	}
+
+	public static final class CloseException extends RuntimeException implements Serializable {
+		public CloseException(IOException e) {
+			super(e);
+		}
+
+		private static final long serialVersionUID = -3841555200842571429L;
+
 	}
 
 }

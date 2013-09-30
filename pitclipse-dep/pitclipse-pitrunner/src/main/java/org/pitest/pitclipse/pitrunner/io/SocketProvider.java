@@ -1,8 +1,5 @@
 package org.pitest.pitclipse.pitrunner.io;
 
-import static java.lang.Thread.currentThread;
-import static java.lang.Thread.sleep;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -15,38 +12,31 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class SocketProvider {
 
-	private static final int DEFAULT_TIMEOUT = 1000;
-	private static final int MAX_RETRIES = 20;
+	private static final int DEFAULT_TIMEOUT = 20000;
 
-	public ServerSocket createServerSocket(int portNumber) {
+	public ObjectStreamSocket listen(int portNumber) {
+		ServerSocket serverSocket = null;
 		try {
-			return new ServerSocket(portNumber);
+			serverSocket = new ServerSocket(portNumber);
+			Socket connection = serverSocket.accept();
+			return ObjectStreamSocket.make(connection);
 		} catch (IOException e) {
 			throw new SocketCreationException(e);
+		} finally {
+			ensureClosed(serverSocket);
 		}
 	}
 
-	public ObjectStreamSocket createClientSocket(int portNumber) {
-		int retryCount = 0;
-		while (true) {
-			try {
-				InetAddress localhost = InetAddress.getLocalHost();
-				Socket socket = new Socket();
-				SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
-				socket.connect(endpoint, DEFAULT_TIMEOUT);
-				return ObjectStreamSocket.make(socket);
-			} catch (Exception e) {
-				if (retryCount < MAX_RETRIES) {
-					try {
-						sleep(DEFAULT_TIMEOUT);
-					} catch (InterruptedException ie) {
-						currentThread().interrupt();
-					}
-					retryCount++;
-				} else {
-					throw new SocketCreationException(e);
-				}
-			}
+	public ObjectStreamSocket connectTo(int portNumber) {
+		try {
+			InetAddress localhost = InetAddress.getLocalHost();
+			Socket socket = new Socket();
+			System.out.println("Connecting to: " + localhost + ":" + portNumber);
+			SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
+			socket.connect(endpoint, DEFAULT_TIMEOUT);
+			return ObjectStreamSocket.make(socket);
+		} catch (Exception e) {
+			throw new SocketCreationException(e);
 		}
 	}
 
@@ -64,6 +54,16 @@ public class SocketProvider {
 				} catch (IOException e) {
 				}
 			}
+		}
+	}
+
+	private void ensureClosed(ServerSocket serverSocket) {
+		try {
+			if (null != serverSocket) {
+				serverSocket.close();
+			}
+		} catch (IOException e) {
+			throw new SocketCreationException(e);
 		}
 	}
 

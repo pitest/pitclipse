@@ -27,7 +27,7 @@ public class PitClient implements Closeable {
 	}
 
 	public void connect() {
-		socket = socketProvider.createClientSocket(portNumber);
+		socket = socketProvider.connectTo(portNumber);
 	}
 
 	public void sendResults(PitResults results) {

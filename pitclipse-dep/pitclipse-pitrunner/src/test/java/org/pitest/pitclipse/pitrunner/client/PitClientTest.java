@@ -77,7 +77,7 @@ public class PitClientTest extends AbstractPitRunnerTest {
 	private void whenThePitClientIsStarted() {
 		PitClient client = new PitClient(context.getPortNumber(), socketProvider);
 		context.setPitClient(client);
-		when(socketProvider.createClientSocket(context.getPortNumber())).thenReturn(connectionSocket);
+		when(socketProvider.connectTo(context.getPortNumber())).thenReturn(connectionSocket);
 		client.connect();
 	}
 
@@ -105,7 +105,7 @@ public class PitClientTest extends AbstractPitRunnerTest {
 	}
 
 	private void thenTheClientConnectsOnThePort() {
-		verify(socketProvider).createClientSocket(context.getPortNumber());
+		verify(socketProvider).connectTo(context.getPortNumber());
 	}
 
 	private void thenTheSocketIsClosed() throws IOException {
