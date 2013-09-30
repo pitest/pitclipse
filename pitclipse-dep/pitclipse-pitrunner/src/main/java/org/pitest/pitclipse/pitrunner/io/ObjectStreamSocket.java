@@ -14,8 +14,7 @@ public class ObjectStreamSocket implements Closeable {
 	private final ObjectInputStream inputStream;
 	private final ObjectOutputStream outputStream;
 
-	private ObjectStreamSocket(Socket underlyingSocket,
-			ObjectInputStream inputStream, ObjectOutputStream outputStream) {
+	private ObjectStreamSocket(Socket underlyingSocket, ObjectInputStream inputStream, ObjectOutputStream outputStream) {
 		this.underlyingSocket = underlyingSocket;
 		this.inputStream = inputStream;
 		this.outputStream = outputStream;
@@ -23,10 +22,8 @@ public class ObjectStreamSocket implements Closeable {
 
 	public static ObjectStreamSocket make(Socket underlyingSocket) {
 		try {
-			ObjectInputStream inputStream = new ObjectInputStream(
-					underlyingSocket.getInputStream());
-			ObjectOutputStream outputStream = new ObjectOutputStream(
-					underlyingSocket.getOutputStream());
+			ObjectInputStream inputStream = new ObjectInputStream(underlyingSocket.getInputStream());
+			ObjectOutputStream outputStream = new ObjectOutputStream(underlyingSocket.getOutputStream());
 			return make(underlyingSocket, inputStream, outputStream);
 		} catch (IOException e) {
 			throw new StreamInitialisationException(e);
@@ -34,10 +31,9 @@ public class ObjectStreamSocket implements Closeable {
 	}
 
 	@VisibleForTesting
-	static ObjectStreamSocket make(Socket underlyingSocket,
-			ObjectInputStream inputStream, ObjectOutputStream outputStream) {
-		return new ObjectStreamSocket(underlyingSocket, inputStream,
-				outputStream);
+	static ObjectStreamSocket make(Socket underlyingSocket, ObjectInputStream inputStream,
+			ObjectOutputStream outputStream) {
+		return new ObjectStreamSocket(underlyingSocket, inputStream, outputStream);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -52,6 +48,7 @@ public class ObjectStreamSocket implements Closeable {
 	public <T> void write(T someObject) {
 		try {
 			outputStream.writeObject(someObject);
+			outputStream.flush();
 		} catch (Exception e) {
 			throw new WriteException(e);
 		}
@@ -86,8 +83,7 @@ public class ObjectStreamSocket implements Closeable {
 		underlyingSocket.close();
 	}
 
-	public static final class StreamInitialisationException extends
-			RuntimeException {
+	public static final class StreamInitialisationException extends RuntimeException {
 		private static final long serialVersionUID = 489374857284580542L;
 
 		public StreamInitialisationException(IOException e) {
