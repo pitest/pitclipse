@@ -22,8 +22,8 @@ public class ObjectStreamSocket implements Closeable {
 
 	public static ObjectStreamSocket make(Socket underlyingSocket) {
 		try {
-			ObjectInputStream inputStream = new ObjectInputStream(underlyingSocket.getInputStream());
 			ObjectOutputStream outputStream = new ObjectOutputStream(underlyingSocket.getOutputStream());
+			ObjectInputStream inputStream = new ObjectInputStream(underlyingSocket.getInputStream());
 			return make(underlyingSocket, inputStream, outputStream);
 		} catch (IOException e) {
 			throw new StreamInitialisationException(e);
