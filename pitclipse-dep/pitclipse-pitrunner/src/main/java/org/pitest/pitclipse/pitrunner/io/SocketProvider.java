@@ -18,6 +18,7 @@ public class SocketProvider {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(portNumber);
+			System.out.println("Listening on: " + serverSocket.getInetAddress() + ":" + portNumber);
 			Socket connection = serverSocket.accept();
 			return ObjectStreamSocket.make(connection);
 		} catch (IOException e) {
@@ -29,7 +30,7 @@ public class SocketProvider {
 
 	public ObjectStreamSocket connectTo(int portNumber) {
 		try {
-			InetAddress localhost = InetAddress.getLocalHost();
+			InetAddress localhost = InetAddress.getByName(null);
 			Socket socket = new Socket();
 			System.out.println("Connecting to: " + localhost + ":" + portNumber);
 			SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);

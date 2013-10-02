@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui;bundle-version="3.6.2",
  org.pitest.pitclipse-pitrunner;bundle-version="0.31.2",
  org.pitest.osgi;bundle-version="0.31.1",
- org.jdom;bundle-version="1.0.0"
+ org.jdom;bundle-version="1.1.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org
