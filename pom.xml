@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse</artifactId>
-  <version>0.31.3.201310021745</version>
+  <version>0.31.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <organization>
     <name>Pitest.org</name>
