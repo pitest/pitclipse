@@ -33,9 +33,8 @@ public final class PitOptions implements Serializable {
 	private final List<String> excludedMethods;
 	private final List<String> avoidCallsTo;
 
-	private PitOptions(String classUnderTest, List<String> classesToMutate,
-			List<File> sourceDirs, File reportDir, List<String> packages,
-			int threads, File historyLocation, List<String> excludedClasses,
+	private PitOptions(String classUnderTest, List<String> classesToMutate, List<File> sourceDirs, File reportDir,
+			List<String> packages, int threads, File historyLocation, List<String> excludedClasses,
 			List<String> excludedMethods, List<String> avoidCallsTo) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
@@ -59,11 +58,9 @@ public final class PitOptions implements Serializable {
 
 	public String[] toCLIArgs() {
 		Builder<String> builder = ImmutableList.builder();
-		builder.add("--failWhenNoMutations", "false", "--outputFormats",
-				"HTML,XML", "--threads", Integer.toString(threads), "--reportDir",
-				reportDir.getPath(), "--targetTests", toTest(),
-				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(),
-				"--verbose");
+		builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,XML", "--threads",
+				Integer.toString(threads), "--reportDir", reportDir.getPath(), "--targetTests", toTest(),
+				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(), "--verbose");
 		builder.addAll(historyLocation());
 		builder.addAll(excludedClasses());
 		builder.addAll(excludedMethods());
@@ -182,8 +179,7 @@ public final class PitOptions implements Serializable {
 		private File historyLocation = null;
 		private List<String> excludedClasses = of();
 		private List<String> excludedMethods = of();
-		private List<String> avoidCallsTo = ImmutableList.copyOf(Splitter
-				.on(',').trimResults().omitEmptyStrings()
+		private List<String> avoidCallsTo = ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings()
 				.split(DEFAULT_AVOID_CALLS_TO_LIST));
 
 		private PitOptionsBuilder() {
@@ -208,9 +204,8 @@ public final class PitOptions implements Serializable {
 			validateTestClass();
 			initialiseReportDir();
 			initialiseHistoryLocation();
-			return new PitOptions(classUnderTest, classesToMutate, sourceDirs,
-					reportDir, packages, threads, historyLocation,
-					excludedClasses, excludedMethods, avoidCallsTo);
+			return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, threads,
+					historyLocation, excludedClasses, excludedMethods, avoidCallsTo);
 		}
 
 		private void initialiseReportDir() {
@@ -221,8 +216,7 @@ public final class PitOptions implements Serializable {
 				try {
 					createParentDirs(reportDir);
 					if (!reportDir.mkdir()) {
-						throw new PitLaunchException(
-								"Directory could not be created: " + reportDir);
+						throw new PitLaunchException("Directory could not be created: " + reportDir);
 					}
 				} catch (IOException e) {
 					rethrow(reportDir, e);
@@ -231,8 +225,7 @@ public final class PitOptions implements Serializable {
 		}
 
 		private void initialiseHistoryLocation() {
-			if (null != historyLocation
-					&& !historyLocation.getParentFile().exists()) {
+			if (null != historyLocation && !historyLocation.getParentFile().exists()) {
 				try {
 					createParentDirs(historyLocation);
 				} catch (IOException e) {
@@ -247,8 +240,7 @@ public final class PitOptions implements Serializable {
 			}
 			for (File dir : sourceDirs) {
 				if (!dir.exists()) {
-					throw new PitLaunchException("Directory does not exist: "
-							+ dir);
+					throw new PitLaunchException("Directory does not exist: " + dir);
 				}
 			}
 		}
@@ -288,14 +280,12 @@ public final class PitOptions implements Serializable {
 			return this;
 		}
 
-		public PitOptionsBuilder withExcludedClasses(
-				List<String> excludedClasses) {
+		public PitOptionsBuilder withExcludedClasses(List<String> excludedClasses) {
 			this.excludedClasses = copyOf(excludedClasses);
 			return this;
 		}
 
-		public PitOptionsBuilder withExcludedMethods(
-				List<String> excludedMethods) {
+		public PitOptionsBuilder withExcludedMethods(List<String> excludedMethods) {
 			this.excludedMethods = copyOf(excludedMethods);
 			return this;
 		}
@@ -306,8 +296,7 @@ public final class PitOptions implements Serializable {
 		}
 	}
 
-	public static final class PitLaunchException extends
-			IllegalArgumentException {
+	public static final class PitLaunchException extends IllegalArgumentException {
 		private static final long serialVersionUID = -8657782829090737433L;
 
 		public PitLaunchException(String msg, Exception e) {
@@ -321,14 +310,6 @@ public final class PitOptions implements Serializable {
 
 	public String getClassUnderTest() {
 		return classUnderTest;
-	}
-
-	public String toCLIArgsAsString() {
-		StringBuilder argsBuilder = new StringBuilder();
-		for (String arg : toCLIArgs()) {
-			argsBuilder.append(' ').append(arg);
-		}
-		return argsBuilder.toString().trim();
 	}
 
 	public List<String> getTestPackages() {
@@ -369,12 +350,9 @@ public final class PitOptions implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PitOptions [reportDir=" + reportDir + ", classUnderTest="
-				+ classUnderTest + ", classesToMutate=" + classesToMutate
-				+ ", sourceDirs=" + sourceDirs + ", packages=" + packages
-				+ ", threads=" + threads + ", historyLocation="
-				+ historyLocation + ", excludedClasses=" + excludedClasses
-				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo="
-				+ avoidCallsTo + "]";
+		return "PitOptions [reportDir=" + reportDir + ", classUnderTest=" + classUnderTest + ", classesToMutate="
+				+ classesToMutate + ", sourceDirs=" + sourceDirs + ", packages=" + packages + ", threads=" + threads
+				+ ", historyLocation=" + historyLocation + ", excludedClasses=" + excludedClasses
+				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + "]";
 	}
 }
