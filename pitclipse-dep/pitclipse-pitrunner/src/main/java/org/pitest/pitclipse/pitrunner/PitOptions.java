@@ -16,7 +16,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.Lists;
 
 @Immutable
 public final class PitOptions implements Serializable {
@@ -54,103 +53,6 @@ public final class PitOptions implements Serializable {
 
 	public List<File> getSourceDirectories() {
 		return copyOfFiles(sourceDirs);
-	}
-
-	public String[] toCLIArgs() {
-		Builder<String> builder = ImmutableList.builder();
-		builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,XML", "--threads",
-				Integer.toString(threads), "--reportDir", reportDir.getPath(), "--targetTests", toTest(),
-				"--targetClasses", classpath(), "--sourceDirs", sourceDirs(), "--verbose");
-		builder.addAll(historyLocation());
-		builder.addAll(excludedClasses());
-		builder.addAll(excludedMethods());
-		builder.addAll(avoidedCalls());
-		List<String> args = builder.build();
-		return args.toArray(new String[args.size()]);
-	}
-
-	private List<String> excludedClasses() {
-		Builder<String> builder = ImmutableList.builder();
-		if (!excludedClasses.isEmpty()) {
-			builder.add("--excludedClasses");
-			builder.add(concat(commaSeperate(excludedClasses)));
-		}
-		return builder.build();
-	}
-
-	private List<String> excludedMethods() {
-		Builder<String> builder = ImmutableList.builder();
-		if (!excludedMethods.isEmpty()) {
-			builder.add("--excludedMethods");
-			builder.add(concat(commaSeperate(excludedMethods)));
-		}
-		return builder.build();
-	}
-
-	private List<String> avoidedCalls() {
-		Builder<String> builder = ImmutableList.builder();
-		if (!avoidCallsTo.isEmpty()) {
-			builder.add("--avoidCallsTo");
-			builder.add(concat(commaSeperate(avoidCallsTo)));
-		}
-		return builder.build();
-	}
-
-	private List<String> historyLocation() {
-		Builder<String> builder = ImmutableList.builder();
-		if (null != historyLocation) {
-			builder.add("--historyInputLocation");
-			builder.add(historyLocation.getPath());
-			builder.add("--historyOutputLocation");
-			builder.add(historyLocation.getPath());
-		}
-		return builder.build();
-	}
-
-	private String toTest() {
-		if (packages.isEmpty()) {
-			return classUnderTest;
-		} else {
-			return concat(commaSeperate(packages));
-		}
-	}
-
-	private String sourceDirs() {
-		return concat(commaSeperate(fileAsStrings(sourceDirs)));
-	}
-
-	private List<String> fileAsStrings(List<File> files) {
-		Builder<String> builder = ImmutableList.builder();
-		for (File file : files) {
-			builder.add(file.getPath());
-		}
-		return builder.build();
-	}
-
-	private String classpath() {
-		return concat(commaSeperate(classesToMutate));
-	}
-
-	private String concat(List<String> entries) {
-		StringBuilder result = new StringBuilder();
-		for (String entry : entries) {
-			result.append(entry);
-		}
-		return result.toString();
-	}
-
-	private List<String> commaSeperate(List<String> candidates) {
-		List<String> formattedCandidates = Lists.newArrayList();
-		int size = candidates.size();
-		for (int i = 0; i < size; i++) {
-			String candidate = candidates.get(i).trim();
-			if (i != size - 1) {
-				formattedCandidates.add(candidate + ",");
-			} else {
-				formattedCandidates.add(candidate);
-			}
-		}
-		return formattedCandidates;
 	}
 
 	private static File copyOfFile(File sourceDir) {

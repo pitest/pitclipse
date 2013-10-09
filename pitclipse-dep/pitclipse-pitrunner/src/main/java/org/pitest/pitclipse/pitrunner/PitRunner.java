@@ -16,7 +16,8 @@ import org.pitest.pitclipse.pitrunner.client.PitClient;
 public class PitRunner {
 
 	public PitResults runPIT(PitOptions options) {
-		MutationCoverageReport.main(options.toCLIArgs());
+		String[] cliArgs = PitCliArguments.from(options);
+		MutationCoverageReport.main(cliArgs);
 		File reportDir = options.getReportDirectory();
 		File htmlResultFile = findResultFile(reportDir, "index.html");
 		File xmlResultFile = findResultFile(reportDir, "mutations.xml");
