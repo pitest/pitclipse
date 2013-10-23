@@ -6,7 +6,6 @@ import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -232,7 +231,7 @@ public class LaunchConfigurationWrapper {
 		return launchConfig.getMappedResources();
 	}
 
-	public Set<String> getMutatedProjects() throws CoreException {
+	public List<String> getMutatedProjects() throws CoreException {
 		return projectFinder.getProjects(this);
 	}
 

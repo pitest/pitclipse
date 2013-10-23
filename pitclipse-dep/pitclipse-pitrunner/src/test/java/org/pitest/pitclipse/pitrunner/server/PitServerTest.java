@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
@@ -46,7 +46,7 @@ public class PitServerTest extends AbstractPitRunnerTest {
 		givenThePortNumber(PORT);
 		whenThePitServerIsStarted();
 		thenTheServerListensOnThePort();
-		givenTheOptions(OPTIONS);
+		givenTheRequest(REQUEST);
 		whenTheServerSendsOptions();
 		thenTheOptionsAreSent();
 		givenTheResults(RESULTS);
@@ -63,8 +63,8 @@ public class PitServerTest extends AbstractPitRunnerTest {
 		thenTheUnderlyingConnectionIsClosed();
 	}
 
-	private void givenTheOptions(PitOptions options) {
-		context.setOptions(options);
+	private void givenTheRequest(PitRequest request) {
+		context.setRequest(request);
 	}
 
 	private void givenThePortNumber(int port) {
@@ -84,7 +84,7 @@ public class PitServerTest extends AbstractPitRunnerTest {
 
 	private void whenTheServerSendsOptions() {
 		PitServer server = context.getPitServer();
-		server.sendOptions(context.getOptions());
+		server.sendRequest(context.getRequest());
 	}
 
 	private void whenTheServerReceivesResults() {
@@ -107,7 +107,7 @@ public class PitServerTest extends AbstractPitRunnerTest {
 	}
 
 	private void thenTheOptionsAreSent() {
-		verify(objectSocket).write(context.getOptions());
+		verify(objectSocket).write(context.getRequest());
 	}
 
 	private void thenTheUnderlyingConnectionIsClosed() throws IOException {

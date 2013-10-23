@@ -8,16 +8,16 @@ import org.pitest.pitclipse.pitrunner.server.PitServer;
 public final class PitRunnerTestContext {
 
 	private int portNumber;
-	private PitOptions options;
+	private PitRequest request;
 	private PitServer pitServer;
-	private PitOptions transmittedOptions;
+	private PitRequest transmittedRequest;
 	private PitClient client;
 	private PitResults results;
 	private PitResults transmittedResults;
 	private ByteArrayOutputStream outputStream;
 
-	public PitOptions getOptions() {
-		return options;
+	public PitRequest getRequest() {
+		return request;
 	}
 
 	public int getPortNumber() {
@@ -32,20 +32,20 @@ public final class PitRunnerTestContext {
 		portNumber = port;
 	}
 
-	public void setOptions(PitOptions options) {
-		this.options = options;
+	public void setRequest(PitRequest request) {
+		this.request = request;
 	}
 
 	public PitServer getPitServer() {
 		return pitServer;
 	}
 
-	public void setTransmittedOptions(PitOptions transmittedOptions) {
-		this.transmittedOptions = transmittedOptions;
+	public void setTransmittedRequest(PitRequest pitRequest) {
+		this.transmittedRequest = pitRequest;
 	}
 
-	public PitOptions getTransmittedOptions() {
-		return transmittedOptions;
+	public PitRequest getTransmittedRequest() {
+		return transmittedRequest;
 	}
 
 	public void setPitClient(PitClient client) {

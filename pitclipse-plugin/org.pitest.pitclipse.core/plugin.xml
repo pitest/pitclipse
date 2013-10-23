@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
   <extension-point id="org.pitest.pitclipse.core.results" name="PitResults" schema="schema/org.pitest.pitclipse.core.results.exsd"/>
+  <extension-point id="org.pitest.pitclipse.core.mutations.results" name="PitMutationsResults" schema="schema/org.pitest.pitclipse.core.mutations.results.exsd"/>
   <extension-point id="org.pitest.pitclipse.core.executePit" name="PitExecutor" schema="schema/org.pitest.pitclipse.core.executePit.exsd"/>
   <extension
       point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -60,5 +61,10 @@
      <pit_options
            class="org.pitest.pitclipse.core.launch.PitExecutionNotifier">
      </pit_options>
+  </extension>
+  <extension
+        point="org.pitest.pitclipse.core.results">
+     <results
+           class="org.pitest.pitclipse.core.result.MutationsModelNotifier"></results>
   </extension>
 </plugin>

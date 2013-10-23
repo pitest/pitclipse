@@ -2,6 +2,7 @@ package org.pitest.pitclipse.pitrunner;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.JAXBContext;
@@ -12,24 +13,26 @@ import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
 
+import com.google.common.collect.ImmutableList;
+
 @Immutable
 public final class PitResults implements Serializable {
+	private static final long serialVersionUID = 5457147591186148047L;
 
 	private static final JAXBContext MUTATIONS_CONTEXT = theJaxbContext();
-	
-	private static final long serialVersionUID = 5271802933404287709L;
+
 	private final File htmlResultFile;
 	private final File xmlResultFile;
 
-	private final PitOptions options;
-
 	private final Mutations mutations;
 
-	private PitResults(PitOptions options, File htmlResultFile, File xmlResultFile, Mutations mutations) {
-		this.options = options;
+	private final ImmutableList<String> projects;
+
+	private PitResults(File htmlResultFile, File xmlResultFile, Mutations mutations, ImmutableList<String> projects) {
 		this.htmlResultFile = htmlResultFile;
 		this.xmlResultFile = xmlResultFile;
 		this.mutations = mutations;
+		this.projects = projects;
 	};
 
 	private static JAXBContext theJaxbContext() {
@@ -44,7 +47,6 @@ public final class PitResults implements Serializable {
 		return htmlResultFile;
 	}
 
-	
 	public File getXmlResultFile() {
 		return xmlResultFile;
 	}
@@ -52,7 +54,10 @@ public final class PitResults implements Serializable {
 	public static final class PitResultsBuilder {
 		private File htmlResultFile = null;
 		private File xmlResultFile = null;
-		private PitOptions options = null;
+		private ImmutableList<String> projects = ImmutableList.of();
+
+		private PitResultsBuilder() {
+		}
 
 		public PitResults build() {
 			validateResultsFile();
@@ -63,7 +68,7 @@ public final class PitResults implements Serializable {
 			} catch (JAXBException e) {
 				mutations = new ObjectFactory().createMutations();
 			}
-			return new PitResults(options, htmlResultFile, xmlResultFile, mutations);
+			return new PitResults(htmlResultFile, xmlResultFile, mutations, projects);
 		}
 
 		public PitResultsBuilder withHtmlResults(File htmlResultFile) {
@@ -75,11 +80,6 @@ public final class PitResults implements Serializable {
 			this.xmlResultFile = new File(xmlResultFile.getPath());
 			return this;
 		}
-		
-		public PitResultsBuilder withPitOptions(PitOptions options) {
-			this.options = options;
-			return this;
-		}
 
 		private void validateResultsFile() {
 			if (null == htmlResultFile) {
@@ -89,28 +89,35 @@ public final class PitResults implements Serializable {
 				throw new PitLaunchException("PIT XML Result File not set");
 			}
 			if (!htmlResultFile.exists()) {
-				throw new PitLaunchException("File does not exist: "
-						+ htmlResultFile);
+				throw new PitLaunchException("File does not exist: " + htmlResultFile);
 			}
 			if (!xmlResultFile.exists()) {
-				throw new PitLaunchException("File does not exist: "
-						+ xmlResultFile);
+				throw new PitLaunchException("File does not exist: " + xmlResultFile);
 			}
+		}
+
+		public PitResultsBuilder withProjects(List<String> projects) {
+			this.projects = ImmutableList.copyOf(projects);
+			return this;
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "PitResults [htmlResultFile=" + htmlResultFile
-				+ ", xmlResultFile=" + xmlResultFile + "]";
+		return "PitResults [htmlResultFile=" + htmlResultFile + ", xmlResultFile=" + xmlResultFile + ", projects="
+				+ projects + "]";
 	}
 
 	public Mutations getMutations() {
 		return mutations;
 	}
 
-	public PitOptions getPitOptions() {
-		return options;
+	public static PitResultsBuilder builder() {
+		return new PitResultsBuilder();
+	}
+
+	public ImmutableList<String> getProjects() {
+		return projects;
 	}
 
 }

@@ -5,18 +5,17 @@ import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf
 import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
 
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 public class WorkspaceLevelProjectFinder implements ProjectFinder {
 	@Override
-	public Set<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-		Builder<String> results = ImmutableSet.builder();
+	public List<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
+		Builder<String> results = ImmutableList.builder();
 		IJavaProject testProject = configurationWrapper.getProject();
 		List<IJavaProject> projects = getOpenJavaProjects();
 		for (IJavaProject project : projects) {

@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
@@ -46,7 +46,7 @@ public class PitClientTest extends AbstractPitRunnerTest {
 		givenThePortNumber(PORT);
 		whenThePitClientIsStarted();
 		thenTheClientConnectsOnThePort();
-		givenTheOptions(OPTIONS);
+		givenTheRequest(REQUEST);
 		whenTheClientReceivesOptions();
 		thenTheOptionsAreReceived();
 		givenTheResults(RESULTS);
@@ -62,8 +62,8 @@ public class PitClientTest extends AbstractPitRunnerTest {
 		thenTheSocketIsClosed();
 	}
 
-	private void givenTheOptions(PitOptions options) {
-		context.setOptions(options);
+	private void givenTheRequest(PitRequest request) {
+		context.setRequest(request);
 	}
 
 	private void givenThePortNumber(int port) {
@@ -82,9 +82,9 @@ public class PitClientTest extends AbstractPitRunnerTest {
 	}
 
 	private void whenTheClientReceivesOptions() {
-		when(connectionSocket.read()).thenReturn(context.getOptions());
+		when(connectionSocket.read()).thenReturn(context.getRequest());
 		PitClient client = context.getPitClient();
-		context.setTransmittedOptions(client.readOptions());
+		context.setTransmittedRequest(client.readRequest());
 	}
 
 	private void whenTheClientSendsResults() {
@@ -101,7 +101,7 @@ public class PitClientTest extends AbstractPitRunnerTest {
 
 	private void thenTheOptionsAreReceived() {
 		verify(connectionSocket).read();
-		assertThat(context.getTransmittedOptions(), areEqualTo(context.getOptions()));
+		assertThat(context.getTransmittedRequest(), areEqualTo(context.getRequest()));
 	}
 
 	private void thenTheClientConnectsOnThePort() {

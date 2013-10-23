@@ -1,18 +1,18 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 public class ProjectLevelProjectFinder implements ProjectFinder {
 
 	@Override
-	public Set<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
+	public List<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
 		IJavaProject project = configurationWrapper.getProject();
-		return ImmutableSet.of(project.getProject().getName());
+		return ImmutableList.of(project.getProject().getName());
 	}
 
 }

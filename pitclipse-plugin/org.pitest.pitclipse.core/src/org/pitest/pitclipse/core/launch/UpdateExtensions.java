@@ -14,9 +14,9 @@ public class UpdateExtensions implements Runnable {
 		this.results = results;
 	}
 
+	@Override
 	public void run() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		new ExtensionPointHandler<PitResults>(EXTENSION_POINT_ID).execute(
-				registry, results);
+		new ExtensionPointHandler<PitResults>(EXTENSION_POINT_ID).execute(registry, results);
 	}
 }

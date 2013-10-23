@@ -13,16 +13,18 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitCommunicatorTest {
 
-	private static final PitOptions OPTIONS = PitOptions
-			.builder()
-			.withSourceDirectory(new File(System.getProperty("java.io.tmpdir")))
-			.withClassUnderTest("Test Class").build();
+	private static final PitOptions OPTIONS = PitOptions.builder()
+			.withSourceDirectory(new File(System.getProperty("java.io.tmpdir"))).withClassUnderTest("Test Class")
+			.build();
+
+	protected static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).build();
 
 	private static final PitResults RESULTS = null;
 
@@ -51,21 +53,19 @@ public class PitCommunicatorTest {
 
 	private void whenPitCommunicatorIsRun() {
 		when(server.receiveResults()).thenReturn(RESULTS);
-		PitCommunicator communicator = new PitCommunicator(server, OPTIONS,
-				handler);
+		PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
 		communicator.run();
 	}
 
 	private void whenPitCommunicatorGetsAnError() {
 		when(server.receiveResults()).thenThrow(new RuntimeException("Boom"));
-		PitCommunicator communicator = new PitCommunicator(server, OPTIONS,
-				handler);
+		PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
 		communicator.run();
 	}
 
 	private void thenTheServerIsCalled() throws IOException {
 		verify(server).listen();
-		verify(server).sendOptions(OPTIONS);
+		verify(server).sendRequest(REQUEST);
 		verify(server).receiveResults();
 		verify(server).close();
 		verifyNoMoreInteractions(server);

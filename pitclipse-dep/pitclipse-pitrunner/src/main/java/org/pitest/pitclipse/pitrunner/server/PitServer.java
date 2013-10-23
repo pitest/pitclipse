@@ -3,7 +3,7 @@ package org.pitest.pitclipse.pitrunner.server;
 import java.io.Closeable;
 import java.io.IOException;
 
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
@@ -27,8 +27,8 @@ public class PitServer implements Closeable {
 		socket = socketProvider.listen(port);
 	}
 
-	public void sendOptions(PitOptions options) {
-		socket.write(options);
+	public void sendRequest(PitRequest request) {
+		socket.write(request);
 	}
 
 	@Override

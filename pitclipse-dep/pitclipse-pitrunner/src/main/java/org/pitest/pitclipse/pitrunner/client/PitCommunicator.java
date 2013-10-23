@@ -5,19 +5,19 @@ import java.io.Serializable;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 @Immutable
 public class PitCommunicator implements Runnable {
 
-	private final PitOptions options;
+	private final PitRequest request;
 	private final PitResultHandler resultHandler;
 	private final PitServer server;
 
-	public PitCommunicator(PitServer server, PitOptions options, PitResultHandler resultHandler) {
+	public PitCommunicator(PitServer server, PitRequest request, PitResultHandler resultHandler) {
 		this.server = server;
-		this.options = options;
+		this.request = request;
 		this.resultHandler = resultHandler;
 	}
 
@@ -25,7 +25,7 @@ public class PitCommunicator implements Runnable {
 	public void run() {
 		try {
 			server.listen();
-			server.sendOptions(options);
+			server.sendRequest(request);
 			resultHandler.handle(server.receiveResults());
 		} finally {
 			try {

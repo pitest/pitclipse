@@ -1,9 +1,9 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 
 public interface ProjectFinder {
-	Set<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException;
+	List<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException;
 }

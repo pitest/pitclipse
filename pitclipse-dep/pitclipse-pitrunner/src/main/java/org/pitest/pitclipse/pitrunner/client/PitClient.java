@@ -3,7 +3,7 @@ package org.pitest.pitclipse.pitrunner.client;
 import java.io.Closeable;
 import java.io.IOException;
 
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
@@ -34,7 +34,7 @@ public class PitClient implements Closeable {
 		socket.write(results);
 	}
 
-	public PitOptions readOptions() {
+	public PitRequest readRequest() {
 		return socket.read();
 	}
 

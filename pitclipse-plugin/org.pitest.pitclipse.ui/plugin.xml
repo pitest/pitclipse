@@ -18,13 +18,23 @@
           category="org.pitest.pitclipse.ui.view.category"
           name="PIT Summary"
           restorable="true"/>
-<!--       <view
+      <view
           allowMultiple="false"
-          class="org.pitest.pitclipse.ui.view.PitMutationsView"
+          class="org.pitest.pitclipse.ui.view.mutations.PitMutationsView"
           icon="icons/pit.gif"
-          id="org.pitest.pitclipse.ui.view.PitMutationsView"
+          id="org.pitest.pitclipse.ui.view.mutations.PitMutationsView"
           category="org.pitest.pitclipse.ui.view.category"
           name="PIT Mutations"
-          restorable="true"/> -->   
+          restorable="true"/>
+   </extension>
+   <extension
+         point="org.pitest.pitclipse.core.executePit">
+      <pit_options
+            class="org.pitest.pitclipse.ui.view.PitExecutionStarted"></pit_options>
+   </extension>
+   <extension
+         point="org.pitest.pitclipse.core.mutations.results">
+      <results
+            class="org.pitest.pitclipse.ui.view.mutations.MutationModelChangedNotifier"></results>
    </extension>
 </plugin>
