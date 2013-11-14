@@ -2,6 +2,7 @@ package org.pitest.pitclipse.pitrunner.service;
 
 import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.pitrunner.model.ModelBuilder;
 import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 import org.pitest.pitclipse.pitrunner.server.PitServerProvider;

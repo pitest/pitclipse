@@ -87,4 +87,53 @@ public class Mutation implements Visitable {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((killingTest == null) ? 0 : killingTest.hashCode());
+		result = prime * result + lineNumber;
+		result = prime * result + ((mutatedMethod == null) ? 0 : mutatedMethod.hashCode());
+		result = prime * result + ((mutator == null) ? 0 : mutator.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mutation other = (Mutation) obj;
+		if (killingTest == null) {
+			if (other.killingTest != null)
+				return false;
+		} else if (!killingTest.equals(other.killingTest))
+			return false;
+		if (lineNumber != other.lineNumber)
+			return false;
+		if (mutatedMethod == null) {
+			if (other.mutatedMethod != null)
+				return false;
+		} else if (!mutatedMethod.equals(other.mutatedMethod))
+			return false;
+		if (mutator == null) {
+			if (other.mutator != null)
+				return false;
+		} else if (!mutator.equals(other.mutator))
+			return false;
+		if (status != other.status)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Mutation [killingTest=" + killingTest + ", lineNumber=" + lineNumber + ", mutatedMethod="
+				+ mutatedMethod + ", mutator=" + mutator + ", status=" + status + "]";
+	}
+
 }

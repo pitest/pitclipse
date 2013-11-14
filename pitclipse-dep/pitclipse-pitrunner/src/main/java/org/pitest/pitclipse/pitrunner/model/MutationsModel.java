@@ -8,20 +8,20 @@ import com.google.common.collect.ImmutableList;
 
 public class MutationsModel implements Visitable {
 
-	public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<ProjectMutations> of());
+	public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<Status> of());
 
-	private final List<ProjectMutations> projectMutations;
+	private final ImmutableList<Status> statuses;
 
-	private MutationsModel(List<ProjectMutations> projectMutations) {
-		this.projectMutations = copyOf(projectMutations);
+	private MutationsModel(ImmutableList<Status> statuses) {
+		this.statuses = statuses;
 	}
 
-	public static MutationsModel make(List<ProjectMutations> projectMutations) {
-		return new MutationsModel(projectMutations);
+	public static MutationsModel make(List<Status> statuses) {
+		return new MutationsModel(copyOf(statuses));
 	}
 
-	public List<ProjectMutations> getProjectMutations() {
-		return copyOf(projectMutations);
+	public List<Status> getStatuses() {
+		return statuses;
 	}
 
 	@Override
@@ -29,4 +29,33 @@ public class MutationsModel implements Visitable {
 		return visitor.visitModel(this);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((statuses == null) ? 0 : statuses.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MutationsModel other = (MutationsModel) obj;
+		if (statuses == null) {
+			if (other.statuses != null)
+				return false;
+		} else if (!statuses.equals(other.statuses))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MutationsModel [statuses=" + statuses + "]";
+	}
 }

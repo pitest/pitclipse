@@ -19,8 +19,6 @@ import com.google.common.collect.ImmutableList;
 public final class PitResults implements Serializable {
 	private static final long serialVersionUID = 5457147591186148047L;
 
-	private static final JAXBContext MUTATIONS_CONTEXT = theJaxbContext();
-
 	private final File htmlResultFile;
 	private final File xmlResultFile;
 
@@ -35,14 +33,6 @@ public final class PitResults implements Serializable {
 		this.projects = projects;
 	};
 
-	private static JAXBContext theJaxbContext() {
-		try {
-			return JAXBContext.newInstance(Mutations.class);
-		} catch (JAXBException e) {
-			throw new RuntimeException("Unable to create a JAXB context", e);
-		}
-	}
-
 	public File getHtmlResultFile() {
 		return htmlResultFile;
 	}
@@ -51,53 +41,61 @@ public final class PitResults implements Serializable {
 		return xmlResultFile;
 	}
 
-	public static final class PitResultsBuilder {
+	public static final class Builder {
+
+		private static final JAXBContext MUTATIONS_CONTEXT = theJaxbContext();
+
+		private static JAXBContext theJaxbContext() {
+			try {
+				return JAXBContext.newInstance(Mutations.class);
+			} catch (JAXBException e) {
+				throw new RuntimeException("Unable to create a JAXB context", e);
+			}
+		}
+
 		private File htmlResultFile = null;
 		private File xmlResultFile = null;
 		private ImmutableList<String> projects = ImmutableList.of();
+		private Mutations mutations = new ObjectFactory().createMutations();
 
-		private PitResultsBuilder() {
+		private Builder() {
 		}
 
 		public PitResults build() {
-			validateResultsFile();
-			Mutations mutations = null;
+			return new PitResults(htmlResultFile, xmlResultFile, mutations, projects);
+		}
+
+		public Builder withHtmlResults(File htmlResultFile) {
+			checkFileExists(htmlResultFile);
+			this.htmlResultFile = new File(htmlResultFile.getPath());
+			return this;
+		}
+
+		public Builder withXmlResults(File xmlResultFile) {
+			checkFileExists(xmlResultFile);
+			this.xmlResultFile = new File(xmlResultFile.getPath());
 			try {
 				Unmarshaller unmarshaller = MUTATIONS_CONTEXT.createUnmarshaller();
 				mutations = (Mutations) unmarshaller.unmarshal(xmlResultFile);
 			} catch (JAXBException e) {
 				mutations = new ObjectFactory().createMutations();
 			}
-			return new PitResults(htmlResultFile, xmlResultFile, mutations, projects);
-		}
-
-		public PitResultsBuilder withHtmlResults(File htmlResultFile) {
-			this.htmlResultFile = new File(htmlResultFile.getPath());
 			return this;
 		}
 
-		public PitResultsBuilder withXmlResults(File xmlResultFile) {
-			this.xmlResultFile = new File(xmlResultFile.getPath());
-			return this;
-		}
-
-		private void validateResultsFile() {
-			if (null == htmlResultFile) {
-				throw new PitLaunchException("PIT HTML Result File not set");
-			}
-			if (null == xmlResultFile) {
-				throw new PitLaunchException("PIT XML Result File not set");
-			}
-			if (!htmlResultFile.exists()) {
-				throw new PitLaunchException("File does not exist: " + htmlResultFile);
-			}
-			if (!xmlResultFile.exists()) {
-				throw new PitLaunchException("File does not exist: " + xmlResultFile);
+		private void checkFileExists(File file) {
+			if (!file.exists()) {
+				throw new PitLaunchException("File does not exist: " + file);
 			}
 		}
 
-		public PitResultsBuilder withProjects(List<String> projects) {
+		public Builder withProjects(List<String> projects) {
 			this.projects = ImmutableList.copyOf(projects);
+			return this;
+		}
+
+		public Builder withMutations(Mutations mutations) {
+			this.mutations = mutations;
 			return this;
 		}
 	}
@@ -112,8 +110,8 @@ public final class PitResults implements Serializable {
 		return mutations;
 	}
 
-	public static PitResultsBuilder builder() {
-		return new PitResultsBuilder();
+	public static Builder builder() {
+		return new Builder();
 	}
 
 	public ImmutableList<String> getProjects() {

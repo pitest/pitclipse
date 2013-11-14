@@ -61,8 +61,8 @@ public class ViewContentProvider implements ITreeContentProvider {
 
 		@Override
 		public Object[] visitModel(MutationsModel mutationsModel) {
-			List<ProjectMutations> projectMutations = mutationsModel.getProjectMutations();
-			return projectMutations.toArray();
+			List<Status> statuses = mutationsModel.getStatuses();
+			return statuses.toArray();
 		}
 
 		@Override
@@ -90,8 +90,8 @@ public class ViewContentProvider implements ITreeContentProvider {
 
 		@Override
 		public Object[] visitStatus(Status status) {
-			// TODO Auto-generated method stub
-			return null;
+			List<ProjectMutations> projectMutations = status.getProjectMutations();
+			return projectMutations.toArray();
 		}
 	}
 

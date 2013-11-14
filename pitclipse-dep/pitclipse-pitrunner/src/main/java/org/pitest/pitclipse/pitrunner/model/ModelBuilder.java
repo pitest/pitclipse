@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.result;
+package org.pitest.pitclipse.pitrunner.model;
 
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.ImmutableList.copyOf;
@@ -8,22 +8,7 @@ import static com.google.common.collect.Multimaps.transformValues;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.pitest.pitclipse.core.extension.point.ResultNotifier;
-import org.pitest.pitclipse.core.launch.MutatedClassNotFoundException;
-import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.model.ClassMutations;
-import org.pitest.pitclipse.pitrunner.model.Mutation;
-import org.pitest.pitclipse.pitrunner.model.PackageMutations;
-import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 
@@ -33,26 +18,36 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
-public class MutationsModelNotifier implements ResultNotifier<PitResults> {
+public class ModelBuilder {
 
-	@Override
-	public void handleResults(PitResults results) {
+	private final EclipseStructureService eclipseStructureService;
+
+	public ModelBuilder(EclipseStructureService jdtHelper) {
+		this.eclipseStructureService = jdtHelper;
+	}
+
+	public MutationsModel buildFrom(PitResults results) {
 		Mutations mutations = results.getMutations();
 		List<String> projects = results.getProjects();
 
-		// List<ProjectMutations> projectMutations =
-		// buildMutationModelFor(projects, mutations);
-		// MutationsModel mutationModel = MutationsModel.make(projectMutations);
-		// Display.getDefault().asyncExec(new UpdateMutations(mutationModel));
+		List<Status> statuses = buildMutationModelFor(projects, mutations);
+		return MutationsModel.make(statuses);
 	}
 
-	private List<ProjectMutations> buildMutationModelFor(List<String> projects, Mutations mutations) {
-		ImmutableList.Builder<ProjectMutations> builder = ImmutableList.builder();
+	private List<Status> buildMutationModelFor(List<String> projects, Mutations mutations) {
+		ImmutableList.Builder<Status> builder = ImmutableList.builder();
 		for (DetectionStatus status : DetectionStatus.values()) {
 			List<org.pitest.pitclipse.pitrunner.results.Mutations.Mutation> mutationsForStatus = selectMutationsByStatus(
 					mutations, status);
-			for (String project : projects) {
-				builder.add(buildProjectMutation(project, mutationsForStatus));
+			if (!mutationsForStatus.isEmpty()) {
+				ImmutableList.Builder<ProjectMutations> projectMutations = ImmutableList.builder();
+				for (String project : projects) {
+					ProjectMutations projectMutation = buildProjectMutation(project, mutationsForStatus);
+					if (!projectMutation.getPackageMutations().isEmpty())
+						projectMutations.add(projectMutation);
+				}
+				builder.add(Status.builder().withDetectionStatus(status).withProjectMutations(projectMutations.build())
+						.build());
 			}
 		}
 		return builder.build();
@@ -86,19 +81,12 @@ public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 	}
 
 	private List<PackageMutations> packageMutationsFrom(String project, List<ClassMutations> classMutations) {
-		final IJavaProject javaProject = javaProject(project);
 		Multimap<String, ClassMutations> mutationsByPackage = Multimaps.index(classMutations,
 				new Function<ClassMutations, String>() {
 					@Override
 					public String apply(ClassMutations mutations) {
 						String mutatedClass = mutations.getClassName();
-						try {
-							IType type = javaProject.findType(mutatedClass);
-							IPackageFragment pkg = type.getPackageFragment();
-							return pkg.getElementName();
-						} catch (JavaModelException e) {
-							throw new MutatedClassNotFoundException(mutatedClass);
-						}
+						return eclipseStructureService.packageFrom(mutatedClass);
 					}
 				});
 		ImmutableList.Builder<PackageMutations> builder = ImmutableList.builder();
@@ -122,7 +110,7 @@ public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 				mutationsByClass, new Predicate<String>() {
 					@Override
 					public boolean apply(String mutatedClass) {
-						return isClassInProject(mutatedClass, project);
+						return eclipseStructureService.isClassInProject(mutatedClass, project);
 					}
 				});
 		Multimap<String, Mutation> transformedMutations = transformValues(mutationsForProject,
@@ -147,27 +135,4 @@ public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 		}
 		return builder.build();
 	}
-
-	private boolean isClassInProject(String mutatedClass, String projectName) {
-		IJavaProject project = javaProject(projectName);
-		try {
-			return null != project.findType(mutatedClass);
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	private IJavaProject javaProject(String projectName) {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		for (IProject project : root.getProjects()) {
-			if (projectName.equals(project.getName())) {
-				if (project.isOpen()) {
-					IJavaProject javaProject = JavaCore.create(project);
-					return javaProject;
-				}
-			}
-		}
-		throw new ProjectNotFoundException(projectName);
-	}
-
 }

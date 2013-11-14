@@ -54,4 +54,40 @@ public class ClassMutations implements Visitable {
 		};
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((className == null) ? 0 : className.hashCode());
+		result = prime * result + ((mutations == null) ? 0 : mutations.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ClassMutations other = (ClassMutations) obj;
+		if (className == null) {
+			if (other.className != null)
+				return false;
+		} else if (!className.equals(other.className))
+			return false;
+		if (mutations == null) {
+			if (other.mutations != null)
+				return false;
+		} else if (!mutations.equals(other.mutations))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ClassMutations [className=" + className + ", mutations=" + mutations + "]";
+	}
+
 }
