@@ -97,8 +97,7 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitStatus(Status status) {
-			// TODO Auto-generated method stub
-			return null;
+			return status.getDetectionStatus().toString();
 		}
 	}
 
@@ -148,8 +147,10 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public Image visitStatus(Status status) {
-			// TODO Auto-generated method stub
-			return null;
+			if (mutationWasDetected(status.getDetectionStatus())) {
+				return MUTATION_DETECTED;
+			}
+			return MUTATION_NOT_DETECTED;
 		}
 
 	}

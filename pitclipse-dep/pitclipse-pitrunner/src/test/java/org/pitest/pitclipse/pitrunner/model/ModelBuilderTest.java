@@ -112,7 +112,7 @@ public class ModelBuilderTest {
 		public void setupMocks() {
 			when(eclipseStructureService.isClassInProject(className, PROJECT_1)).thenReturn(PROJECT_1.equals(project));
 			when(eclipseStructureService.isClassInProject(className, PROJECT_2)).thenReturn(PROJECT_2.equals(project));
-			when(eclipseStructureService.packageFrom(className)).thenReturn(pkg);
+			when(eclipseStructureService.packageFrom(project, className)).thenReturn(pkg);
 		}
 
 		public List<Mutations.Mutation> toExpectedMutation() {

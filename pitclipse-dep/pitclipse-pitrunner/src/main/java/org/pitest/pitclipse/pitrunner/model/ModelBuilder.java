@@ -80,13 +80,13 @@ public class ModelBuilder {
 		return packageMutationsFrom(project, classMutations);
 	}
 
-	private List<PackageMutations> packageMutationsFrom(String project, List<ClassMutations> classMutations) {
+	private List<PackageMutations> packageMutationsFrom(final String project, List<ClassMutations> classMutations) {
 		Multimap<String, ClassMutations> mutationsByPackage = Multimaps.index(classMutations,
 				new Function<ClassMutations, String>() {
 					@Override
 					public String apply(ClassMutations mutations) {
 						String mutatedClass = mutations.getClassName();
-						return eclipseStructureService.packageFrom(mutatedClass);
+						return eclipseStructureService.packageFrom(project, mutatedClass);
 					}
 				});
 		ImmutableList.Builder<PackageMutations> builder = ImmutableList.builder();
