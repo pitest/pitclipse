@@ -38,6 +38,7 @@ public class ModelBuilderTest {
 	private static final String PACKAGE_B = "foo.blip";
 	private static final String PROJECT_1 = "project1";
 	private static final String PROJECT_2 = "project2";
+	private static final String MUTATOR = "org.pitest.mutationtest.engine.gregor.mutators.MathMutator";
 
 	private static final List<String> PROJECTS = ImmutableList.of(PROJECT_1, PROJECT_2);
 
@@ -124,6 +125,7 @@ public class ModelBuilderTest {
 				mutation.setStatus(detectionStatus);
 				mutation.setLineNumber(BigInteger.valueOf(entry.getKey()));
 				mutation.setDetected(detectionStatus == KILLED);
+				mutation.setMutator(MUTATOR);
 				builder.add(mutation);
 			}
 			return builder.build();
@@ -183,7 +185,7 @@ public class ModelBuilderTest {
 
 	private PackageMutations packageBMutations() {
 		List<Mutation> mutationsForClassB = ImmutableList.of(Mutation.builder().withStatus(SURVIVED)
-				.withLineNumber(345).build());
+				.withMutator(MUTATOR).withLineNumber(345).build());
 		ClassMutations classB = ClassMutations.builder().withClassName(CLASS_B).withMutations(mutationsForClassB)
 				.build();
 		List<ClassMutations> packageBMutations = ImmutableList.of(classB);
@@ -194,7 +196,7 @@ public class ModelBuilderTest {
 
 	private PackageMutations packageAKilledMutations() {
 		List<Mutation> mutationsForClassA = ImmutableList.of(Mutation.builder().withStatus(KILLED).withLineNumber(123)
-				.build());
+				.withMutator(MUTATOR).build());
 		ClassMutations classA = ClassMutations.builder().withClassName(CLASS_A).withMutations(mutationsForClassA)
 				.build();
 		List<ClassMutations> packageAMutations = ImmutableList.of(classA);
@@ -205,7 +207,7 @@ public class ModelBuilderTest {
 
 	private PackageMutations packageASurvivedMutations() {
 		List<Mutation> mutationsForClassA = ImmutableList.of(Mutation.builder().withStatus(SURVIVED)
-				.withLineNumber(234).build());
+				.withMutator(MUTATOR).withLineNumber(234).build());
 		ClassMutations classA = ClassMutations.builder().withClassName(CLASS_A).withMutations(mutationsForClassA)
 				.build();
 		List<ClassMutations> packageAMutations = ImmutableList.of(classA);
