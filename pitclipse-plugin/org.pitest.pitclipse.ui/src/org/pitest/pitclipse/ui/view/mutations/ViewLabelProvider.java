@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
+import static com.google.common.collect.Sets.immutableEnumSet;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
@@ -32,13 +33,11 @@ import org.pitest.pitclipse.pitrunner.model.Status;
 import org.pitest.pitclipse.pitrunner.model.Visitable;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 
-import com.google.common.collect.Sets;
-
 public class ViewLabelProvider extends LabelProvider {
 
 	private static final Image MUTATION_DETECTED = getBundleImage("detected.gif");
 	private static final Image MUTATION_NOT_DETECTED = getBundleImage("not_detected.gif");
-	private static final Set<DetectionStatus> DETECTED_STATUSES = Sets.immutableEnumSet(KILLED, TIMED_OUT, NON_VIABLE,
+	private static final Set<DetectionStatus> DETECTED_STATUSES = immutableEnumSet(KILLED, TIMED_OUT, NON_VIABLE,
 			MEMORY_ERROR, NOT_STARTED, STARTED, RUN_ERROR);
 
 	@Override
@@ -92,7 +91,7 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitMutation(Mutation mutation) {
-			return Integer.toString(mutation.getLineNumber());
+			return Integer.toString(mutation.getLineNumber()) + ": " + mutation.getMutator();
 		}
 
 		@Override
