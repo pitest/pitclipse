@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-public class ProjectMutations implements Visitable {
+public class ProjectMutations implements Visitable, Countable {
 	private final String projectName;
 	private final ImmutableList<PackageMutations> packageMutations;
 
@@ -86,5 +86,14 @@ public class ProjectMutations implements Visitable {
 	@Override
 	public String toString() {
 		return "ProjectMutations [projectName=" + projectName + ", packageMutations=" + packageMutations + "]";
+	}
+
+	@Override
+	public long count() {
+		long sum = 0L;
+		for (PackageMutations packageMutation : packageMutations) {
+			sum += packageMutation.count();
+		}
+		return sum;
 	}
 }

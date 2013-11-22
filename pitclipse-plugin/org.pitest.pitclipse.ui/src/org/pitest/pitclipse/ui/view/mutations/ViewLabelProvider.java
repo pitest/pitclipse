@@ -24,6 +24,7 @@ import org.eclipse.ui.ide.IDE.SharedImages;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.pitrunner.model.ClassMutations;
+import org.pitest.pitclipse.pitrunner.model.Countable;
 import org.pitest.pitclipse.pitrunner.model.Mutation;
 import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 import org.pitest.pitclipse.pitrunner.model.MutationsModelVisitor;
@@ -76,17 +77,17 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitProject(ProjectMutations projectMutations) {
-			return projectMutations.getProjectName();
+			return projectMutations.getProjectName() + countString(projectMutations);
 		}
 
 		@Override
 		public String visitPackage(PackageMutations packageMutations) {
-			return packageMutations.getPackageName();
+			return packageMutations.getPackageName() + countString(packageMutations);
 		}
 
 		@Override
 		public String visitClass(ClassMutations classMutations) {
-			return classMutations.getClassName();
+			return classMutations.getClassName() + countString(classMutations);
 		}
 
 		@Override
@@ -96,7 +97,11 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitStatus(Status status) {
-			return status.getDetectionStatus().toString();
+			return status.getDetectionStatus().toString() + countString(status);
+		}
+
+		private String countString(Countable countable) {
+			return " (" + countable.count() + ")";
 		}
 	}
 

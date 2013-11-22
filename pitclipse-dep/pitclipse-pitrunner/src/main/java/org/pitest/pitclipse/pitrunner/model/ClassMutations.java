@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-public class ClassMutations implements Visitable {
+public class ClassMutations implements Visitable, Countable {
 	private final String className;
 	private final ImmutableList<Mutation> mutations;
 
@@ -88,6 +88,11 @@ public class ClassMutations implements Visitable {
 	@Override
 	public String toString() {
 		return "ClassMutations [className=" + className + ", mutations=" + mutations + "]";
+	}
+
+	@Override
+	public long count() {
+		return mutations.size();
 	}
 
 }

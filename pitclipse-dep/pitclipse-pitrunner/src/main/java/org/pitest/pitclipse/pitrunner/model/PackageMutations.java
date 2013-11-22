@@ -2,7 +2,7 @@ package org.pitest.pitclipse.pitrunner.model;
 
 import com.google.common.collect.ImmutableList;
 
-public class PackageMutations implements Visitable {
+public class PackageMutations implements Visitable, Countable {
 
 	private final String packageName;
 	private final ImmutableList<ClassMutations> classMutations;
@@ -85,5 +85,14 @@ public class PackageMutations implements Visitable {
 	@Override
 	public String toString() {
 		return "PackageMutations [packageName=" + packageName + ", classMutations=" + classMutations + "]";
+	}
+
+	@Override
+	public long count() {
+		long sum = 0L;
+		for (ClassMutations classMutation : classMutations) {
+			sum += classMutation.count();
+		}
+		return sum;
 	}
 }

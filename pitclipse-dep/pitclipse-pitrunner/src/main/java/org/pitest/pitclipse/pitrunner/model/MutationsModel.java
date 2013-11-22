@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-public class MutationsModel implements Visitable {
+public class MutationsModel implements Visitable, Countable {
 
 	public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<Status> of());
 
@@ -57,5 +57,14 @@ public class MutationsModel implements Visitable {
 	@Override
 	public String toString() {
 		return "MutationsModel [statuses=" + statuses + "]";
+	}
+
+	@Override
+	public long count() {
+		long sum = 0L;
+		for (Status status : statuses) {
+			sum += status.count();
+		}
+		return sum;
 	}
 }

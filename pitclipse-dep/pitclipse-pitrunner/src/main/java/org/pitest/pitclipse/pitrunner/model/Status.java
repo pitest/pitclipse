@@ -8,7 +8,7 @@ import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 
 import com.google.common.collect.ImmutableList;
 
-public class Status implements Visitable {
+public class Status implements Visitable, Countable {
 
 	private final DetectionStatus detectionStatus;
 	private final ImmutableList<ProjectMutations> projectMutations;
@@ -88,6 +88,15 @@ public class Status implements Visitable {
 	@Override
 	public String toString() {
 		return "Status [detectionStatus=" + detectionStatus + ", projectMutations=" + projectMutations + "]";
+	}
+
+	@Override
+	public long count() {
+		long sum = 0L;
+		for (ProjectMutations projectMutation : projectMutations) {
+			sum += projectMutation.count();
+		}
+		return sum;
 	}
 
 }

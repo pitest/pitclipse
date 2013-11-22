@@ -1,5 +1,9 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -10,6 +14,7 @@ import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.SURVIVED;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -22,6 +27,8 @@ import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.LinkedListMultimap;
@@ -66,6 +73,27 @@ public class ModelBuilderTest {
 		thenTheResultIsAsExpected();
 	}
 
+	@Test
+	public void mutationsCanBeCounted() {
+		givenAClass(CLASS_A).hasPackage(PACKAGE_A).isIn(PROJECT_1).hasADetectedMutationOnLine(123)
+				.andHasASurvivingMutationOnLine(234);
+		andClass(CLASS_B).hasPackage(PACKAGE_B).isIn(PROJECT_1).hasASurvivingMutationOnLine(345);
+		whenTheModelIsBuilt();
+		thenTheNumberOfModelMutationsWillBe(3).andTheNumberOfDetectedPackageMutationsIs(PACKAGE_A, 1)
+				.andTheNumberOfSurvivedPackageMutationsIs(PACKAGE_A, 1)
+				.andTheNumberOfDetectedPackageMutationsIs(PACKAGE_B, 0)
+				.andTheNumberOfSurvivedPackageMutationsIs(PACKAGE_B, 1)
+				.andTheNumberOfDetectedClassMutationsWillBe(PACKAGE_A, CLASS_A, 1)
+				.andTheNumberOfSurvivedClassMutationsWillBe(PACKAGE_A, CLASS_A, 1)
+				.andTheNumberOfDetectedClassMutationsWillBe(PACKAGE_B, CLASS_B, 0)
+				.andTheNumberOfSurvivedClassMutationsWillBe(PACKAGE_B, CLASS_B, 1);
+	}
+
+	private CountContext thenTheNumberOfModelMutationsWillBe(long count) {
+		CountContext context = new CountContext();
+		return context.thenTheNumberOfModelMutationsWillBe(count);
+	}
+
 	private TestClassContext andClass(String className) {
 		return givenAClass(className);
 	}
@@ -74,62 +102,6 @@ public class ModelBuilderTest {
 		TestClassContext context = new TestClassContext(className);
 		testContexts.add(context);
 		return context;
-	}
-
-	private class TestClassContext {
-		private final String className;
-		private String pkg;
-		private String project;
-		private final Multimap<Integer, DetectionStatus> mutations = LinkedListMultimap.create();
-
-		public TestClassContext(String className) {
-			this.className = className;
-		}
-
-		public TestClassContext andHasASurvivingMutationOnLine(int line) {
-			return hasASurvivingMutationOnLine(line);
-		}
-
-		public TestClassContext hasASurvivingMutationOnLine(int line) {
-			mutations.put(line, SURVIVED);
-			return this;
-		}
-
-		public TestClassContext hasADetectedMutationOnLine(int line) {
-			mutations.put(line, KILLED);
-			return this;
-		}
-
-		public TestClassContext hasPackage(String pkg) {
-			this.pkg = pkg;
-			return this;
-		}
-
-		public TestClassContext isIn(String project) {
-			this.project = project;
-			return this;
-		}
-
-		public void setupMocks() {
-			when(eclipseStructureService.isClassInProject(className, PROJECT_1)).thenReturn(PROJECT_1.equals(project));
-			when(eclipseStructureService.isClassInProject(className, PROJECT_2)).thenReturn(PROJECT_2.equals(project));
-			when(eclipseStructureService.packageFrom(project, className)).thenReturn(pkg);
-		}
-
-		public List<Mutations.Mutation> toExpectedMutation() {
-			ImmutableList.Builder<Mutations.Mutation> builder = ImmutableList.builder();
-			for (Entry<Integer, DetectionStatus> entry : mutations.entries()) {
-				Mutations.Mutation mutation = new Mutations.Mutation();
-				mutation.setMutatedClass(className);
-				DetectionStatus detectionStatus = entry.getValue();
-				mutation.setStatus(detectionStatus);
-				mutation.setLineNumber(BigInteger.valueOf(entry.getKey()));
-				mutation.setDetected(detectionStatus == KILLED);
-				mutation.setMutator(MUTATOR);
-				builder.add(mutation);
-			}
-			return builder.build();
-		}
 	}
 
 	private void whenTheModelIsBuilt() {
@@ -218,5 +190,180 @@ public class ModelBuilderTest {
 
 	private void thenTheResultIsAsExpected() {
 		assertThat(actualModel, is(equalTo(expectedModel)));
+	}
+
+	private class TestClassContext {
+		private final String className;
+		private String pkg;
+		private String project;
+		private final Multimap<Integer, DetectionStatus> mutations = LinkedListMultimap.create();
+
+		public TestClassContext(String className) {
+			this.className = className;
+		}
+
+		public TestClassContext andHasASurvivingMutationOnLine(int line) {
+			return hasASurvivingMutationOnLine(line);
+		}
+
+		public TestClassContext hasASurvivingMutationOnLine(int line) {
+			mutations.put(line, SURVIVED);
+			return this;
+		}
+
+		public TestClassContext hasADetectedMutationOnLine(int line) {
+			mutations.put(line, KILLED);
+			return this;
+		}
+
+		public TestClassContext hasPackage(String pkg) {
+			this.pkg = pkg;
+			return this;
+		}
+
+		public TestClassContext isIn(String project) {
+			this.project = project;
+			return this;
+		}
+
+		public void setupMocks() {
+			when(eclipseStructureService.isClassInProject(className, PROJECT_1)).thenReturn(PROJECT_1.equals(project));
+			when(eclipseStructureService.isClassInProject(className, PROJECT_2)).thenReturn(PROJECT_2.equals(project));
+			when(eclipseStructureService.packageFrom(project, className)).thenReturn(pkg);
+		}
+
+		public List<Mutations.Mutation> toExpectedMutation() {
+			ImmutableList.Builder<Mutations.Mutation> builder = ImmutableList.builder();
+			for (Entry<Integer, DetectionStatus> entry : mutations.entries()) {
+				Mutations.Mutation mutation = new Mutations.Mutation();
+				mutation.setMutatedClass(className);
+				DetectionStatus detectionStatus = entry.getValue();
+				mutation.setStatus(detectionStatus);
+				mutation.setLineNumber(BigInteger.valueOf(entry.getKey()));
+				mutation.setDetected(detectionStatus == KILLED);
+				mutation.setMutator(MUTATOR);
+				builder.add(mutation);
+			}
+			return builder.build();
+		}
+	}
+
+	private class CountContext {
+		private class ClassNameFilter implements Predicate<ClassMutations> {
+			private final String className;
+
+			public ClassNameFilter(String className) {
+				this.className = className;
+			}
+
+			@Override
+			public boolean apply(ClassMutations classMutations) {
+				return className.equals(classMutations.getClassName());
+			}
+		}
+
+		private class PackageFilter implements Predicate<PackageMutations> {
+			private final String pkg;
+
+			public PackageFilter(String pkg) {
+				this.pkg = pkg;
+			}
+
+			@Override
+			public boolean apply(PackageMutations pkgMutations) {
+				return pkg.equals(pkgMutations.getPackageName());
+			}
+		}
+
+		private class StatusFilter implements Predicate<Status> {
+			private final DetectionStatus status;
+
+			public StatusFilter(DetectionStatus status) {
+				this.status = status;
+			}
+
+			@Override
+			public boolean apply(Status status) {
+				return this.status == status.getDetectionStatus();
+			}
+		}
+
+		public CountContext thenTheNumberOfModelMutationsWillBe(long count) {
+			assertThat(actualModel.count(), is(equalTo(count)));
+			return this;
+		}
+
+		public CountContext andTheNumberOfDetectedPackageMutationsIs(String pkg, long count) {
+			assertThat(countMutationsInPackage(pkg, KILLED), is(equalTo(count)));
+			return this;
+		}
+
+		public CountContext andTheNumberOfSurvivedPackageMutationsIs(String pkg, long count) {
+			assertThat(countMutationsInPackage(pkg, SURVIVED), is(equalTo(count)));
+			return this;
+		}
+
+		public CountContext andTheNumberOfDetectedClassMutationsWillBe(String pkg, String className, long count) {
+			assertThat(countMutationsForClass(pkg, className, KILLED), is(equalTo(count)));
+			return this;
+		}
+
+		public CountContext andTheNumberOfSurvivedClassMutationsWillBe(String pkg, String className, long count) {
+			assertThat(countMutationsForClass(pkg, className, SURVIVED), is(equalTo(count)));
+			return this;
+		}
+
+		private long countMutationsForClass(String pkg, String className, DetectionStatus status) {
+			Collection<Status> statuses = filter(actualModel.getStatuses(), new StatusFilter(status));
+			Collection<ClassMutations> mutationsForClass = filterByPackageAndClass(statuses, pkg, className);
+			long sum = total(mutationsForClass);
+			return sum;
+		}
+
+		private long countMutationsInPackage(String pkg, DetectionStatus status) {
+			Collection<Status> statuses = filter(actualModel.getStatuses(), new StatusFilter(status));
+			return total(filterByPackage(statuses, pkg));
+		}
+
+		private long total(Collection<? extends Countable> counts) {
+			long sum = 0L;
+			for (Countable count : counts) {
+				sum += count.count();
+			}
+			return sum;
+		}
+
+		private Collection<PackageMutations> filterByPackage(Collection<Status> statuses, String pkg) {
+			List<PackageMutations> allPackageMutations = packageMutationsFrom(statuses);
+			Collection<PackageMutations> filteredForPackage = filter(allPackageMutations, new PackageFilter(pkg));
+			return filteredForPackage;
+		}
+
+		private List<PackageMutations> packageMutationsFrom(Collection<Status> statuses) {
+			return copyOf(concat(transform(statuses, new Function<Status, List<PackageMutations>>() {
+				@Override
+				public List<PackageMutations> apply(Status status) {
+					Builder<PackageMutations> pkgBuilder = ImmutableList.builder();
+					List<ProjectMutations> projectMutations = status.getProjectMutations();
+					for (ProjectMutations projectMutation : projectMutations) {
+						pkgBuilder.addAll(projectMutation.getPackageMutations());
+					}
+					return pkgBuilder.build();
+				}
+			})));
+		}
+
+		private Collection<ClassMutations> filterByPackageAndClass(Collection<Status> statuses, String pkg,
+				String className) {
+			Collection<PackageMutations> filteredForPackage = filterByPackage(statuses, pkg);
+			Collection<ClassMutations> mutationsForClass = filter(
+					copyOf(concat(transform(filteredForPackage, new Function<PackageMutations, List<ClassMutations>>() {
+						@Override
+						public List<ClassMutations> apply(PackageMutations pkg) {
+							return pkg.getClassMutations();
+						}
+					}))), new ClassNameFilter(className));
+			return mutationsForClass;
+		}
 	}
 }
