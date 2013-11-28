@@ -17,9 +17,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
 
 public class ModelBuilder {
 
+	private static final Ordering<Mutation> MUTATION_ORDERING = Ordering.from(MutationSorter.INSTANCE);
 	private final EclipseStructureService eclipseStructureService;
 
 	public ModelBuilder(EclipseStructureService jdtHelper) {
@@ -130,8 +132,9 @@ public class ModelBuilder {
 	private List<ClassMutations> classMutationsFrom(Multimap<String, Mutation> mutationsByClass) {
 		ImmutableList.Builder<ClassMutations> builder = ImmutableList.builder();
 		for (String className : mutationsByClass.keySet()) {
-			Collection<Mutation> mutations = mutationsByClass.get(className);
-			builder.add(ClassMutations.builder().withClassName(className).withMutations(mutations).build());
+			ImmutableList<Mutation> unsortedMutations = copyOf(mutationsByClass.get(className));
+			ImmutableList<Mutation> sortedMutations = MUTATION_ORDERING.immutableSortedCopy(unsortedMutations);
+			builder.add(ClassMutations.builder().withClassName(className).withMutations(sortedMutations).build());
 		}
 		return builder.build();
 	}

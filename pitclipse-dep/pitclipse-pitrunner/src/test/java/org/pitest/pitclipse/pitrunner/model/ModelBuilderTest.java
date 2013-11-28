@@ -66,24 +66,24 @@ public class ModelBuilderTest {
 
 	@Test
 	public void mutationsInTheSameProject() {
-		givenAClass(CLASS_A).hasPackage(PACKAGE_A).isIn(PROJECT_1).hasADetectedMutationOnLine(123)
-				.andHasASurvivingMutationOnLine(234);
-		andClass(CLASS_B).hasPackage(PACKAGE_B).isIn(PROJECT_1).hasASurvivingMutationOnLine(345);
+		givenAClass(CLASS_A).inPackage(PACKAGE_A).isIn(PROJECT_1).hasADetectedMutationOnLine(124)
+				.andHasADetectedMutationOnLine(123).andHasASurvivingMutationOnLine(234);
+		andClass(CLASS_B).inPackage(PACKAGE_B).isIn(PROJECT_1).hasASurvivingMutationOnLine(345);
 		whenTheModelIsBuilt();
 		thenTheResultIsAsExpected();
 	}
 
 	@Test
 	public void mutationsCanBeCounted() {
-		givenAClass(CLASS_A).hasPackage(PACKAGE_A).isIn(PROJECT_1).hasADetectedMutationOnLine(123)
-				.andHasASurvivingMutationOnLine(234);
-		andClass(CLASS_B).hasPackage(PACKAGE_B).isIn(PROJECT_1).hasASurvivingMutationOnLine(345);
+		givenAClass(CLASS_A).inPackage(PACKAGE_A).isIn(PROJECT_1).hasADetectedMutationOnLine(124)
+				.andHasADetectedMutationOnLine(123).andHasASurvivingMutationOnLine(234);
+		andClass(CLASS_B).inPackage(PACKAGE_B).isIn(PROJECT_1).hasASurvivingMutationOnLine(345);
 		whenTheModelIsBuilt();
-		thenTheNumberOfModelMutationsWillBe(3).andTheNumberOfDetectedPackageMutationsIs(PACKAGE_A, 1)
+		thenTheNumberOfModelMutationsWillBe(4).andTheNumberOfDetectedPackageMutationsIs(PACKAGE_A, 2)
 				.andTheNumberOfSurvivedPackageMutationsIs(PACKAGE_A, 1)
 				.andTheNumberOfDetectedPackageMutationsIs(PACKAGE_B, 0)
 				.andTheNumberOfSurvivedPackageMutationsIs(PACKAGE_B, 1)
-				.andTheNumberOfDetectedClassMutationsWillBe(PACKAGE_A, CLASS_A, 1)
+				.andTheNumberOfDetectedClassMutationsWillBe(PACKAGE_A, CLASS_A, 2)
 				.andTheNumberOfSurvivedClassMutationsWillBe(PACKAGE_A, CLASS_A, 1)
 				.andTheNumberOfDetectedClassMutationsWillBe(PACKAGE_B, CLASS_B, 0)
 				.andTheNumberOfSurvivedClassMutationsWillBe(PACKAGE_B, CLASS_B, 1);
@@ -168,7 +168,8 @@ public class ModelBuilderTest {
 
 	private PackageMutations packageAKilledMutations() {
 		List<Mutation> mutationsForClassA = ImmutableList.of(Mutation.builder().withStatus(KILLED).withLineNumber(123)
-				.withMutator(MUTATOR).build());
+				.withMutator(MUTATOR).build(),
+				Mutation.builder().withStatus(KILLED).withLineNumber(124).withMutator(MUTATOR).build());
 		ClassMutations classA = ClassMutations.builder().withClassName(CLASS_A).withMutations(mutationsForClassA)
 				.build();
 		List<ClassMutations> packageAMutations = ImmutableList.of(classA);
@@ -216,7 +217,11 @@ public class ModelBuilderTest {
 			return this;
 		}
 
-		public TestClassContext hasPackage(String pkg) {
+		public TestClassContext andHasADetectedMutationOnLine(int line) {
+			return hasADetectedMutationOnLine(line);
+		}
+
+		public TestClassContext inPackage(String pkg) {
 			this.pkg = pkg;
 			return this;
 		}
