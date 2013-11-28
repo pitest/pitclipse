@@ -8,7 +8,7 @@ public class MutationModelChangedNotifier implements ResultNotifier<MutationsMod
 
 	@Override
 	public void handleResults(MutationsModel results) {
-		PitMutationsView mutationsView = new PitViewFinder().getMutationsView();
+		MutationsView mutationsView = PitViewFinder.INSTANCE.getMutationsView();
 		mutationsView.updateWith(results);
 	}
 

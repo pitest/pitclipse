@@ -64,7 +64,6 @@ public class ViewLabelProvider extends LabelProvider {
 		URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 		ImageDescriptor image = ImageDescriptor.createFromURL(url);
 		return image.createImage();
-
 	}
 
 	private enum LabelVisitor implements MutationsModelVisitor<String> {
@@ -106,7 +105,6 @@ public class ViewLabelProvider extends LabelProvider {
 	}
 
 	private enum ImageVisitor implements MutationsModelVisitor<Image> {
-
 		INSTANCE;
 
 		@Override
@@ -156,7 +154,5 @@ public class ViewLabelProvider extends LabelProvider {
 			}
 			return MUTATION_NOT_DETECTED;
 		}
-
 	}
-
 }

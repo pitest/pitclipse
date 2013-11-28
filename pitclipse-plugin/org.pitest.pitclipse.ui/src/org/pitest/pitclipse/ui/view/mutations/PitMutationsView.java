@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 
-public class PitMutationsView extends ViewPart {
+public class PitMutationsView extends ViewPart implements MutationsView {
 
 	private class ViewUpdater implements Runnable {
 		private final MutationsModel mutations;
@@ -39,7 +39,8 @@ public class PitMutationsView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	public void updateWith(final MutationsModel mutations) {
+	@Override
+	public void updateWith(MutationsModel mutations) {
 		Display.getDefault().asyncExec(new ViewUpdater(mutations));
 	}
 

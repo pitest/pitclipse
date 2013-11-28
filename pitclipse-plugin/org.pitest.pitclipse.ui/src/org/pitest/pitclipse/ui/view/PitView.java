@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.part.ViewPart;
 
-public class PitView extends ViewPart {
+public class PitView extends ViewPart implements SummaryView {
 	private Browser browser = null;
 	private PitUiUpdatePublisher publisher = null;
 
@@ -20,8 +20,7 @@ public class PitView extends ViewPart {
 			publisher = new PitUiUpdatePublisher(browser);
 			browser.addProgressListener(publisher);
 		} catch (SWTError e) {
-			MessageBox messageBox = new MessageBox(parent.getShell(),
-					SWT.ICON_ERROR | SWT.OK);
+			MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setMessage("Browser cannot be initialized.");
 			messageBox.setText("Exit");
 			messageBox.open();
@@ -32,6 +31,7 @@ public class PitView extends ViewPart {
 	public void setFocus() {
 	}
 
+	@Override
 	public synchronized void update(File result) {
 		if (result == null) {
 			browser.setText("<html/>");
