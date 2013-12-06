@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -29,6 +30,8 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 	private static PitclipseTestActivator plugin;
 
 	private List<String> stories = of();
+
+	private final AtomicBoolean testsInProgress = new AtomicBoolean(false);
 
 	public PitclipseTestActivator() {
 	}
@@ -54,8 +57,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 																// signature
 		super.start(context);
 		setActivator(this);
-		Enumeration<URL> stories = context.getBundle().findEntries("/",
-				"j*.story", true);
+		Enumeration<URL> stories = context.getBundle().findEntries("/", "j*.story", true);
 		Builder<String> builder = builder();
 		while (stories.hasMoreElements()) {
 			URL storyUrl = stories.nextElement();
@@ -105,6 +107,14 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 	 */
 	public static PitclipseTestActivator getDefault() {
 		return plugin;
+	}
+
+	public boolean areTestsInProgress() {
+		return testsInProgress.get();
+	}
+
+	public void startTests() {
+		testsInProgress.set(true);
 	}
 
 }

@@ -28,6 +28,10 @@ public class PitMutationsView extends ViewPart implements MutationsView {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		createTreeViewer(parent);
+	}
+
+	private void createTreeViewer(Composite parent) {
 		viewer = new TreeViewer(parent, TREE_STYLE);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());

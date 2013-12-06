@@ -35,11 +35,9 @@ public class PitclipseStoriesTest extends JUnitStories {
 	public Configuration configuration() {
 		PLAYBACK_DELAY = 50L;
 		TIMEOUT = 5000L;
-		return new MostUsefulConfiguration().useStoryLoader(new LoadFromURL())
-				.useStoryReporterBuilder(
-						new StoryReporterBuilder().withDefaultFormats()
-								.withFormats(HTML, CONSOLE)
-								.withRelativeDirectory("jbehave-report"));
+		return new MostUsefulConfiguration().useStoryLoader(new LoadFromURL()).useStoryReporterBuilder(
+				new StoryReporterBuilder().withDefaultFormats().withFormats(HTML, CONSOLE)
+						.withRelativeDirectory("jbehave-report"));
 	}
 
 	@Override
@@ -56,14 +54,14 @@ public class PitclipseStoriesTest extends JUnitStories {
 
 	@Override
 	public InjectableStepsFactory stepsFactory() {
-		return new InstanceStepsFactory(configuration(), new SetupSteps(),
-				new ProjectSteps(), new ClassSteps(), new PitclipseSteps(),
-				new PreferencesSteps(), new LaunchConfigurationSteps());
+		return new InstanceStepsFactory(configuration(), new SetupSteps(), new ProjectSteps(), new ClassSteps(),
+				new PitclipseSteps(), new PreferencesSteps(), new LaunchConfigurationSteps());
 	}
 
 	@BeforeStories
 	public static void beforeClass() throws Exception {
 		PLAYBACK_DELAY = 100L;
 		TIMEOUT = 5000L;
+		PitclipseTestActivator.getDefault().startTests();
 	}
 }
