@@ -9,7 +9,6 @@ import static org.pitest.pitclipse.ui.PitclipseTestActivator.getDefault;
 import java.util.List;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.jbehave.core.annotations.BeforeStories;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
@@ -35,6 +34,7 @@ public class PitclipseStoriesTest extends JUnitStories {
 	public Configuration configuration() {
 		PLAYBACK_DELAY = 50L;
 		TIMEOUT = 5000L;
+		PitclipseTestActivator.getDefault().startTests();
 		return new MostUsefulConfiguration().useStoryLoader(new LoadFromURL()).useStoryReporterBuilder(
 				new StoryReporterBuilder().withDefaultFormats().withFormats(HTML, CONSOLE)
 						.withRelativeDirectory("jbehave-report"));
@@ -56,12 +56,5 @@ public class PitclipseStoriesTest extends JUnitStories {
 	public InjectableStepsFactory stepsFactory() {
 		return new InstanceStepsFactory(configuration(), new SetupSteps(), new ProjectSteps(), new ClassSteps(),
 				new PitclipseSteps(), new PreferencesSteps(), new LaunchConfigurationSteps());
-	}
-
-	@BeforeStories
-	public static void beforeClass() throws Exception {
-		PLAYBACK_DELAY = 100L;
-		TIMEOUT = 5000L;
-		PitclipseTestActivator.getDefault().startTests();
 	}
 }
