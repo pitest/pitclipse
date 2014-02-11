@@ -40,7 +40,7 @@
       </dependency>
       <dependency>
         <groupId>junit</groupId>
-        <artifactId>junit-dep</artifactId>
+        <artifactId>junit</artifactId>
         <version>${junit.version}</version>
       </dependency>
       <dependency>
@@ -66,6 +66,11 @@
       <dependency>
         <groupId>org.pitest</groupId>
         <artifactId>pitest</artifactId>
+        <version>${pitest.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-command-line</artifactId>
         <version>${pitest.version}</version>
       </dependency>
     </dependencies>
@@ -113,7 +118,7 @@
     <jbehave.version>3.7.5</jbehave.version>
     <maven.site.version>3.1</maven.site.version>
     <mockito.version>1.9.5</mockito.version>
-    <pitest.version>0.31</pitest.version>
+    <pitest.version>0.32</pitest.version>
     <tycho.version>0.15.0</tycho.version>
 <!--    <forceContextQualifier>201401081810</forceContextQualifier> -->
     <xjc.version>1.5</xjc.version>

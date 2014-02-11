@@ -81,17 +81,13 @@ public class PitCoreActivator extends AbstractUIPlugin {
 																// signature
 		super.start(context);
 		setActivator(this);
-		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar",
-				false);
+		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar", false);
 		setupStateDirectories();
 		ImmutableList.Builder<String> builder = ImmutableList.builder();
-		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi"))
-				.getCanonicalPath());
-		builder.add(getBundleFile(
-				Platform.getBundle("org.pitest.pitclipse-pitrunner"))
-				.getCanonicalPath());
-		builder.add(getBundleFile(Platform.getBundle("com.google.guava"))
-				.getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.command-line-osgi")).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse-pitrunner")).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath());
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
 
@@ -109,8 +105,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
 	private void setupHistoryFile() {
 		IPath pluginLocation = getStateLocation();
-		File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE)
-				.toFile();
+		File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE).toFile();
 		try {
 			createParentDirs(stateFile);
 			historyFile = stateFile;
@@ -123,8 +118,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
 	private void setupResultDir() {
 		IPath pluginLocation = getStateLocation();
-		File stateFile = pluginLocation.append(HTML_RESULTS_DIR)
-				.append(HTML_FILE).toFile();
+		File stateFile = pluginLocation.append(HTML_RESULTS_DIR).append(HTML_FILE).toFile();
 		try {
 			createParentDirs(stateFile);
 			resultDir = stateFile.getParentFile();
@@ -200,8 +194,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	private static void log(int status, String msg, Throwable t) {
-		getDefault().getLog().log(
-				new Status(status, PLUGIN_ID, Status.OK, msg, t));
+		getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, t));
 	}
 
 	public static Shell getActiveWorkbenchShell() {
@@ -249,22 +242,15 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public PitConfiguration getConfiguration() {
-		String executionMode = getPreferenceStore().getString(
-				PIT_EXECUTION_MODE);
+		String executionMode = getPreferenceStore().getString(PIT_EXECUTION_MODE);
 		boolean parallelRun = getPreferenceStore().getBoolean(RUN_IN_PARALLEL);
-		boolean incrementalAnalysis = getPreferenceStore().getBoolean(
-				INCREMENTAL_ANALYSIS);
-		String excludedClasses = getPreferenceStore().getString(
-				EXCLUDED_CLASSES);
-		String excludedMethods = getPreferenceStore().getString(
-				EXCLUDED_METHODS);
+		boolean incrementalAnalysis = getPreferenceStore().getBoolean(INCREMENTAL_ANALYSIS);
+		String excludedClasses = getPreferenceStore().getString(EXCLUDED_CLASSES);
+		String excludedMethods = getPreferenceStore().getString(EXCLUDED_METHODS);
 		String avoidCallsTo = getPreferenceStore().getString(AVOID_CALLS_TO);
-		PitConfiguration.Builder builder = PitConfiguration.builder()
-				.withParallelExecution(parallelRun)
-				.withIncrementalAnalysis(incrementalAnalysis)
-				.withExcludedClasses(excludedClasses)
-				.withExcludedMethods(excludedMethods)
-				.withAvoidCallsTo(avoidCallsTo);
+		PitConfiguration.Builder builder = PitConfiguration.builder().withParallelExecution(parallelRun)
+				.withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
+				.withExcludedMethods(excludedMethods).withAvoidCallsTo(avoidCallsTo);
 		for (PitExecutionMode pitExecutionMode : values()) {
 			if (pitExecutionMode.getId().equals(executionMode)) {
 				builder.withExecutionMode(pitExecutionMode);
@@ -276,7 +262,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-		getPreferenceStore().setValue(PIT_EXECUTION_MODE,
-				pitExecutionMode.getId());
+		getPreferenceStore().setValue(PIT_EXECUTION_MODE, pitExecutionMode.getId());
 	}
 }

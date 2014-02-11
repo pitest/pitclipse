@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.pitest.mutationtest.MutationCoverageReport;
+import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.client.PitClient;
 
 @ThreadSafe
@@ -39,6 +39,11 @@ public class PitRunner {
 
 	public PitResults runPIT(PitRequest request) {
 		String[] cliArgs = PitCliArguments.from(request.getOptions());
+		// EntryPoint e = new EntryPoint();
+		// ReportOptions data = new ReportOptions();
+		// data.addOutputFormats(asList("XML", "HTML"));
+		// data.setClassPathElements(cliArgs.)
+		// e.execute(null, data);
 		MutationCoverageReport.main(cliArgs);
 		File reportDir = request.getReportDirectory();
 		File htmlResultFile = findResultFile(reportDir, "index.html");

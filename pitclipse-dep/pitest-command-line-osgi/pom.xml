@@ -8,23 +8,13 @@
     <groupId>org.pitest</groupId>
     <version>0.32.1-SNAPSHOT</version>
   </parent>
-  <artifactId>pitest-osgi</artifactId>
-  <name>pitest-osgi</name>
+  <artifactId>pitest-command-line-osgi</artifactId>
+  <name>pitest-command-line-osgi</name>
   <packaging>bundle</packaging>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitest</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>pitest-command-line</artifactId>
     </dependency>
   </dependencies>
   <build>

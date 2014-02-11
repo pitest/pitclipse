@@ -14,6 +14,10 @@
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
+      <artifactId>pitest-command-line</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
       <artifactId>pitest</artifactId>
       <exclusions>
         <exclusion>
@@ -47,7 +51,7 @@
     </dependency>
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit-dep</artifactId>
+      <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

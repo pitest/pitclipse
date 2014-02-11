@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>pitest-osgi</module>
+    <module>pitest-command-line-osgi</module>
     <module>pitclipse-pitrunner</module>
   </modules>
   <build>
