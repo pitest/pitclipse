@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.pitest.pitclipse.feature_0.32.1.201402201855.jar" id="org.pitest.pitclipse.feature" version="0.32.1.201402201855">
+   <feature url="features/org.pitest.pitclipse.feature_0.32.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.32.2.qualifier">
       <category name="Pitclipse"/>
    </feature>
-   <feature url="features/org.pitest.pitclipse.feature_0.32.1.201402201855.jar" id="org.pitest.pitclipse.feature" version="0.32.1.201402201855">
+   <feature url="features/org.pitest.pitclipse.feature_0.32.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.32.2.qualifier">
       <category name="Dependencies"/>
    </feature>
   
