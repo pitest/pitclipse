@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class PackageMutations implements Visitable, Countable {
 

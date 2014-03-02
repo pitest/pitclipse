@@ -1,9 +1,5 @@
 package org.pitest.pitclipse.core;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableList.of;
-import static com.google.common.io.Files.createParentDirs;
-import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
@@ -13,6 +9,10 @@ import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTA
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +32,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
-
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -51,7 +50,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	// The shared instance
 	private static PitCoreActivator plugin;
 
-	private List<String> pitClasspath = of();
+	private ImmutableList<String> pitClasspath = of();
 
 	private File resultDir;
 
@@ -61,7 +60,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public List<String> getPitClasspath() {
-		return copyOf(pitClasspath);
+		return pitClasspath;
 	}
 
 	private void setPITClasspath(List<String> classpath) {
@@ -87,7 +86,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.command-line-osgi")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse-pitrunner")).getCanonicalPath());
-		builder.add(getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.guava-shade-osgi")).getCanonicalPath());
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
 

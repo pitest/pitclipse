@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
-import static com.google.common.collect.Sets.immutableEnumSet;
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;

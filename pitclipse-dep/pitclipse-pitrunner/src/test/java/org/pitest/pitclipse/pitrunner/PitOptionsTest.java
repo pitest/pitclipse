@@ -1,12 +1,12 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static com.google.common.collect.ImmutableList.of;
 import static java.lang.Integer.toHexString;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 import java.io.File;
 import java.io.IOException;

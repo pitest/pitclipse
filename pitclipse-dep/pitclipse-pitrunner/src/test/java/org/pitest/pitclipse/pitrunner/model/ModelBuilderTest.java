@@ -1,16 +1,16 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static com.google.common.collect.Collections2.filter;
-import static com.google.common.collect.Collections2.transform;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Iterables.concat;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.SURVIVED;
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.Iterables.concat;
+import static org.pitest.pitclipse.reloc.guava.collect.Lists.newArrayList;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -26,13 +26,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.Predicate;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.LinkedListMultimap;
+import org.pitest.pitclipse.reloc.guava.collect.Multimap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ModelBuilderTest {

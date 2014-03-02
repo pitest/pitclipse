@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class PitRequest implements Serializable {
 	private static final long serialVersionUID = 2058881520214195050L;

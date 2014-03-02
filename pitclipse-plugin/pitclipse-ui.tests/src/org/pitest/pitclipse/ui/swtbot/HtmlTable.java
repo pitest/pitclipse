@@ -1,13 +1,13 @@
 package org.pitest.pitclipse.ui.swtbot;
 
-import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.ImmutableMap;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableMap;
 
 public class HtmlTable {
 
@@ -31,7 +31,7 @@ public class HtmlTable {
 		List<List<String>> rows = getRows(table);
 		Builder<Map<String, String>> resultBuilder = ImmutableList.builder();
 		for (List<String> row : rows) {
-			com.google.common.collect.ImmutableMap.Builder<String, String> rowBuilder = ImmutableMap
+			org.pitest.pitclipse.reloc.guava.collect.ImmutableMap.Builder<String, String> rowBuilder = ImmutableMap
 					.builder();
 			for (int i = 0; i < headers.size(); i++) {
 				rowBuilder.put(headers.get(i), row.get(i));
@@ -56,8 +56,7 @@ public class HtmlTable {
 		Builder<String> resultBuilder = ImmutableList.builder();
 		int position = row.indexOf("<td>");
 		while (row.indexOf("<td>", position) != -1) {
-			String cell = stripOutTag(row.substring(position), "<td>", "</td>")
-					.replaceAll("<div.*>", "").trim();
+			String cell = stripOutTag(row.substring(position), "<td>", "</td>").replaceAll("<div.*>", "").trim();
 
 			resultBuilder.add(cell);
 			position = row.indexOf("<td>", position) + 9;
@@ -69,8 +68,7 @@ public class HtmlTable {
 		Builder<String> builder = ImmutableList.builder();
 		int position = table.indexOf("<th>");
 		while (table.indexOf("<th>", position) != -1) {
-			String header = stripOutTag(table.substring(position), "<th>",
-					"</th>");
+			String header = stripOutTag(table.substring(position), "<th>", "</th>");
 			builder.add(header);
 			position = table.indexOf("<th>", position) + 9;
 		}
@@ -79,8 +77,7 @@ public class HtmlTable {
 
 	private String stripOutTag(String html, String startString, String endString) {
 		String tagValue = getValue(html, startString, endString);
-		return tagValue.replaceFirst(startString, "")
-				.replaceFirst(endString, "").trim();
+		return tagValue.replaceFirst(startString, "").replaceFirst(endString, "").trim();
 	}
 
 	private String getValue(String html, String startString, String endString) {
@@ -89,8 +86,7 @@ public class HtmlTable {
 		if (startPos != -1) {
 			int endPos = html.indexOf(endString, startPos);
 			if (endPos != -1) {
-				returnValue = html.substring(startPos,
-						endPos + endString.length());
+				returnValue = html.substring(startPos, endPos + endString.length());
 			}
 		}
 		return returnValue;

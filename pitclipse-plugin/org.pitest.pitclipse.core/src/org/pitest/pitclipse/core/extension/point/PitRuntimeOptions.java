@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.pitest.pitclipse.pitrunner.PitOptions;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @Immutable
 public class PitRuntimeOptions {

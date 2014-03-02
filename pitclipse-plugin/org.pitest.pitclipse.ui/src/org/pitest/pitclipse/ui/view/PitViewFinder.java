@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.ui.view;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.newHashSet;
 
 import java.io.File;
 import java.util.Set;

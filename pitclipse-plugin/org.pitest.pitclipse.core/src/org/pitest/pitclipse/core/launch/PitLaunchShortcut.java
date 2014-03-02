@@ -1,7 +1,7 @@
 package org.pitest.pitclipse.core.launch;
 
-import static com.google.common.collect.ImmutableList.builder;
-import static com.google.common.collect.ImmutableList.of;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.eclipse.jdt.core.IJavaElement.CLASS_FILE;
 import static org.eclipse.jdt.core.IJavaElement.COMPILATION_UNIT;
 import static org.eclipse.jdt.core.IJavaElement.JAVA_PROJECT;
@@ -58,7 +58,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class PitLaunchShortcut implements ILaunchShortcut2 {
 

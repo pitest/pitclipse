@@ -10,10 +10,4 @@
     <version>0.32.2-SNAPSHOT</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
-  <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-  </dependencies>
 </project>

@@ -12,6 +12,10 @@
   <name>pitclipse-pitrunner</name>
   <packaging>bundle</packaging>
   <dependencies>
+  	<dependency>
+  	  <groupId>org.pitest</groupId>
+      <artifactId>guava-shade</artifactId>
+  	</dependency>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest-command-line</artifactId>
@@ -29,10 +33,6 @@
           <artifactId>junit</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

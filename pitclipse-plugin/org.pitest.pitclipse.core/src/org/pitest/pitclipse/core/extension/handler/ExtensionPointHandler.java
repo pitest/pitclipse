@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.core.extension.handler;
 
-import static org.pitest.pitclipse.core.PitCoreActivator.log;
 import static org.pitest.pitclipse.core.PitCoreActivator.warn;
 
 import org.eclipse.core.runtime.CoreException;
@@ -22,12 +21,10 @@ public class ExtensionPointHandler<T> {
 	}
 
 	private <U> void evaluate(IExtensionRegistry registry, final U results) {
-		IConfigurationElement[] config = registry
-				.getConfigurationElementsFor(extensionPointId);
+		IConfigurationElement[] config = registry.getConfigurationElementsFor(extensionPointId);
 		try {
 			for (IConfigurationElement e : config) {
-				log("Evaluating extension: " + e.getName());
-				final Object o = e.createExecutableExtension("class");
+				Object o = e.createExecutableExtension("class");
 				if (o instanceof ResultNotifier) {
 					@SuppressWarnings("unchecked")
 					final ResultNotifier<U> notifier = (ResultNotifier<U>) o;
@@ -41,10 +38,12 @@ public class ExtensionPointHandler<T> {
 
 	private <U> void executeExtension(final Runnable extension) {
 		ISafeRunnable runnable = new ISafeRunnable() {
+			@Override
 			public void handleException(Throwable e) {
 				warn("Exception in client", e);
 			}
 
+			@Override
 			public void run() throws Exception {
 				extension.run();
 			}

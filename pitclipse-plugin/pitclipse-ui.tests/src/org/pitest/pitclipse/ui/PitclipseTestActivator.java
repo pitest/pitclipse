@@ -1,10 +1,9 @@
 package org.pitest.pitclipse.ui;
 
-import static com.google.common.collect.ImmutableList.builder;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableList.of;
-import static com.google.common.collect.Sets.newTreeSet;
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.newTreeSet;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,8 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -29,7 +28,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 	// The shared instance
 	private static PitclipseTestActivator plugin;
 
-	private List<String> stories = of();
+	private ImmutableList<String> stories = ImmutableList.of();
 
 	private final AtomicBoolean testsInProgress = new AtomicBoolean(false);
 
@@ -95,7 +94,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
 																// class defines
 																// signature
 		setActivator(null);
-		List<String> emptyPath = of();
+		List<String> emptyPath = ImmutableList.of();
 		setStories(emptyPath);
 		super.stop(context);
 	}

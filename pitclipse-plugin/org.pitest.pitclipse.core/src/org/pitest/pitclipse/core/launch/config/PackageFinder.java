@@ -1,7 +1,7 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableSet.builder;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.builder;
 import static org.eclipse.core.resources.IResource.FOLDER;
 import static org.eclipse.core.resources.IResource.NONE;
 import static org.eclipse.core.resources.IResource.PROJECT;
@@ -21,22 +21,20 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.google.common.collect.ImmutableSet.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 public class PackageFinder {
 
-	private static final class ProjectLevelProxyVisitor implements
-			IResourceProxyVisitor {
+	private static final class ProjectLevelProxyVisitor implements IResourceProxyVisitor {
 		private final LaunchConfigurationWrapper configurationWrapper;
 		private final Builder<String> builder;
 
-		private ProjectLevelProxyVisitor(
-				LaunchConfigurationWrapper configurationWrapper,
-				Builder<String> builder) {
+		private ProjectLevelProxyVisitor(LaunchConfigurationWrapper configurationWrapper, Builder<String> builder) {
 			this.configurationWrapper = configurationWrapper;
 			this.builder = builder;
 		}
 
+		@Override
 		public boolean visit(IResourceProxy proxy) throws CoreException {
 			IJavaProject project = configurationWrapper.getProject();
 			if (proxy.getType() == FOLDER) {
@@ -44,24 +42,20 @@ public class PackageFinder {
 				if (element.getElementType() == PACKAGE_FRAGMENT) {
 					builder.add(element.getElementName() + ".*");
 				} else if (element.getElementType() == PACKAGE_FRAGMENT_ROOT) {
-					builder.addAll(getPackagesFromRoot(project,
-							element.getHandleIdentifier()));
+					builder.addAll(getPackagesFromRoot(project, element.getHandleIdentifier()));
 				}
 			} else if (proxy.getType() == PROJECT) {
-				IPackageFragmentRoot[] packageRoots = project
-						.getAllPackageFragmentRoots();
+				IPackageFragmentRoot[] packageRoots = project.getAllPackageFragmentRoots();
 				for (IPackageFragmentRoot packageRoot : packageRoots) {
 					if (!packageRoot.isArchive()) {
-						builder.addAll(getPackagesFromRoot(project,
-								packageRoot.getHandleIdentifier()));
+						builder.addAll(getPackagesFromRoot(project, packageRoot.getHandleIdentifier()));
 					}
 				}
 			}
 			return false;
 		}
 
-		private Set<String> getPackagesFromRoot(IJavaProject project,
-				String handleId) throws CoreException {
+		private Set<String> getPackagesFromRoot(IJavaProject project, String handleId) throws CoreException {
 			Builder<String> builder = builder();
 			IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
 			for (IPackageFragmentRoot root : roots) {
@@ -82,14 +76,11 @@ public class PackageFinder {
 		}
 	}
 
-	public List<String> getPackages(
-			LaunchConfigurationWrapper configurationWrapper)
-			throws CoreException {
+	public List<String> getPackages(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
 
 		final Builder<String> builder = builder();
 		IResource[] resources = configurationWrapper.getMappedResources();
-		IResourceProxyVisitor visitor = new ProjectLevelProxyVisitor(
-				configurationWrapper, builder);
+		IResourceProxyVisitor visitor = new ProjectLevelProxyVisitor(configurationWrapper, builder);
 		for (IResource resource : resources) {
 			resource.accept(visitor, NONE);
 		}

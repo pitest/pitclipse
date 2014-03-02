@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.pitest</groupId>
+    <artifactId>pitclipse-dep</artifactId>
+    <version>0.32.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>guava-shade-osgi</artifactId>
+  <name>guava-shade-osgi</name>
+  <packaging>bundle</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>guava-shade</artifactId>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+          	<Embed-Dependency>*;inline=true</Embed-Dependency>
+          	<Import-Package>!sun.misc,*</Import-Package>
+            <Export-Package>javax.annotation.*;org.pitest.pitclipse.reloc.guava.*</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

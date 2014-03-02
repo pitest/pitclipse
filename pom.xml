@@ -73,6 +73,11 @@
         <artifactId>pitest-command-line</artifactId>
         <version>${pitest.version}</version>
       </dependency>
+      <dependency>
+  	    <groupId>org.pitest</groupId>
+        <artifactId>guava-shade</artifactId>
+        <version>${project.parent.version}</version>
+  	  </dependency>
     </dependencies>
   </dependencyManagement>
   <build>

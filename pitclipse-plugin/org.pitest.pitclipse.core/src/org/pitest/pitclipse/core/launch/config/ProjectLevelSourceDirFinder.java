@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 import java.io.File;
 import java.net.URI;
@@ -12,27 +12,23 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 public class ProjectLevelSourceDirFinder implements SourceDirFinder {
 
-	public List<File> getSourceDirs(
-			LaunchConfigurationWrapper configurationWrapper)
-			throws CoreException {
+	@Override
+	public List<File> getSourceDirs(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
 		Builder<File> sourceDirBuilder = ImmutableSet.builder();
 		IJavaProject javaProject = configurationWrapper.getProject();
 		URI location = getProjectLocation(javaProject.getProject());
-		IPackageFragmentRoot[] packageRoots = javaProject
-				.getPackageFragmentRoots();
+		IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
 
 		File projectRoot = new File(location);
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
 			if (!packageRoot.isArchive()) {
-				File packagePath = removeProjectFromPackagePath(javaProject,
-						packageRoot.getPath());
-				sourceDirBuilder.add(new File(projectRoot, packagePath
-						.toString()));
+				File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
+				sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
 			}
 		}
 		return copyOf(sourceDirBuilder.build());
@@ -48,8 +44,7 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
 		return projLocation.toURI();
 	}
 
-	private File removeProjectFromPackagePath(IJavaProject javaProject,
-			IPath packagePath) {
+	private File removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
 		IPath newPath = packagePath.removeFirstSegments(1);
 		return newPath.toFile();
 	}

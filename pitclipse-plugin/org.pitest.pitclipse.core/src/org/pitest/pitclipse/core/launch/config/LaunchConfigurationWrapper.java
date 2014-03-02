@@ -23,8 +23,8 @@ import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.base.Splitter;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class LaunchConfigurationWrapper {
 

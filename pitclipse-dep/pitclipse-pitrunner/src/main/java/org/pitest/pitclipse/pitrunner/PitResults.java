@@ -12,8 +12,7 @@ import javax.xml.bind.Unmarshaller;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
-
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @Immutable
 public final class PitResults implements Serializable {

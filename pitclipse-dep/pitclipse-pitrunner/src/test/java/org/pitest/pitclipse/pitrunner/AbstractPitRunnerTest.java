@@ -1,8 +1,8 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static com.google.common.collect.ImmutableList.of;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 import java.io.File;
 import java.util.List;
@@ -12,8 +12,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.pitest.pitclipse.pitrunner.server.PitServerTest;
-
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public abstract class AbstractPitRunnerTest {
 

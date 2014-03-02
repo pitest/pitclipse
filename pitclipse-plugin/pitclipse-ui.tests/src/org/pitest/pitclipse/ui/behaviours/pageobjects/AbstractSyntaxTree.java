@@ -14,9 +14,8 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.StepException;
-
-import com.google.common.collect.ImmutableList;
 
 public class AbstractSyntaxTree {
 
@@ -24,8 +23,7 @@ public class AbstractSyntaxTree {
 		IJavaProject javaProject = getJavaProject(context);
 		try {
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
-			IType type = javaProject.findType(context
-					.getFullyQualifiedTestClassName());
+			IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
 			for (IMethod method : type.getMethods()) {
 				method.delete(true, progressMonitor);
 			}
@@ -39,16 +37,14 @@ public class AbstractSyntaxTree {
 	}
 
 	private IJavaProject getJavaProject(String projectName) {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		return JavaCore.create(project);
 	}
 
 	public void addMethod(ConcreteClassContext context) {
 		IJavaProject javaProject = getJavaProject(context);
 		try {
-			IType type = javaProject.findType(context
-					.getFullyQualifiedTestClassName());
+			IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
 			NullProgressMonitor progressMonitor = new NullProgressMonitor();
 			type.createMethod(context.getMethod(), null, false, progressMonitor);
 		} catch (JavaModelException e) {
@@ -58,8 +54,7 @@ public class AbstractSyntaxTree {
 
 	public void deleteProject(String projectName) {
 		NullProgressMonitor progressMonitor = new NullProgressMonitor();
-		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		try {
 			project.delete(true, progressMonitor);
 		} catch (CoreException e) {
@@ -72,36 +67,29 @@ public class AbstractSyntaxTree {
 		try {
 			Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4");
 			IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
-			IClasspathEntry junitClasspath = JavaCore
-					.newContainerEntry(junitEntry.getPath());
+			IClasspathEntry junitClasspath = JavaCore.newContainerEntry(junitEntry.getPath());
 
-			List<IClasspathEntry> entries = ImmutableList
-					.<IClasspathEntry> builder().add(project.getRawClasspath())
+			List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
 					.add(junitClasspath).build();
 
 			// add a new entry using the path to the container
-			project.setRawClasspath(
-					entries.toArray(new IClasspathEntry[entries.size()]), null);
+			project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 		} catch (JavaModelException e) {
 			throw new StepException(e);
 		}
 	}
 
-	public void addProjectToClassPathOfProject(String projectName,
-			String projectToAdd) {
+	public void addProjectToClassPathOfProject(String projectName, String projectToAdd) {
 		IJavaProject project = getJavaProject(projectName);
 		try {
 			Path junitPath = new Path("/" + projectToAdd);
-			IClasspathEntry junitClasspath = JavaCore
-					.newProjectEntry(junitPath);
+			IClasspathEntry junitClasspath = JavaCore.newProjectEntry(junitPath);
 
-			List<IClasspathEntry> entries = ImmutableList
-					.<IClasspathEntry> builder().add(project.getRawClasspath())
+			List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
 					.add(junitClasspath).build();
 
 			// add a new entry using the path to the container
-			project.setRawClasspath(
-					entries.toArray(new IClasspathEntry[entries.size()]), null);
+			project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 		} catch (JavaModelException e) {
 			throw new StepException(e);
 		}

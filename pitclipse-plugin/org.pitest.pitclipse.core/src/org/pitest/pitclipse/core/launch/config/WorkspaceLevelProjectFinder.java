@@ -9,8 +9,8 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class WorkspaceLevelProjectFinder implements ProjectFinder {
 	@Override

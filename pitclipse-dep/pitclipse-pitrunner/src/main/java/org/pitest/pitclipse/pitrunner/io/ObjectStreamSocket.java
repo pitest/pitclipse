@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.google.common.annotations.VisibleForTesting;
+import org.pitest.pitclipse.reloc.guava.annotations.VisibleForTesting;
 
 public class ObjectStreamSocket implements Closeable {
 

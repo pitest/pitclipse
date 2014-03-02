@@ -1,7 +1,7 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableSet.builder;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.builder;
 
 import java.util.List;
 import java.util.Set;
@@ -19,21 +19,19 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 public class WorkspaceLevelClassFinder implements ClassFinder {
 
-	public List<String> getClasses(
-			LaunchConfigurationWrapper configurationWrapper)
-			throws CoreException {
+	@Override
+	public List<String> getClasses(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
 		Builder<String> classPathBuilder = builder();
 		List<IJavaProject> projects = getOpenJavaProjects();
 		IJavaProject testProject = configurationWrapper.getProject();
 		for (IJavaProject project : projects) {
-			if (sameProject(testProject, project)
-					|| onClassPathOf(testProject, project)) {
+			if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
 				classPathBuilder.addAll(getClassesFromProject(project));
 			}
 		}
@@ -48,8 +46,7 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 		return testProject.getElementName().equals(project.getElementName());
 	}
 
-	private Set<String> getClassesFromProject(IJavaProject project)
-			throws JavaModelException {
+	private Set<String> getClassesFromProject(IJavaProject project) throws JavaModelException {
 		Builder<String> classPathBuilder = builder();
 		IPackageFragmentRoot[] packageRoots = project.getPackageFragmentRoots();
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
@@ -58,8 +55,7 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 					if (element instanceof IPackageFragment) {
 						IPackageFragment packge = (IPackageFragment) element;
 						if (packge.getCompilationUnits().length > 0) {
-							classPathBuilder
-									.addAll(getClassesFromPackage(packge));
+							classPathBuilder.addAll(getClassesFromPackage(packge));
 						}
 					}
 				}
@@ -69,13 +65,10 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 	}
 
 	private List<IJavaProject> getOpenJavaProjects() throws CoreException {
-		ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList
-				.builder();
+		ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		for (IProject project : root.getProjects()) {
-			if (project.isOpen()
-					&& project
-							.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
+			if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
 				resultBuilder.add(JavaCore.create(project));
 			}
 		}
@@ -83,12 +76,10 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 	}
 
 	private boolean isMavenTestDir(IPackageFragmentRoot packageRoot) {
-		return packageRoot.getPath().toPortableString()
-				.contains("src/test/java");
+		return packageRoot.getPath().toPortableString().contains("src/test/java");
 	}
 
-	private Set<String> getClassesFromPackage(IPackageFragment packge)
-			throws JavaModelException {
+	private Set<String> getClassesFromPackage(IPackageFragment packge) throws JavaModelException {
 		Builder<String> classPathBuilder = ImmutableSet.builder();
 		for (ICompilationUnit javaFile : packge.getCompilationUnits()) {
 			classPathBuilder.addAll(getClassesFromSourceFile(javaFile));
@@ -96,8 +87,7 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 		return classPathBuilder.build();
 	}
 
-	private Set<String> getClassesFromSourceFile(ICompilationUnit javaFile)
-			throws JavaModelException {
+	private Set<String> getClassesFromSourceFile(ICompilationUnit javaFile) throws JavaModelException {
 		Builder<String> classPathBuilder = ImmutableSet.builder();
 		for (IType type : javaFile.getAllTypes()) {
 			classPathBuilder.add(type.getFullyQualifiedName());

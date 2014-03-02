@@ -12,6 +12,7 @@ import org.pitest.pitclipse.pitrunner.model.PackageMutations;
 import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
 import org.pitest.pitclipse.pitrunner.model.Status;
 import org.pitest.pitclipse.pitrunner.model.Visitable;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class ViewContentProvider implements ITreeContentProvider {
 

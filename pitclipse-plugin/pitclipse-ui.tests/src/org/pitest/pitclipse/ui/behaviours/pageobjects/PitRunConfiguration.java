@@ -1,10 +1,11 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableList.of;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 import java.util.List;
+
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class PitRunConfiguration {
 
@@ -16,8 +17,7 @@ public class PitRunConfiguration {
 	private final String excludedMethods;
 	private final String avoidCallsTo;
 
-	private PitRunConfiguration(String name, List<String> projects,
-			boolean runInParallel, boolean incrementalAnalysis,
+	private PitRunConfiguration(String name, List<String> projects, boolean runInParallel, boolean incrementalAnalysis,
 			String excludedClasses, String excludedMethods, String avoidCallsTo) {
 		this.name = name;
 		this.projects = projects;
@@ -38,7 +38,7 @@ public class PitRunConfiguration {
 
 	public static class Builder {
 		private String name;
-		private List<String> projects = of();
+		private List<String> projects = ImmutableList.of();
 		private boolean runInParallel = false;
 		private boolean incrementalAnalysis = false;
 		private String excludedClasses = "";
@@ -46,9 +46,8 @@ public class PitRunConfiguration {
 		private String avoidCallsTo = DEFAULT_AVOID_CALLS_TO_LIST;
 
 		public PitRunConfiguration build() {
-			return new PitRunConfiguration(name, projects, runInParallel,
-					incrementalAnalysis, excludedClasses, excludedMethods,
-					avoidCallsTo);
+			return new PitRunConfiguration(name, projects, runInParallel, incrementalAnalysis, excludedClasses,
+					excludedMethods, avoidCallsTo);
 		}
 
 		public Builder withName(String name) {

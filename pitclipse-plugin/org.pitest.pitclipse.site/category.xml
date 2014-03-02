@@ -3,10 +3,5 @@
    <feature url="features/org.pitest.pitclipse.feature_0.32.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.32.2.qualifier">
       <category name="Pitclipse"/>
    </feature>
-   <feature url="features/org.pitest.pitclipse.feature_0.32.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.32.2.qualifier">
-      <category name="Dependencies"/>
-   </feature>
-  
    <category-def name="Pitclipse" label="Pitclipse"/>
-   <category-def name="Dependencies" label="Dependencies"/>
 </site>

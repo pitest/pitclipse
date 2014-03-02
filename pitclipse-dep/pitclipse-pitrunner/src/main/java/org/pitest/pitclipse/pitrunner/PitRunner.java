@@ -1,7 +1,7 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Integer.valueOf;
+import static org.pitest.pitclipse.reloc.guava.base.Preconditions.checkArgument;
 
 import java.io.File;
 import java.io.IOException;

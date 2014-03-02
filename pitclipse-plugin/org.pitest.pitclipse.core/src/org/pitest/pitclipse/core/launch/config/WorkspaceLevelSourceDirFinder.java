@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
 import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
 import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 

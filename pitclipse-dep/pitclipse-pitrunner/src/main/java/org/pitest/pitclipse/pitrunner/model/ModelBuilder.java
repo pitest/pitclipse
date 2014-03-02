@@ -1,9 +1,9 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static com.google.common.collect.Collections2.filter;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Multimaps.filterKeys;
-import static com.google.common.collect.Multimaps.transformValues;
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.filterKeys;
+import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.transformValues;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,13 +11,12 @@ import java.util.List;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Ordering;
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.Predicate;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Multimap;
+import org.pitest.pitclipse.reloc.guava.collect.Multimaps;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class ModelBuilder {
 

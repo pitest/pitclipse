@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.pitrunner.service;
 
-import static com.google.common.collect.ImmutableList.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 import java.io.File;
 import java.util.List;
@@ -24,8 +24,7 @@ import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 import org.pitest.pitclipse.pitrunner.server.PitServerProvider;
 import org.pitest.pitclipse.pitrunner.server.PitServerTest;
-
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitclipseServiceTest {

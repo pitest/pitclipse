@@ -7,9 +7,8 @@ import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class PackageExplorer {
 
@@ -22,8 +21,7 @@ public class PackageExplorer {
 
 	public List<String> getProjectsInWorkspace() {
 		Builder<String> builder = ImmutableList.builder();
-		SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot()
-				.tree().getAllItems();
+		SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot().tree().getAllItems();
 		for (SWTBotTreeItem swtBotTreeItem : treeItems) {
 			builder.add(swtBotTreeItem.getText());
 		}
@@ -39,8 +37,7 @@ public class PackageExplorer {
 	}
 
 	private SWTBotTreeItem getProject(String projectName) {
-		SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot()
-				.tree().getAllItems();
+		SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot().tree().getAllItems();
 		for (SWTBotTreeItem treeItem : treeItems) {
 			if (projectName.equals(treeItem.getText())) {
 				openProject(treeItem);
@@ -51,14 +48,12 @@ public class PackageExplorer {
 		return null; // Never reached
 	}
 
-	public boolean doesPackageExistInProject(String packageName,
-			String projectName) {
+	public boolean doesPackageExistInProject(String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
 		return isNotNull(getPackageFromProject(project, packageName));
 	}
 
-	private SWTBotTreeItem getPackageFromProject(SWTBotTreeItem project,
-			String packageName) {
+	private SWTBotTreeItem getPackageFromProject(SWTBotTreeItem project, String packageName) {
 		for (SWTBotTreeItem srcDir : project.getItems()) {
 			srcDir.expand();
 			for (SWTBotTreeItem pkg : srcDir.getItems()) {
@@ -71,8 +66,7 @@ public class PackageExplorer {
 		return null;
 	}
 
-	private SWTBotTreeItem getClassFromPackage(SWTBotTreeItem pkg,
-			String className) {
+	private SWTBotTreeItem getClassFromPackage(SWTBotTreeItem pkg, String className) {
 		String fileName = className + ".java";
 		for (SWTBotTreeItem clazz : pkg.getItems()) {
 			if (fileName.equals(clazz.getText())) {
@@ -82,8 +76,7 @@ public class PackageExplorer {
 		return null;
 	}
 
-	public void selectClass(String className, String packageName,
-			String projectName) {
+	public void selectClass(String className, String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
 		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
 		pkg.select().expand();
@@ -91,8 +84,7 @@ public class PackageExplorer {
 		clazz.select().expand();
 	}
 
-	public boolean doesClassExistInProject(String className,
-			String packageName, String projectName) {
+	public boolean doesClassExistInProject(String className, String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
 		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
 		pkg.select().expand();
@@ -117,8 +109,7 @@ public class PackageExplorer {
 	}
 
 	public SWTBotTreeItem selectPackageRoot(PackageContext context) {
-		for (SWTBotTreeItem srcDir : getProject(context.getProjectName())
-				.getItems()) {
+		for (SWTBotTreeItem srcDir : getProject(context.getProjectName()).getItems()) {
 			srcDir.select();
 			srcDir.expand();
 			if (srcDir.getText().equals(context.getSourceDir())) {

@@ -1,10 +1,10 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableList.of;
-import static com.google.common.io.Files.createParentDirs;
-import static com.google.common.io.Files.createTempDir;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +13,9 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.base.Splitter;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 @Immutable
 public final class PitOptions implements Serializable {

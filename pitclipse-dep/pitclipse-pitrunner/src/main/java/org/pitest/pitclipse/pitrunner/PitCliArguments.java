@@ -3,9 +3,9 @@ package org.pitest.pitclipse.pitrunner;
 import java.io.File;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.Lists;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.collect.Lists;
 
 public class PitCliArguments {
 

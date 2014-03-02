@@ -1,10 +1,10 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class MutationsModel implements Visitable, Countable {
 

@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static com.google.common.collect.ImmutableSet.copyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.copyOf;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
@@ -25,11 +25,10 @@ import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.reloc.guava.base.Splitter;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 
 public class PitclipseSteps {
 

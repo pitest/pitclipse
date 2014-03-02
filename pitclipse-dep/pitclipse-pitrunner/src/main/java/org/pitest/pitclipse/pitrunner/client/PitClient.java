@@ -7,8 +7,7 @@ import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
-
-import com.google.common.annotations.VisibleForTesting;
+import org.pitest.pitclipse.reloc.guava.annotations.VisibleForTesting;
 
 public class PitClient implements Closeable {
 

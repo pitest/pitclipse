@@ -24,7 +24,7 @@ import org.pitest.pitclipse.pitrunner.PitRunner;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 

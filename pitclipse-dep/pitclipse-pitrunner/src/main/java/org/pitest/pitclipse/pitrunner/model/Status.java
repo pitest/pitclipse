@@ -1,12 +1,11 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 import java.util.List;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class Status implements Visitable, Countable {
 

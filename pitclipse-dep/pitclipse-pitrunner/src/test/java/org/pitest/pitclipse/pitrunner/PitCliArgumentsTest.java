@@ -10,12 +10,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
-
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.Splitter;
+import org.pitest.pitclipse.reloc.guava.collect.Collections2;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class PitCliArgumentsTest {
 

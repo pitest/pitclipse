@@ -2,7 +2,7 @@ package org.pitest.pitclipse.pitrunner.model;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class ProjectMutations implements Visitable, Countable {
 	private final String projectName;
