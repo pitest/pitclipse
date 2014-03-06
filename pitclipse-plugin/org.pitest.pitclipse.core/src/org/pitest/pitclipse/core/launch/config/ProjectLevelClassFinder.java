@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 public class ProjectLevelClassFinder implements ClassFinder {
@@ -23,10 +22,8 @@ public class ProjectLevelClassFinder implements ClassFinder {
 				for (IJavaElement element : packageRoot.getChildren()) {
 					if (element instanceof IPackageFragment) {
 						IPackageFragment packge = (IPackageFragment) element;
-						if (packge.getCompilationUnits().length > 0) {
+						if (packge.getCompilationUnits().length > 0)
 							classPathBuilder.add(packge.getElementName() + ".*");
-							// classPathBuilder.addAll(getClassesFromPackage(packge));
-						}
 					}
 				}
 			}

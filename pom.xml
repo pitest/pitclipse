@@ -116,7 +116,7 @@
     </profile>
   </profiles>
   <properties>
-    <guava.version>12.0</guava.version>
+    <guava.version>16.0.1</guava.version>
     <felix.version>2.4.0</felix.version>
     <hamcrest.version>1.3</hamcrest.version>
     <junit.version>4.11</junit.version>
