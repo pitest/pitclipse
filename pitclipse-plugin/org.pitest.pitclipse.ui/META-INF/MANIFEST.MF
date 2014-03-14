@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.pitest.pitclipse.core;bundle-version="0.33.1",
  org.pitest.pitclipse-pitrunner;bundle-version="0.33.1",
- org.pitest.guava-shade-osgi;bundle-version="0.33.1",
+ org.pitest.guava-shade-osgi;bundle-version="16.0.1",
  org.eclipse.ui.ide,
  org.eclipse.jdt.ui
 Bundle-ActivationPolicy: lazy

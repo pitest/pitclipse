@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.pitest</groupId>
-    <artifactId>pitclipse-dep</artifactId>
-    <version>0.33.1-SNAPSHOT</version>
+    <artifactId>pitclipse-parent</artifactId>
+    <version>0.33.1</version>
   </parent>
   <artifactId>guava-shade-osgi</artifactId>
   <name>guava-shade-osgi</name>
   <packaging>bundle</packaging>
+  <version>${guava.version}</version>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>

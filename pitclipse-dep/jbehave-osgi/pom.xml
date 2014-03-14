@@ -5,14 +5,14 @@
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>pitclipse-dep</artifactId>
+    <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1-SNAPSHOT</version>
+    <version>0.33.1</version>
   </parent>
   <artifactId>jbehave-osgi</artifactId>
   <name>jbehave-osgi</name>
   <packaging>bundle</packaging>
-
+  <version>${jbehave.version}</version>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

@@ -2,20 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>pitclipse</artifactId>
+    <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1-SNAPSHOT</version>
+    <version>0.33.1</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
-  <modules>
-    <module>pitest-osgi</module>
-    <module>pitest-command-line-osgi</module>
-    <module>pitclipse-pitrunner</module>
-    <module>guava-shade</module>
-    <module>guava-shade-osgi</module>
-  </modules>
   <build>
     <pluginManagement>
       <plugins>
@@ -29,9 +22,19 @@
   </build>
   <profiles>
     <profile>
-      <id>ui-test</id>
+      <id>external-bundle</id>
       <modules>
+        <module>pitest-osgi</module>
+        <module>pitest-command-line-osgi</module>
+        <module>guava-shade</module>
+        <module>guava-shade-osgi</module>
         <module>jbehave-osgi</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>bundle</id>
+      <modules>
+        <module>pitclipse-pitrunner</module>
       </modules>
     </profile>
   </profiles>

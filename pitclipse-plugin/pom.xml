@@ -3,12 +3,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>pitclipse</artifactId>
+    <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1-SNAPSHOT</version>
+    <version>0.33.1</version>
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
+  <version>0.33.1-SNAPSHOT</version>
   <modules>
     <module>org.pitest.pitclipse.core</module>
     <module>org.pitest.pitclipse.ui</module>
@@ -39,17 +40,17 @@
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest-osgi</artifactId>
-      <version>${project.version}</version>
+      <version>${pitest.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>guava-shade-osgi</artifactId>
-      <version>${project.version}</version>
+      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitclipse-pitrunner</artifactId>
-      <version>${project.version}</version>
+      <version>${version}</version>
     </dependency>
   </dependencies>
   <build>

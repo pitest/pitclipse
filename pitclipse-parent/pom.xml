@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
-  <artifactId>pitclipse</artifactId>
-  <version>0.33.1-SNAPSHOT</version>
+  <artifactId>pitclipse-parent</artifactId>
+  <version>0.33.1</version>
   <packaging>pom</packaging>
+  <name>pitclipse-parent</name>
   <organization>
     <name>Pitest.org</name>
     <url>http://pitest.org/</url>
   </organization>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
   <distributionManagement>
     <repository>
       <id>releases</id>
@@ -26,6 +21,19 @@
       <url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <guava.version>16.0.1</guava.version>
+    <felix.version>2.4.0</felix.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <junit.version>4.11</junit.version>
+    <jbehave.version>3.7.5</jbehave.version>
+    <maven.site.version>3.1</maven.site.version>
+    <mockito.version>1.9.5</mockito.version>
+    <pitest.version>0.33</pitest.version>
+    <tycho.version>0.15.0</tycho.version>
+    <xjc.version>1.5</xjc.version>
+  </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -74,10 +82,15 @@
         <version>${pitest.version}</version>
       </dependency>
       <dependency>
-  	    <groupId>org.pitest</groupId>
+		<groupId>org.pitest</groupId>
         <artifactId>guava-shade</artifactId>
-        <version>${project.parent.version}</version>
-  	  </dependency>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+		<groupId>org.pitest</groupId>
+        <artifactId>guava-shade-osgi</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
@@ -101,31 +114,4 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>bundle</id>
-      <modules>
-        <module>pitclipse-dep</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>plugin</id>
-      <modules>
-        <module>pitclipse-plugin</module>
-      </modules>
-    </profile>
-  </profiles>
-  <properties>
-    <guava.version>16.0.1</guava.version>
-    <felix.version>2.4.0</felix.version>
-    <hamcrest.version>1.3</hamcrest.version>
-    <junit.version>4.11</junit.version>
-    <jbehave.version>3.7.5</jbehave.version>
-    <maven.site.version>3.1</maven.site.version>
-    <mockito.version>1.9.5</mockito.version>
-    <pitest.version>0.33</pitest.version>
-    <tycho.version>0.15.0</tycho.version>
-<!--    <forceContextQualifier>201401081810</forceContextQualifier> -->
-    <xjc.version>1.5</xjc.version>
-  </properties>
-</project> 
+</project>

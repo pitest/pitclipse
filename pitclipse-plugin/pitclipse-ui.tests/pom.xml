@@ -63,18 +63,8 @@
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitest-osgi</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pitest</groupId>
-      <artifactId>pitclipse-pitrunner</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pitest</groupId>
       <artifactId>jbehave-osgi</artifactId>
-      <version>${project.version}</version>
+      <version>${jbehave.version}</version>
     </dependency>
   </dependencies>
 </project>

@@ -4,13 +4,14 @@
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>pitclipse-dep</artifactId>
+    <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1-SNAPSHOT</version>
+    <version>0.33.1</version>
   </parent>
   <artifactId>pitest-command-line-osgi</artifactId>
   <name>pitest-command-line-osgi</name>
   <packaging>bundle</packaging>
+  <version>${pitest.version}</version>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
