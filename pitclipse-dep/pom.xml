@@ -9,7 +9,7 @@
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
-  <version>0.33.1-SNAPSHOT</version>
+  <version>0.33.1.201403140903</version>
   <build>
     <pluginManagement>
       <plugins>
