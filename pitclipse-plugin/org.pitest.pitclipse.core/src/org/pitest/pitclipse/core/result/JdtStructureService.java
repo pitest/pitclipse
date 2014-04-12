@@ -10,9 +10,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.pitest.pitclipse.core.launch.MutatedClassNotFoundException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
-import org.pitest.pitclipse.pitrunner.model.EclipseStructureService;
+import org.pitest.pitclipse.pitrunner.model.ProjectStructureService;
 
-public enum JdtStructureService implements EclipseStructureService {
+public enum JdtStructureService implements ProjectStructureService {
 
 	INSTANCE;
 

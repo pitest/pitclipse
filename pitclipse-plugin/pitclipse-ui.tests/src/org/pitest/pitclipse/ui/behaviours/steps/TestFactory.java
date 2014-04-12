@@ -44,4 +44,8 @@ public enum TestFactory {
 	public int aRandomInt() {
 		return random.nextInt();
 	}
+
+	public boolean aRandomBoolean() {
+		return random.nextBoolean();
+	}
 }

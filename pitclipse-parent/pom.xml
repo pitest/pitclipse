@@ -82,13 +82,8 @@
         <version>${pitest.version}</version>
       </dependency>
       <dependency>
-		<groupId>org.pitest</groupId>
+        <groupId>org.pitest</groupId>
         <artifactId>guava-shade</artifactId>
-        <version>${guava.version}</version>
-      </dependency>
-      <dependency>
-		<groupId>org.pitest</groupId>
-        <artifactId>guava-shade-osgi</artifactId>
         <version>${guava.version}</version>
       </dependency>
     </dependencies>
