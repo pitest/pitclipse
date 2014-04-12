@@ -21,9 +21,9 @@ import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 public class ModelBuilder {
 
 	private static final Ordering<Mutation> MUTATION_ORDERING = Ordering.from(MutationSorter.INSTANCE);
-	private final EclipseStructureService eclipseStructureService;
+	private final ProjectStructureService eclipseStructureService;
 
-	public ModelBuilder(EclipseStructureService jdtHelper) {
+	public ModelBuilder(ProjectStructureService jdtHelper) {
 		this.eclipseStructureService = jdtHelper;
 	}
 

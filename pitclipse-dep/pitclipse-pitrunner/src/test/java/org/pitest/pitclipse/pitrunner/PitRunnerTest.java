@@ -26,7 +26,6 @@ public class PitRunnerTest {
 		PitResults results = runner.runPIT(request);
 		assertThat(results, is(notNullValue()));
 		assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
-		assertThat(results.getXmlResultFile(), is(aFileThatExists()));
 		assertThat(results.getMutations(), is(notNullValue()));
 	}
 

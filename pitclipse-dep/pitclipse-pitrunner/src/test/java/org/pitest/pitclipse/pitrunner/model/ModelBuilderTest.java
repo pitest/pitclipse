@@ -49,7 +49,7 @@ public class ModelBuilderTest {
 	private static final List<String> PROJECTS = ImmutableList.of(PROJECT_1, PROJECT_2);
 
 	@Mock
-	private EclipseStructureService eclipseStructureService;
+	private ProjectStructureService eclipseStructureService;
 
 	private Mutations mutations;
 	private List<TestClassContext> testContexts;

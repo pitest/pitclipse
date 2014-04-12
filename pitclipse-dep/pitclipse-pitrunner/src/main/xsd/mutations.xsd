@@ -27,6 +27,7 @@
               <xs:element type="xs:string" name="mutator" />
               <xs:element type="xs:integer" name="index" />
               <xs:element type="xs:string" name="killingTest" />
+              <xs:element type="xs:string" name="description" />
             </xs:sequence>
             <xs:attribute type="xs:boolean" name="detected"
               use="optional" />

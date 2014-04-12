@@ -19,7 +19,6 @@ public final class PitResults implements Serializable {
 	private static final long serialVersionUID = 5457147591186148047L;
 
 	private final File htmlResultFile;
-	private final File xmlResultFile;
 
 	private final Mutations mutations;
 
@@ -27,17 +26,12 @@ public final class PitResults implements Serializable {
 
 	private PitResults(File htmlResultFile, File xmlResultFile, Mutations mutations, ImmutableList<String> projects) {
 		this.htmlResultFile = htmlResultFile;
-		this.xmlResultFile = xmlResultFile;
 		this.mutations = mutations;
 		this.projects = projects;
 	};
 
 	public File getHtmlResultFile() {
 		return htmlResultFile;
-	}
-
-	public File getXmlResultFile() {
-		return xmlResultFile;
 	}
 
 	public static final class Builder {
@@ -101,8 +95,7 @@ public final class PitResults implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PitResults [htmlResultFile=" + htmlResultFile + ", xmlResultFile=" + xmlResultFile + ", projects="
-				+ projects + "]";
+		return "PitResults [htmlResultFile=" + htmlResultFile + ", projects=" + projects + "]";
 	}
 
 	public Mutations getMutations() {

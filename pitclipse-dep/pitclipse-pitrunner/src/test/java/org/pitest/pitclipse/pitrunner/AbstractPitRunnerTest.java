@@ -58,7 +58,7 @@ public abstract class AbstractPitRunnerTest {
 			@Override
 			protected boolean matchesSafely(PitResults actualResult) {
 				return new EqualsBuilder().append(expectedResult.getHtmlResultFile(), actualResult.getHtmlResultFile())
-						.append(expectedResult.getXmlResultFile(), actualResult.getXmlResultFile()).isEquals();
+						.isEquals();
 			}
 		};
 	}

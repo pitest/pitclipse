@@ -13,10 +13,10 @@
   <packaging>bundle</packaging>
   <version>0.33.2-SNAPSHOT</version>
   <dependencies>
-  	<dependency>
-  	  <groupId>org.pitest</groupId>
+    <dependency>
+      <groupId>org.pitest</groupId>
       <artifactId>guava-shade</artifactId>
-  	</dependency>
+    </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest-command-line</artifactId>

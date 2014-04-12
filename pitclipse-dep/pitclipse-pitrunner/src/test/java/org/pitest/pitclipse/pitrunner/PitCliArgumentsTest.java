@@ -161,7 +161,7 @@ public class PitCliArgumentsTest {
 	private static final class ExpectedArgsBuilder {
 
 		private static final ImmutableList<String> DEFAULT_PIT_ARGS = ImmutableList.of("--failWhenNoMutations",
-				"false", "--outputFormats", "HTML,XML", "--verbose");
+				"false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS", "--verbose");
 		private File reportDir;
 		private int threadCount = DEFAULT_NUMBER_OF_THREADS;
 		private String classUnderTest;

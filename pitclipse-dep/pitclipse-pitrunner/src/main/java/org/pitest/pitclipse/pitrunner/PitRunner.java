@@ -10,6 +10,8 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.client.PitClient;
+import org.pitest.pitclipse.pitrunner.results.Mutations;
+import org.pitest.pitclipse.pitrunner.results.mutations.RecordingMutationsDispatcher;
 
 @ThreadSafe
 public class PitRunner {
@@ -47,9 +49,10 @@ public class PitRunner {
 		MutationCoverageReport.main(cliArgs);
 		File reportDir = request.getReportDirectory();
 		File htmlResultFile = findResultFile(reportDir, "index.html");
-		File xmlResultFile = findResultFile(reportDir, "mutations.xml");
-		return PitResults.builder().withHtmlResults(htmlResultFile).withXmlResults(xmlResultFile)
-				.withProjects(request.getProjects()).build();
+		Mutations results = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
+
+		return PitResults.builder().withHtmlResults(htmlResultFile).withProjects(request.getProjects())
+				.withMutations(results).build();
 	}
 
 	private static void validateArgs(String[] args) {
