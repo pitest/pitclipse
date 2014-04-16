@@ -9,13 +9,16 @@ public class Mutation implements Visitable {
 	private final String mutatedMethod;
 	private final String mutator;
 	private final DetectionStatus status;
+	private final String description;
 
-	private Mutation(String killingTest, int lineNumber, String mutatedMethod, String mutator, DetectionStatus status) {
+	private Mutation(String killingTest, int lineNumber, String mutatedMethod, String mutator, DetectionStatus status,
+			String description) {
 		this.killingTest = killingTest;
 		this.lineNumber = lineNumber;
 		this.mutatedMethod = mutatedMethod;
 		this.mutator = mutator;
 		this.status = status;
+		this.description = description;
 	}
 
 	@Override
@@ -43,6 +46,10 @@ public class Mutation implements Visitable {
 		return status;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -53,12 +60,13 @@ public class Mutation implements Visitable {
 		private String mutatedMethod;
 		private String mutator;
 		private DetectionStatus status;
+		private String description;
 
 		private Builder() {
 		}
 
 		public Mutation build() {
-			return new Mutation(killingTest, lineNumber, mutatedMethod, mutator, status);
+			return new Mutation(killingTest, lineNumber, mutatedMethod, mutator, status, description);
 		}
 
 		public Builder withKillingTest(String killingTest) {
@@ -83,6 +91,11 @@ public class Mutation implements Visitable {
 
 		public Builder withStatus(DetectionStatus status) {
 			this.status = status;
+			return this;
+		}
+
+		public Builder withDescription(String description) {
+			this.description = description;
 			return this;
 		}
 	}

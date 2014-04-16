@@ -121,7 +121,8 @@ public class ModelBuilder {
 						Mutation mutation = Mutation.builder().withKillingTest(dtoMutation.getKillingTest())
 								.withLineNumber(dtoMutation.getLineNumber().intValue())
 								.withMutatedMethod(dtoMutation.getMutatedMethod())
-								.withMutator(dtoMutation.getMutator()).withStatus(dtoMutation.getStatus()).build();
+								.withMutator(dtoMutation.getMutator()).withStatus(dtoMutation.getStatus())
+								.withDescription(dtoMutation.getDescription()).build();
 						return mutation;
 					}
 				});

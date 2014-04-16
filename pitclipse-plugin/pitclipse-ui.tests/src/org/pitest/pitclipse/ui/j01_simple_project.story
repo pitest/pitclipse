@@ -39,8 +39,8 @@ And test FooTest in package foo.bar is run for project project1
 Then a coverage report is generated with 1 classes tested with overall coverage of 50% and mutation coverage of 0%
 And the mutation results are
 |status|project|package|class|line|mutation|
-|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
+|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|Replaced integer addition with subtraction|
+|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|replaced return of integer sized value with (x == 0 ? 1 |
 
 Scenario: Create a bad test for doFoo
 Given the class FooTest in package foo.bar in project project1 is selected
@@ -49,8 +49,8 @@ And test FooTest in package foo.bar is run for project project1
 Then a coverage report is generated with 1 classes tested with overall coverage of 100% and mutation coverage of 0%
 And the mutation results are
 |status|project|package|class|line|mutation|
-|SURVIVED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|SURVIVED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|6|Replaced integer addition with subtraction|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|6|replaced return of integer sized value with (x == 0 ? 1 |
 
 Scenario: Create a better test for doFoo
 Given the class FooTest in package foo.bar in project project1 is selected
@@ -59,8 +59,8 @@ And test FooTest in package foo.bar is run for project project1
 Then a coverage report is generated with 1 classes tested with overall coverage of 100% and mutation coverage of 100%
 And the mutation results are
 |status|project|package|class|line|mutation|
-|KILLED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|KILLED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
+|KILLED|project1|foo.bar|foo.bar.Foo|6|Replaced integer addition with subtraction|
+|KILLED|project1|foo.bar|foo.bar.Foo|6|replaced return of integer sized value with (x == 0 ? 1 |
 
 Scenario: Run mutation tests at package, package root & project level
 When tests in package foo.bar are run for project project1
@@ -88,18 +88,18 @@ When test BarTest in package foo.bar is run for project project1
 Then a coverage report is generated with 2 classes tested with overall coverage of 50% and mutation coverage of 50%
 And the mutation results are
 |status|project|package|class|line|mutation|
-|KILLED|project1|foo.bar|foo.bar.Bar|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|KILLED|project1|foo.bar|foo.bar.Bar|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
-|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
+|KILLED|project1|foo.bar|foo.bar.Bar|6|Replaced integer addition with subtraction|
+|KILLED|project1|foo.bar|foo.bar.Bar|6|replaced return of integer sized value with (x == 0 ? 1 |
+|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|Replaced integer addition with subtraction|
+|NO_COVERAGE|project1|foo.bar|foo.bar.Foo|6|replaced return of integer sized value with (x == 0 ? 1 |
 When tests in package foo.bar are run for project project1
 Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
 And the mutation results are
 |status|project|package|class|line|mutation|
-|KILLED|project1|foo.bar|foo.bar.Bar|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|KILLED|project1|foo.bar|foo.bar.Bar|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
-|KILLED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.MathMutator|
-|KILLED|project1|foo.bar|foo.bar.Foo|6|org.pitest.mutationtest.engine.gregor.mutators.ReturnValsMutator|
+|KILLED|project1|foo.bar|foo.bar.Bar|6|Replaced integer addition with subtraction|
+|KILLED|project1|foo.bar|foo.bar.Bar|6|replaced return of integer sized value with (x == 0 ? 1  |
+|KILLED|project1|foo.bar|foo.bar.Foo|6|Replaced integer addition with subtraction|
+|KILLED|project1|foo.bar|foo.bar.Foo|6|replaced return of integer sized value with (x == 0 ? 1 |
 When tests in source root src are run for project project1
 Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
 When tests are run for project project1

@@ -1,6 +1,5 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
@@ -8,6 +7,7 @@ import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
 
 import java.net.URL;
 import java.util.Set;
@@ -91,7 +91,7 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitMutation(Mutation mutation) {
-			return Integer.toString(mutation.getLineNumber()) + ": " + mutation.getMutator();
+			return Integer.toString(mutation.getLineNumber()) + ": " + mutation.getDescription();
 		}
 
 		@Override

@@ -46,6 +46,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 			mutation.setSourceFile(details.getFilename());
 			mutation.setStatus(convert(result.getStatus()));
 			mutation.setDetected(result.getStatus().isDetected());
+			mutation.setDescription(details.getDescription());
 
 			this.mutations = ImmutableList.<Mutation> builder().addAll(mutations).add(mutation).build();
 		}
