@@ -22,6 +22,18 @@ public final class ClassSteps {
 		INSTANCE.getBuildProgress().waitForBuild();
 	}
 
+	@Given("a bad test for class $className in package $packageName is created in project $projectName")
+	public void createClassWithBadTest(String className, String packageName, String projectName) {
+		String testClass = className + "Test";
+		createClass(testClass, packageName, projectName);
+		selectClass(testClass, packageName, projectName);
+		createMethod("@Test public void badTest() {" + className + " x = new " + className + "(); x.f(1);}");
+		createClass(className, packageName, projectName);
+		selectClass(className, packageName, projectName);
+		createMethod("public int f(int i) {ArrayList<Object> pointless = new ArrayList<Object>(); pointless.clear(); return i + 1;}");
+		// createMethod("public int f(int i) {return i + 1;}");
+	}
+
 	@Then("package $packageName exists in project $projectName")
 	public void verifyPackageExists(String packageName, String projectName) {
 		assertTrue("Package: " + packageName + " not found",

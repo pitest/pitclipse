@@ -59,8 +59,6 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 			return DetectionStatus.KILLED;
 		case MEMORY_ERROR:
 			return DetectionStatus.MEMORY_ERROR;
-		case NO_COVERAGE:
-			return DetectionStatus.NO_COVERAGE;
 		case NON_VIABLE:
 			return DetectionStatus.NON_VIABLE;
 		case NOT_STARTED:
@@ -73,6 +71,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 			return DetectionStatus.SURVIVED;
 		case TIMED_OUT:
 			return DetectionStatus.TIMED_OUT;
+		case NO_COVERAGE:
 		default:
 			return DetectionStatus.NO_COVERAGE;
 		}

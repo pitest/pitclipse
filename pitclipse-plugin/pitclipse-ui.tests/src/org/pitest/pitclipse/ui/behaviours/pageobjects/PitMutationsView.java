@@ -93,7 +93,7 @@ public class PitMutationsView {
 	}
 
 	private String mutationFrom(String mutationLabel) {
-		List<String> labelSplitByPattern = ImmutableList.copyOf(Splitter.on(": ").split(mutationLabel));
+		List<String> labelSplitByPattern = ImmutableList.copyOf(Splitter.on(": ").limit(2).split(mutationLabel));
 		return labelSplitByPattern.size() > 1 ? labelSplitByPattern.get(1) : "";
 	}
 
