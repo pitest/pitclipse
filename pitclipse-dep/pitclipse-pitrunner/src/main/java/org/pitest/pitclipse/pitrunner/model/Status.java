@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-
 import java.util.List;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class Status implements Visitable, Countable {
 
@@ -38,7 +38,8 @@ public class Status implements Visitable, Countable {
 		}
 
 		public Builder withProjectMutations(List<ProjectMutations> projectMutations) {
-			this.projectMutations = copyOf(projectMutations);
+			this.projectMutations = Ordering.natural().nullsLast().onResultOf(ProjectName.GET)
+					.immutableSortedCopy(projectMutations);
 			return this;
 		}
 
@@ -98,4 +99,13 @@ public class Status implements Visitable, Countable {
 		return sum;
 	}
 
+	private enum ProjectName implements Function<ProjectMutations, String> {
+		GET;
+
+		@Override
+		public String apply(ProjectMutations input) {
+			return input.getProjectName();
+		}
+
+	}
 }

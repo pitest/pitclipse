@@ -136,8 +136,8 @@ public class ModelBuilderTest {
 		List<ProjectMutations> project1KilledMutations = ImmutableList.of(expectedKilledMutationsForProject1());
 		List<ProjectMutations> project1SurvivedMutations = ImmutableList.of(expectedSurvivedMutationsForProject1());
 		List<Status> statuses = ImmutableList.of(
-				Status.builder().withDetectionStatus(KILLED).withProjectMutations(project1KilledMutations).build(),
-				Status.builder().withDetectionStatus(SURVIVED).withProjectMutations(project1SurvivedMutations).build());
+				Status.builder().withDetectionStatus(SURVIVED).withProjectMutations(project1SurvivedMutations).build(),
+				Status.builder().withDetectionStatus(KILLED).withProjectMutations(project1KilledMutations).build());
 		expectedModel = MutationsModel.make(statuses);
 	}
 

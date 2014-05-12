@@ -2,7 +2,9 @@ package org.pitest.pitclipse.pitrunner.model;
 
 import java.util.List;
 
+import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class ProjectMutations implements Visitable, Countable {
 	private final String projectName;
@@ -43,7 +45,8 @@ public class ProjectMutations implements Visitable, Countable {
 		}
 
 		public Builder withPackageMutations(List<PackageMutations> packages) {
-			this.packageMutations = ImmutableList.copyOf(packages);
+			this.packageMutations = Ordering.natural().nullsLast().onResultOf(PackageName.GET)
+					.immutableSortedCopy(packages);
 			return this;
 		}
 
@@ -96,4 +99,14 @@ public class ProjectMutations implements Visitable, Countable {
 		}
 		return sum;
 	}
+
+	private enum PackageName implements Function<PackageMutations, String> {
+		GET;
+
+		@Override
+		public String apply(PackageMutations input) {
+			return input.getPackageName();
+		}
+	}
+
 }

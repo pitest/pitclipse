@@ -1,10 +1,10 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-
+import java.util.Comparator;
 import java.util.List;
 
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class ClassMutations implements Visitable, Countable {
 	private final String className;
@@ -45,13 +45,25 @@ public class ClassMutations implements Visitable, Countable {
 		}
 
 		public Builder withMutations(Iterable<Mutation> mutations) {
-			this.mutations = copyOf(mutations);
+			this.mutations = Ordering.from(MutationComparator.INSTANCE).immutableSortedCopy(mutations);
 			return this;
 		}
 
 		public ClassMutations build() {
 			return new ClassMutations(className, mutations);
 		};
+
+		private enum MutationComparator implements Comparator<Mutation> {
+			INSTANCE;
+
+			@Override
+			public int compare(Mutation lhs, Mutation rhs) {
+				if (lhs.getLineNumber() != rhs.getLineNumber()) {
+					return Ordering.natural().compare(lhs.getLineNumber(), rhs.getLineNumber());
+				}
+				return Ordering.natural().compare(lhs.getDescription(), rhs.getDescription());
+			}
+		}
 	}
 
 	@Override
