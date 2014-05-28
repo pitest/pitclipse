@@ -5,8 +5,8 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 
-public enum ExpandingDoubleClickListener implements IDoubleClickListener {
-	INSTANCE;
+public enum ExpandingDoubleClick implements IDoubleClickListener {
+	LISTENER;
 
 	@Override
 	public void doubleClick(DoubleClickEvent event) {

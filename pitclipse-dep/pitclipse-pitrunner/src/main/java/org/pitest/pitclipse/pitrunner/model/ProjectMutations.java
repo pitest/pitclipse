@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+
 import java.util.List;
 
 import org.pitest.pitclipse.reloc.guava.base.Function;
@@ -12,7 +14,13 @@ public class ProjectMutations implements Visitable, Countable {
 
 	private ProjectMutations(String projectName, ImmutableList<PackageMutations> packageMutations) {
 		this.projectName = projectName;
-		this.packageMutations = packageMutations;
+		this.packageMutations = ImmutableList.copyOf(transform(packageMutations,
+				new Function<PackageMutations, PackageMutations>() {
+					@Override
+					public PackageMutations apply(PackageMutations input) {
+						return input.copyOf().withProjectMutations(ProjectMutations.this).build();
+					}
+				}));
 	}
 
 	@Override
@@ -26,6 +34,10 @@ public class ProjectMutations implements Visitable, Countable {
 
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public Builder copyOf() {
+		return builder().withPackageMutations(packageMutations).withProjectName(projectName);
 	}
 
 	public List<PackageMutations> getPackageMutations() {

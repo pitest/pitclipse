@@ -183,6 +183,19 @@ public class PitclipseSteps {
 		assertThat(actualMutations, is(equalTo(expectedMutations)));
 	}
 
+	@When("the following mutation is selected $tableOfMutations")
+	public void mutationIsSelected(ExamplesTable tableOfMutations) {
+		PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
+		INSTANCE.getPitMutationsView().select(mutation);
+	}
+
+	@Then("the file $fileName is opened at line number $lineNumber")
+	public void mutationIsOpened(String fileName, int lineNumber) {
+		FilePosition position = INSTANCE.getPitMutationsView().getLastSelectedMutation();
+		assertThat(position.className, is(equalTo(fileName)));
+		assertThat(position.lineNumber, is(equalTo(lineNumber)));
+	}
+
 	private List<PitMutation> mutationsFromExampleTable(ExamplesTable tableOfMutations) {
 		ImmutableList.Builder<PitMutation> projectsBuilder = ImmutableList.builder();
 		for (Parameters mutationRow : tableOfMutations.getRowsAsParameters()) {

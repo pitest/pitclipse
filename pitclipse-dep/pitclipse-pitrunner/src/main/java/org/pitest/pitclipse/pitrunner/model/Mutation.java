@@ -10,9 +10,11 @@ public class Mutation implements Visitable {
 	private final String mutator;
 	private final DetectionStatus status;
 	private final String description;
+	private final ClassMutations classMutations;
 
-	private Mutation(String killingTest, int lineNumber, String mutatedMethod, String mutator, DetectionStatus status,
-			String description) {
+	private Mutation(ClassMutations classMutations, String killingTest, int lineNumber, String mutatedMethod,
+			String mutator, DetectionStatus status, String description) {
+		this.classMutations = classMutations;
 		this.killingTest = killingTest;
 		this.lineNumber = lineNumber;
 		this.mutatedMethod = mutatedMethod;
@@ -50,8 +52,17 @@ public class Mutation implements Visitable {
 		return description;
 	}
 
+	public ClassMutations getClassMutations() {
+		return classMutations;
+	}
+
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public Builder copyOf() {
+		return new Builder().withDescription(description).withKillingTest(killingTest).withLineNumber(lineNumber)
+				.withMutatedMethod(mutatedMethod).withMutator(mutator).withStatus(status);
 	}
 
 	public static class Builder {
@@ -61,12 +72,13 @@ public class Mutation implements Visitable {
 		private String mutator;
 		private DetectionStatus status;
 		private String description;
+		private ClassMutations classMutations;
 
 		private Builder() {
 		}
 
 		public Mutation build() {
-			return new Mutation(killingTest, lineNumber, mutatedMethod, mutator, status, description);
+			return new Mutation(classMutations, killingTest, lineNumber, mutatedMethod, mutator, status, description);
 		}
 
 		public Builder withKillingTest(String killingTest) {
@@ -96,6 +108,11 @@ public class Mutation implements Visitable {
 
 		public Builder withDescription(String description) {
 			this.description = description;
+			return this;
+		}
+
+		public Builder withClassMutation(ClassMutations classMutations) {
+			this.classMutations = classMutations;
 			return this;
 		}
 	}

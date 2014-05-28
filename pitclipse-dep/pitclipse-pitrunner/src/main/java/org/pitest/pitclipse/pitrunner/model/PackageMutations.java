@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+
 import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
@@ -7,10 +9,18 @@ import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 public class PackageMutations implements Visitable, Countable {
 	private final String packageName;
 	private final ImmutableList<ClassMutations> classMutations;
+	private final ProjectMutations projectMutations;
 
-	private PackageMutations(String packageName, ImmutableList<ClassMutations> mutations) {
+	private PackageMutations(ProjectMutations projectMutations, String packageName,
+			ImmutableList<ClassMutations> mutations) {
+		this.projectMutations = projectMutations;
 		this.packageName = packageName;
-		this.classMutations = mutations;
+		this.classMutations = ImmutableList.copyOf(transform(mutations, new Function<ClassMutations, ClassMutations>() {
+			@Override
+			public ClassMutations apply(ClassMutations input) {
+				return input.copyOf().withPackageMutations(PackageMutations.this).build();
+			}
+		}));
 	}
 
 	public String getPackageName() {
@@ -21,6 +31,10 @@ public class PackageMutations implements Visitable, Countable {
 		return classMutations;
 	}
 
+	public ProjectMutations getProjectMutations() {
+		return projectMutations;
+	}
+
 	@Override
 	public <T> T accept(MutationsModelVisitor<T> visitor) {
 		return visitor.visitPackage(this);
@@ -29,6 +43,7 @@ public class PackageMutations implements Visitable, Countable {
 	public static class Builder {
 		private String packageName;
 		private ImmutableList<ClassMutations> mutations;
+		private ProjectMutations projectMutations;
 
 		private Builder() {
 		}
@@ -39,13 +54,17 @@ public class PackageMutations implements Visitable, Countable {
 		}
 
 		public Builder withClassMutations(Iterable<ClassMutations> mutations) {
-			this.mutations = Ordering.natural().nullsLast().onResultOf(ClassName.GET)
-					.immutableSortedCopy(mutations);
+			this.mutations = Ordering.natural().nullsLast().onResultOf(ClassName.GET).immutableSortedCopy(mutations);
 			return this;
 		}
 
 		public PackageMutations build() {
-			return new PackageMutations(packageName, mutations);
+			return new PackageMutations(projectMutations, packageName, mutations);
+		}
+
+		public Builder withProjectMutations(ProjectMutations projectMutations) {
+			this.projectMutations = projectMutations;
+			return this;
 		}
 
 		private enum ClassName implements Function<ClassMutations, String> {
@@ -60,6 +79,10 @@ public class PackageMutations implements Visitable, Countable {
 
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public Builder copyOf() {
+		return builder().withClassMutations(classMutations).withPackageName(packageName);
 	}
 
 	@Override
@@ -106,5 +129,4 @@ public class PackageMutations implements Visitable, Countable {
 		}
 		return sum;
 	}
-
 }

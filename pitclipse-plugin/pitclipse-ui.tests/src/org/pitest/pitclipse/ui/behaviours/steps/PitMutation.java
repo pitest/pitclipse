@@ -128,4 +128,27 @@ public class PitMutation {
 				+ ", lineNumber=" + lineNumber + ", mutation=" + mutation + "]";
 	}
 
+	public DetectionStatus getStatus() {
+		return status;
+	}
+
+	public String getProject() {
+		return project;
+	}
+
+	public String getPkg() {
+		return pkg;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	public String getMutation() {
+		return mutation;
+	}
 }

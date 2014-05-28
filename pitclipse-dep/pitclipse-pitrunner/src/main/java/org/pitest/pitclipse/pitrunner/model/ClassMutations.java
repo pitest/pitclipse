@@ -1,18 +1,28 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+
 import java.util.Comparator;
 import java.util.List;
 
+import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class ClassMutations implements Visitable, Countable {
 	private final String className;
 	private final ImmutableList<Mutation> mutations;
+	private final PackageMutations packageMutations;
 
-	private ClassMutations(String className, ImmutableList<Mutation> mutations) {
+	private ClassMutations(PackageMutations packageMutations, String className, ImmutableList<Mutation> mutations) {
+		this.packageMutations = packageMutations;
 		this.className = className;
-		this.mutations = mutations;
+		this.mutations = ImmutableList.copyOf(transform(mutations, new Function<Mutation, Mutation>() {
+			@Override
+			public Mutation apply(Mutation input) {
+				return input.copyOf().withClassMutation(ClassMutations.this).build();
+			}
+		}));
 	}
 
 	@Override
@@ -28,13 +38,22 @@ public class ClassMutations implements Visitable, Countable {
 		return mutations;
 	}
 
+	public PackageMutations getPackageMutations() {
+		return packageMutations;
+	}
+
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public Builder copyOf() {
+		return new Builder().withClassName(className).withMutations(mutations);
 	}
 
 	public static class Builder {
 		private String className;
 		private ImmutableList<Mutation> mutations = ImmutableList.of();
+		private PackageMutations packageMutations;
 
 		private Builder() {
 		}
@@ -50,7 +69,7 @@ public class ClassMutations implements Visitable, Countable {
 		}
 
 		public ClassMutations build() {
-			return new ClassMutations(className, mutations);
+			return new ClassMutations(packageMutations, className, mutations);
 		};
 
 		private enum MutationComparator implements Comparator<Mutation> {
@@ -63,6 +82,11 @@ public class ClassMutations implements Visitable, Countable {
 				}
 				return Ordering.natural().compare(lhs.getDescription(), rhs.getDescription());
 			}
+		}
+
+		public Builder withPackageMutations(PackageMutations packageMutations) {
+			this.packageMutations = packageMutations;
+			return this;
 		}
 	}
 
