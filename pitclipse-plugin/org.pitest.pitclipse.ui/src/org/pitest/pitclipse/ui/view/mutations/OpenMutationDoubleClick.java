@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
+import static org.eclipse.ui.ide.IDE.openEditor;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -22,7 +24,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -152,7 +153,7 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
 
 				private void tryToOpen(IWorkbenchWindow workbench, final IFile file) throws PartInitException,
 						CoreException {
-					IEditorPart editorPart = IDE.openEditor(workbench.getActivePage(), file);
+					IEditorPart editorPart = openEditor(workbench.getActivePage(), file);
 					if (editorPart instanceof ITextEditor && lineNumber >= 0) {
 						ITextEditor textEditor = (ITextEditor) editorPart;
 						IEditorInput editorInput = textEditor.getEditorInput();
