@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import java.io.File;
@@ -30,6 +32,7 @@ public class PitCliArgumentsTest {
 	private static final List<String> EXCLUDED_METHODS = ImmutableList.of("*toString*", "leaveMeAlone*");
 	private static final File NO_HISTORY_FILE = null;
 	private static final int DEFAULT_NUMBER_OF_THREADS = 1;
+	private static final List<String> MUTATORS = ImmutableList.of("FOO", "BAR");
 
 	private static final List<String> DEFAULT_AVOID_LIST = ImmutableList.copyOf(Splitter.on(',').trimResults()
 			.omitEmptyStrings().split(DEFAULT_AVOID_CALLS_TO_LIST));
@@ -57,29 +60,29 @@ public class PitCliArgumentsTest {
 	@Test
 	public void minimumOptionsSet() throws IOException {
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
-				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).build();
+				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
 	public void testPackagesSupplied() {
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
-				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).build();
+				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, PACKAGE_1 + "," + PACKAGE_2,
-				CLASS_PATH, NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				CLASS_PATH, NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
 	public void multipleSourceDirectoriesExist() throws IOException {
 		List<File> srcDirs = ImmutableList.of(testSrcDir, anotherTestSrcDir);
 		PitOptions options = PitOptions.builder().withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1)
-				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).build();
+				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, srcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
@@ -87,40 +90,40 @@ public class PitCliArgumentsTest {
 		int nonStandardThreadCount = 123456;
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withThreads(nonStandardThreadCount)
-				.build();
+				.withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, nonStandardThreadCount, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
 	public void validHistoryLocationSupplied() {
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withHistoryLocation(historyLocation)
-				.build();
+				.withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				historyLocation, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				historyLocation, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
 	public void excludedClassesSet() throws IOException {
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withExcludedClasses(EXCLUDED_CLASSES)
-				.build();
+				.withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				NO_HISTORY_FILE, EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
 	public void excludedClassesAndMethodsSet() throws IOException {
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withExcludedClasses(EXCLUDED_CLASSES)
-				.withExcludedMethods(EXCLUDED_METHODS).build();
+				.withMutators(MUTATORS).withExcludedMethods(EXCLUDED_METHODS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, EXCLUDED_CLASSES, EXCLUDED_METHODS, DEFAULT_AVOID_LIST);
+				NO_HISTORY_FILE, EXCLUDED_CLASSES, EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS);
 	}
 
 	@Test
@@ -128,10 +131,10 @@ public class PitCliArgumentsTest {
 		List<String> alternativeAvoidList = ImmutableList.of("org.springframework");
 		PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
 				.withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withAvoidCallsTo(alternativeAvoidList)
-				.build();
+				.withMutators(MUTATORS).build();
 		whenArgumentsAreMadeFrom(options);
 		thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
-				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, alternativeAvoidList);
+				NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, alternativeAvoidList, MUTATORS);
 	}
 
 	private void whenArgumentsAreMadeFrom(PitOptions options) {
@@ -140,13 +143,13 @@ public class PitCliArgumentsTest {
 
 	private void thenTheArgumentsAreMadeUpOf(File reportDir, List<File> testSrcDirs, int threadCount, String testClass,
 			List<String> classesToMutate, File historyFile, List<String> excludedClasses, List<String> excludedMethods,
-			List<String> avoidCallsTo) {
+			List<String> avoidCallsTo, List<String> mutators) {
 		Object[] expectedCliArgs = new ExpectedArgsBuilder().withThreadCount(threadCount).withReportDir(reportDir)
 				.withClassUnderTest(testClass).withTargetClasses(classesToMutate)
 				.withSourceDirectories(filesAsStrings(testSrcDirs)).withHistoryLocation(historyFile)
-				.withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)
-				.withAvoidCallsTo(avoidCallsTo).build();
-		assertArrayEquals(expectedCliArgs, actualCliArgs);
+				.withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods).withMutators(MUTATORS)
+				.withAvoidCallsTo(avoidCallsTo).withMutators(mutators).build();
+		assertThat(actualCliArgs, is(equalTo(expectedCliArgs)));
 	}
 
 	private List<String> filesAsStrings(List<File> files) {
@@ -171,6 +174,7 @@ public class PitCliArgumentsTest {
 		private List<String> excludedClasses = NO_EXCLUDED_CLASSES;
 		private List<String> excludedMethods = NO_EXCLUDED_METHODS;
 		private List<String> avoidCallsTo = DEFAULT_AVOID_LIST;
+		private List<String> mutators = MUTATORS;
 
 		public String[] build() {
 			Builder<String> resultBuilder = ImmutableList.builder();
@@ -185,7 +189,13 @@ public class PitCliArgumentsTest {
 			resultBuilder.addAll(addIfKnown("--excludedClasses", excludedClasses));
 			resultBuilder.addAll(addIfKnown("--excludedMethods", excludedMethods));
 			resultBuilder.addAll(addIfKnown("--avoidCallsTo", avoidCallsTo));
+			resultBuilder.addAll(addIfKnown("--mutators", mutators));
 			return asStrings(resultBuilder.build());
+		}
+
+		public ExpectedArgsBuilder withMutators(List<String> mutators) {
+			this.mutators = ImmutableList.copyOf(mutators);
+			return this;
 		}
 
 		public ExpectedArgsBuilder withTargetClasses(List<String> targetClasses) {

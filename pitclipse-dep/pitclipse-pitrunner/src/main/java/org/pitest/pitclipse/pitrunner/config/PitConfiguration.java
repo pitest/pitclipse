@@ -7,6 +7,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class PitConfiguration {
 	public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging";
+	public static final String DEFAULT_MUTATORS = "DEFAULTS";
 
 	private final PitExecutionMode executionMode;
 	private final boolean parallelExecution;
@@ -14,16 +15,17 @@ public class PitConfiguration {
 	private final String excludedClasses;
 	private final String excludedMethods;
 	private final String avoidCallsTo;
+	private final String mutators;
 
-	private PitConfiguration(PitExecutionMode executionMode,
-			boolean parallelExecution, boolean incrementalAnalysis,
-			String excludedClasses, String excludedMethods, String avoidCallsTo) {
+	private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis,
+			String excludedClasses, String excludedMethods, String avoidCallsTo, String mutators) {
 		this.executionMode = executionMode;
 		this.parallelExecution = parallelExecution;
 		this.incrementalAnalysis = incrementalAnalysis;
 		this.excludedClasses = excludedClasses;
 		this.excludedMethods = excludedMethods;
 		this.avoidCallsTo = avoidCallsTo;
+		this.mutators = mutators;
 	}
 
 	public static Builder builder() {
@@ -43,13 +45,13 @@ public class PitConfiguration {
 	}
 
 	public static final class Builder {
-
 		private PitExecutionMode executionMode = PROJECT_ISOLATION;
 		private boolean parallelExecution = true;
 		private boolean incrementalAnalysis = false;
 		private String excludedClasses = "";
 		private String excludedMethods = "";
 		private String avoidCallsTo = DEFAULT_AVOID_CALLS_TO_LIST;
+		private String mutators = DEFAULT_MUTATORS;
 
 		private Builder() {
 		}
@@ -84,10 +86,14 @@ public class PitConfiguration {
 			return this;
 		}
 
+		public Builder withMutators(String defaultMutators) {
+			this.mutators = defaultMutators;
+			return this;
+		}
+
 		public PitConfiguration build() {
-			return new PitConfiguration(executionMode, parallelExecution,
-					incrementalAnalysis, excludedClasses, excludedMethods,
-					avoidCallsTo);
+			return new PitConfiguration(executionMode, parallelExecution, incrementalAnalysis, excludedClasses,
+					excludedMethods, avoidCallsTo, mutators);
 		}
 
 	}
@@ -102,6 +108,10 @@ public class PitConfiguration {
 
 	public String getAvoidCallsTo() {
 		return avoidCallsTo;
+	}
+
+	public String getMutators() {
+		return mutators;
 	}
 
 }

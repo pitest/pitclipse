@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.pitrunner;
 
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
@@ -15,7 +16,6 @@ import javax.annotation.concurrent.Immutable;
 
 import org.pitest.pitclipse.reloc.guava.base.Splitter;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 @Immutable
 public final class PitOptions implements Serializable {
@@ -23,48 +23,43 @@ public final class PitOptions implements Serializable {
 	private static final long serialVersionUID = 1543633254516962868L;
 	private final File reportDir;
 	private final String classUnderTest;
-	private final List<String> classesToMutate;
-	private final List<File> sourceDirs;
-	private final List<String> packages;
+	private final ImmutableList<String> classesToMutate;
+	private final ImmutableList<File> sourceDirs;
+	private final ImmutableList<String> packages;
 	private final int threads;
 	private final File historyLocation;
-	private final List<String> excludedClasses;
-	private final List<String> excludedMethods;
-	private final List<String> avoidCallsTo;
+	private final ImmutableList<String> excludedClasses;
+	private final ImmutableList<String> excludedMethods;
+	private final ImmutableList<String> avoidCallsTo;
+	private final ImmutableList<String> mutators;
 
-	private PitOptions(String classUnderTest, List<String> classesToMutate, List<File> sourceDirs, File reportDir,
-			List<String> packages, int threads, File historyLocation, List<String> excludedClasses,
-			List<String> excludedMethods, List<String> avoidCallsTo) {
+	private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
+			File reportDir, ImmutableList<String> packages, int threads, File historyLocation,
+			ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
+			ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
 		this.historyLocation = historyLocation;
-		this.packages = copyOf(packages);
-		this.classesToMutate = copyOf(classesToMutate);
+		this.packages = packages;
+		this.classesToMutate = classesToMutate;
 		this.sourceDirs = sourceDirs;
 		this.reportDir = reportDir;
-		this.excludedClasses = copyOf(excludedClasses);
-		this.excludedMethods = copyOf(excludedMethods);
-		this.avoidCallsTo = copyOf(avoidCallsTo);
+		this.excludedClasses = excludedClasses;
+		this.excludedMethods = excludedMethods;
+		this.avoidCallsTo = avoidCallsTo;
+		this.mutators = mutators;
 	}
 
 	public File getReportDirectory() {
 		return new File(reportDir.getPath());
 	}
 
-	public List<File> getSourceDirectories() {
-		return copyOfFiles(sourceDirs);
+	public ImmutableList<File> getSourceDirectories() {
+		return sourceDirs;
 	}
 
 	private static File copyOfFile(File sourceDir) {
 		return new File(sourceDir.getPath());
-	}
-
-	private static List<File> copyOfFiles(List<File> sourceDirs) {
-		Builder<File> builder = ImmutableList.builder();
-		for (File file : sourceDirs) {
-			builder.add(copyOfFile(file));
-		}
-		return builder.build();
 	}
 
 	public static PitOptionsBuilder builder() {
@@ -73,16 +68,16 @@ public final class PitOptions implements Serializable {
 
 	public static final class PitOptionsBuilder {
 		private String classUnderTest = null;
-		private List<String> classesToMutate = of();
+		private ImmutableList<String> classesToMutate = of();
 		private File reportDir = null;
-		private List<File> sourceDirs = of();
-		private List<String> packages = of();
+		private ImmutableList<File> sourceDirs = of();
+		private ImmutableList<String> packages = of();
 		private int threads = 1;
 		private File historyLocation = null;
-		private List<String> excludedClasses = of();
-		private List<String> excludedMethods = of();
-		private List<String> avoidCallsTo = ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings()
-				.split(DEFAULT_AVOID_CALLS_TO_LIST));
+		private ImmutableList<String> excludedClasses = of();
+		private ImmutableList<String> excludedMethods = of();
+		private ImmutableList<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
+		private ImmutableList<String> mutators = copyOf(split(DEFAULT_MUTATORS));
 
 		private PitOptionsBuilder() {
 		}
@@ -107,7 +102,7 @@ public final class PitOptions implements Serializable {
 			initialiseReportDir();
 			initialiseHistoryLocation();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, threads,
-					historyLocation, excludedClasses, excludedMethods, avoidCallsTo);
+					historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators);
 		}
 
 		private void initialiseReportDir() {
@@ -196,6 +191,15 @@ public final class PitOptions implements Serializable {
 			this.avoidCallsTo = copyOf(avoidCallsTo);
 			return this;
 		}
+
+		public PitOptionsBuilder withMutators(List<String> mutators) {
+			this.mutators = copyOf(mutators);
+			return this;
+		}
+
+		private static List<String> split(String toSplit) {
+			return ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings().split(toSplit));
+		}
 	}
 
 	public static final class PitLaunchException extends IllegalArgumentException {
@@ -250,11 +254,16 @@ public final class PitOptions implements Serializable {
 		return avoidCallsTo;
 	}
 
+	public List<String> getMutators() {
+		return mutators;
+	}
+
 	@Override
 	public String toString() {
 		return "PitOptions [reportDir=" + reportDir + ", classUnderTest=" + classUnderTest + ", classesToMutate="
 				+ classesToMutate + ", sourceDirs=" + sourceDirs + ", packages=" + packages + ", threads=" + threads
 				+ ", historyLocation=" + historyLocation + ", excludedClasses=" + excludedClasses
-				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + "]";
+				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + ", mutators=" + mutators
+				+ "]";
 	}
 }

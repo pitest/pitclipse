@@ -31,6 +31,7 @@ public class PitCliArguments {
 		builder.addAll(excludedClassesFrom(options));
 		builder.addAll(excludedMethodsFrom(options));
 		builder.addAll(avoidedCallsFrom(options));
+		builder.addAll(mutatorsFrom(options));
 		List<String> args = builder.build();
 		return args.toArray(new String[args.size()]);
 	}
@@ -61,6 +62,16 @@ public class PitCliArguments {
 		if (!avoidCallsTo.isEmpty()) {
 			builder.add("--avoidCallsTo");
 			builder.add(concat(commaSeperate(avoidCallsTo)));
+		}
+		return builder.build();
+	}
+
+	private List<String> mutatorsFrom(PitOptions options) {
+		Builder<String> builder = ImmutableList.builder();
+		List<String> mutators = options.getMutators();
+		if (!mutators.isEmpty()) {
+			builder.add("--mutators");
+			builder.add(concat(commaSeperate(mutators)));
 		}
 		return builder.build();
 	}
