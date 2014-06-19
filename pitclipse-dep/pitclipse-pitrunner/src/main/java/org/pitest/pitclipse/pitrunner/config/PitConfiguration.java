@@ -86,8 +86,8 @@ public class PitConfiguration {
 			return this;
 		}
 
-		public Builder withMutators(String defaultMutators) {
-			this.mutators = defaultMutators;
+		public Builder withMutators(String mutators) {
+			this.mutators = mutators;
 			return this;
 		}
 

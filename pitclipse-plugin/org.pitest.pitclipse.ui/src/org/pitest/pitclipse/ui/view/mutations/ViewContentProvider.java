@@ -27,7 +27,7 @@ public class ViewContentProvider implements ITreeContentProvider {
 	public Object[] getElements(Object element) {
 		if (element instanceof Visitable) {
 			Visitable visitable = (Visitable) element;
-			return visitable.accept(StructureVisitor.INSTANCE);
+			return visitable.accept(Structure.VISITOR);
 		}
 		return nothing();
 	}
@@ -36,33 +36,38 @@ public class ViewContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object element) {
 		if (element instanceof Visitable) {
 			Visitable visitable = (Visitable) element;
-			return visitable.accept(StructureVisitor.INSTANCE);
+			return visitable.accept(Structure.VISITOR);
 		}
 		return nothing();
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		return nothing();
+		if (element instanceof Visitable) {
+			Visitable visitable = (Visitable) element;
+			return visitable.accept(Parent.VISITOR);
+		}
+		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
 		if (element instanceof Visitable) {
 			Visitable visitable = (Visitable) element;
-			Object[] children = visitable.accept(StructureVisitor.INSTANCE);
+			Object[] children = visitable.accept(Structure.VISITOR);
 			return children.length > 0;
 		}
 		return false;
 	}
 
-	private enum StructureVisitor implements MutationsModelVisitor<Object[]> {
-		INSTANCE;
+	private enum Structure implements MutationsModelVisitor<Object[]> {
+		VISITOR;
 
 		@Override
 		public Object[] visitModel(MutationsModel mutationsModel) {
 			List<Status> statuses = mutationsModel.getStatuses();
 			return statuses.toArray();
+
 		}
 
 		@Override
@@ -92,6 +97,40 @@ public class ViewContentProvider implements ITreeContentProvider {
 		public Object[] visitStatus(Status status) {
 			List<ProjectMutations> projectMutations = status.getProjectMutations();
 			return projectMutations.toArray();
+		}
+	}
+
+	private enum Parent implements MutationsModelVisitor<Object> {
+		VISITOR;
+
+		@Override
+		public Object visitModel(MutationsModel mutationsModel) {
+			return null;
+		}
+
+		@Override
+		public Object visitStatus(Status status) {
+			return status.getMutationsModel();
+		}
+
+		@Override
+		public Object visitProject(ProjectMutations projectMutations) {
+			return projectMutations.getStatus();
+		}
+
+		@Override
+		public Object visitPackage(PackageMutations packageMutations) {
+			return packageMutations.getProjectMutations();
+		}
+
+		@Override
+		public Object visitClass(ClassMutations classMutations) {
+			return classMutations.getPackageMutations();
+		}
+
+		@Override
+		public Object visitMutation(Mutation mutation) {
+			return mutation.getClassMutations();
 		}
 	}
 

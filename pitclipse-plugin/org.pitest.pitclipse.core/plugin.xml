@@ -49,6 +49,12 @@
            id="org.pitest.pitclipse.core.preferences.PitPreferencePage"
            name="Pitest">
      </page>
+     <page 
+         id="org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage" 
+         name="Mutators" 
+         class="org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage" 
+         category="org.pitest.pitclipse.core.preferences.PitPreferencePage"> 
+      </page> 
   </extension>
   <extension
         point="org.eclipse.core.runtime.preferences">

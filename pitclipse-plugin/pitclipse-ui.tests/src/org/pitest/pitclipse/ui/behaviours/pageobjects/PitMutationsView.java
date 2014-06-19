@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
 import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
 import java.util.List;
@@ -42,8 +43,7 @@ public class PitMutationsView {
 	private ImmutableList<PitMutation> mutationsFrom(SWTBotTree mutationTree) {
 		ImmutableList.Builder<PitMutation> resultBuilder = ImmutableList.builder();
 		for (SWTBotTreeItem statusTreeItem : mutationTree.getAllItems()) {
-			String status = normaliseLabel(statusTreeItem);
-			statusTreeItem.expand();
+			String status = normaliseLabel(expand(statusTreeItem));
 			PitMutation.Builder mutationBuilder = PitMutation.builder().withStatus(DetectionStatus.valueOf(status));
 			resultBuilder.addAll(statusMutations(mutationBuilder, statusTreeItem));
 		}
@@ -54,7 +54,7 @@ public class PitMutationsView {
 			SWTBotTreeItem statusTreeItem) {
 		ImmutableList.Builder<PitMutation> mutationResults = ImmutableList.builder();
 		for (SWTBotTreeItem projectTreeItem : statusTreeItem.getItems()) {
-			projectTreeItem.expand();
+			expand(projectTreeItem);
 			mutationBuilder.withProject(normaliseLabel(projectTreeItem));
 			mutationResults.addAll(projectMutations(mutationBuilder, projectTreeItem));
 		}
@@ -65,7 +65,7 @@ public class PitMutationsView {
 			SWTBotTreeItem projectTreeItem) {
 		ImmutableList.Builder<PitMutation> mutationResults = ImmutableList.builder();
 		for (SWTBotTreeItem pkgTreeItem : projectTreeItem.getItems()) {
-			pkgTreeItem.expand();
+			expand(pkgTreeItem);
 			mutationBuilder.withPackage(normaliseLabel(pkgTreeItem));
 			mutationResults.addAll(packageMutations(mutationBuilder, pkgTreeItem));
 		}
@@ -75,7 +75,7 @@ public class PitMutationsView {
 	private ImmutableList<PitMutation> packageMutations(PitMutation.Builder mutationBuilder, SWTBotTreeItem pkgTreeItem) {
 		ImmutableList.Builder<PitMutation> mutationResults = ImmutableList.builder();
 		for (SWTBotTreeItem classTreeItem : pkgTreeItem.getItems()) {
-			classTreeItem.expand();
+			expand(classTreeItem);
 			mutationBuilder.withClassName(normaliseLabel(classTreeItem));
 			mutationResults.addAll(classMutations(mutationBuilder, classTreeItem));
 		}
@@ -85,7 +85,7 @@ public class PitMutationsView {
 	private ImmutableList<PitMutation> classMutations(PitMutation.Builder mutationBuilder, SWTBotTreeItem classTreeItem) {
 		ImmutableList.Builder<PitMutation> mutationResults = ImmutableList.builder();
 		for (SWTBotTreeItem mutationTreeItem : classTreeItem.getItems()) {
-			mutationTreeItem.expand();
+			expand(mutationTreeItem);
 			String mutationLabel = mutationTreeItem.getText();
 			mutationBuilder.withLineNumber(lineNumberFrom(mutationLabel));
 			mutationBuilder.withMutation(mutationFrom(mutationLabel));
@@ -156,7 +156,7 @@ public class PitMutationsView {
 		}
 
 		public static StatusTree from(SWTBotTreeItem statusTree) {
-			statusTree.expand();
+			expand(statusTree);
 			ImmutableList.Builder<ProjectTree> statuses = ImmutableList.builder();
 			for (SWTBotTreeItem treeItem : statusTree.getItems()) {
 				statuses.add(ProjectTree.from(treeItem));
@@ -183,7 +183,7 @@ public class PitMutationsView {
 		}
 
 		public static ProjectTree from(SWTBotTreeItem projectTree) {
-			projectTree.expand();
+			expand(projectTree);
 			ImmutableList.Builder<PackageTree> packages = ImmutableList.builder();
 			for (SWTBotTreeItem treeItem : projectTree.getItems()) {
 				packages.add(PackageTree.from(treeItem));
@@ -209,7 +209,7 @@ public class PitMutationsView {
 		}
 
 		public static PackageTree from(SWTBotTreeItem packageTree) {
-			packageTree.expand();
+			expand(packageTree);
 			ImmutableList.Builder<ClassTree> classes = ImmutableList.builder();
 			for (SWTBotTreeItem treeItem : packageTree.getItems()) {
 				classes.add(ClassTree.from(treeItem));
@@ -236,7 +236,7 @@ public class PitMutationsView {
 		}
 
 		public static ClassTree from(SWTBotTreeItem classTree) {
-			classTree.expand();
+			expand(classTree);
 			ImmutableList.Builder<MutationTree> mutations = ImmutableList.builder();
 			for (SWTBotTreeItem treeItem : classTree.getItems()) {
 				mutations.add(MutationTree.from(treeItem));
@@ -258,11 +258,10 @@ public class PitMutationsView {
 		}
 
 		public void select() {
-			treeItem.expand().doubleClick();
+			treeItem.select().doubleClick();
 		}
 
 		public static MutationTree from(SWTBotTreeItem mutationNode) {
-			mutationNode.expand();
 			String label = mutationNode.getText();
 			int lineNumber = lineNumberFrom(label);
 			String mutation = mutationFrom(label);

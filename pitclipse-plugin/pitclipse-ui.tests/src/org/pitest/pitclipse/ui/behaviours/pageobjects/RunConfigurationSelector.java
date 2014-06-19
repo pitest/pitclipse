@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 import java.util.List;
 
@@ -57,9 +58,7 @@ public class RunConfigurationSelector {
 		shell.activate();
 		for (SWTBotTreeItem treeItem : bot.tree().getAllItems()) {
 			if ("PIT Mutation Test".equals(treeItem.getText())) {
-				treeItem.select();
-				treeItem.expand();
-				return treeItem;
+				return selectAndExpand(treeItem);
 			}
 		}
 		return null;

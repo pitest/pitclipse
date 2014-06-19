@@ -2,6 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class WindowsMenu {
@@ -102,6 +103,15 @@ public class WindowsMenu {
 	public void openPitMutationsView() {
 		bot.menu(WINDOWS).menu(SHOW_VIEW).menu(OTHER).click();
 		viewSelector.selectView("PIT", "PIT Mutations");
+	}
+
+	public PitMutators getMutators() {
+		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		return preferenceSelector.getMutators();
+	}
+
+	public void setMutators(PitMutators mutators) {
+		PitCoreActivator.getDefault().setMutators(mutators);
 	}
 
 }

@@ -9,11 +9,13 @@ import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.SURVIVED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
 
 import java.util.Comparator;
 import java.util.List;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
@@ -36,7 +38,12 @@ public class MutationsModel implements Visitable, Countable {
 	private final ImmutableList<Status> statuses;
 
 	private MutationsModel(ImmutableList<Status> statuses) {
-		this.statuses = statuses;
+		this.statuses = ImmutableList.copyOf(transform(statuses, new Function<Status, Status>() {
+			@Override
+			public Status apply(Status input) {
+				return input.copyOf().withModel(MutationsModel.this).build();
+			}
+		}));
 	}
 
 	public static MutationsModel make(List<Status> statuses) {

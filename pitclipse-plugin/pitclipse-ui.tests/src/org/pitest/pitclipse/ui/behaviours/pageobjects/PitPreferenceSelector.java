@@ -1,11 +1,16 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
+
 import java.io.Closeable;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+import org.pitest.pitclipse.reloc.guava.base.Optional;
 
 public class PitPreferenceSelector implements Closeable {
 
@@ -34,12 +39,13 @@ public class PitPreferenceSelector implements Closeable {
 		PitCoreActivator.getDefault().setExecutionMode(mode);
 	}
 
+	@Override
 	public void close() {
 		bot.button("OK").click();
 	}
 
-	private void expandPitPreferences() {
-		bot.tree().getTreeItem("Pitest").select().expand();
+	private SWTBotTreeItem expandPitPreferences() {
+		return selectAndExpand(bot.tree().getTreeItem("Pitest"));
 	}
 
 	private void activatePreferenceShell() {
@@ -70,8 +76,7 @@ public class PitPreferenceSelector implements Closeable {
 		activatePreferenceShell();
 		try {
 			expandPitPreferences();
-			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL)
-					.isChecked();
+			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).isChecked();
 		} finally {
 			close();
 		}
@@ -175,4 +180,28 @@ public class PitPreferenceSelector implements Closeable {
 		}
 	}
 
+	public PitMutators getMutators() {
+		activatePreferenceShell();
+		try {
+			expandPitMutatorPreferences();
+			for (PitMutators mutator : PitMutators.values()) {
+				if (bot.radio(mutator.getLabel()).isSelected()) {
+					return mutator;
+				}
+			}
+			return null;
+		} finally {
+			close();
+		}
+	}
+
+	private Optional<SWTBotTreeItem> expandPitMutatorPreferences() {
+		SWTBotTreeItem pitPrefs = expandPitPreferences();
+		for (SWTBotTreeItem t : pitPrefs.getItems()) {
+			if (t.getText().equals("Mutators")) {
+				return Optional.of(selectAndExpand(t));
+			}
+		}
+		return Optional.absent();
+	}
 }

@@ -7,13 +7,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.pitest.pitclipse.core.PitMutators.ALL;
+import static org.pitest.pitclipse.core.PitMutators.STRONGER;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
 
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class PreferencesSteps {
@@ -25,8 +30,7 @@ public class PreferencesSteps {
 
 	@Then("the project level scope preference is selected")
 	public void projectScopePreferenceIsChosen() {
-		assertEquals(PROJECT_ISOLATION, INSTANCE.getWindowsMenu()
-				.getPitExecutionMode());
+		assertEquals(PROJECT_ISOLATION, INSTANCE.getWindowsMenu().getPitExecutionMode());
 	}
 
 	@When("the workspace level scope preference is selected")
@@ -36,8 +40,7 @@ public class PreferencesSteps {
 
 	@Then("the workspace level scope preference is selected")
 	public void workspacePreferenceIsChosen() {
-		PitExecutionMode pitExecutionMode = INSTANCE.getWindowsMenu()
-				.getPitExecutionMode();
+		PitExecutionMode pitExecutionMode = INSTANCE.getWindowsMenu().getPitExecutionMode();
 		assertEquals(WORKSPACE, pitExecutionMode);
 	}
 
@@ -116,4 +119,19 @@ public class PreferencesSteps {
 		INSTANCE.getWindowsMenu().setAvoidCallsTo(avoidCallsTo);
 	}
 
+	@Then("the default mutators preference is selected")
+	public void defaultMutators() {
+		PitMutators selectedMutators = INSTANCE.getWindowsMenu().getMutators();
+		assertThat(selectedMutators.toString(), is(equalTo(DEFAULT_MUTATORS)));
+	}
+
+	@Given("the stronger mutator preference is selected")
+	public void useStrongerMutators() {
+		INSTANCE.getWindowsMenu().setMutators(STRONGER);
+	}
+
+	@Given("the all mutators preference is selected")
+	public void useAllMutators() {
+		INSTANCE.getWindowsMenu().setMutators(ALL);
+	}
 }

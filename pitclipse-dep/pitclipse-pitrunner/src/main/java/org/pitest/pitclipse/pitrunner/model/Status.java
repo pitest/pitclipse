@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+
 import java.util.List;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
@@ -11,10 +13,19 @@ public class Status implements Visitable, Countable {
 
 	private final DetectionStatus detectionStatus;
 	private final ImmutableList<ProjectMutations> projectMutations;
+	private final MutationsModel mutationsModel;
 
-	private Status(DetectionStatus detectionStatus, ImmutableList<ProjectMutations> projectMutations) {
+	private Status(MutationsModel mutationsModel, DetectionStatus detectionStatus,
+			ImmutableList<ProjectMutations> projectMutations) {
+		this.mutationsModel = mutationsModel;
 		this.detectionStatus = detectionStatus;
-		this.projectMutations = projectMutations;
+		this.projectMutations = ImmutableList.copyOf(transform(projectMutations,
+				new Function<ProjectMutations, ProjectMutations>() {
+					@Override
+					public ProjectMutations apply(ProjectMutations input) {
+						return input.copyOf().withStatus(Status.this).build();
+					}
+				}));
 	}
 
 	public DetectionStatus getDetectionStatus() {
@@ -28,6 +39,7 @@ public class Status implements Visitable, Countable {
 	public static class Builder {
 		private DetectionStatus detectionStatus;
 		private ImmutableList<ProjectMutations> projectMutations = ImmutableList.of();
+		private MutationsModel mutationsModel;
 
 		private Builder() {
 		}
@@ -44,7 +56,12 @@ public class Status implements Visitable, Countable {
 		}
 
 		public Status build() {
-			return new Status(detectionStatus, projectMutations);
+			return new Status(mutationsModel, detectionStatus, projectMutations);
+		}
+
+		public Builder withModel(MutationsModel mutationsModel) {
+			this.mutationsModel = mutationsModel;
+			return this;
 		}
 	}
 
@@ -107,5 +124,13 @@ public class Status implements Visitable, Countable {
 			return input.getProjectName();
 		}
 
+	}
+
+	public Builder copyOf() {
+		return builder().withDetectionStatus(detectionStatus).withProjectMutations(projectMutations);
+	}
+
+	public MutationsModel getMutationsModel() {
+		return mutationsModel;
 	}
 }

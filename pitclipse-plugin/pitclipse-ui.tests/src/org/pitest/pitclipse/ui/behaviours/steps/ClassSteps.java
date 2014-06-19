@@ -30,7 +30,7 @@ public final class ClassSteps {
 		createMethod("@Test public void badTest() {" + className + " x = new " + className + "(); x.f(1);}");
 		createClass(className, packageName, projectName);
 		selectClass(className, packageName, projectName);
-		createMethod("public int f(int i) {ArrayList<Object> pointless = new ArrayList<Object>(); pointless.clear(); return i + 1;}");
+		createMethod("public int f(int i) {ArrayList<Object> pointless = new ArrayList<Object>(); if (pointless.size() == 1) return i + 1; else return 0;}");
 		// createMethod("public int f(int i) {return i + 1;}");
 	}
 

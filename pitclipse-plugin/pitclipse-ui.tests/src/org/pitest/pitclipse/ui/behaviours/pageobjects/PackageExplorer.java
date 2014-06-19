@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static junit.framework.Assert.fail;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class PackageExplorer {
 	}
 
 	private void openProject(SWTBotTreeItem project) {
-		project.click().select().expand();
+		expand(project);
 	}
 
 	private SWTBotTreeItem getProject(String projectName) {
@@ -55,8 +57,7 @@ public class PackageExplorer {
 
 	private SWTBotTreeItem getPackageFromProject(SWTBotTreeItem project, String packageName) {
 		for (SWTBotTreeItem srcDir : project.getItems()) {
-			srcDir.expand();
-			for (SWTBotTreeItem pkg : srcDir.getItems()) {
+			for (SWTBotTreeItem pkg : selectAndExpand(srcDir).getItems()) {
 				String text = pkg.getText();
 				if (packageName.equals(text)) {
 					return pkg;
@@ -78,24 +79,19 @@ public class PackageExplorer {
 
 	public void selectClass(String className, String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
-		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
-		pkg.select().expand();
-		SWTBotTreeItem clazz = getClassFromPackage(pkg, className);
-		clazz.select().expand();
+		SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
+		SWTBotTreeItem clazz = selectAndExpand(getClassFromPackage(pkg, className));
 	}
 
 	public boolean doesClassExistInProject(String className, String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
-		SWTBotTreeItem pkg = getPackageFromProject(project, packageName);
-		pkg.select().expand();
+		SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
 		return isNotNull(getClassFromPackage(pkg, className));
 	}
 
 	public void openClass(ClassContext context) {
-		SWTBotTreeItem pkg = getPackage(context);
-		pkg.select().expand();
-		SWTBotTreeItem clazz = getClassFromPackage(pkg, context.getClassName());
-		clazz.select().expand();
+		SWTBotTreeItem pkg = selectAndExpand(getPackage(context));
+		SWTBotTreeItem clazz = selectAndExpand(getClassFromPackage(pkg, context.getClassName()));
 		clazz.doubleClick();
 	}
 
@@ -110,9 +106,8 @@ public class PackageExplorer {
 
 	public SWTBotTreeItem selectPackageRoot(PackageContext context) {
 		for (SWTBotTreeItem srcDir : getProject(context.getProjectName()).getItems()) {
-			srcDir.select();
-			srcDir.expand();
-			if (srcDir.getText().equals(context.getSourceDir())) {
+			SWTBotTreeItem t = selectAndExpand(srcDir);
+			if (t.getText().equals(context.getSourceDir())) {
 				return srcDir;
 			}
 		}

@@ -5,6 +5,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTA
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -23,12 +24,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = PitCoreActivator.getDefault()
-				.getPreferenceStore();
+		IPreferenceStore store = PitCoreActivator.getDefault().getPreferenceStore();
 		store.setDefault(PIT_EXECUTION_MODE, "containingProject");
 		store.setDefault(RUN_IN_PARALLEL, "true");
 		store.setDefault(INCREMENTAL_ANALYSIS, "false");
 		store.setDefault(AVOID_CALLS_TO, DEFAULT_AVOID_CALLS_TO_LIST);
+		store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
 	}
 
 }

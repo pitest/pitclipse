@@ -11,8 +11,10 @@ import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 public class ProjectMutations implements Visitable, Countable {
 	private final String projectName;
 	private final ImmutableList<PackageMutations> packageMutations;
+	private final Status status;
 
-	private ProjectMutations(String projectName, ImmutableList<PackageMutations> packageMutations) {
+	private ProjectMutations(Status status, String projectName, ImmutableList<PackageMutations> packageMutations) {
+		this.status = status;
 		this.projectName = projectName;
 		this.packageMutations = ImmutableList.copyOf(transform(packageMutations,
 				new Function<PackageMutations, PackageMutations>() {
@@ -47,6 +49,7 @@ public class ProjectMutations implements Visitable, Countable {
 	public static class Builder {
 		private String projectName;
 		private ImmutableList<PackageMutations> packageMutations = ImmutableList.of();
+		private Status status;
 
 		private Builder() {
 		}
@@ -63,7 +66,12 @@ public class ProjectMutations implements Visitable, Countable {
 		}
 
 		public ProjectMutations build() {
-			return new ProjectMutations(projectName, packageMutations);
+			return new ProjectMutations(status, projectName, packageMutations);
+		}
+
+		public Builder withStatus(Status status) {
+			this.status = status;
+			return this;
 		}
 	}
 
@@ -110,6 +118,10 @@ public class ProjectMutations implements Visitable, Countable {
 			sum += packageMutation.count();
 		}
 		return sum;
+	}
+
+	public Status getStatus() {
+		return status;
 	}
 
 	private enum PackageName implements Function<PackageMutations, String> {

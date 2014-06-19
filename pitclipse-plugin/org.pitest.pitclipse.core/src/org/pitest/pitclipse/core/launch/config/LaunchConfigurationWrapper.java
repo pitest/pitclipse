@@ -22,7 +22,6 @@ import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-
 import org.pitest.pitclipse.reloc.guava.base.Splitter;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
@@ -101,11 +100,12 @@ public class LaunchConfigurationWrapper {
 		List<String> excludedClasses = getExcludedClasses();
 		List<String> excludedMethods = getExcludedMethods();
 		List<String> avoidCallsTo = getAvoidCallsTo();
+		List<String> mutators = getMutators();
 
 		PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
 				.withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)
-				.withAvoidCallsTo(avoidCallsTo);
+				.withAvoidCallsTo(avoidCallsTo).withMutators(mutators);
 		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}
@@ -235,4 +235,7 @@ public class LaunchConfigurationWrapper {
 		return projectFinder.getProjects(this);
 	}
 
+	private List<String> getMutators() {
+		return ImmutableList.of(pitConfiguration.getMutators());
+	}
 }
