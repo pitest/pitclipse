@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.pitest.pitclipse.feature_0.33.3.qualifier.jar" id="org.pitest.pitclipse.feature" version="0.33.3.qualifier">
+   <feature url="features/org.pitest.pitclipse.feature_0.33.3.201406200736.jar" id="org.pitest.pitclipse.feature" version="0.33.3.201406200736">
       <category name="Pitclipse"/>
    </feature>
    <category-def name="Pitclipse" label="Pitclipse"/>

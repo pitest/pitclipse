@@ -7,7 +7,7 @@
   <packaging>eclipse-feature</packaging>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>0.33.3-SNAPSHOT</version>
+    <version>0.33.3.201406200736</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
 </project>
