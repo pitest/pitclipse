@@ -15,7 +15,7 @@ public final class ClassSteps {
 	@When("a class $className in package $packageName is created in project $projectName")
 	public void createClass(String className, String packageName, String projectName) {
 		INSTANCE.getBuildProgress().listenForBuild();
-		INSTANCE.getPackageExplorer().selectProject(projectName);
+		INSTANCE.getPackageExplorer().selectPackageRoot(projectName, "src");
 		// Cannot use the Package explorer right click context menu
 		// to create a class due to SWTBot bug 261360
 		INSTANCE.getFileMenu().createClass(packageName, className);

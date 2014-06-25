@@ -80,7 +80,7 @@ public class PackageExplorer {
 	public void selectClass(String className, String packageName, String projectName) {
 		SWTBotTreeItem project = getProject(projectName);
 		SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
-		SWTBotTreeItem clazz = selectAndExpand(getClassFromPackage(pkg, className));
+		selectAndExpand(getClassFromPackage(pkg, className));
 	}
 
 	public boolean doesClassExistInProject(String className, String packageName, String projectName) {
@@ -105,12 +105,18 @@ public class PackageExplorer {
 	}
 
 	public SWTBotTreeItem selectPackageRoot(PackageContext context) {
-		for (SWTBotTreeItem srcDir : getProject(context.getProjectName()).getItems()) {
+		return selectPackageRoot(context.getProjectName(), context.getSourceDir());
+	}
+
+	public SWTBotTreeItem selectPackageRoot(String projectName, String src) {
+		SWTBotTreeItem project = getProject(projectName);
+		for (SWTBotTreeItem srcDir : project.getItems()) {
 			SWTBotTreeItem t = selectAndExpand(srcDir);
-			if (t.getText().equals(context.getSourceDir())) {
+			if (t.getText().equals(src)) {
 				return srcDir;
 			}
 		}
 		return null;
+
 	}
 }

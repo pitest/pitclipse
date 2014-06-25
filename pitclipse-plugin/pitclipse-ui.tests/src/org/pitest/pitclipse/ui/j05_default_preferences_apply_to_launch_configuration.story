@@ -9,7 +9,6 @@ Then no PIT launch configurations exist
 
 Scenario: Create a test
 When the user creates a project with name project5
-When a class SomeNewClass in package foo.bar is created in project project5
 When a class SomeNewClassTest in package foo.bar is created in project project5
 
 Scenario: Launching PIT creates a configuration
