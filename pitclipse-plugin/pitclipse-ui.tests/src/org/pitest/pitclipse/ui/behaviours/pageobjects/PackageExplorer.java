@@ -1,7 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static junit.framework.Assert.fail;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
@@ -35,7 +34,7 @@ public class PackageExplorer {
 	}
 
 	private void openProject(SWTBotTreeItem project) {
-		expand(project);
+		selectAndExpand(project);
 	}
 
 	private SWTBotTreeItem getProject(String projectName) {

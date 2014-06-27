@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.ui,
  org.pitest.jbehave-osgi;bundle-version="3.7.5",
  com.thoughtworks.xstream,
  org.pitest.pitclipse-pitrunner;bundle-version="0.33.3",
- org.pitest.guava-shade-osgi;bundle-version="16.0.1"
+ org.pitest.guava-shade-osgi;bundle-version="16.0.1",
+ org.eclipse.jdt.junit4.runtime;bundle-version="1.1.200"
 Import-Package: org.eclipse.core.runtime
 Bundle-Activator: org.pitest.pitclipse.ui.PitclipseTestActivator
 Bundle-ActivationPolicy: lazy
