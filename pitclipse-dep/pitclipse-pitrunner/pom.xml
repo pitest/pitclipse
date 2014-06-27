@@ -11,7 +11,7 @@
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
   <packaging>bundle</packaging>
-  <version>0.33.3.201406200736</version>
+  <version>0.33.3.201406271742</version>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
