@@ -6,12 +6,12 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>pitclipse-pitrunner</artifactId>
   <name>pitclipse-pitrunner</name>
   <packaging>bundle</packaging>
-  <version>0.33.3.201406271742</version>
+  <version>1.0.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>

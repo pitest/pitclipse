@@ -6,12 +6,12 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>pitest-osgi</artifactId>
   <name>pitest-osgi</name>
   <packaging>bundle</packaging>
-  <version>${pitest.version}.0</version>
+  <version>${pitest.version}</version>
   <dependencies>
   	<dependency>
       <groupId>org.pitest</groupId>

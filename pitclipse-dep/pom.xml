@@ -4,12 +4,12 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>0.33.1</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
   <packaging>pom</packaging>
-  <version>0.33.3.201406271742</version>
+  <version>1.0.0-SNAPSHOT</version>
   <build>
     <pluginManagement>
       <plugins>

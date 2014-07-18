@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse-parent</artifactId>
-  <version>0.33.1</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>pitclipse-parent</name>
   <organization>
@@ -30,7 +30,7 @@
     <jbehave.version>3.7.5</jbehave.version>
     <maven.site.version>3.1</maven.site.version>
     <mockito.version>1.9.5</mockito.version>
-    <pitest.version>0.33</pitest.version>
+    <pitest.version>1.0.0</pitest.version>
     <tycho.version>0.15.0</tycho.version>
     <xjc.version>1.5</xjc.version>
   </properties>
