@@ -5,9 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
@@ -36,18 +33,8 @@ public final class PitResults implements Serializable {
 
 	public static final class Builder {
 
-		private static final JAXBContext MUTATIONS_CONTEXT = theJaxbContext();
-
-		private static JAXBContext theJaxbContext() {
-			try {
-				return JAXBContext.newInstance(Mutations.class);
-			} catch (JAXBException e) {
-				throw new RuntimeException("Unable to create a JAXB context", e);
-			}
-		}
-
 		private File htmlResultFile = null;
-		private File xmlResultFile = null;
+		private final File xmlResultFile = null;
 		private ImmutableList<String> projects = ImmutableList.of();
 		private Mutations mutations = new ObjectFactory().createMutations();
 
@@ -61,18 +48,6 @@ public final class PitResults implements Serializable {
 		public Builder withHtmlResults(File htmlResultFile) {
 			checkFileExists(htmlResultFile);
 			this.htmlResultFile = new File(htmlResultFile.getPath());
-			return this;
-		}
-
-		public Builder withXmlResults(File xmlResultFile) {
-			checkFileExists(xmlResultFile);
-			this.xmlResultFile = new File(xmlResultFile.getPath());
-			try {
-				Unmarshaller unmarshaller = MUTATIONS_CONTEXT.createUnmarshaller();
-				mutations = (Mutations) unmarshaller.unmarshal(xmlResultFile);
-			} catch (JAXBException e) {
-				mutations = new ObjectFactory().createMutations();
-			}
 			return this;
 		}
 

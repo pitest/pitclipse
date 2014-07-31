@@ -40,8 +40,7 @@ public class PitclipseServiceTest {
 	private static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).withProjects(PROJECTS)
 			.build();
 
-	private static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).withXmlResults(TMP_DIR)
-			.build();
+	private static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).build();
 	private static final MutationsModel MODEL = MutationsModel.EMPTY_MODEL;
 
 	private static final int PORT = new Random().nextInt();
