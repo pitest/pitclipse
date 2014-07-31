@@ -22,8 +22,7 @@ public abstract class AbstractPitRunnerTest {
 
 	protected static final List<String> CLASS_PATH = of(PitServerTest.class.getCanonicalName());
 
-	protected static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).withXmlResults(TMP_DIR)
-			.build();
+	protected static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).build();
 
 	protected static final PitOptions OPTIONS = PitOptions.builder().withSourceDirectory(TMP_DIR)
 			.withClassUnderTest(PitServerTest.class.getCanonicalName()).withClassesToMutate(CLASS_PATH).build();
