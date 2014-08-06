@@ -44,6 +44,11 @@
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
+      <artifactId>pitest-command-line-osgi</artifactId>
+      <version>${pitest.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
       <artifactId>guava-shade-osgi</artifactId>
       <version>${guava.version}</version>
     </dependency>
