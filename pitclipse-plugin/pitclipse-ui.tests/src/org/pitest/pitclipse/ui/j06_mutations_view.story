@@ -51,18 +51,20 @@ And the mutation results are
 Scenario: Using all mutators yields even more mutation results
 Given the all mutators preference is selected
 When tests in package foo.bar are run for project project1
-Then a coverage report is generated with 2 classes tested with overall coverage of 80% and mutation coverage of 10%
+Then a coverage report is generated with 2 classes tested with overall coverage of 80% and mutation coverage of 9%
 And the mutation results are
 |status|project|package|class|line|mutation|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|Substituted 1 with 0|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|negated conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed call to java/util/ArrayList::size|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional|
+|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|12|Substituted 0 with 1|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|Substituted 1 with 0|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|negated conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed call to java/util/ArrayList::size|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|12|Substituted 0 with 1|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
