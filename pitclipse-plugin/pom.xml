@@ -9,7 +9,7 @@
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1.201408281802</version>
   <modules>
     <module>org.pitest.pitclipse.core</module>
     <module>org.pitest.pitclipse.ui</module>
