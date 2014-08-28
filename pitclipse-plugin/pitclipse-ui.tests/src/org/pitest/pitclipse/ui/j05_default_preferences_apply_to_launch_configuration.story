@@ -17,7 +17,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.SomeNewClassTest|foo.bar.*|project5|||true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
+|foo.bar.SomeNewClassTest|foo.bar.SomeNewClassTest|project5|||true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
@@ -34,7 +34,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.AnotherNewClassTest|foo.bar.*|project5|||false|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
+|foo.bar.AnotherNewClassTest|foo.bar.AnotherNewClassTest, foo.bar.SomeNewClassTest|project5|||false|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
@@ -53,7 +53,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.YetAnotherClassTest|foo.bar.*|project5|||true|true|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
+|foo.bar.YetAnotherClassTest|foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest|project5|||true|true|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
@@ -72,7 +72,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.NoNotAnotherClass|foo.bar.*|project5|org.foo.*IntTest, *DbTest||true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
+|foo.bar.NoNotAnotherClass|foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest|project5|org.foo.*IntTest, *DbTest||true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
@@ -92,7 +92,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.ClassMadnessTest|foo.bar.*|project5||*toString*, doNotMutateMe*|true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
+|foo.bar.ClassMadnessTest|foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.ClassMadnessTest, foo.bar.YetAnotherClassTest|project5||*toString*, doNotMutateMe*|true|false|java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
@@ -114,7 +114,7 @@ Then a coverage report is generated with 0 classes tested with overall coverage 
 
 Then the options passed to Pit match:
 |classUnderTest|classesToMutate|projects|excludedClasses|excludedMethods|runInParallel|incrementalAnalysis|avoidCallsTo|
-|foo.bar.TestAvoidClassesTest|foo.bar.*|project5|||true|false|org.slf4j, org.apache|
+|foo.bar.TestAvoidClassesTest|foo.bar.TestAvoidClassesTest, foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.ClassMadnessTest, foo.bar.YetAnotherClassTest|project5|||true|false|org.slf4j, org.apache|
 
 Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|

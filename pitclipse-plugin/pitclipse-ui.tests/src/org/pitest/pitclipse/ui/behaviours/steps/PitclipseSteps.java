@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.copyOf;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class PitclipseSteps {
 
 		@Override
 		public void run() {
-			INSTANCE.getPackageExplorer().selectProject(projectName);
+			PAGES.getPackageExplorer().selectProject(projectName);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class PitclipseSteps {
 
 		@Override
 		public void run() {
-			INSTANCE.getPackageExplorer().selectPackageRoot(context);
+			PAGES.getPackageExplorer().selectPackageRoot(context);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class PitclipseSteps {
 
 		@Override
 		public void run() {
-			INSTANCE.getPackageExplorer().selectPackage(context);
+			PAGES.getPackageExplorer().selectPackage(context);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class PitclipseSteps {
 
 		@Override
 		public void run() {
-			INSTANCE.getPackageExplorer().selectClass(testClassName, packageName, projectName);
+			PAGES.getPackageExplorer().selectClass(testClassName, packageName, projectName);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class PitclipseSteps {
 		while (counter < retryCount) {
 			try {
 				runnable.run();
-				INSTANCE.getRunMenu().runPit();
+				PAGES.getRunMenu().runPit();
 				return;
 			} catch (TimeoutException te) {
 				counter++;
@@ -164,7 +164,7 @@ public class PitclipseSteps {
 
 	@Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
 	public void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
-		PitSummaryView pitView = INSTANCE.getPitSummaryView();
+		PitSummaryView pitView = PAGES.getPitSummaryView();
 		pitView.waitForUpdate();
 		try {
 			assertEquals(classes, pitView.getClassesTested());
@@ -179,19 +179,19 @@ public class PitclipseSteps {
 	@Then("the mutation results are $tableOfMutations")
 	public void mutationsAre(ExamplesTable tableOfMutations) {
 		List<PitMutation> expectedMutations = mutationsFromExampleTable(tableOfMutations);
-		List<PitMutation> actualMutations = INSTANCE.getPitMutationsView().getMutations();
+		List<PitMutation> actualMutations = PAGES.getPitMutationsView().getMutations();
 		assertThat(actualMutations, is(equalTo(expectedMutations)));
 	}
 
 	@When("the following mutation is selected $tableOfMutations")
 	public void mutationIsSelected(ExamplesTable tableOfMutations) {
 		PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
-		INSTANCE.getPitMutationsView().select(mutation);
+		PAGES.getPitMutationsView().select(mutation);
 	}
 
 	@Then("the file $fileName is opened at line number $lineNumber")
 	public void mutationIsOpened(String fileName, int lineNumber) {
-		FilePosition position = INSTANCE.getPitMutationsView().getLastSelectedMutation();
+		FilePosition position = PAGES.getPitMutationsView().getLastSelectedMutation();
 		assertThat(position.className, is(equalTo(fileName)));
 		assertThat(position.lineNumber, is(equalTo(lineNumber)));
 	}
@@ -228,13 +228,13 @@ public class PitclipseSteps {
 
 	@When("the PIT views are opened")
 	public void thePitViewsAreOpened() {
-		INSTANCE.getWindowsMenu().openPitSummaryView();
-		INSTANCE.getWindowsMenu().openPitMutationsView();
+		PAGES.getWindowsMenu().openPitSummaryView();
+		PAGES.getWindowsMenu().openPitMutationsView();
 	}
 
 	@When("the Console view is closed")
 	public void closeTheConsole() {
-		INSTANCE.views().closeConsole();
+		PAGES.views().closeConsole();
 	}
 
 	@When("tests in package $packageName are run for project $projectName")
@@ -254,7 +254,7 @@ public class PitclipseSteps {
 
 	@Then("the options passed to Pit match: $configTable")
 	public void runtimeOptionsMatch(ExamplesTable configTable) {
-		PitOptions options = INSTANCE.getRunMenu().getLastUsedPitOptions();
+		PitOptions options = PAGES.getRunMenu().getLastUsedPitOptions();
 		assertThat(configTable.getRowCount(), is(greaterThan(0)));
 		assertThat(options, match(configTable.getRow(0)));
 	}

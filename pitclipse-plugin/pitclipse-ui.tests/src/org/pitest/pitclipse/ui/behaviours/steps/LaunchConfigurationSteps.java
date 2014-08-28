@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +21,12 @@ public class LaunchConfigurationSteps {
 
 	@Then("no PIT launch configurations exist")
 	public void noPitConfigurationsExist() {
-		assertTrue(INSTANCE.getRunMenu().runConfigurations().isEmpty());
+		assertTrue(PAGES.getRunMenu().runConfigurations().isEmpty());
 	}
 
 	@Then("a launch configuration with name $name is created")
 	public void openPitConfig(String name) {
-		for (PitRunConfiguration pitRunConfiguration : INSTANCE.getRunMenu()
+		for (PitRunConfiguration pitRunConfiguration : PAGES.getRunMenu()
 				.runConfigurations()) {
 			if (name.equals(pitRunConfiguration.getName())) {
 				return;
@@ -37,7 +37,7 @@ public class LaunchConfigurationSteps {
 
 	@When("the launch configuration with name $name is selected")
 	public void selectConfig(String name) {
-		for (PitRunConfiguration pitRunConfiguration : INSTANCE.getRunMenu()
+		for (PitRunConfiguration pitRunConfiguration : PAGES.getRunMenu()
 				.runConfigurations()) {
 			if (name.equals(pitRunConfiguration.getName())) {
 				launchConfig = pitRunConfiguration;
@@ -83,7 +83,7 @@ public class LaunchConfigurationSteps {
 
 	@Then("the launch configurations are configured as: $configTable")
 	public void launchConfigurationsMatch(ExamplesTable configTable) {
-		List<PitRunConfiguration> launchConfigurations = INSTANCE.getRunMenu()
+		List<PitRunConfiguration> launchConfigurations = PAGES.getRunMenu()
 				.runConfigurations();
 		configurationsMatch(configTable.getRows(), launchConfigurations);
 	}

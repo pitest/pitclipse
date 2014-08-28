@@ -118,7 +118,7 @@ public class PitOptionsTest {
 		assertTrue(reportDir.exists());
 		assertEquals(TMP_DIR, reportDir.getParentFile());
 		assertNull(options.getClassUnderTest());
-		assertEquals(PACKAGES, options.getTestPackages());
+		assertEquals(PACKAGES, options.getPackages());
 	}
 
 	@Test(expected = PitLaunchException.class)

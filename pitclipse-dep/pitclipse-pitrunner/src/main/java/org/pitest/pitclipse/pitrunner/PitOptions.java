@@ -218,10 +218,6 @@ public final class PitOptions implements Serializable {
 		return classUnderTest;
 	}
 
-	public List<String> getTestPackages() {
-		return packages;
-	}
-
 	public File getHistoryLocation() {
 		return historyLocation;
 	}
@@ -235,19 +231,19 @@ public final class PitOptions implements Serializable {
 	}
 
 	public List<String> getExcludedClasses() {
-		return copyOf(excludedClasses);
+		return excludedClasses;
 	}
 
 	public List<String> getExcludedMethods() {
-		return copyOf(excludedMethods);
+		return excludedMethods;
 	}
 
 	public List<String> getClassesToMutate() {
-		return copyOf(classesToMutate);
+		return classesToMutate;
 	}
 
 	public List<String> getPackages() {
-		return copyOf(packages);
+		return packages;
 	}
 
 	public List<String> getAvoidCallsTo() {

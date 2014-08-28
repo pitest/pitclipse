@@ -7,6 +7,7 @@ import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
+import static org.pitest.pitclipse.reloc.guava.base.Strings.isNullOrEmpty;
 import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
 
 import java.net.URL;
@@ -81,7 +82,10 @@ public class ViewLabelProvider extends LabelProvider {
 
 		@Override
 		public String visitPackage(PackageMutations packageMutations) {
-			return packageMutations.getPackageName() + countString(packageMutations);
+			String label = packageMutations.getPackageName();
+			if (isNullOrEmpty(label))
+				label = "(default package)";
+			return label + countString(packageMutations);
 		}
 
 		@Override

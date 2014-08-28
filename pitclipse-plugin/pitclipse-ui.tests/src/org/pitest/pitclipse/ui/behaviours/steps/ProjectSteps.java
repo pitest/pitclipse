@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.INSTANCE;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 
@@ -15,13 +15,13 @@ public class ProjectSteps {
 
 	@When("the user creates a project with name $projectName")
 	public void createJavaProject(String projectName) {
-		INSTANCE.getFileMenu().newJavaProject(projectName);
-		INSTANCE.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
+		PAGES.getFileMenu().newJavaProject(projectName);
+		PAGES.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
 	}
 
 	@Then("the project $projectName exists in the workspace")
 	public void verifyProjectExists(String projectName) {
-		for (String project : INSTANCE.getPackageExplorer()
+		for (String project : PAGES.getPackageExplorer()
 				.getProjectsInWorkspace()) {
 			if (projectName.equals(project)) {
 				// Project does indeed exist
@@ -33,9 +33,9 @@ public class ProjectSteps {
 
 	@Given("an empty workspace")
 	public void deleteAllProjects() {
-		for (String project : INSTANCE.getPackageExplorer()
+		for (String project : PAGES.getPackageExplorer()
 				.getProjectsInWorkspace()) {
-			INSTANCE.getAbstractSyntaxTree().deleteProject(project);
+			PAGES.getAbstractSyntaxTree().deleteProject(project);
 		}
 		File historyFile = PitCoreActivator.getDefault().getHistoryFile();
 		if (historyFile.exists()) {
@@ -45,8 +45,8 @@ public class ProjectSteps {
 
 	@When("the dependent project $dependentProject is added to the classpath of $project")
 	public void addToBuildPath(String dependentProject, String projectName) {
-		INSTANCE.getPackageExplorer().selectProject(projectName);
-		INSTANCE.getAbstractSyntaxTree().addProjectToClassPathOfProject(
+		PAGES.getPackageExplorer().selectProject(projectName);
+		PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(
 				projectName, dependentProject);
 	}
 }

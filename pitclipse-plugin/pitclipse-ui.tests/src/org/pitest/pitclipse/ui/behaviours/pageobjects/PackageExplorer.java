@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static junit.framework.Assert.fail;
+import static org.pitest.pitclipse.reloc.guava.base.Strings.isNullOrEmpty;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
@@ -58,12 +59,20 @@ public class PackageExplorer {
 		for (SWTBotTreeItem srcDir : project.getItems()) {
 			for (SWTBotTreeItem pkg : selectAndExpand(srcDir).getItems()) {
 				String text = pkg.getText();
-				if (packageName.equals(text)) {
+				if (packageName.equals(text) || (isDefaultPackage(packageName) && isDefaultPackageLabel(text))) {
 					return pkg;
 				}
 			}
 		}
 		return null;
+	}
+
+	private boolean isDefaultPackageLabel(String label) {
+		return "(default package)".equals(label);
+	}
+
+	private boolean isDefaultPackage(String packageName) {
+		return isNullOrEmpty(packageName);
 	}
 
 	private SWTBotTreeItem getClassFromPackage(SWTBotTreeItem pkg, String className) {

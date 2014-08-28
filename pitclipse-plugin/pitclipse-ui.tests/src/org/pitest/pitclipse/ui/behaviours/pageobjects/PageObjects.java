@@ -3,7 +3,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 public enum PageObjects {
-	INSTANCE;
+	PAGES;
 
 	private final FileMenu fileMenu;
 	private final WelcomeScreen welcomeScreen;

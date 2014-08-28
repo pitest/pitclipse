@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
 import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
@@ -28,7 +29,7 @@ public class PitMutationsView {
 
 	public List<PitMutation> getMutations() {
 		safeSleep(1000);
-		PageObjects.INSTANCE.views().closeConsole();
+		PAGES.views().closeConsole();
 		SWTBotTree mutationTree = mutationTreeRoot();
 		return mutationsFrom(mutationTree);
 	}
