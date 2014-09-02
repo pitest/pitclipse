@@ -3,7 +3,7 @@
    <description name="Pitest" url="http://pitest.org/pitclipse/update-site/">
       Pitclipse update site
    </description>
-   <feature url="features/org.pitest.pitclipse.feature_1.0.1.201408281802.jar" id="org.pitest.pitclipse.feature" version="1.0.1.201408281802">
+   <feature url="features/org.pitest.pitclipse.feature_1.0.2.qualifier.jar" id="org.pitest.pitclipse.feature" version="1.0.2.qualifier">
       <category name="Pitclipse"/>
    </feature>
    <category-def name="Pitclipse" label="Pitclipse"/>
