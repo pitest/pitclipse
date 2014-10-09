@@ -15,7 +15,7 @@ If you wish to build the plugin from source, you will need the following.
 
 
 * Maven 3.0
-* Nexus OSS setup for P2 Repository support https://docs.sonatype.org/display/Nexus/Nexus+OSGi+Experimental+Features+-+P2+Repository+Plugin
+* Nexus OSS setup for P2 Repository support https://docs.sonatype.org/display/Nexus/Nexus+OSGi+Experimental+Features+-+P2+Repository+Plugin or http://mrexception.blogspot.co.uk/2012/04/p2-support-for-nexus-oss.html
 OR
 * Nexus Pro
 
@@ -23,7 +23,6 @@ You will need to setup p2 proxys for the following update sites:
 * http://download.eclipse.org/releases/indigo
 * http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/
 * http://jbehave.org/reference/eclipse/updates/
-* http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/
 
 
 Eclipse Build
