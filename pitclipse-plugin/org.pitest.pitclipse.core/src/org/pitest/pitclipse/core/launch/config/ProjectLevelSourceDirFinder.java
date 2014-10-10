@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
@@ -26,12 +25,17 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
 
 		File projectRoot = new File(location);
 		for (IPackageFragmentRoot packageRoot : packageRoots) {
-			if (!packageRoot.isArchive()) {
+			if (isValid(packageRoot)) {
 				File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
-				sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
+				File potentialSourceRoot = new File(projectRoot, packagePath.toString());
+				sourceDirBuilder.add(potentialSourceRoot);
 			}
 		}
 		return copyOf(sourceDirBuilder.build());
+	}
+
+	private boolean isValid(IPackageFragmentRoot packageRoot) {
+		return !packageRoot.isArchive() && !packageRoot.isExternal();
 	}
 
 	private URI getProjectLocation(IProject project) throws CoreException {
