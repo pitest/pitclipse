@@ -41,7 +41,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
 	private static final String HTML_RESULTS_DIR = "html_results";
 	private static final String HTML_FILE = "index.html";
-	private static final String STATE_FILE = "state.out";
+	private static final String STATE_FILE = "state-1.1.0.out";
 	private static final String HISTORY_DIR = "history";
 
 	// The plug-in ID
