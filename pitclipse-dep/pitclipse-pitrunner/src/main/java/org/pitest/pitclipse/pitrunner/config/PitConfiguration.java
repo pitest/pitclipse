@@ -2,12 +2,20 @@ package org.pitest.pitclipse.pitrunner.config;
 
 import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
 
+import java.math.BigDecimal;
+
 import javax.annotation.concurrent.Immutable;
 
+/**
+ * @author phil
+ * 
+ */
 @Immutable
 public class PitConfiguration {
 	public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging";
 	public static final String DEFAULT_MUTATORS = "DEFAULTS";
+	public static final int DEFAULT_TIMEOUT = 3000;
+	public static final BigDecimal DEFAULT_TIMEOUT_FACTOR = BigDecimal.valueOf(1.25);
 
 	private final PitExecutionMode executionMode;
 	private final boolean parallelExecution;
@@ -16,9 +24,12 @@ public class PitConfiguration {
 	private final String excludedMethods;
 	private final String avoidCallsTo;
 	private final String mutators;
+	private final int timeout;
+	private final BigDecimal timeoutFactor;
 
 	private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis,
-			String excludedClasses, String excludedMethods, String avoidCallsTo, String mutators) {
+			String excludedClasses, String excludedMethods, String avoidCallsTo, String mutators, int timeout,
+			BigDecimal timeoutFactor) {
 		this.executionMode = executionMode;
 		this.parallelExecution = parallelExecution;
 		this.incrementalAnalysis = incrementalAnalysis;
@@ -26,6 +37,8 @@ public class PitConfiguration {
 		this.excludedMethods = excludedMethods;
 		this.avoidCallsTo = avoidCallsTo;
 		this.mutators = mutators;
+		this.timeout = timeout;
+		this.timeoutFactor = timeoutFactor;
 	}
 
 	public static Builder builder() {
@@ -52,6 +65,8 @@ public class PitConfiguration {
 		private String excludedMethods = "";
 		private String avoidCallsTo = DEFAULT_AVOID_CALLS_TO_LIST;
 		private String mutators = DEFAULT_MUTATORS;
+		private int timeout = DEFAULT_TIMEOUT;
+		private BigDecimal timeoutFactor = DEFAULT_TIMEOUT_FACTOR;
 
 		private Builder() {
 		}
@@ -91,9 +106,19 @@ public class PitConfiguration {
 			return this;
 		}
 
+		public Builder withTimeout(int timeout) {
+			this.timeout = timeout;
+			return this;
+		}
+
 		public PitConfiguration build() {
 			return new PitConfiguration(executionMode, parallelExecution, incrementalAnalysis, excludedClasses,
-					excludedMethods, avoidCallsTo, mutators);
+					excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);
+		}
+
+		public Builder withTimeoutFactor(BigDecimal timeoutFactor) {
+			this.timeoutFactor = timeoutFactor;
+			return this;
 		}
 
 	}
@@ -114,4 +139,11 @@ public class PitConfiguration {
 		return mutators;
 	}
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public BigDecimal getTimeoutFactor() {
+		return timeoutFactor;
+	}
 }

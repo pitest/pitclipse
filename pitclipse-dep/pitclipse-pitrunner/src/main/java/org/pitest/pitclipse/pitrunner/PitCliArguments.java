@@ -32,6 +32,8 @@ public class PitCliArguments {
 		builder.addAll(excludedMethodsFrom(options));
 		builder.addAll(avoidedCallsFrom(options));
 		builder.addAll(mutatorsFrom(options));
+		builder.add("--timeoutConst", Integer.toString(options.getTimeout()));
+		builder.add("--timeoutFactor", options.getTimeoutFactor().toPlainString());
 		List<String> args = builder.build();
 		return args.toArray(new String[args.size()]);
 	}

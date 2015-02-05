@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.math.BigDecimal;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
@@ -34,7 +36,7 @@ public class WindowsMenu {
 	}
 
 	public PitExecutionMode getPitExecutionMode() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		return preferenceSelector.getPitExecutionMode();
 	}
 
@@ -46,53 +48,53 @@ public class WindowsMenu {
 	}
 
 	public boolean isPitRunInParallel() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		return preferenceSelector.isPitRunInParallel();
 	}
 
 	public void setPitRunInParallel(boolean inParallel) {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		preferenceSelector.setPitRunInParallel(inParallel);
 	}
 
 	public boolean isIncrementalAnalysisEnabled() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		return preferenceSelector.isIncrementalAnalysisEnabled();
 	}
 
 	public void setIncrementalAnalysisEnabled(boolean incremental) {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		preferenceSelector.setPitIncrementalAnalysisEnabled(incremental);
 	}
 
 	public String getExcludedClasses() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
+		openPreferences();
 		return preferenceSelector.getExcludedClasses();
 	}
 
-	public void setExcludedClasses(String excludedClasses) {
+	private PreferenceDsl openPreferences() {
 		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		preferenceSelector.setExcludedClasses(excludedClasses);
+		return new PreferenceDsl();
+	}
+
+	public void setExcludedClasses(String excludedClasses) {
+		openPreferences().andThen().setExcludedClasses(excludedClasses);
 	}
 
 	public String getExcludedMethods() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		return preferenceSelector.getExcludedMethods();
+		return openPreferences().andThen().getExcludedMethods();
 	}
 
 	public void setExcludedMethods(String excludedMethods) {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		preferenceSelector.setExcludedMethods(excludedMethods);
+		openPreferences().andThen().setExcludedMethods(excludedMethods);
 	}
 
 	public String getAvoidCallsTo() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		return preferenceSelector.getAvoidCallsTo();
+		return openPreferences().andThen().getAvoidCallsTo();
 	}
 
 	public void setAvoidCallsTo(String avoidCallsTo) {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		preferenceSelector.setAvoidCallsTo(avoidCallsTo);
+		openPreferences().andThen().setAvoidCallsTo(avoidCallsTo);
 	}
 
 	public void openPitSummaryView() {
@@ -106,12 +108,32 @@ public class WindowsMenu {
 	}
 
 	public PitMutators getMutators() {
-		bot.menu(WINDOWS).menu(PREFERENCES).click();
-		return preferenceSelector.getMutators();
+		return openPreferences().andThen().getMutators();
 	}
 
 	public void setMutators(PitMutators mutators) {
 		PitCoreActivator.getDefault().setMutators(mutators);
 	}
 
+	public void setTimeoutConstant(int timeout) {
+		openPreferences().andThen().setPitTimeoutConst(timeout);
+	}
+
+	public void setTimeoutFactor(int factor) {
+		openPreferences().andThen().setPitTimeoutFactor(factor);
+	}
+
+	public int getTimeout() {
+		return openPreferences().andThen().getTimeout();
+	}
+
+	public BigDecimal getTimeoutFactor() {
+		return openPreferences().andThen().getPitTimeoutFactor();
+	}
+
+	private class PreferenceDsl {
+		public PitPreferenceSelector andThen() {
+			return preferenceSelector;
+		}
+	}
 }

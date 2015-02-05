@@ -23,6 +23,25 @@ Then the launch configurations are configured as:
 |name|runInParallel|useIncrementalAnalysis|excludedClasses|excludedMethods|avoidCallsTo|
 |SomeNewClassTest|true|false|||java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging|
 
+Scenario: Change the timeout Constant
+Given the timeout constant is 500
+When test SomeNewClassTest in package foo.bar is run for project project5
+Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+Then the options passed to Pit match:
+|classUnderTest|timeoutConst|
+|foo.bar.SomeNewClassTest|500|
+
+Scenario: Change the timeout Factor
+Given the timeout factor is 2
+
+When test SomeNewClassTest in package foo.bar is run for project project5
+
+Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
+
+Then the options passed to Pit match:
+|classUnderTest|timeoutFactor|
+|foo.bar.SomeNewClassTest|2|
+
 Scenario: Change the run in parallel preference
 When the mutation tests run in parallel preference is deselected
 

@@ -10,6 +10,7 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -279,6 +280,8 @@ public class PitclipseSteps {
 						.getRuntime().availableProcessors());
 				match &= checkBooleanMatch(match, optionRow, "incrementalAnalysis",
 						options.getHistoryLocation() != null);
+				match &= checkIntMatch(match, optionRow, "timeoutConst", options.getTimeout());
+				match &= checkBigDecimalMatch(match, optionRow, "timeoutFactor", options.getTimeoutFactor());
 				return match;
 			}
 
@@ -293,9 +296,10 @@ public class PitclipseSteps {
 							allMatch &= sourceDirectories.get(i).toString().contains(paths.get(i));
 						}
 						return allMatch;
-					}
+					} else
+						return false;
 				}
-				return false;
+				return match;
 			}
 
 			private boolean checkStringMatch(boolean match, Map<String, String> optionRow, String key, String value) {
@@ -314,6 +318,23 @@ public class PitclipseSteps {
 				return match;
 			}
 
+			private boolean checkIntMatch(boolean match, Map<String, String> optionRow, String key, int actualValue) {
+				if (match && optionRow.containsKey(key)) {
+					int expectedValue = Integer.valueOf(optionRow.get(key));
+					return expectedValue == actualValue;
+				}
+				return match;
+			}
+
+			private boolean checkBigDecimalMatch(boolean match, Map<String, String> optionRow, String key,
+					BigDecimal actualValue) {
+				if (match && optionRow.containsKey(key)) {
+					BigDecimal expectedValue = new BigDecimal(optionRow.get(key));
+					return expectedValue.compareTo(actualValue) == 0;
+				}
+				return match;
+			}
+
 			private boolean checkSetMatch(boolean match, Map<String, String> optionRow, String key,
 					List<String> actualValues) {
 				if (match && optionRow.containsKey(key)) {
@@ -325,5 +346,4 @@ public class PitclipseSteps {
 			}
 		};
 	}
-
 }

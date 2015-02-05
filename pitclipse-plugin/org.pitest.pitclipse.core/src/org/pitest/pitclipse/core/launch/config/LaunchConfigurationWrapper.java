@@ -5,6 +5,7 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_P
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -101,11 +102,14 @@ public class LaunchConfigurationWrapper {
 		List<String> excludedMethods = getExcludedMethods();
 		List<String> avoidCallsTo = getAvoidCallsTo();
 		List<String> mutators = getMutators();
+		int timeout = pitConfiguration.getTimeout();
+		BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
 
 		PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
 				.withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
 				.withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)
-				.withAvoidCallsTo(avoidCallsTo).withMutators(mutators);
+				.withAvoidCallsTo(avoidCallsTo).withMutators(mutators).withTimeout(timeout)
+				.withTimeoutFactor(timeoutFactor);
 		if (isIncrementalAnalysis()) {
 			builder.withHistoryLocation(getDefault().getHistoryFile());
 		}

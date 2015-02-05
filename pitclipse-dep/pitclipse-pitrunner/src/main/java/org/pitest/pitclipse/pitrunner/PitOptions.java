@@ -10,6 +10,7 @@ import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
@@ -32,11 +33,13 @@ public final class PitOptions implements Serializable {
 	private final ImmutableList<String> excludedMethods;
 	private final ImmutableList<String> avoidCallsTo;
 	private final ImmutableList<String> mutators;
+	private final int timeout;
+	private final BigDecimal timeoutFactor;
 
 	private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
 			File reportDir, ImmutableList<String> packages, int threads, File historyLocation,
 			ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
-			ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators) {
+			ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor) {
 		this.classUnderTest = classUnderTest;
 		this.threads = threads;
 		this.historyLocation = historyLocation;
@@ -48,6 +51,8 @@ public final class PitOptions implements Serializable {
 		this.excludedMethods = excludedMethods;
 		this.avoidCallsTo = avoidCallsTo;
 		this.mutators = mutators;
+		this.timeout = timeout;
+		this.timeoutFactor = timeoutFactor;
 	}
 
 	public File getReportDirectory() {
@@ -78,6 +83,8 @@ public final class PitOptions implements Serializable {
 		private ImmutableList<String> excludedMethods = of();
 		private ImmutableList<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
 		private ImmutableList<String> mutators = copyOf(split(DEFAULT_MUTATORS));
+		private int timeout = 3000;
+		private BigDecimal timeoutFactor = BigDecimal.valueOf(1.25);
 
 		private PitOptionsBuilder() {
 		}
@@ -96,13 +103,23 @@ public final class PitOptions implements Serializable {
 			return this;
 		}
 
+		public PitOptionsBuilder withTimeout(int timeout) {
+			this.timeout = timeout;
+			return this;
+		}
+
+		public PitOptionsBuilder withTimeoutFactor(BigDecimal factor) {
+			this.timeoutFactor = factor;
+			return this;
+		}
+
 		public PitOptions build() {
 			validateSourceDir();
 			validateTestClass();
 			initialiseReportDir();
 			initialiseHistoryLocation();
 			return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, threads,
-					historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators);
+					historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);
 		}
 
 		private void initialiseReportDir() {
@@ -254,12 +271,20 @@ public final class PitOptions implements Serializable {
 		return mutators;
 	}
 
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public BigDecimal getTimeoutFactor() {
+		return timeoutFactor;
+	}
+
 	@Override
 	public String toString() {
 		return "PitOptions [reportDir=" + reportDir + ", classUnderTest=" + classUnderTest + ", classesToMutate="
 				+ classesToMutate + ", sourceDirs=" + sourceDirs + ", packages=" + packages + ", threads=" + threads
 				+ ", historyLocation=" + historyLocation + ", excludedClasses=" + excludedClasses
 				+ ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + ", mutators=" + mutators
-				+ "]";
+				+ ", timeoutConst=" + timeout + ", timeoutFactor=" + timeoutFactor + "]";
 	}
 }

@@ -1,8 +1,10 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static java.math.BigDecimal.ZERO;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 import java.io.Closeable;
+import java.math.BigDecimal;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -19,6 +21,10 @@ public class PitPreferenceSelector implements Closeable {
 	private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
 	private static final String EXCLUDED_METHODS_LABEL = "Excluded methods (e.g.*toString*)";
 	private static final String AVOID_CALLS_TO_LABEL = "Avoid calls to";
+	private static final String MUTATORS_LABEL = "Mutators";
+	private static final String EXECUTION_MODE_LABEL = "Pit Execution Scope";
+	private static final String PIT_TIMEOUT_LABEL = "Pit Timeout";
+	private static final String PIT_TIMEOUT_FACTOR_LABEL = "Timeout Factor";
 	private final SWTWorkbenchBot bot;
 
 	public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -54,13 +60,7 @@ public class PitPreferenceSelector implements Closeable {
 	}
 
 	public PitExecutionMode getPitExecutionMode() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return getActiveExecutionMode();
-		} finally {
-			close();
-		}
+		return getSelectedExecutionMode().from(EXECUTION_MODE_LABEL);
 	}
 
 	private PitExecutionMode getActiveExecutionMode() {
@@ -73,126 +73,47 @@ public class PitPreferenceSelector implements Closeable {
 	}
 
 	public boolean isPitRunInParallel() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).isChecked();
-		} finally {
-			close();
-		}
+		return getBoolean().from(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL);
 	}
 
 	public boolean isIncrementalAnalysisEnabled() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).isChecked();
-		} finally {
-			close();
-		}
+		return getBoolean().from(USE_INCREMENTAL_ANALYSIS_LABEL);
 	}
 
 	public void setPitRunInParallel(boolean inParallel) {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			if (inParallel) {
-				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).select();
-			} else {
-				bot.checkBox(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).deselect();
-			}
-		} finally {
-			close();
-		}
+		setSelectionFor(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).to(inParallel);
 	}
 
 	public void setPitIncrementalAnalysisEnabled(boolean incremental) {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			if (incremental) {
-				bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).select();
-			} else {
-				bot.checkBox(USE_INCREMENTAL_ANALYSIS_LABEL).deselect();
-			}
-		} finally {
-			close();
-		}
+		setSelectionFor(USE_INCREMENTAL_ANALYSIS_LABEL).to(incremental);
 	}
 
 	public String getExcludedClasses() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return bot.textWithLabel(EXCLUDED_CLASSES_LABEL).getText();
-		} finally {
-			close();
-		}
+		return getText().from(EXCLUDED_CLASSES_LABEL);
 	}
 
 	public void setExcludedClasses(String excludedClasses) {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			bot.textWithLabel(EXCLUDED_CLASSES_LABEL).setText(excludedClasses);
-		} finally {
-			close();
-		}
+		setTextFor(EXCLUDED_CLASSES_LABEL).to(excludedClasses);
 	}
 
 	public String getExcludedMethods() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return bot.textWithLabel(EXCLUDED_METHODS_LABEL).getText();
-		} finally {
-			close();
-		}
+		return getText().from(EXCLUDED_METHODS_LABEL);
 	}
 
 	public void setExcludedMethods(String excludedMethods) {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			bot.textWithLabel(EXCLUDED_METHODS_LABEL).setText(excludedMethods);
-		} finally {
-			close();
-		}
+		setTextFor(EXCLUDED_METHODS_LABEL).to(excludedMethods);
 	}
 
 	public String getAvoidCallsTo() {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			return bot.textWithLabel(AVOID_CALLS_TO_LABEL).getText();
-		} finally {
-			close();
-		}
+		return getText().from(AVOID_CALLS_TO_LABEL);
 	}
 
 	public void setAvoidCallsTo(String avoidCallsTo) {
-		activatePreferenceShell();
-		try {
-			expandPitPreferences();
-			bot.textWithLabel(AVOID_CALLS_TO_LABEL).setText(avoidCallsTo);
-		} finally {
-			close();
-		}
+		setTextFor(AVOID_CALLS_TO_LABEL).to(avoidCallsTo);
 	}
 
 	public PitMutators getMutators() {
-		activatePreferenceShell();
-		try {
-			expandPitMutatorPreferences();
-			for (PitMutators mutator : PitMutators.values()) {
-				if (bot.radio(mutator.getLabel()).isSelected()) {
-					return mutator;
-				}
-			}
-			return null;
-		} finally {
-			close();
-		}
+		return getSelectedMutators().from(MUTATORS_LABEL);
 	}
 
 	private Optional<SWTBotTreeItem> expandPitMutatorPreferences() {
@@ -203,5 +124,168 @@ public class PitPreferenceSelector implements Closeable {
 			}
 		}
 		return Optional.absent();
+	}
+
+	public void setPitTimeoutConst(int timeout) {
+		setTextFor(PIT_TIMEOUT_LABEL).to(timeout);
+	}
+
+	public void setPitTimeoutFactor(int factor) {
+		setTextFor(PIT_TIMEOUT_FACTOR_LABEL).to(factor);
+	}
+
+	private static interface PreferenceGetter<T> {
+		T getPreference(String label);
+	}
+
+	private class PreferenceGetterBuilder<T> {
+		private final PreferenceGetter<T> getter;
+
+		public PreferenceGetterBuilder(PreferenceGetter<T> getter) {
+			this.getter = getter;
+		}
+
+		public T from(String label) {
+			activatePreferenceShell();
+			try {
+				expandPitPreferences();
+				return getter.getPreference(label);
+			} finally {
+				close();
+			}
+		}
+	}
+
+	private class PreferenceSetterBuilder {
+		private final String label;
+
+		public PreferenceSetterBuilder(String label) {
+			this.label = label;
+		}
+
+		public void to(final String value) {
+			updatePreference(new PreferenceSetter<String>() {
+				@Override
+				public void setPreference() {
+					bot.textWithLabel(label).setText(value);
+				}
+			});
+		}
+
+		public void to(final boolean value) {
+			updatePreference(new PreferenceSetter<Boolean>() {
+				@Override
+				public void setPreference() {
+					if (value)
+						bot.checkBox(label).select();
+					else
+						bot.checkBox(label).deselect();
+				}
+			});
+		}
+
+		public void to(final int value) {
+			to(Integer.toString(value));
+		}
+
+		private <T> void updatePreference(PreferenceSetter<T> s) {
+			activatePreferenceShell();
+			try {
+				expandPitPreferences();
+				s.setPreference();
+			} finally {
+				close();
+			}
+		}
+	}
+
+	private static interface PreferenceSetter<T> {
+		void setPreference();
+	}
+
+	private PreferenceSetterBuilder setTextFor(final String label) {
+		return new PreferenceSetterBuilder(label);
+	}
+
+	private PreferenceSetterBuilder setSelectionFor(final String label) {
+		return new PreferenceSetterBuilder(label);
+	}
+
+	private PreferenceGetterBuilder<String> getText() {
+		return new PreferenceGetterBuilder<String>(new PreferenceGetter<String>() {
+			@Override
+			public String getPreference(String label) {
+				return bot.textWithLabel(label).getText();
+			}
+		});
+	}
+
+	private PreferenceGetterBuilder<Integer> getInteger() {
+		return new PreferenceGetterBuilder<Integer>(new PreferenceGetter<Integer>() {
+			@Override
+			public Integer getPreference(String label) {
+				String value = bot.textWithLabel(label).getText();
+				try {
+					return Integer.parseInt(value);
+				} catch (NumberFormatException e) {
+					return 0;
+				}
+			}
+		});
+	}
+
+	private PreferenceGetterBuilder<BigDecimal> getBigDecimal() {
+		return new PreferenceGetterBuilder<BigDecimal>(new PreferenceGetter<BigDecimal>() {
+			@Override
+			public BigDecimal getPreference(String label) {
+				String value = bot.textWithLabel(label).getText();
+				try {
+					return new BigDecimal(value);
+				} catch (NumberFormatException e) {
+					return ZERO;
+				}
+			}
+		});
+	}
+
+	private PreferenceGetterBuilder<Boolean> getBoolean() {
+		return new PreferenceGetterBuilder<Boolean>(new PreferenceGetter<Boolean>() {
+			@Override
+			public Boolean getPreference(String label) {
+				return bot.checkBox(label).isChecked();
+			}
+		});
+	}
+
+	private PreferenceGetterBuilder<PitMutators> getSelectedMutators() {
+		return new PreferenceGetterBuilder<PitMutators>(new PreferenceGetter<PitMutators>() {
+			@Override
+			public PitMutators getPreference(String label) {
+				expandPitMutatorPreferences();
+				for (PitMutators mutator : PitMutators.values()) {
+					if (bot.radio(mutator.getLabel()).isSelected()) {
+						return mutator;
+					}
+				}
+				return PitMutators.DEFAULTS;
+			}
+		});
+	}
+
+	private PreferenceGetterBuilder<PitExecutionMode> getSelectedExecutionMode() {
+		return new PreferenceGetterBuilder<PitExecutionMode>(new PreferenceGetter<PitExecutionMode>() {
+			@Override
+			public PitExecutionMode getPreference(String label) {
+				return getActiveExecutionMode();
+			}
+		});
+	}
+
+	public int getTimeout() {
+		return getInteger().from(PIT_TIMEOUT_LABEL);
+	}
+
+	public BigDecimal getPitTimeoutFactor() {
+		return getBigDecimal().from(PIT_TIMEOUT_FACTOR_LABEL);
 	}
 }

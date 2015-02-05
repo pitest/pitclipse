@@ -9,6 +9,8 @@ import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_M
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT_FACTOR;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
@@ -16,6 +18,7 @@ import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
@@ -24,6 +27,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -241,16 +245,25 @@ public class PitCoreActivator extends AbstractUIPlugin {
 	}
 
 	public PitConfiguration getConfiguration() {
-		String executionMode = getPreferenceStore().getString(PIT_EXECUTION_MODE);
-		String mutators = getPreferenceStore().getString(PIT_MUTATORS);
-		boolean parallelRun = getPreferenceStore().getBoolean(RUN_IN_PARALLEL);
-		boolean incrementalAnalysis = getPreferenceStore().getBoolean(INCREMENTAL_ANALYSIS);
-		String excludedClasses = getPreferenceStore().getString(EXCLUDED_CLASSES);
-		String excludedMethods = getPreferenceStore().getString(EXCLUDED_METHODS);
-		String avoidCallsTo = getPreferenceStore().getString(AVOID_CALLS_TO);
+		IPreferenceStore preferenceStore = getPreferenceStore();
+		String executionMode = preferenceStore.getString(PIT_EXECUTION_MODE);
+		String mutators = preferenceStore.getString(PIT_MUTATORS);
+		boolean parallelRun = preferenceStore.getBoolean(RUN_IN_PARALLEL);
+		boolean incrementalAnalysis = preferenceStore.getBoolean(INCREMENTAL_ANALYSIS);
+		String excludedClasses = preferenceStore.getString(EXCLUDED_CLASSES);
+		String excludedMethods = preferenceStore.getString(EXCLUDED_METHODS);
+		String avoidCallsTo = preferenceStore.getString(AVOID_CALLS_TO);
+		String timeout = preferenceStore.getString(TIMEOUT);
+		String timeoutFactor = preferenceStore.getString(TIMEOUT_FACTOR);
 		PitConfiguration.Builder builder = PitConfiguration.builder().withParallelExecution(parallelRun)
 				.withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
 				.withExcludedMethods(excludedMethods).withAvoidCallsTo(avoidCallsTo);
+		try {
+			builder.withTimeout(Integer.valueOf(timeout));
+			builder.withTimeoutFactor(new BigDecimal(timeoutFactor));
+		} catch (NumberFormatException ignoreMe) {
+		}
+
 		for (PitExecutionMode pitExecutionMode : PitExecutionMode.values()) {
 			if (pitExecutionMode.getId().equals(executionMode)) {
 				builder.withExecutionMode(pitExecutionMode);
