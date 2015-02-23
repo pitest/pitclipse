@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.pitest.command-line-osgi;bundle-version="1.1.4",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: lib/jsr305-2.0.0.jar,.
 Export-Package: org.pitest.pitclipse.core,
