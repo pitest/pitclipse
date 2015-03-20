@@ -37,8 +37,8 @@ import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.Mutations.Mutation;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
-import org.pitest.pitclipse.reloc.guava.base.Objects.ToStringHelper;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects.ToStringHelper;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -128,12 +128,13 @@ class ListenerTestFixture {
 
 			@Override
 			public void describeTo(Description description) {
-				ToStringHelper expectedResultAsString = Objects.toStringHelper(expectedResult);
+				ToStringHelper expectedResultAsString = MoreObjects.toStringHelper(expectedResult);
 				for (Mutation m : expectedResult.getMutation()) {
 					expectedResultAsString.add(
 							"Mutation",
-							Objects.toStringHelper(m).add("index", m.getIndex()).add("killingTest", m.getKillingTest())
-									.add("lineNumber", m.getLineNumber()).add("mutatedClass", m.getMutatedClass())
+							MoreObjects.toStringHelper(m).add("index", m.getIndex())
+									.add("killingTest", m.getKillingTest()).add("lineNumber", m.getLineNumber())
+									.add("mutatedClass", m.getMutatedClass())
 									.add("mutatedMethod", m.getMutatedMethod()).add("mutator", m.getMutator())
 									.add("sourceFile", m.getSourceFile()).add("status", m.getStatus()).toString());
 				}
