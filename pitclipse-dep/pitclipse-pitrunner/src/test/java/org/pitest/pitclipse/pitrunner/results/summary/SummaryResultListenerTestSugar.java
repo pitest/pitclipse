@@ -9,7 +9,7 @@ import static org.pitest.pitclipse.pitrunner.results.MutationResultListenerLifec
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.pitrunner.results.Dispatcher;
@@ -58,14 +58,16 @@ class SummaryResultListenerTestSugar {
 		}
 
 		private Matcher<SummaryResult> sameAs(final SummaryResult expected) {
-			return new TypeSafeMatcher<SummaryResult>() {
+			return new TypeSafeDiagnosingMatcher<SummaryResult>() {
+
 				@Override
 				public void describeTo(Description description) {
-					description.appendText("summaryResult").appendValue(reflectionToString(expected));
+					description.appendValue(reflectionToString(expected));
 				}
 
 				@Override
-				protected boolean matchesSafely(SummaryResult actual) {
+				protected boolean matchesSafely(SummaryResult actual, Description mismatchDescription) {
+					mismatchDescription.appendValue(reflectionToString(actual));
 					return reflectionEquals(expected, actual);
 				}
 			};
