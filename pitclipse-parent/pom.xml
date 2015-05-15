@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.pitest</groupId>
 	<artifactId>pitclipse-parent</artifactId>
-	<version>1.1.2</version>
+	<version>1.1.5</version>
 	<packaging>pom</packaging>
 	<name>pitclipse-parent</name>
 	<organization>
@@ -25,15 +25,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<guava.version>18.0</guava.version>
-		<felix.version>2.4.0</felix.version>
+		<felix.version>2.5.3</felix.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<junit.version>4.11</junit.version>
 		<jbehave.version>3.9.2</jbehave.version>
-		<maven.site.version>3.1</maven.site.version>
-		<maven.compiler.version>2.3.2</maven.compiler.version>
-		<maven.jarsigner.version>1.3.2</maven.jarsigner.version>
+		<maven.site.version>3.4</maven.site.version>
+		<maven.compiler.version>3.3</maven.compiler.version>
+		<maven.jarsigner.version>1.4</maven.jarsigner.version>
 		<mockito.version>1.9.5</mockito.version>
-		<pitest.version>1.1.4</pitest.version>
+		<pitest.version>1.1.5</pitest.version>
 		<tycho.version>0.15.0</tycho.version>
 	</properties>
 	<dependencyManagement>
@@ -81,6 +81,11 @@
 			<dependency>
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-command-line</artifactId>
+				<version>${pitest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-html-report</artifactId>
 				<version>${pitest.version}</version>
 			</dependency>
 			<dependency>

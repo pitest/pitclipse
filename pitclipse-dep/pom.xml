@@ -4,7 +4,7 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.1.2</version>
+    <version>1.1.5</version>
   </parent>
   <artifactId>pitclipse-dep</artifactId>
   <name>pitclipse-dep</name>
@@ -27,6 +27,7 @@
       <modules>
         <module>pitest-osgi</module>
         <module>pitest-command-line-osgi</module>
+        <module>pitest-html-report-osgi</module>
         <module>guava-shade</module>
         <module>guava-shade-osgi</module>
         <module>jbehave-osgi</module>

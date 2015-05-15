@@ -5,7 +5,7 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.1.2</version>
+    <version>1.1.4</version>
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
@@ -40,6 +40,11 @@
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest-osgi</artifactId>
+      <version>${pitest.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-html-report-osgi</artifactId>
       <version>${pitest.version}</version>
     </dependency>
     <dependency>

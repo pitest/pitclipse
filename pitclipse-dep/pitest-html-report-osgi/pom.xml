@@ -8,24 +8,14 @@
     <groupId>org.pitest</groupId>
     <version>1.1.5</version>
   </parent>
-  <artifactId>pitest-osgi</artifactId>
-  <name>pitest-osgi</name>
+  <artifactId>pitest-html-report-osgi</artifactId>
+  <name>pitest-html-report-osgi</name>
   <packaging>bundle</packaging>
   <version>${pitest.version}</version>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitest</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>pitest-html-report</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -37,9 +27,9 @@
         <configuration>
           <instructions>
             <Import-Package>!com.thoughtworks.xstream.*,!com.bea.xml.stream.*,!joptsimple.*,!net.sf.cglib.proxy.*,!nu.xom.*,!org.xmlpull.*,!org.dom4j.*,!org.apache.bsf.*,!org.codehaus.jettison.*,!org.joda.time.*,!org.kxml2.*,!sun.misc,!sun.reflect,!org.junit.*,!junit.*,!org.testng.*,!com.ctc.wstx.stax.*,*</Import-Package>
-            <Export-Package>org.pitest.mutationtest,org.pitest.util,org.pitest.testng,org.pitest.testapi,org.pitest.project,org.pitest.mutationtest.statistics,org.pitest.mutationtest.tooling,org.pitest.mutationtest.engine,org.pitest.functional.predicate,org.pitest.mutationtest.config,org.pitest.functional,org.pitest.classinfo,org.pitest.classpath,org.pitest.coverage,org.pitest.mutationtest.incremental,org.pitest.plugin</Export-Package>
-            <Embed-Dependency>*;inline=true</Embed-Dependency>
+            <Export-Package>org.pitest.mutationtest.report.html</Export-Package>
             <Require-Bundle>system.bundle</Require-Bundle>
+            <Embed-Dependency>*;inline=true</Embed-Dependency>
           </instructions>
         </configuration>
       </plugin>
