@@ -1,11 +1,10 @@
 Pitclipse
 =========
 
-Eclipse plugin for PIT.  Update site: http://eclipse.pitest.org/release
+Eclipse plugin for PIT.  Please download from Eclipse Marketplace
 
 
-
-
+Manual Update site: http://eclipse.pitest.org/release (please note that this is not viewable from a browser, but will work from an Eclipse update)
 
 
 
