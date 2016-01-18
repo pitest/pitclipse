@@ -1,8 +1,8 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.copyOf;
@@ -276,8 +276,8 @@ public class PitclipseSteps {
 				match &= checkSetMatch(match, optionRow, "excludedClasses", options.getExcludedClasses());
 				match &= checkSetMatch(match, optionRow, "excludedMethods", options.getExcludedMethods());
 				match &= checkSetMatch(match, optionRow, "packagesUnderTest", options.getPackages());
-				match &= checkBooleanMatch(match, optionRow, "runInParallel", options.getThreads() == Runtime
-						.getRuntime().availableProcessors());
+				match &= checkBooleanMatch(match, optionRow, "runInParallel",
+						options.getThreads() == Runtime.getRuntime().availableProcessors());
 				match &= checkBooleanMatch(match, optionRow, "incrementalAnalysis",
 						options.getHistoryLocation() != null);
 				match &= checkIntMatch(match, optionRow, "timeoutConst", options.getTimeout());
@@ -288,8 +288,8 @@ public class PitclipseSteps {
 			private boolean checkClasspathMatch(boolean match, Map<String, String> optionRow, String key,
 					List<File> sourceDirectories) {
 				if (match && optionRow.containsKey(key)) {
-					List<String> paths = ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings()
-							.split(optionRow.get(key)));
+					List<String> paths = ImmutableList
+							.copyOf(Splitter.on(',').trimResults().omitEmptyStrings().split(optionRow.get(key)));
 					if (paths.size() == sourceDirectories.size()) {
 						boolean allMatch = true;
 						for (int i = 0; i < paths.size(); i++) {
@@ -338,8 +338,8 @@ public class PitclipseSteps {
 			private boolean checkSetMatch(boolean match, Map<String, String> optionRow, String key,
 					List<String> actualValues) {
 				if (match && optionRow.containsKey(key)) {
-					Set<String> expectedValues = copyOf(Splitter.on(',').trimResults().omitEmptyStrings()
-							.split(optionRow.get(key)));
+					Set<String> expectedValues = copyOf(
+							Splitter.on(',').trimResults().omitEmptyStrings().split(optionRow.get(key)));
 					return expectedValues.equals(copyOf(actualValues));
 				}
 				return match;

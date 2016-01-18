@@ -7,6 +7,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.Properties;
+
 import org.junit.Test;
 import org.pitest.mutationtest.ListenerArguments;
 
@@ -22,7 +24,7 @@ public class SummaryResultListenerFactoryTest {
 
 	@Test
 	public void factoryProducesExpectedListener() {
-		assertThat(factory.getListener(someArgs()), is(instanceOf(SummaryResultListener.class)));
+    assertThat(factory.getListener(someArgs()), is(instanceOf(SummaryResultListener.class)));
 	}
 
 	private ListenerArguments someArgs() {

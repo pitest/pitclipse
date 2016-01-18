@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
+import java.util.Properties;
+
 import org.pitest.mutationtest.ListenerArguments;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.MutationResultListenerFactory;
@@ -13,7 +15,12 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
 	}
 
 	@Override
-	public MutationResultListener getListener(ListenerArguments args) {
+	public String name() {
+		return "PITCLIPSE_SUMMARY";
+	}
+
+	@Override
+	public MutationResultListener getListener(ListenerArguments arg1) {
 		Dispatcher<SummaryResult> dispatcher = new Dispatcher<SummaryResult>() {
 			@Override
 			public void dispatch(SummaryResult result) {
@@ -23,8 +30,4 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
 		return new SummaryResultListener(dispatcher);
 	}
 
-	@Override
-	public String name() {
-		return "PITCLIPSE_SUMMARY";
-	}
 }

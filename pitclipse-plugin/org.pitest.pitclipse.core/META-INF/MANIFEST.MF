@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.pitest.command-line-osgi;bundle-version="1.1.5",
  org.pitest.html-report-osgi;bundle-version="1.1.5",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0",
- org.jdom;bundle-version="1.1.1"
+ org.apache.servicemix.bundles.jdom;bundle-version="2.0.6"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org
