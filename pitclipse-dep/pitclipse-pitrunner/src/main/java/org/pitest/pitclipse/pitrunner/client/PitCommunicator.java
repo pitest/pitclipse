@@ -44,5 +44,4 @@ public class PitCommunicator implements Runnable {
 		private static final long serialVersionUID = -3841555200842571429L;
 
 	}
-
 }

@@ -10,37 +10,54 @@ import static org.pitest.pitclipse.pitrunner.results.MutationResultListenerLifec
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
-import org.pitest.pitclipse.pitrunner.results.Dispatcher;
+import org.pitest.pitclipse.pitrunner.results.ListenerContext;
 import org.pitest.pitclipse.pitrunner.results.ListenerFactory;
 import org.pitest.pitclipse.reloc.guava.base.Optional;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 class SummaryResultListenerTestSugar {
-	static SetupState given(ClassMutationResults first, ClassMutationResults... others) {
-		final Builder<ClassMutationResults> r = ImmutableList.builder();
-		r.add(first);
-		if (null != others)
-			r.add(others);
-		return new SetupState(r.build());
-	}
 
-	static SetupState givenNoMutations() {
-		return new SetupState(ImmutableList.<ClassMutationResults> of());
+	static class CoverageState {
+		private final CoverageDatabase coverageDatabase;
+
+		private CoverageState(CoverageDatabase coverageDatabase) {
+			this.coverageDatabase = coverageDatabase;
+		}
+
+		public SetupState and(ClassMutationResults first, ClassMutationResults... others) {
+			final Builder<ClassMutationResults> r = ImmutableList.builder();
+			r.add(first);
+			if (null != others)
+				r.add(others);
+			return new SetupState(coverageDatabase, r.build());
+		}
+
+		public SetupState andNoMutations() {
+			return new SetupState(coverageDatabase, ImmutableList.<ClassMutationResults> of());
+		}
+
+		static CoverageState given(CoverageDatabase coverageDatabase) {
+			return new CoverageState(coverageDatabase);
+		}
 	}
 
 	static class SetupState {
 
 		private final ImmutableList<ClassMutationResults> results;
+		private final CoverageDatabase coverageDatabase;
 
-		public SetupState(ImmutableList<ClassMutationResults> results) {
+		public SetupState(CoverageDatabase coverageDatabase, ImmutableList<ClassMutationResults> results) {
+			this.coverageDatabase = coverageDatabase;
 			this.results = results;
 		}
 
 		public Verification whenPitIsExecuted() {
-			Optional<SummaryResult> result = using(SummaryListenerFactory.INSTANCE).handleMutationResults(results);
+			Optional<SummaryResult> result = using(SummaryListenerFactory.INSTANCE, coverageDatabase)
+					.handleMutationResults(results);
 			return new Verification(result);
 		}
 	}
@@ -90,8 +107,11 @@ class SummaryResultListenerTestSugar {
 			this.result = result;
 		}
 
-		public SummaryResultWrapper withCoverageOf(int coverage) {
-			return new SummaryResultWrapper(new SummaryResult(coverage));
+		public SummaryResultWrapper withCoverageOf(String className, int lineCov, int mutationCov) {
+			Coverage lineCoverage = Coverage.from(lineCov, 100);
+			Coverage mutationCoverage = Coverage.from(mutationCov, 100);
+			ClassSummary classSummary = ClassSummary.from(className, lineCoverage, mutationCoverage);
+			return new SummaryResultWrapper(result.update(classSummary));
 		}
 
 		public SummaryResult getResult() {
@@ -100,12 +120,11 @@ class SummaryResultListenerTestSugar {
 	}
 }
 
-enum SummaryListenerFactory implements ListenerFactory<SummaryResult, Dispatcher<SummaryResult>> {
+enum SummaryListenerFactory implements ListenerFactory<SummaryResult> {
 	INSTANCE;
 
 	@Override
-	public MutationResultListener apply(Dispatcher<SummaryResult> dispatcher) {
-		return new SummaryResultListener(dispatcher);
+	public MutationResultListener apply(ListenerContext<SummaryResult> context) {
+		return new SummaryResultListener(context.dispatcher, context.coverageData);
 	}
-
 }

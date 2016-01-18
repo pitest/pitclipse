@@ -1,23 +1,25 @@
 package org.pitest.pitclipse.pitrunner.results;
 
+import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.reloc.guava.base.Optional;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
-public class MutationResultListenerLifecycle<T, D extends Dispatcher<? super T>, F extends ListenerFactory<T, D>> {
+public class MutationResultListenerLifecycle<T, F extends ListenerFactory<T>> {
 
 	private final F factory;
+	private final CoverageDatabase coverageData;
 
-	public static <T, D extends Dispatcher<? super T>, F extends ListenerFactory<T, D>> MutationResultListenerLifecycle<T, D, F> using(
-			F factory) {
-		return new MutationResultListenerLifecycle<T, D, F>(factory);
+	public static <T, F extends ListenerFactory<T>> MutationResultListenerLifecycle<T, F> using(F factory,
+			CoverageDatabase coverageData) {
+		return new MutationResultListenerLifecycle<T, F>(factory, coverageData);
 	}
 
 	public Optional<T> handleMutationResults(ImmutableList<ClassMutationResults> results) {
 		RecordingDispatcher<T> recordingDispatcher = new RecordingDispatcher<T>();
-		D dispatcher = (D) recordingDispatcher;
-		MutationResultListener listener = factory.apply(dispatcher);
+		ListenerContext<T> context = new ListenerContext<T>(recordingDispatcher, coverageData);
+		MutationResultListener listener = factory.apply(context);
 		listener.runStart();
 		for (ClassMutationResults r : results)
 			listener.handleMutationResult(r);
@@ -25,8 +27,9 @@ public class MutationResultListenerLifecycle<T, D extends Dispatcher<? super T>,
 		return recordingDispatcher.getResult();
 	}
 
-	private MutationResultListenerLifecycle(F factory) {
+	private MutationResultListenerLifecycle(F factory, CoverageDatabase coverageData) {
 		this.factory = factory;
+		this.coverageData = coverageData;
 	}
 
 	private static class RecordingDispatcher<T> implements Dispatcher<T> {

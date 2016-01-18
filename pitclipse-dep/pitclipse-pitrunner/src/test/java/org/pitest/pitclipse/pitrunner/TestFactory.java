@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.pitrunner;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Random;
 
@@ -51,5 +52,13 @@ public enum TestFactory {
 
 	public boolean aRandomBoolean() {
 		return random.nextBoolean();
+	}
+
+	public long aRandomLong() {
+		return random.nextLong();
+	}
+
+	public BigInteger aRandomBigInteger() {
+		return BigInteger.valueOf(aRandomLong());
 	}
 }

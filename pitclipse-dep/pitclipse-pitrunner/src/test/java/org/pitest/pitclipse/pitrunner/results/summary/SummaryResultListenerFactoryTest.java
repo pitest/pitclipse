@@ -6,10 +6,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ListenerArguments;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SummaryResultListenerFactoryTest {
 
 	private final SummaryResultListenerFactory factory = new SummaryResultListenerFactory();
@@ -26,6 +32,8 @@ public class SummaryResultListenerFactoryTest {
 	}
 
 	private ListenerArguments someArgs() {
-		return null;
+		ListenerArguments args = mock(ListenerArguments.class);
+		when(args.getCoverage()).thenReturn(mock(CoverageDatabase.class));
+		return args;
 	}
 }

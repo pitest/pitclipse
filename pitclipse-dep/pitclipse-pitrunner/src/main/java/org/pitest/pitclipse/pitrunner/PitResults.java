@@ -9,6 +9,7 @@ import javax.annotation.concurrent.Immutable;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
+import org.pitest.pitclipse.pitrunner.results.summary.SummaryResult;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @Immutable
@@ -21,9 +22,13 @@ public final class PitResults implements Serializable {
 
 	private final ImmutableList<String> projects;
 
-	private PitResults(File htmlResultFile, File xmlResultFile, Mutations mutations, ImmutableList<String> projects) {
+	private final SummaryResult summaryResult;
+
+	private PitResults(File htmlResultFile, File xmlResultFile, Mutations mutations, SummaryResult summaryResult,
+			ImmutableList<String> projects) {
 		this.htmlResultFile = htmlResultFile;
 		this.mutations = mutations;
+		this.summaryResult = summaryResult;
 		this.projects = projects;
 	};
 
@@ -37,12 +42,13 @@ public final class PitResults implements Serializable {
 		private final File xmlResultFile = null;
 		private ImmutableList<String> projects = ImmutableList.of();
 		private Mutations mutations = new ObjectFactory().createMutations();
+		private SummaryResult summaryResult = SummaryResult.EMPTY;
 
 		private Builder() {
 		}
 
 		public PitResults build() {
-			return new PitResults(htmlResultFile, xmlResultFile, mutations, projects);
+			return new PitResults(htmlResultFile, xmlResultFile, mutations, summaryResult, projects);
 		}
 
 		public Builder withHtmlResults(File htmlResultFile) {
@@ -64,6 +70,11 @@ public final class PitResults implements Serializable {
 
 		public Builder withMutations(Mutations mutations) {
 			this.mutations = mutations;
+			return this;
+		}
+
+		public Builder withSummaryResult(SummaryResult summaryResult) {
+			this.summaryResult = summaryResult;
 			return this;
 		}
 	}

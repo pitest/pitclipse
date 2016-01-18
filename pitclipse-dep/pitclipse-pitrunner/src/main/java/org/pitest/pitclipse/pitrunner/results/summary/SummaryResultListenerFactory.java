@@ -20,7 +20,7 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
 				// NOOP
 			}
 		};
-		return new SummaryResultListener(dispatcher);
+		return new SummaryResultListener(dispatcher, args.getCoverage());
 	}
 
 	@Override
