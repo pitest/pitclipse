@@ -5,7 +5,7 @@
   <parent>
     <artifactId>pitclipse-parent</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.1.4</version>
+    <version>1.1.10</version>
   </parent>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
@@ -25,16 +25,6 @@
       <layout>p2</layout>
       <url>${local.p2.url}</url>
     </repository>
-<!--    <repository>
-      <id>p2.snapsnots</id>
-      <layout>p2</layout>
-      <url>http://localhost:8081/nexus/content/repositories/snapshots/.meta/p2/</url>
-    </repository>   
-    <repository>
-      <id>p2.releases</id>
-      <layout>p2</layout>
-      <url>http://localhost:8081/nexus/content/repositories/releases/.meta/p2/</url>
-    </repository>  --> 
   </repositories>
   <dependencies>
     <dependency>
@@ -62,6 +52,11 @@
       <artifactId>pitclipse-pitrunner</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+		  <groupId>org.apache.servicemix.bundles</groupId>
+		  <artifactId>org.apache.servicemix.bundles.jdom</artifactId>
+		  <version>2.0.6_1</version>
+	  </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -90,11 +85,18 @@
         <module>org.pitest.pitclipse.test-feature</module>
         <module>org.pitest.pitclipse.test-site</module>
       </modules>
+      <dependencies>
+        <dependency>
+          <groupId>org.pitest</groupId>
+          <artifactId>jbehave-osgi</artifactId>
+          <version>${jbehave.version}</version>
+        </dependency>
+      </dependencies>
     </profile>
     <profile>
       <id>to_be_fixed</id>
       <modules>
-		<module>pitclipse-ui.tests</module>
+		    <module>pitclipse-ui.tests</module>
       </modules>
     </profile>
   </profiles>

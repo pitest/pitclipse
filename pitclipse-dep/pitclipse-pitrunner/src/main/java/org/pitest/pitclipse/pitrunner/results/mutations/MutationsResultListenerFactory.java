@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.results.mutations;
 
+import java.util.Properties;
+
 import org.pitest.mutationtest.ListenerArguments;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.MutationResultListenerFactory;

@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.pitest</groupId>
 	<artifactId>pitclipse-parent</artifactId>
-	<version>1.1.5</version>
+	<version>1.1.10</version>
 	<packaging>pom</packaging>
 	<name>pitclipse-parent</name>
 	<organization>
@@ -25,9 +25,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<guava.version>18.0</guava.version>
-		<felix.version>2.5.3</felix.version>
+		<felix.version>3.0.1</felix.version>
 		<hamcrest.version>1.3</hamcrest.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.12</junit.version>
 		<jbehave.version>3.9.2</jbehave.version>
 		<maven.site.version>3.4</maven.site.version>
 		<maven.compiler.version>3.3</maven.compiler.version>

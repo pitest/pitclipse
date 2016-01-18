@@ -9,6 +9,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Properties;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -28,7 +30,7 @@ public class SummaryResultListenerFactoryTest {
 
 	@Test
 	public void factoryProducesExpectedListener() {
-		assertThat(factory.getListener(someArgs()), is(instanceOf(SummaryResultListener.class)));
+    assertThat(factory.getListener(someArgs()), is(instanceOf(SummaryResultListener.class)));
 	}
 
 	private ListenerArguments someArgs() {
