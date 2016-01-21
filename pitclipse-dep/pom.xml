@@ -25,9 +25,6 @@
     <profile>
       <id>external-bundle</id>
       <modules>
-        <module>pitest-osgi</module>
-        <module>pitest-command-line-osgi</module>
-        <module>pitest-html-report-osgi</module>
         <module>guava-shade</module>
         <module>guava-shade-osgi</module>
         <module>jbehave-osgi</module>
