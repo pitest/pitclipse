@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.pitest</groupId>
-    <artifactId>pitclipse-parent</artifactId>
-    <version>1.1.10</version>
+    <artifactId>guava-bundle</artifactId>
+    <version>18.0</version>
   </parent>
   <artifactId>guava-shade</artifactId>
   <name>guava-shade</name>
-  <version>${guava.version}</version>
+  <version>18.0</version>
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -20,7 +20,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.1</version>
+        <version>${maven.shade.version}</version>
         <executions>
           <execution>
             <goals>
