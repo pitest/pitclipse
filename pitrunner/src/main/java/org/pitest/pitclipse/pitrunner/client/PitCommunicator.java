@@ -3,12 +3,9 @@ package org.pitest.pitclipse.pitrunner.client;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
-@Immutable
 public class PitCommunicator implements Runnable {
 
 	private final PitRequest request;

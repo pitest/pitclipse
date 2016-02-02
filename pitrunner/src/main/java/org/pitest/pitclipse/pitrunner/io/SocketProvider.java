@@ -7,9 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-import javax.annotation.concurrent.Immutable;
-
-@Immutable
 public class SocketProvider {
 
 	private static final int DEFAULT_TIMEOUT = 20000;

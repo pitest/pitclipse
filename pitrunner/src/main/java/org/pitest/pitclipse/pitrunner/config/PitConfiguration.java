@@ -4,13 +4,10 @@ import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISO
 
 import java.math.BigDecimal;
 
-import javax.annotation.concurrent.Immutable;
-
 /**
  * @author phil
  * 
  */
-@Immutable
 public class PitConfiguration {
 	public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging";
 	public static final String DEFAULT_MUTATORS = "DEFAULTS";

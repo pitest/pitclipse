@@ -3,31 +3,45 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>pitclipse-parent</artifactId>
-    <groupId>org.pitest</groupId>
-    <version>1.1.10</version>
-  </parent>
-  <artifactId>pitclipse-pitrunner</artifactId>
-  <name>pitclipse-pitrunner</name>
+  <groupId>org.pitest</groupId>
+  <artifactId>pitrunner</artifactId>
+  <name>pitrunner</name>
   <packaging>bundle</packaging>
   <version>1.1.4-SNAPSHOT</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<guava.version>18.0</guava.version>
+		<felix.version>2.5.3</felix.version>
+		<hamcrest.version>1.3</hamcrest.version>
+		<junit.version>4.12</junit.version>
+		<maven.compiler.version>3.3</maven.compiler.version>
+		<maven.jarsigner.version>1.4</maven.jarsigner.version>
+		<mockito.version>1.9.5</mockito.version>
+		<pitest.version>1.1.5</pitest.version>
+		<tycho.version>0.15.0</tycho.version>
+    <pitest.version>1.1.4</pitest.version>
+    <commons.version>3.1</commons.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>guava-shade</artifactId>
+      <version>${guava.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitest-command-line</artifactId>
+      <artifactId>pitest-command-line-osgi</artifactId>
+      <version>${pitest.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitest-html-report</artifactId>
+      <version>${pitest.version}</version>
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitest</artifactId>
+      <artifactId>pitest-osgi</artifactId>
+      <version>${pitest.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.testng</groupId>
@@ -42,26 +56,25 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+      <version>${commons.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
+      <version>${hamcrest.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -70,6 +83,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>${felix.version}</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
@@ -80,6 +94,15 @@
     </plugins>
     <pluginManagement>
       <plugins>
+ 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.version}</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -107,4 +130,39 @@
       </plugins>
     </pluginManagement>
   </build>
+  <profiles>
+		<profile>
+			<id>sign</id>
+			<activation>
+				<property>
+					<name>jarsigner.alias</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>${maven.jarsigner.version}</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<arguments>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
+								<argument>-sigalg</argument>
+								<argument>SHA1withRSA</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

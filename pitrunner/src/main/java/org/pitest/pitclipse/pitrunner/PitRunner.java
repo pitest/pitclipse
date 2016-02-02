@@ -6,14 +6,11 @@ import static org.pitest.pitclipse.reloc.guava.base.Preconditions.checkArgument;
 import java.io.File;
 import java.io.IOException;
 
-import javax.annotation.concurrent.ThreadSafe;
-
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.client.PitClient;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.mutations.RecordingMutationsDispatcher;
 
-@ThreadSafe
 public class PitRunner {
 
 	public static void main(String[] args) {

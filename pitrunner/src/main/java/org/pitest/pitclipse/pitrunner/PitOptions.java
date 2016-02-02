@@ -13,12 +13,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.pitest.pitclipse.reloc.guava.base.Splitter;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
-@Immutable
 public final class PitOptions implements Serializable {
 
 	private static final long serialVersionUID = 1543633254516962868L;

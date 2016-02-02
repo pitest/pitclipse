@@ -20,7 +20,7 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
 	}
 
 	@Override
-	public MutationResultListener getListener(ListenerArguments arg1) {
+	public MutationResultListener getListener(ListenerArguments args) {
 		Dispatcher<SummaryResult> dispatcher = new Dispatcher<SummaryResult>() {
 			@Override
 			public void dispatch(SummaryResult result) {
