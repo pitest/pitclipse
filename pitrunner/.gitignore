@@ -1,1 +1,3 @@
-/test-output
+.idea/
+test-output/
+*.iml
