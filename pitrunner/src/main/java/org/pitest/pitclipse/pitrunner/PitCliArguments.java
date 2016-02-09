@@ -22,7 +22,7 @@ public class PitCliArguments {
 		Builder<String> builder = ImmutableList.builder();
 		int threads = options.getThreads();
 		File reportDir = options.getReportDirectory();
-		builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY",
+		builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS",
 				"--verbose", "--threads", Integer.toString(threads), "--reportDir", reportDir.getPath(),
 				"--targetTests", testsToRunFrom(options));
 		builder.addAll(targetClassesFrom(options));

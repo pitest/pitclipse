@@ -2,6 +2,7 @@ package org.pitest.pitclipse.pitrunner.results.summary;
 
 import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
@@ -49,8 +50,9 @@ public class SummaryResultListener implements MutationResultListener {
 	}
 }
 
-class ClassSummary {
+class ClassSummary implements Serializable {
 
+	private static final long serialVersionUID = 6039947777282909605L;
 	private final Coverage lineCoverage;
 	private final String className;
 	private final Coverage mutationCoverage;
@@ -133,10 +135,11 @@ class ClassSummary {
 	}
 }
 
-class Coverage {
+class Coverage implements Serializable {
 
 	private static final int PRECISION = 10;
 	private static final BigDecimal HUNDRED_PERCENT = BigDecimal.valueOf(100);
+	private static final long serialVersionUID = 6511618552254606506L;
 
 	private final int covered;
 	private final int total;

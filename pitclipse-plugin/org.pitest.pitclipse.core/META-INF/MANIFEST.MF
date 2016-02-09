@@ -12,12 +12,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.debug.ui;bundle-version="3.5.2",
  org.eclipse.jdt.launching;bundle-version="3.5.200",
  org.eclipse.jdt.ui;bundle-version="3.6.2",
- org.pitest.pitclipse-pitrunner;bundle-version="1.1.4",
+ org.pitest.pitrunner;bundle-version="1.1.4",
  org.pitest.osgi;bundle-version="1.1.5",
  org.pitest.command-line-osgi;bundle-version="1.1.5",
  org.pitest.html-report-osgi;bundle-version="1.1.5",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0",
- org.apache.servicemix.bundles.jdom;bundle-version="2.0.6"
+ org.jdom;bundle-version="1.1.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Pitest.org

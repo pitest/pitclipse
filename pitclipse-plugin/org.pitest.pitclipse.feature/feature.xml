@@ -64,7 +64,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.pitest.pitclipse-pitrunner"
+         id="org.pitest.pitrunner"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -78,7 +78,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.jdom"
+         id="org.jdom"
          download-size="0"
          install-size="0"
          version="0.0.0"

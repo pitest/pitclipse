@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>pitclipse-parent</artifactId>
-    <groupId>org.pitest</groupId>
-    <version>1.1.10</version>
-  </parent>
+  <groupId>org.pitest</groupId>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
   <version>1.1.4-SNAPSHOT</version>
@@ -17,13 +13,26 @@
     <module>org.pitest.pitclipse.site</module>
   </modules>
   <properties>
-    <local.p2.url>http://localhost:8081/nexus/content/groups/local-p2-mirror/</local.p2.url>
+    <p2.url>http://localhost:8081/nexus/content/groups/local-p2-mirror/</p2.url>
+<!--    <p2.url>http://download.eclipse.org/releases/indigo/</p2.url> -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<guava.version>18.0</guava.version>
+		<felix.version>3.0.1</felix.version>
+		<hamcrest.version>1.3</hamcrest.version>
+		<junit.version>4.12</junit.version>
+		<jbehave.version>3.9.2</jbehave.version>
+		<maven.site.version>3.4</maven.site.version>
+		<maven.compiler.version>3.3</maven.compiler.version>
+		<maven.jarsigner.version>1.4</maven.jarsigner.version>
+		<mockito.version>1.9.5</mockito.version>
+		<pitest.version>1.1.5</pitest.version>
+		<tycho.version>0.15.0</tycho.version>
   </properties>
   <repositories>
     <repository>
       <id>local.repo</id>
       <layout>p2</layout>
-      <url>${local.p2.url}</url>
+      <url>${p2.url}</url>
     </repository>
   </repositories>
   <dependencies>
@@ -49,14 +58,14 @@
     </dependency>
     <dependency>
       <groupId>org.pitest</groupId>
-      <artifactId>pitclipse-pitrunner</artifactId>
+      <artifactId>pitrunner</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-		  <groupId>org.apache.servicemix.bundles</groupId>
-		  <artifactId>org.apache.servicemix.bundles.jdom</artifactId>
-		  <version>2.0.6_1</version>
-	  </dependency>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>1.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -99,5 +108,38 @@
 		    <module>pitclipse-ui.tests</module>
       </modules>
     </profile>
+    <profile>
+			<id>sign</id>
+			<activation>
+				<property>
+					<name>jarsigner.alias</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>${maven.jarsigner.version}</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<arguments>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
+								<argument>-sigalg</argument>
+								<argument>SHA1withRSA</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
   </profiles>
 </project>

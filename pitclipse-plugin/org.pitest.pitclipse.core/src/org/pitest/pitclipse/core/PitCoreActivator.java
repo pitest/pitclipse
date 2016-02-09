@@ -90,7 +90,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.command-line-osgi")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.html-report-osgi")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
-		builder.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse-pitrunner")).getCanonicalPath());
+		builder.add(getBundleFile(Platform.getBundle("org.pitest.pitrunner")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.guava-shade-osgi")).getCanonicalPath());
 		while (jars.hasMoreElements()) {
 			URL jar = jars.nextElement();
