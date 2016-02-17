@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse Core
 Bundle-SymbolicName: org.pitest.pitclipse.core;singleton:=true
-Bundle-Version: 1.1.4.qualifier
+Bundle-Version: 1.1.4.201602091756
 Bundle-Activator: org.pitest.pitclipse.core.PitCoreActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.eclipse.jdt.core;bundle-version="3.6.2",
- org.eclipse.debug.ui;bundle-version="3.6.3",
- org.eclipse.jdt.debug.ui;bundle-version="3.5.2",
- org.eclipse.jdt.launching;bundle-version="3.5.200",
- org.eclipse.jdt.ui;bundle-version="3.6.2",
+ org.eclipse.jdt.core;bundle-version="3.8.3",
+ org.eclipse.debug.ui;bundle-version="3.8.2",
+ org.eclipse.jdt.debug.ui;bundle-version="3.6.100",
+ org.eclipse.jdt.launching;bundle-version="3.6.101",
+ org.eclipse.jdt.ui;bundle-version="3.8.2",
  org.pitest.pitrunner;bundle-version="1.1.4",
  org.pitest.osgi;bundle-version="1.1.5",
  org.pitest.command-line-osgi;bundle-version="1.1.5",
