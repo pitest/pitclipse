@@ -136,13 +136,19 @@ public final class PitOptions implements Serializable {
 		}
 
 		private void initialiseHistoryLocation() {
-			if (null != historyLocation && !historyLocation.getParentFile().exists()) {
-				try {
-					createParentDirs(historyLocation);
-				} catch (IOException e) {
-					rethrow(reportDir, e);
-				}
-			}
+			if (null != historyLocation) {
+                File parentDir = historyLocation.getParentFile();
+                if (parentDir == null) {
+                    throw new PitLaunchException("Unable to use path: " + historyLocation);
+                }
+                if (!parentDir.exists()) {
+                    try {
+                        createParentDirs(historyLocation);
+                    } catch (IOException e) {
+                        rethrow(historyLocation, e);
+                    }
+                }
+            }
 		}
 
 		private void validateSourceDir() {
@@ -234,10 +240,6 @@ public final class PitOptions implements Serializable {
 
 	public File getHistoryLocation() {
 		return historyLocation;
-	}
-
-	public List<File> getSourceDirs() {
-		return sourceDirs;
 	}
 
 	public int getThreads() {
