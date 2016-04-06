@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.test-feature"
       label="Pitclipse Test"
-      version="1.1.4.201602091756">
+      version="1.1.4.201604051649">
 
    <description url="http://pitest.org">
       PITest Eclipse Test plugins
@@ -29,21 +29,7 @@
    </license>
 
    <plugin
-         id="com.thoughtworks.xstream"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.pitest.jbehave-osgi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.xmlpull"
          download-size="0"
          install-size="0"
          version="0.0.0"

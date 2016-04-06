@@ -2,26 +2,25 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse UI Tests
 Bundle-SymbolicName: org.pitest.pitclipse-ui.tests;singleton:=true
-Bundle-Version: 1.1.4.201602091756
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 1.1.4.201604051649
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.jdt.core;bundle-version="3.6.2",
  org.apache.log4j;bundle-version="1.2.15",
- org.pitest.pitclipse.core;bundle-version="1.1.4",
- org.pitest.pitclipse.ui;bundle-version="1.1.4",
- org.apache.commons.collections;bundle-version="3.2.0",
+ org.junit4;bundle-version="4.8.1",
+ org.eclipse.jdt.junit4.runtime;bundle-version="1.1.200",
  org.eclipse.swtbot.eclipse.core;bundle-version="2.0.5",
  org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.5",
+ org.eclipse.platform;bundle-version="4.2.2",
  org.eclipse.swtbot.junit4_x;bundle-version="2.0.5",
- org.pitest.jbehave-osgi;bundle-version="3.9.2",
- org.pitest.pitclipse-pitrunner;bundle-version="1.1.4",
+ org.eclipse.sdk;bundle-version="4.2.2",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0",
- org.eclipse.jdt.junit4.runtime;bundle-version="1.1.200",
- org.junit;bundle-version="4.12.0",
- org.hamcrest.core;bundle-version="1.3.0",
- org.hamcrest.library;bundle-version="1.3.0"
+ org.pitest.pitrunner;bundle-version="1.1.4",
+ org.pitest.pitclipse.ui;bundle-version="1.1.4",
+ org.pitest.pitclipse.core;bundle-version="1.1.4",
+ org.pitest.jbehave-osgi;bundle-version="3.9.2"
 Import-Package: org.eclipse.core.runtime
 Bundle-Activator: org.pitest.pitclipse.ui.PitclipseTestActivator
 Bundle-ActivationPolicy: lazy

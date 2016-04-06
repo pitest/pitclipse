@@ -6,7 +6,7 @@
   <artifactId>org.pitest.pitclipse-ui.tests</artifactId>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>1.1.4.201602091756</version>
+    <version>1.1.4.201604051649</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <packaging>eclipse-test-plugin</packaging>
@@ -69,6 +69,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
     </dependency>
   </dependencies>
 </project>

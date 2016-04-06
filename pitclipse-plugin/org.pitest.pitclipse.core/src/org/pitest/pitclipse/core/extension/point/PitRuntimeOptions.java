@@ -2,13 +2,10 @@ package org.pitest.pitclipse.core.extension.point;
 
 import java.util.List;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.pitest.pitclipse.pitrunner.PitOptions;
 
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
-@Immutable
 public class PitRuntimeOptions {
 
 	private final int portNumber;

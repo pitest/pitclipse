@@ -5,7 +5,7 @@
   <groupId>org.pitest</groupId>
   <artifactId>pitclipse-plugin</artifactId>
   <packaging>pom</packaging>
-  <version>1.1.4.201602091756</version>
+  <version>1.1.4.201604051649</version>
   <modules>
     <module>org.pitest.pitclipse.core</module>
     <module>org.pitest.pitclipse.ui</module>
@@ -20,13 +20,14 @@
     <felix.version>3.0.1</felix.version>
     <hamcrest.version>1.3</hamcrest.version>
     <junit.version>4.12</junit.version>
-    <jbehave.version>3.9.2</jbehave.version>
+    <jbehave.version>3.9.2.1</jbehave.version>
     <maven.site.version>3.4</maven.site.version>
     <maven.compiler.version>3.3</maven.compiler.version>
     <maven.jarsigner.version>1.4</maven.jarsigner.version>
     <mockito.version>1.9.5</mockito.version>
     <pitest.version>1.1.5</pitest.version>
-    <tycho.version>0.15.0</tycho.version>
+    <pitrunner.version>${project.version}</pitrunner.version>
+    <tycho.version>0.22.0</tycho.version>
   </properties>
   <repositories>
     <repository>
@@ -59,7 +60,7 @@
     <dependency>
       <groupId>org.pitest</groupId>
       <artifactId>pitrunner</artifactId>
-      <version>${project.version}</version>
+      <version>${pitrunner.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
@@ -83,6 +84,11 @@
           <resolver>p2</resolver>
           <pomDependencies>consider</pomDependencies>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-versions-plugin</artifactId>
+        <version>${tycho.version}</version>
       </plugin>
     </plugins>
   </build>

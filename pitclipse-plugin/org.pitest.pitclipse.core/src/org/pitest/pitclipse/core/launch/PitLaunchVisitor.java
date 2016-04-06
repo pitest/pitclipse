@@ -2,8 +2,6 @@ package org.pitest.pitclipse.core.launch;
 
 import static org.eclipse.debug.core.ILaunchManager.RUN_MODE;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -11,7 +9,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionModeVisitor;
 
-@Immutable
 public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 
 	public class LaunchFailedException extends RuntimeException {

@@ -4,8 +4,6 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_M
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -18,7 +16,6 @@ import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-@Immutable
 public final class PitMigrationDelegate {
 
 	private PitMigrationDelegate() {

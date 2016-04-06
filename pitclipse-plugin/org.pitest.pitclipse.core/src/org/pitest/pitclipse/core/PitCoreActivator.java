@@ -84,7 +84,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 																// signature
 		super.start(context);
 		setActivator(this);
-		Enumeration<URL> jars = context.getBundle().findEntries("lib", "*.jar", false);
 		setupStateDirectories();
 		ImmutableList.Builder<String> builder = ImmutableList.builder();
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.command-line-osgi")).getCanonicalPath());
@@ -92,13 +91,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.pitrunner")).getCanonicalPath());
 		builder.add(getBundleFile(Platform.getBundle("org.pitest.guava-shade-osgi")).getCanonicalPath());
-		while (jars.hasMoreElements()) {
-			URL jar = jars.nextElement();
-
-			URI fileUri = locateAndEscapeUrl(jar).toURI();
-			File jarFile = new File(fileUri);
-			builder.add(jarFile.getCanonicalPath());
-		}
 		setPITClasspath(builder.build());
 	}
 
