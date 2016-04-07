@@ -46,9 +46,9 @@ public class ResultsParser {
 
 	private String getProjectSummary() {
 		String summary = "";
-		int startPos = html.indexOf(SUMMARY_START);
+		int startPos = caseInsensitveIndexOf(html, SUMMARY_START);
 		if (startPos != -1) {
-			int endPos = html.indexOf(SUMMARY_END, startPos);
+			int endPos = caseInsensitveIndexOf(html, SUMMARY_END, startPos);
 			if (endPos != -1) {
 				return html.substring(startPos, endPos + SUMMARY_END.length());
 			}
@@ -76,4 +76,11 @@ public class ResultsParser {
 		return new Summary(classes, codeCoverage, mutationCoverage);
 	}
 
+	static int caseInsensitveIndexOf(String s, String searchString) {
+		return caseInsensitveIndexOf(s, searchString, 0);
+	}
+
+	static int caseInsensitveIndexOf(String s, String searchString, int offset) {
+		return s.toLowerCase().indexOf(searchString.toLowerCase(), offset);
+	}
 }

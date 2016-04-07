@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.ui.swtbot;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.ui.swtbot.ResultsParser.caseInsensitveIndexOf;
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +14,12 @@ public class HtmlTable {
 	private static final String TABLE_START = "<table>";
 	private static final String TABLE_END = "</table>";
 
-	private List<Map<String, String>> results = ImmutableList.of();
+	private ImmutableList<Map<String, String>> results = ImmutableList.of();
 
 	public HtmlTable(String html) {
-		int startPos = html.indexOf(TABLE_START);
+		int startPos = caseInsensitveIndexOf(html, TABLE_START);
 		if (startPos != -1) {
-			int endPos = html.indexOf(TABLE_END, startPos);
+			int endPos = caseInsensitveIndexOf(html, TABLE_END, startPos);
 			if (endPos != -1) {
 				parseTable(stripOutTag(html, TABLE_START, TABLE_END));
 			}
@@ -43,48 +43,58 @@ public class HtmlTable {
 
 	private List<List<String>> getRows(String table) {
 		Builder<List<String>> resultBuilder = ImmutableList.builder();
-		int position = table.indexOf("<tbody>");
-		while (table.indexOf("<tr>", position) != -1) {
+		int position = caseInsensitveIndexOf(table, "<tbody>");
+		while (caseInsensitveIndexOf(table, "<tr>", position) != -1) {
 			String row = stripOutTag(table.substring(position), "<tr>", "</tr>");
 			resultBuilder.add(parseRow(row));
-			position = table.indexOf("<tr>", position) + 9;
+			position = caseInsensitveIndexOf(table, "<tr>", position) + 9;
 		}
 		return resultBuilder.build();
 	}
 
 	private List<String> parseRow(String row) {
 		Builder<String> resultBuilder = ImmutableList.builder();
-		int position = row.indexOf("<td>");
-		while (row.indexOf("<td>", position) != -1) {
-			String cell = stripOutTag(row.substring(position), "<td>", "</td>").replaceAll("<div.*>", "").trim();
+		int position = caseInsensitveIndexOf(row, "<td>");
+		while (caseInsensitveIndexOf(row, "<td>", position) != -1) {
+			String cell = stripOutTag(row.substring(position), "<td>", "</td>").
+					replaceAll("<div.*>", "").
+					replaceAll("<DIV.*>", "").
+					trim();
 
 			resultBuilder.add(cell);
-			position = row.indexOf("<td>", position) + 9;
+			position = caseInsensitveIndexOf(row, "<td>", position) + 9;
 		}
 		return resultBuilder.build();
 	}
 
 	private List<String> getHeaders(String table) {
 		Builder<String> builder = ImmutableList.builder();
-		int position = table.indexOf("<th>");
-		while (table.indexOf("<th>", position) != -1) {
+		int position = caseInsensitveIndexOf(table, "<th>");
+		while (caseInsensitveIndexOf(table, "<th>", position) != -1) {
 			String header = stripOutTag(table.substring(position), "<th>", "</th>");
 			builder.add(header);
-			position = table.indexOf("<th>", position) + 9;
+			position = caseInsensitveIndexOf(table, "<th>", position) + 9;
 		}
 		return builder.build();
 	}
 
 	private String stripOutTag(String html, String startString, String endString) {
 		String tagValue = getValue(html, startString, endString);
-		return tagValue.replaceFirst(startString, "").replaceFirst(endString, "").trim();
+		return tagValue.
+				replaceFirst(startString, "").
+				replaceFirst(startString.toLowerCase(), "").
+				replaceFirst(startString.toUpperCase(), "").
+				replaceFirst(endString, "").
+				replaceFirst(endString.toUpperCase(), "").
+				replaceFirst(endString.toLowerCase(), "").
+				trim();
 	}
 
 	private String getValue(String html, String startString, String endString) {
 		String returnValue = "";
-		int startPos = html.indexOf(startString);
+		int startPos = caseInsensitveIndexOf(html, startString);
 		if (startPos != -1) {
-			int endPos = html.indexOf(endString, startPos);
+			int endPos = caseInsensitveIndexOf(html, endString, startPos);
 			if (endPos != -1) {
 				returnValue = html.substring(startPos, endPos + endString.length());
 			}
@@ -92,7 +102,7 @@ public class HtmlTable {
 		return returnValue;
 	}
 
-	public List<Map<String, String>> getResults() {
-		return copyOf(results);
+	public ImmutableList<Map<String, String>> getResults() {
+		return results;
 	}
 }
