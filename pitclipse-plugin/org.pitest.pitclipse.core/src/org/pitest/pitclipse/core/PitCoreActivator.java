@@ -1,7 +1,6 @@
 package org.pitest.pitclipse.core;
 
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.eclipse.core.runtime.FileLocator.toFileURL;
 import static org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage.PIT_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_CLASSES;
@@ -19,9 +18,6 @@ import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URI;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
@@ -125,15 +121,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 		}
 	}
 
-	private URL locateAndEscapeUrl(URL url) throws IOException {
-		// Nasty hack thanks to the following 6 year old bug in Eclipse
-		// https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096
-		// Astonishingly, the reason given for not fixing is that many plugins
-		// expect invalid Urls so would be broken!!!
-		URL unescapedUrl = toFileURL(url);
-		String escaped = unescapedUrl.getPath().replace(" ", "%20");
-		return new URL("file", "", escaped);
-	}
 
 	private static void setActivator(PitCoreActivator pitActivator) {
 		plugin = pitActivator;
