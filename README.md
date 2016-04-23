@@ -6,7 +6,7 @@ Eclipse plugin for PIT.  Please download from Eclipse Marketplace
 
 Manual Update site: http://eclipse.pitest.org/release/ (please note that this is not viewable from a browser, but will work from an Eclipse update)
 
-
+[Notable previous versions are described here](OLD_MILESTONES.md)
 
 Plugin Build Requirements
 =========================
