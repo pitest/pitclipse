@@ -24,11 +24,12 @@ public class MutationsResultListenerFactoryTest {
 
 	@Test
 	public void factoryProducesExpectedListener() {
-		assertThat(factory.getListener(someArgs()),
+		assertThat(factory.getListener(someProperties(), someArgs()),
 				is(instanceOf(PitclipseMutationsResultListener.class)));
 	}
 
 	private ListenerArguments someArgs() {
 		return null;
 	}
+	private Properties someProperties() { return null;	}
 }

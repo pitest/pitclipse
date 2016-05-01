@@ -6,12 +6,12 @@
   <parent>
     <artifactId>pitest-bundles</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.1.5</version>
+    <version>1.1.9</version>
   </parent>
   <artifactId>pitest-html-report-osgi</artifactId>
   <name>pitest-html-report-osgi</name>
   <packaging>bundle</packaging>
-  <version>1.1.5</version>
+  <version>1.1.9</version>
   <dependencies>
     <dependency>
       <groupId>org.pitest</groupId>

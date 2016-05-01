@@ -20,22 +20,26 @@ import org.pitest.mutationtest.ListenerArguments;
 @RunWith(MockitoJUnitRunner.class)
 public class SummaryResultListenerFactoryTest {
 
-	private final SummaryResultListenerFactory factory = new SummaryResultListenerFactory();
+    private final SummaryResultListenerFactory factory = new SummaryResultListenerFactory();
 
-	@Test
-	public void theListenerDescribesItselfSensibly() {
-		assertThat(factory.description(), is(not(nullValue())));
-		assertThat(factory.name(), is(equalTo("PITCLIPSE_SUMMARY")));
-	}
+    @Test
+    public void theListenerDescribesItselfSensibly() {
+        assertThat(factory.description(), is(not(nullValue())));
+        assertThat(factory.name(), is(equalTo("PITCLIPSE_SUMMARY")));
+    }
 
-	@Test
-	public void factoryProducesExpectedListener() {
-    assertThat(factory.getListener(someArgs()), is(instanceOf(SummaryResultListener.class)));
-	}
+    @Test
+    public void factoryProducesExpectedListener() {
+        assertThat(factory.getListener(someProperties(), someArgs()), is(instanceOf(SummaryResultListener.class)));
+    }
 
-	private ListenerArguments someArgs() {
-		ListenerArguments args = mock(ListenerArguments.class);
-		when(args.getCoverage()).thenReturn(mock(CoverageDatabase.class));
-		return args;
-	}
+    private ListenerArguments someArgs() {
+        ListenerArguments args = mock(ListenerArguments.class);
+        when(args.getCoverage()).thenReturn(mock(CoverageDatabase.class));
+        return args;
+    }
+
+    private Properties someProperties() {
+        return null;
+    }
 }

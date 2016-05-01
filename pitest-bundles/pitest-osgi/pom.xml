@@ -6,12 +6,12 @@
   <parent>
     <artifactId>pitest-bundles</artifactId>
     <groupId>org.pitest</groupId>
-    <version>1.1.5</version>
+    <version>1.1.9</version>
   </parent>
   <artifactId>pitest-osgi</artifactId>
   <name>pitest-osgi</name>
   <packaging>bundle</packaging>
-  <version>1.1.5</version>
+  <version>1.1.9</version>
   <dependencies>
   	<dependency>
       <groupId>org.pitest</groupId>
@@ -35,10 +35,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Import-Package>!com.thoughtworks.xstream.*,!com.bea.xml.stream.*,!joptsimple.*,!net.sf.cglib.proxy.*,!nu.xom.*,!org.xmlpull.*,!org.dom4j.*,!org.apache.bsf.*,!org.codehaus.jettison.*,!org.joda.time.*,!org.kxml2.*,!sun.misc,!sun.reflect,!org.junit.*,!junit.*,!org.testng.*,!com.ctc.wstx.stax.*,*</Import-Package>
+            <Import-Package>!com.thoughtworks.xstream.*,!com.bea.xml.stream.*,!joptsimple.*,!net.sf.cglib.proxy.*,!nu.xom.*,!org.xmlpull.*,!org.dom4j.*,!org.apache.bsf.*,!org.codehaus.jettison.*,!org.joda.time.*,!org.kxml2.*,!sun.misc,!sun.reflect,!org.junit.*,!junit.*,!org.testng.*,!com.ctc.wstx.stax.*,!org.jdom.*,!org.jdom2.*,*</Import-Package>
             <Export-Package>org.pitest.mutationtest,org.pitest.util,org.pitest.testng,org.pitest.testapi,org.pitest.project,org.pitest.mutationtest.statistics,org.pitest.mutationtest.tooling,org.pitest.mutationtest.engine,org.pitest.functional.predicate,org.pitest.mutationtest.config,org.pitest.functional,org.pitest.classinfo,org.pitest.classpath,org.pitest.coverage,org.pitest.mutationtest.incremental,org.pitest.plugin</Export-Package>
             <Embed-Dependency>*;inline=true</Embed-Dependency>
             <Require-Bundle>system.bundle</Require-Bundle>
+	    <_noee>true</_noee>
           </instructions>
         </configuration>
       </plugin>

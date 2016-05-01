@@ -14,7 +14,7 @@ public class MutationsResultListenerFactory implements MutationResultListenerFac
 	}
 
 	@Override
-	public MutationResultListener getListener(ListenerArguments args) {
+	public MutationResultListener getListener(Properties properties, ListenerArguments listenerArguments) {
 		return new PitclipseMutationsResultListener(RecordingMutationsDispatcher.INSTANCE);
 	}
 

@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.feature"
       label="Pitclipse"
-      version="1.1.5.201604190633">
+      version="1.1.5.201604290652">
 
    <description url="http://pitest.org">
       PITest Eclipse plugin
@@ -72,13 +72,6 @@
 
    <plugin
          id="org.pitest.guava-shade-osgi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jdom"
          download-size="0"
          install-size="0"
          version="0.0.0"
