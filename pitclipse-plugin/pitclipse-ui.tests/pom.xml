@@ -10,6 +10,16 @@
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
   <packaging>eclipse-test-plugin</packaging>
+  <repositories>
+    <repository>
+      <id>swtbot.repo</id>
+      <layout>p2</layout>
+      <url>${swtbot.url}</url>
+    </repository>
+  </repositories>
+  <properties>
+    <swtbot.url>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot.url>
+  </properties>
   <build>
     <plugins>
       <plugin>
