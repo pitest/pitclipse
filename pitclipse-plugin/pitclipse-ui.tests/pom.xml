@@ -18,7 +18,7 @@
     </repository>
   </repositories>
   <properties>
-    <swtbot.url>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot.url>
+    <swtbot.url>http://download.eclipse.org/technology/swtbot/releases/2.3.0/</swtbot.url>
   </properties>
   <build>
     <plugins>
