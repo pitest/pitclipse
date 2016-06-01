@@ -37,10 +37,10 @@ Then a coverage report is generated with 2 classes tested with overall coverage 
 And the mutation results are
 |status|project|package|class|line|mutation|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|negated conditional|
-|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional|
+|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional - replaced equality check with false|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|negated conditional|
-|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional - replaced equality check with false|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
 |NO_COVERAGE|project1|foo.bar|foo.bar.Bar|10|Replaced integer addition with subtraction|
 |NO_COVERAGE|project1|foo.bar|foo.bar.Bar|10|replaced return of integer sized value with (x == 0 ? 1 : 0)|
@@ -57,15 +57,15 @@ And the mutation results are
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|Substituted 1 with 0|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|negated conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed call to java/util/ArrayList::size|
-|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional|
-|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional|
+|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional - replaced equality check with false|
+|SURVIVED|project1|foo.bar|foo.bar.Bar|9|removed conditional - replaced equality check with true|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|12|Substituted 0 with 1|
 |SURVIVED|project1|foo.bar|foo.bar.Bar|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|Substituted 1 with 0|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|negated conditional|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed call to java/util/ArrayList::size|
-|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional|
-|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional - replaced equality check with false|
+|SURVIVED|project1|foo.bar|foo.bar.Foo|9|removed conditional - replaced equality check with true|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|12|Substituted 0 with 1|
 |SURVIVED|project1|foo.bar|foo.bar.Foo|12|replaced return of integer sized value with (x == 0 ? 1 : 0)|
 |KILLED|project1|foo.bar|foo.bar.Bar|8|removed call to java/util/ArrayList::<init>|
