@@ -28,7 +28,7 @@ public class WindowsMenu {
 
 	public void openJavaPerspective() {
 		bot.menu(WINDOWS).menu(OPEN_PERSPECTIVES).menu(OTHER).click();
-		perspectiveSelector.selectPerspective("Java (default)");
+		perspectiveSelector.selectPerspective("Java");
 	}
 
 	public void setPitExecutionMode(PitExecutionMode mode) {
