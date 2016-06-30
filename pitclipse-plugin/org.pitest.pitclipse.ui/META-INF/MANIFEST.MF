@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitclipse UI
 Bundle-SymbolicName: org.pitest.pitclipse.ui;singleton:=true
-Bundle-Version: 1.1.5.201606020652
+Bundle-Version: 1.1.6.201606301730
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.pitest.pitclipse.core;bundle-version="1.1.5",
- org.pitest.pitrunner;bundle-version="1.1.5",
+ org.pitest.pitclipse.core;bundle-version="1.1.6",
+ org.pitest.pitrunner;bundle-version="1.1.6",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0",
  org.eclipse.ui.ide,
  org.eclipse.jdt.ui,
