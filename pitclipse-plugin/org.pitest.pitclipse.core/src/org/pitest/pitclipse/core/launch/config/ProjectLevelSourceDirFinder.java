@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-
 import java.io.File;
 import java.net.URI;
 import java.util.List;
@@ -11,6 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
@@ -28,16 +27,22 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
 			if (isValid(packageRoot)) {
 				File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
 				File potentialSourceRoot = new File(projectRoot, packagePath.toString());
-				sourceDirBuilder.add(potentialSourceRoot);
+				if (isValidSourceDir(potentialSourceRoot)) {
+					sourceDirBuilder.add(potentialSourceRoot);
+				}
 			}
 		}
-		return copyOf(sourceDirBuilder.build());
+		return ImmutableList.copyOf(sourceDirBuilder.build());
 	}
 
 	private boolean isValid(IPackageFragmentRoot packageRoot) {
 		return !packageRoot.isArchive() && !packageRoot.isExternal();
 	}
 
+	private boolean isValidSourceDir(File sourceDir) {
+		return sourceDir.exists() && sourceDir.isDirectory();
+	}
+	
 	private URI getProjectLocation(IProject project) throws CoreException {
 		URI locationURI = project.getDescription().getLocationURI();
 		if (null != locationURI) {
