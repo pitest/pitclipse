@@ -7,7 +7,7 @@
   <artifactId>pitrunner</artifactId>
   <name>pitrunner</name>
   <packaging>bundle</packaging>
-  <version>1.1.6.201607050705</version>
+  <version>1.1.7.201607061633</version>
   <organization>
     <name>Pitest.org</name>
     <url>http://pitest.org/</url>
