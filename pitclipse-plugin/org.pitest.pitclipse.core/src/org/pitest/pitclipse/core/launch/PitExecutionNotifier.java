@@ -11,14 +11,14 @@ import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
-	private static final ExecutorService executorService = Executors.newCachedThreadPool();
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
-	@Override
-	public void handleResults(PitRuntimeOptions runtimeOptions) {
-		PitResultHandler resultHandler = new ExtensionPointResultHandler();
-		PitServer server = new PitServer(runtimeOptions.getPortNumber());
-		PitRequest request = PitRequest.builder().withPitOptions(runtimeOptions.getOptions())
-				.withProjects(runtimeOptions.getMutatedProjects()).build();
-		executorService.execute(new PitCommunicator(server, request, resultHandler));
-	}
+    @Override
+    public void handleResults(PitRuntimeOptions runtimeOptions) {
+        PitResultHandler resultHandler = new ExtensionPointResultHandler();
+        PitServer server = new PitServer(runtimeOptions.getPortNumber());
+        PitRequest request = PitRequest.builder().withPitOptions(runtimeOptions.getOptions())
+                .withProjects(runtimeOptions.getMutatedProjects()).build();
+        executorService.execute(new PitCommunicator(server, request, resultHandler));
+    }
 }

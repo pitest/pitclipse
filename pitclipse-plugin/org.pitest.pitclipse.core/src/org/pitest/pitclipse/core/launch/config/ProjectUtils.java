@@ -13,26 +13,26 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class ProjectUtils {
 
-	private ProjectUtils() {
-	}
+    private ProjectUtils() {
+    }
 
-	public static List<IJavaProject> getOpenJavaProjects() throws CoreException {
-		ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		for (IProject project : root.getProjects()) {
-			if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
-				resultBuilder.add(JavaCore.create(project));
-			}
-		}
-		return resultBuilder.build();
-	}
+    public static List<IJavaProject> getOpenJavaProjects() throws CoreException {
+        ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        for (IProject project : root.getProjects()) {
+            if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
+                resultBuilder.add(JavaCore.create(project));
+            }
+        }
+        return resultBuilder.build();
+    }
 
-	public static boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
-		return testProject.isOnClasspath(project);
-	}
+    public static boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
+        return testProject.isOnClasspath(project);
+    }
 
-	public static boolean sameProject(IJavaProject testProject, IJavaProject project) {
-		return testProject.getElementName().equals(project.getElementName());
-	}
+    public static boolean sameProject(IJavaProject testProject, IJavaProject project) {
+        return testProject.getElementName().equals(project.getElementName());
+    }
 
 }

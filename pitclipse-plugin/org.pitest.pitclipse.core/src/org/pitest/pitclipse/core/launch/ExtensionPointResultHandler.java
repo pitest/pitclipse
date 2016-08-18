@@ -6,8 +6,8 @@ import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
 
 public class ExtensionPointResultHandler implements PitResultHandler {
 
-	public void handle(PitResults results) {
-		Display.getDefault().asyncExec(new UpdateExtensions(results));
-	}
+    public void handle(PitResults results) {
+        Display.getDefault().asyncExec(new UpdateExtensions(results));
+    }
 
 }

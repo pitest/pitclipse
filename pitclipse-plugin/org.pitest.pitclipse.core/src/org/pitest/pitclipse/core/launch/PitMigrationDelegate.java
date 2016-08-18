@@ -18,66 +18,66 @@ import org.eclipse.jdt.core.JavaCore;
 
 public final class PitMigrationDelegate {
 
-	private PitMigrationDelegate() {
-	}
+    private PitMigrationDelegate() {
+    }
 
-	public static void mapResources(ILaunchConfigurationWorkingCopy config)
-			throws CoreException {
-		IResource resource = getResource(config);
-		if (resource == null) {
-			config.setMappedResources(null);
-		} else {
-			config.setMappedResources(new IResource[] { resource });
-		}
-	}
+    public static void mapResources(ILaunchConfigurationWorkingCopy config)
+            throws CoreException {
+        IResource resource = getResource(config);
+        if (resource == null) {
+            config.setMappedResources(null);
+        } else {
+            config.setMappedResources(new IResource[] { resource });
+        }
+    }
 
-	/**
-	 * Returns a resource mapping for the given launch configuration, or
-	 * <code>null</code> if none.
-	 * 
-	 * @param config
-	 *            working copy
-	 * @return resource or <code>null</code>
-	 * @throws CoreException
-	 *             if an exception occurs mapping resource
-	 */
-	private static IResource getResource(ILaunchConfiguration config)
-			throws CoreException {
-		String projName = config.getAttribute(ATTR_PROJECT_NAME, (String) null);
-		String typeName = config.getAttribute(ATTR_MAIN_TYPE_NAME,
-				(String) null);
-		String container = config.getAttribute(ATTR_TEST_CONTAINER,
-				(String) null);
-		IJavaElement element = null;
-		if (projName != null && Path.ROOT.isValidSegment(projName)) {
-			IJavaProject javaProject = getJavaModel().getJavaProject(projName);
-			if (javaProject.exists()) {
-				if (typeName != null && typeName.length() > 0) {
-					element = javaProject.findType(typeName);
-				} else if (container != null && container.length() > 0) {
-					element = JavaCore.create(container);
-				}
-				if (element == null) {
-					element = javaProject;
-				}
-			} else {
-				IProject project = javaProject.getProject();
-				if (project.exists() && !project.isOpen()) {
-					return project;
-				}
-			}
-		}
-		IResource resource = null;
-		if (element != null) {
-			resource = element.getResource();
-		}
-		return resource;
-	}
+    /**
+     * Returns a resource mapping for the given launch configuration, or
+     * <code>null</code> if none.
+     * 
+     * @param config
+     *            working copy
+     * @return resource or <code>null</code>
+     * @throws CoreException
+     *             if an exception occurs mapping resource
+     */
+    private static IResource getResource(ILaunchConfiguration config)
+            throws CoreException {
+        String projName = config.getAttribute(ATTR_PROJECT_NAME, (String) null);
+        String typeName = config.getAttribute(ATTR_MAIN_TYPE_NAME,
+                (String) null);
+        String container = config.getAttribute(ATTR_TEST_CONTAINER,
+                (String) null);
+        IJavaElement element = null;
+        if (projName != null && Path.ROOT.isValidSegment(projName)) {
+            IJavaProject javaProject = getJavaModel().getJavaProject(projName);
+            if (javaProject.exists()) {
+                if (typeName != null && typeName.length() > 0) {
+                    element = javaProject.findType(typeName);
+                } else if (container != null && container.length() > 0) {
+                    element = JavaCore.create(container);
+                }
+                if (element == null) {
+                    element = javaProject;
+                }
+            } else {
+                IProject project = javaProject.getProject();
+                if (project.exists() && !project.isOpen()) {
+                    return project;
+                }
+            }
+        }
+        IResource resource = null;
+        if (element != null) {
+            resource = element.getResource();
+        }
+        return resource;
+    }
 
-	/*
-	 * Convenience method to get access to the java model.
-	 */
-	private static IJavaModel getJavaModel() {
-		return JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
-	}
+    /*
+     * Convenience method to get access to the java model.
+     */
+    private static IJavaModel getJavaModel() {
+        return JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
+    }
 }

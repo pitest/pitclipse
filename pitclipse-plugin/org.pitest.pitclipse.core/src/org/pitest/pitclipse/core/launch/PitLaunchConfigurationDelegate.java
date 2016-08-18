@@ -12,18 +12,18 @@ import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
 
 public class PitLaunchConfigurationDelegate extends AbstractJavaLaunchConfigurationDelegate {
 
-	@Override
-	public void launch(ILaunchConfiguration launchConfig, String mode, ILaunch launch, IProgressMonitor progress)
-			throws CoreException {
+    @Override
+    public void launch(ILaunchConfiguration launchConfig, String mode, ILaunch launch, IProgressMonitor progress)
+            throws CoreException {
 
-		pluginExecutionMode().accept(new PitLaunchVisitor(pluginConfiguration(), launchConfig, launch, progress));
-	}
+        pluginExecutionMode().accept(new PitLaunchVisitor(pluginConfiguration(), launchConfig, launch, progress));
+    }
 
-	private PitExecutionMode pluginExecutionMode() {
-		return pluginConfiguration().getExecutionMode();
-	}
+    private PitExecutionMode pluginExecutionMode() {
+        return pluginConfiguration().getExecutionMode();
+    }
 
-	private PitConfiguration pluginConfiguration() {
-		return getDefault().getConfiguration();
-	}
+    private PitConfiguration pluginConfiguration() {
+        return getDefault().getConfiguration();
+    }
 }

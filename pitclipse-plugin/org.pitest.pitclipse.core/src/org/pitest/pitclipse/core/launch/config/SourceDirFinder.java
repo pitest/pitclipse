@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 
 public interface SourceDirFinder {
-	List<File> getSourceDirs(
-			LaunchConfigurationWrapper configurationWrapper)
-			throws CoreException;
+    List<File> getSourceDirs(
+            LaunchConfigurationWrapper configurationWrapper)
+            throws CoreException;
 }

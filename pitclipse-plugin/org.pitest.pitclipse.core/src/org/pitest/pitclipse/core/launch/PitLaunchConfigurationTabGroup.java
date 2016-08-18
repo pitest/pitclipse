@@ -10,14 +10,14 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaJRETab;
 
 public class PitLaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
 
-	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-				new PitArgumentsTab(),
-				new JavaArgumentsTab(),
-				new JavaJRETab(),
-				new JavaClasspathTab(), 
-				new CommonTab()
-		};
-		setTabs(tabs);
-	}
+    public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+        final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
+                new PitArgumentsTab(),
+                new JavaArgumentsTab(),
+                new JavaJRETab(),
+                new JavaClasspathTab(), 
+                new CommonTab()
+        };
+        setTabs(tabs);
+    }
 }

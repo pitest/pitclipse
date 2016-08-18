@@ -13,16 +13,16 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class WorkspaceLevelProjectFinder implements ProjectFinder {
-	@Override
-	public List<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-		Builder<String> results = ImmutableList.builder();
-		IJavaProject testProject = configurationWrapper.getProject();
-		List<IJavaProject> projects = getOpenJavaProjects();
-		for (IJavaProject project : projects) {
-			if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
-				results.add(project.getProject().getName());
-			}
-		}
-		return results.build();
-	}
+    @Override
+    public List<String> getProjects(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
+        Builder<String> results = ImmutableList.builder();
+        IJavaProject testProject = configurationWrapper.getProject();
+        List<IJavaProject> projects = getOpenJavaProjects();
+        for (IJavaProject project : projects) {
+            if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
+                results.add(project.getProject().getName());
+            }
+        }
+        return results.build();
+    }
 }

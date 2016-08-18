@@ -6,9 +6,9 @@ import org.pitest.pitclipse.ui.view.PitViewFinder;
 import org.pitest.pitclipse.ui.view.SummaryView;
 
 public class PitResultsNotifier implements ResultNotifier<PitResults> {
-	@Override
-	public void handleResults(PitResults results) {
-		SummaryView view = PitViewFinder.INSTANCE.getSummaryView();
-		view.update(results.getHtmlResultFile());
-	}
+    @Override
+    public void handleResults(PitResults results) {
+        SummaryView view = PitViewFinder.INSTANCE.getSummaryView();
+        view.update(results.getHtmlResultFile());
+    }
 }

@@ -11,28 +11,28 @@ import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 public class ProjectLevelLaunchDelegate extends AbstractPitLaunchDelegate {
 
-	public ProjectLevelLaunchDelegate(PitConfiguration pitConfiguration) {
-		super(pitConfiguration);
-	}
+    public ProjectLevelLaunchDelegate(PitConfiguration pitConfiguration) {
+        super(pitConfiguration);
+    }
 
-	@Override
-	protected SourceDirFinder getSourceDirFinder() {
-		return new ProjectLevelSourceDirFinder();
-	}
+    @Override
+    protected SourceDirFinder getSourceDirFinder() {
+        return new ProjectLevelSourceDirFinder();
+    }
 
-	@Override
-	protected ClassFinder getClassFinder() {
-		return new ProjectLevelClassFinder();
-	}
+    @Override
+    protected ClassFinder getClassFinder() {
+        return new ProjectLevelClassFinder();
+    }
 
-	@Override
-	protected PackageFinder getPackageFinder() {
-		return new PackageFinder();
-	}
+    @Override
+    protected PackageFinder getPackageFinder() {
+        return new PackageFinder();
+    }
 
-	@Override
-	protected ProjectFinder getProjectFinder() {
-		return new ProjectLevelProjectFinder();
-	}
+    @Override
+    protected ProjectFinder getProjectFinder() {
+        return new ProjectLevelProjectFinder();
+    }
 
 }

@@ -11,41 +11,41 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 
 public class WaitForBuildCondition extends DefaultCondition implements
-		Closeable {
+        Closeable {
 
-	private volatile boolean completed = false;
-	private IResourceChangeListener listener = null;
+    private volatile boolean completed = false;
+    private IResourceChangeListener listener = null;
 
-	public WaitForBuildCondition() {
-	}
+    public WaitForBuildCondition() {
+    }
 
-	public void subscribe() {
-		listener = new BuiltResourceChangeListener();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
-				POST_BUILD);
-	}
+    public void subscribe() {
+        listener = new BuiltResourceChangeListener();
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+                POST_BUILD);
+    }
 
-	public boolean test() throws Exception {
-		return completed;
-	}
+    public boolean test() throws Exception {
+        return completed;
+    }
 
-	public String getFailureMessage() {
-		return "Unable to determine if build completed.";
-	}
+    public String getFailureMessage() {
+        return "Unable to determine if build completed.";
+    }
 
-	public void close() throws IOException {
-		unsubscribe();
-	}
+    public void close() throws IOException {
+        unsubscribe();
+    }
 
-	public void unsubscribe() {
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
-	}
+    public void unsubscribe() {
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
+    }
 
-	private class BuiltResourceChangeListener implements
-			IResourceChangeListener {
-		public void resourceChanged(IResourceChangeEvent event) {
-			completed = true;
-		}
-	}
+    private class BuiltResourceChangeListener implements
+            IResourceChangeListener {
+        public void resourceChanged(IResourceChangeEvent event) {
+            completed = true;
+        }
+    }
 
 }
