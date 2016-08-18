@@ -14,22 +14,22 @@ import org.pitest.mutationtest.ListenerArguments;
 
 public class MutationsResultListenerFactoryTest {
 
-	private final MutationsResultListenerFactory factory = new MutationsResultListenerFactory();
+    private final MutationsResultListenerFactory factory = new MutationsResultListenerFactory();
 
-	@Test
-	public void theListenerDescribesItselfSensibly() {
-		assertThat(factory.description(), is(not(nullValue())));
-		assertThat(factory.name(), is(equalTo("PITCLIPSE_MUTATIONS")));
-	}
+    @Test
+    public void theListenerDescribesItselfSensibly() {
+        assertThat(factory.description(), is(not(nullValue())));
+        assertThat(factory.name(), is(equalTo("PITCLIPSE_MUTATIONS")));
+    }
 
-	@Test
-	public void factoryProducesExpectedListener() {
-		assertThat(factory.getListener(someProperties(), someArgs()),
-				is(instanceOf(PitclipseMutationsResultListener.class)));
-	}
+    @Test
+    public void factoryProducesExpectedListener() {
+        assertThat(factory.getListener(someProperties(), someArgs()),
+                is(instanceOf(PitclipseMutationsResultListener.class)));
+    }
 
-	private ListenerArguments someArgs() {
-		return null;
-	}
-	private Properties someProperties() { return null;	}
+    private ListenerArguments someArgs() {
+        return null;
+    }
+    private Properties someProperties() { return null;    }
 }

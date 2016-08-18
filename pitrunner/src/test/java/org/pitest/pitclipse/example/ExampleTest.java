@@ -6,13 +6,13 @@ import org.junit.Test;
 
 public class ExampleTest {
 
-	private final Foo foo = new Foo();
+    private final Foo foo = new Foo();
 
-	private final Bar bar = new Bar();
+    private final Bar bar = new Bar();
 
-	@Test
-	public void test() {
-		assertEquals(foo.doFoo(0), bar.doBar(2));
-	}
+    @Test
+    public void test() {
+        assertEquals(foo.doFoo(0), bar.doBar(2));
+    }
 
 }

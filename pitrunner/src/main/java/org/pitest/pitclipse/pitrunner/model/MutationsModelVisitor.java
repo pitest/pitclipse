@@ -1,15 +1,15 @@
 package org.pitest.pitclipse.pitrunner.model;
 
 public interface MutationsModelVisitor<T> {
-	T visitModel(MutationsModel mutationsModel);
+    T visitModel(MutationsModel mutationsModel);
 
-	T visitProject(ProjectMutations projectMutations);
+    T visitProject(ProjectMutations projectMutations);
 
-	T visitPackage(PackageMutations packageMutations);
+    T visitPackage(PackageMutations packageMutations);
 
-	T visitClass(ClassMutations classMutations);
+    T visitClass(ClassMutations classMutations);
 
-	T visitMutation(Mutation mutation);
+    T visitMutation(Mutation mutation);
 
-	T visitStatus(Status status);
+    T visitStatus(Status status);
 }

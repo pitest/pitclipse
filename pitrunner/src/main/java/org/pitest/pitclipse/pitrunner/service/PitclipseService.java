@@ -8,18 +8,18 @@ import org.pitest.pitclipse.pitrunner.server.PitServer;
 import org.pitest.pitclipse.pitrunner.server.PitServerProvider;
 
 public class PitclipseService {
-	private final PitServerProvider serverProvider;
-	private final ModelBuilder modelBuilder;
+    private final PitServerProvider serverProvider;
+    private final ModelBuilder modelBuilder;
 
-	public PitclipseService(PitServerProvider serverProvider, ModelBuilder modelBuilder) {
-		this.serverProvider = serverProvider;
-		this.modelBuilder = modelBuilder;
-	}
+    public PitclipseService(PitServerProvider serverProvider, ModelBuilder modelBuilder) {
+        this.serverProvider = serverProvider;
+        this.modelBuilder = modelBuilder;
+    }
 
-	public MutationsModel analyse(int port, PitRequest request) {
-		PitServer server = serverProvider.newServerFor(port);
-		server.sendRequest(request);
-		PitResults results = server.receiveResults();
-		return modelBuilder.buildFrom(results);
-	}
+    public MutationsModel analyse(int port, PitRequest request) {
+        PitServer server = serverProvider.newServerFor(port);
+        server.sendRequest(request);
+        PitResults results = server.receiveResults();
+        return modelBuilder.buildFrom(results);
+    }
 }

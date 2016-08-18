@@ -21,96 +21,96 @@ import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 @RunWith(MockitoJUnitRunner.class)
 public class PitServerTest extends AbstractPitRunnerTest {
 
-	@Mock
-	private SocketProvider socketProvider;
+    @Mock
+    private SocketProvider socketProvider;
 
-	@Mock
-	private ObjectStreamSocket objectSocket;
+    @Mock
+    private ObjectStreamSocket objectSocket;
 
-	private PitRunnerTestContext context;
+    private PitRunnerTestContext context;
 
-	@Before
-	public void setup() {
-		context = new PitRunnerTestContext();
-	}
+    @Before
+    public void setup() {
+        context = new PitRunnerTestContext();
+    }
 
-	@Test
-	public void serverStartsListener() {
-		givenThePortNumber(PORT);
-		whenThePitServerIsStarted();
-		thenTheServerListensOnThePort();
-	}
+    @Test
+    public void serverStartsListener() {
+        givenThePortNumber(PORT);
+        whenThePitServerIsStarted();
+        thenTheServerListensOnThePort();
+    }
 
-	@Test
-	public void serverSendsOptions() {
-		givenThePortNumber(PORT);
-		whenThePitServerIsStarted();
-		thenTheServerListensOnThePort();
-		givenTheRequest(REQUEST);
-		whenTheServerSendsOptions();
-		thenTheOptionsAreSent();
-		givenTheResults(RESULTS);
-		whenTheServerReceivesResults();
-		thenTheResultsAreSent();
-	}
+    @Test
+    public void serverSendsOptions() {
+        givenThePortNumber(PORT);
+        whenThePitServerIsStarted();
+        thenTheServerListensOnThePort();
+        givenTheRequest(REQUEST);
+        whenTheServerSendsOptions();
+        thenTheOptionsAreSent();
+        givenTheResults(RESULTS);
+        whenTheServerReceivesResults();
+        thenTheResultsAreSent();
+    }
 
-	@Test
-	public void serverStopClosesSocket() throws IOException {
-		givenThePortNumber(PORT);
-		whenThePitServerIsStarted();
-		thenTheServerListensOnThePort();
-		whenTheServerIsStopped();
-		thenTheUnderlyingConnectionIsClosed();
-	}
+    @Test
+    public void serverStopClosesSocket() throws IOException {
+        givenThePortNumber(PORT);
+        whenThePitServerIsStarted();
+        thenTheServerListensOnThePort();
+        whenTheServerIsStopped();
+        thenTheUnderlyingConnectionIsClosed();
+    }
 
-	private void givenTheRequest(PitRequest request) {
-		context.setRequest(request);
-	}
+    private void givenTheRequest(PitRequest request) {
+        context.setRequest(request);
+    }
 
-	private void givenThePortNumber(int port) {
-		context.setPortNumber(port);
-	}
+    private void givenThePortNumber(int port) {
+        context.setPortNumber(port);
+    }
 
-	private void givenTheResults(PitResults results) {
-		context.setResults(results);
-	}
+    private void givenTheResults(PitResults results) {
+        context.setResults(results);
+    }
 
-	private void whenThePitServerIsStarted() {
-		PitServer server = new PitServer(context.getPortNumber(), socketProvider);
-		context.setPitServer(server);
-		when(socketProvider.listen(context.getPortNumber())).thenReturn(objectSocket);
-		server.listen();
-	}
+    private void whenThePitServerIsStarted() {
+        PitServer server = new PitServer(context.getPortNumber(), socketProvider);
+        context.setPitServer(server);
+        when(socketProvider.listen(context.getPortNumber())).thenReturn(objectSocket);
+        server.listen();
+    }
 
-	private void whenTheServerSendsOptions() {
-		PitServer server = context.getPitServer();
-		server.sendRequest(context.getRequest());
-	}
+    private void whenTheServerSendsOptions() {
+        PitServer server = context.getPitServer();
+        server.sendRequest(context.getRequest());
+    }
 
-	private void whenTheServerReceivesResults() {
-		when(objectSocket.read()).thenReturn(context.getResults());
-		PitResults results = context.getPitServer().receiveResults();
-		context.setTransmittedResults(results);
-	}
+    private void whenTheServerReceivesResults() {
+        when(objectSocket.read()).thenReturn(context.getResults());
+        PitResults results = context.getPitServer().receiveResults();
+        context.setTransmittedResults(results);
+    }
 
-	private void whenTheServerIsStopped() throws IOException {
-		PitServer server = context.getPitServer();
-		server.close();
-	}
+    private void whenTheServerIsStopped() throws IOException {
+        PitServer server = context.getPitServer();
+        server.close();
+    }
 
-	private void thenTheResultsAreSent() {
-		assertThat(context.getTransmittedResults(), areEqualTo(RESULTS));
-	}
+    private void thenTheResultsAreSent() {
+        assertThat(context.getTransmittedResults(), areEqualTo(RESULTS));
+    }
 
-	private void thenTheServerListensOnThePort() {
-		verify(socketProvider).listen(context.getPortNumber());
-	}
+    private void thenTheServerListensOnThePort() {
+        verify(socketProvider).listen(context.getPortNumber());
+    }
 
-	private void thenTheOptionsAreSent() {
-		verify(objectSocket).write(context.getRequest());
-	}
+    private void thenTheOptionsAreSent() {
+        verify(objectSocket).write(context.getRequest());
+    }
 
-	private void thenTheUnderlyingConnectionIsClosed() throws IOException {
-		verify(objectSocket).close();
-	}
+    private void thenTheUnderlyingConnectionIsClosed() throws IOException {
+        verify(objectSocket).close();
+    }
 }
