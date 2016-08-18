@@ -11,43 +11,43 @@ import org.junit.Test;
 
 public class PitConfigurationTest {
 
-	private static final String DEFAULT_MUTATORS = "DEFAULTS";
-	private PitConfiguration config;
+    private static final String DEFAULT_MUTATORS = "DEFAULTS";
+    private PitConfiguration config;
 
-	@Test
-	public void noScopeDefinedDefaultsToProject() {
-		givenNoExecutionScopeIsSupplied();
-		thenTheDefaultScopeIsProjectLevel();
-	}
+    @Test
+    public void noScopeDefinedDefaultsToProject() {
+        givenNoExecutionScopeIsSupplied();
+        thenTheDefaultScopeIsProjectLevel();
+    }
 
-	@Test
-	public void noMutatorsDefinedDefaultsToDefault() {
-		givenNoMutatorsAreSupplied();
-		thenTheDefaultMutatorsAreUsed();
-	}
+    @Test
+    public void noMutatorsDefinedDefaultsToDefault() {
+        givenNoMutatorsAreSupplied();
+        thenTheDefaultMutatorsAreUsed();
+    }
 
-	private void givenNoExecutionScopeIsSupplied() {
-		defaultConfig();
-	}
+    private void givenNoExecutionScopeIsSupplied() {
+        defaultConfig();
+    }
 
-	private void givenNoMutatorsAreSupplied() {
-		defaultConfig();
-	}
+    private void givenNoMutatorsAreSupplied() {
+        defaultConfig();
+    }
 
-	private void thenTheDefaultScopeIsProjectLevel() {
-		assertEquals(PROJECT_ISOLATION, config.getExecutionMode());
-	}
+    private void thenTheDefaultScopeIsProjectLevel() {
+        assertEquals(PROJECT_ISOLATION, config.getExecutionMode());
+    }
 
-	private void thenTheDefaultMutatorsAreUsed() {
-		assertThat(config.getMutators(), is(equalTo(DEFAULT_MUTATORS)));
-	}
+    private void thenTheDefaultMutatorsAreUsed() {
+        assertThat(config.getMutators(), is(equalTo(DEFAULT_MUTATORS)));
+    }
 
-	@Before
-	public void cleanup() {
-		config = null;
-	}
+    @Before
+    public void cleanup() {
+        config = null;
+    }
 
-	private void defaultConfig() {
-		config = PitConfiguration.builder().build();
-	}
+    private void defaultConfig() {
+        config = PitConfiguration.builder().build();
+    }
 }

@@ -13,34 +13,34 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class PitExecutionModeTest {
 
-	@Mock
-	private PitExecutionModeVisitor<Void> visitor;
+    @Mock
+    private PitExecutionModeVisitor<Void> visitor;
 
-	@Test
-	public void projectVisitorIsInkvoked() {
-		whenTheProjectExecutionModeIsVisited();
-		thenTheProjectExecutionVisitorMethodIsInvoked();
-	}
+    @Test
+    public void projectVisitorIsInkvoked() {
+        whenTheProjectExecutionModeIsVisited();
+        thenTheProjectExecutionVisitorMethodIsInvoked();
+    }
 
-	@Test
-	public void workspaceVisitorIsInkvoked() {
-		whenTheWorkspaceExecutionModeIsVisited();
-		thenTheWorkspaceExecutionVisitorMethodIsInvoked();
-	}
+    @Test
+    public void workspaceVisitorIsInkvoked() {
+        whenTheWorkspaceExecutionModeIsVisited();
+        thenTheWorkspaceExecutionVisitorMethodIsInvoked();
+    }
 
-	private void whenTheProjectExecutionModeIsVisited() {
-		PROJECT_ISOLATION.accept(visitor);
-	}
+    private void whenTheProjectExecutionModeIsVisited() {
+        PROJECT_ISOLATION.accept(visitor);
+    }
 
-	private void whenTheWorkspaceExecutionModeIsVisited() {
-		WORKSPACE.accept(visitor);
-	}
+    private void whenTheWorkspaceExecutionModeIsVisited() {
+        WORKSPACE.accept(visitor);
+    }
 
-	private void thenTheProjectExecutionVisitorMethodIsInvoked() {
-		verify(visitor, only()).visitProjectLevelConfiguration();
-	}
+    private void thenTheProjectExecutionVisitorMethodIsInvoked() {
+        verify(visitor, only()).visitProjectLevelConfiguration();
+    }
 
-	private void thenTheWorkspaceExecutionVisitorMethodIsInvoked() {
-		verify(visitor, only()).visitWorkspaceLevelConfiguration();
-	}
+    private void thenTheWorkspaceExecutionVisitorMethodIsInvoked() {
+        verify(visitor, only()).visitWorkspaceLevelConfiguration();
+    }
 }

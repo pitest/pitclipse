@@ -20,64 +20,64 @@ import org.pitest.pitclipse.pitrunner.server.PitServer;
 @RunWith(MockitoJUnitRunner.class)
 public class PitCommunicatorTest {
 
-	private static final PitOptions OPTIONS = PitOptions.builder()
-			.withSourceDirectory(new File(System.getProperty("java.io.tmpdir"))).withClassUnderTest("Test Class")
-			.build();
+    private static final PitOptions OPTIONS = PitOptions.builder()
+            .withSourceDirectory(new File(System.getProperty("java.io.tmpdir"))).withClassUnderTest("Test Class")
+            .build();
 
-	protected static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).build();
+    protected static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).build();
 
-	private static final PitResults RESULTS = null;
+    private static final PitResults RESULTS = null;
 
-	@Mock
-	private PitServer server;
+    @Mock
+    private PitServer server;
 
-	@Mock
-	private PitResultHandler handler;
+    @Mock
+    private PitResultHandler handler;
 
-	@Test
-	public void runCommunicator() throws IOException {
-		whenPitCommunicatorIsRun();
-		thenTheServerIsCalled();
-		thenTheResultsAreHandled();
-	}
+    @Test
+    public void runCommunicator() throws IOException {
+        whenPitCommunicatorIsRun();
+        thenTheServerIsCalled();
+        thenTheResultsAreHandled();
+    }
 
-	@Test(expected = RuntimeException.class)
-	public void clientIsClosedOnException() throws IOException {
-		try {
-			whenPitCommunicatorGetsAnError();
-		} finally {
-			thenTheServerIsCalled();
-			thenResultsAreNotHandled();
-		}
-	}
+    @Test(expected = RuntimeException.class)
+    public void clientIsClosedOnException() throws IOException {
+        try {
+            whenPitCommunicatorGetsAnError();
+        } finally {
+            thenTheServerIsCalled();
+            thenResultsAreNotHandled();
+        }
+    }
 
-	private void whenPitCommunicatorIsRun() {
-		when(server.receiveResults()).thenReturn(RESULTS);
-		PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
-		communicator.run();
-	}
+    private void whenPitCommunicatorIsRun() {
+        when(server.receiveResults()).thenReturn(RESULTS);
+        PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
+        communicator.run();
+    }
 
-	private void whenPitCommunicatorGetsAnError() {
-		when(server.receiveResults()).thenThrow(new RuntimeException("Boom"));
-		PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
-		communicator.run();
-	}
+    private void whenPitCommunicatorGetsAnError() {
+        when(server.receiveResults()).thenThrow(new RuntimeException("Boom"));
+        PitCommunicator communicator = new PitCommunicator(server, REQUEST, handler);
+        communicator.run();
+    }
 
-	private void thenTheServerIsCalled() throws IOException {
-		verify(server).listen();
-		verify(server).sendRequest(REQUEST);
-		verify(server).receiveResults();
-		verify(server).close();
-		verifyNoMoreInteractions(server);
-	}
+    private void thenTheServerIsCalled() throws IOException {
+        verify(server).listen();
+        verify(server).sendRequest(REQUEST);
+        verify(server).receiveResults();
+        verify(server).close();
+        verifyNoMoreInteractions(server);
+    }
 
-	private void thenTheResultsAreHandled() {
-		verify(handler).handle(RESULTS);
-		verifyNoMoreInteractions(handler);
-	}
+    private void thenTheResultsAreHandled() {
+        verify(handler).handle(RESULTS);
+        verifyNoMoreInteractions(handler);
+    }
 
-	private void thenResultsAreNotHandled() {
-		verifyZeroInteractions(handler);
-	}
+    private void thenResultsAreNotHandled() {
+        verifyZeroInteractions(handler);
+    }
 
 }

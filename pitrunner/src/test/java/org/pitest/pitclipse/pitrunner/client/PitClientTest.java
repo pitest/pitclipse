@@ -21,95 +21,95 @@ import org.pitest.pitclipse.pitrunner.io.SocketProvider;
 @RunWith(MockitoJUnitRunner.class)
 public class PitClientTest extends AbstractPitRunnerTest {
 
-	@Mock
-	private SocketProvider socketProvider;
+    @Mock
+    private SocketProvider socketProvider;
 
-	@Mock
-	private ObjectStreamSocket connectionSocket;
+    @Mock
+    private ObjectStreamSocket connectionSocket;
 
-	private PitRunnerTestContext context;
+    private PitRunnerTestContext context;
 
-	@Before
-	public void setup() {
-		context = new PitRunnerTestContext();
-	}
+    @Before
+    public void setup() {
+        context = new PitRunnerTestContext();
+    }
 
-	@Test
-	public void clientConnectsToServer() throws IOException {
-		givenThePortNumber(PORT);
-		whenThePitClientIsStarted();
-		thenTheClientConnectsOnThePort();
-	}
+    @Test
+    public void clientConnectsToServer() throws IOException {
+        givenThePortNumber(PORT);
+        whenThePitClientIsStarted();
+        thenTheClientConnectsOnThePort();
+    }
 
-	@Test
-	public void clientSendsOptionsAndReceivesResults() throws IOException, ClassNotFoundException {
-		givenThePortNumber(PORT);
-		whenThePitClientIsStarted();
-		thenTheClientConnectsOnThePort();
-		givenTheRequest(REQUEST);
-		whenTheClientReceivesOptions();
-		thenTheOptionsAreReceived();
-		givenTheResults(RESULTS);
-		whenTheClientSendsResults();
-		thenTheResultsAreSent();
-	}
+    @Test
+    public void clientSendsOptionsAndReceivesResults() throws IOException, ClassNotFoundException {
+        givenThePortNumber(PORT);
+        whenThePitClientIsStarted();
+        thenTheClientConnectsOnThePort();
+        givenTheRequest(REQUEST);
+        whenTheClientReceivesOptions();
+        thenTheOptionsAreReceived();
+        givenTheResults(RESULTS);
+        whenTheClientSendsResults();
+        thenTheResultsAreSent();
+    }
 
-	@Test
-	public void closingClientClosesTheSocket() throws IOException {
-		givenThePortNumber(PORT);
-		whenThePitClientIsStarted();
-		whenTheClientIsClosed();
-		thenTheSocketIsClosed();
-	}
+    @Test
+    public void closingClientClosesTheSocket() throws IOException {
+        givenThePortNumber(PORT);
+        whenThePitClientIsStarted();
+        whenTheClientIsClosed();
+        thenTheSocketIsClosed();
+    }
 
-	private void givenTheRequest(PitRequest request) {
-		context.setRequest(request);
-	}
+    private void givenTheRequest(PitRequest request) {
+        context.setRequest(request);
+    }
 
-	private void givenThePortNumber(int port) {
-		context.setPortNumber(port);
-	}
+    private void givenThePortNumber(int port) {
+        context.setPortNumber(port);
+    }
 
-	private void givenTheResults(PitResults results) {
-		context.setResults(results);
-	}
+    private void givenTheResults(PitResults results) {
+        context.setResults(results);
+    }
 
-	private void whenThePitClientIsStarted() {
-		PitClient client = new PitClient(context.getPortNumber(), socketProvider);
-		context.setPitClient(client);
-		when(socketProvider.connectTo(context.getPortNumber())).thenReturn(connectionSocket);
-		client.connect();
-	}
+    private void whenThePitClientIsStarted() {
+        PitClient client = new PitClient(context.getPortNumber(), socketProvider);
+        context.setPitClient(client);
+        when(socketProvider.connectTo(context.getPortNumber())).thenReturn(connectionSocket);
+        client.connect();
+    }
 
-	private void whenTheClientReceivesOptions() {
-		when(connectionSocket.read()).thenReturn(context.getRequest());
-		PitClient client = context.getPitClient();
-		context.setTransmittedRequest(client.readRequest());
-	}
+    private void whenTheClientReceivesOptions() {
+        when(connectionSocket.read()).thenReturn(context.getRequest());
+        PitClient client = context.getPitClient();
+        context.setTransmittedRequest(client.readRequest());
+    }
 
-	private void whenTheClientSendsResults() {
-		context.getPitClient().sendResults(context.getResults());
-	}
+    private void whenTheClientSendsResults() {
+        context.getPitClient().sendResults(context.getResults());
+    }
 
-	private void whenTheClientIsClosed() throws IOException {
-		context.getPitClient().close();
-	}
+    private void whenTheClientIsClosed() throws IOException {
+        context.getPitClient().close();
+    }
 
-	private void thenTheResultsAreSent() {
-		verify(connectionSocket).write(context.getResults());
-	}
+    private void thenTheResultsAreSent() {
+        verify(connectionSocket).write(context.getResults());
+    }
 
-	private void thenTheOptionsAreReceived() {
-		verify(connectionSocket).read();
-		assertThat(context.getTransmittedRequest(), areEqualTo(context.getRequest()));
-	}
+    private void thenTheOptionsAreReceived() {
+        verify(connectionSocket).read();
+        assertThat(context.getTransmittedRequest(), areEqualTo(context.getRequest()));
+    }
 
-	private void thenTheClientConnectsOnThePort() {
-		verify(socketProvider).connectTo(context.getPortNumber());
-	}
+    private void thenTheClientConnectsOnThePort() {
+        verify(socketProvider).connectTo(context.getPortNumber());
+    }
 
-	private void thenTheSocketIsClosed() throws IOException {
-		verify(connectionSocket).close();
-	}
+    private void thenTheSocketIsClosed() throws IOException {
+        verify(connectionSocket).close();
+    }
 
 }

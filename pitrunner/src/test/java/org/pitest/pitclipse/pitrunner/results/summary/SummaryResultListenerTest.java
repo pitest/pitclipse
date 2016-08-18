@@ -13,20 +13,20 @@ import org.junit.Test;
 import org.pitest.pitclipse.example.Foo;
 
 public class SummaryResultListenerTest {
-	@Test
-	public void noResultsReturnsAnEmptyResult() {
-		given(anEmptyCoverageDatabase()).andNoMutations().whenPitIsExecuted().thenTheResultsAre(empty());
-	}
+    @Test
+    public void noResultsReturnsAnEmptyResult() {
+        given(anEmptyCoverageDatabase()).andNoMutations().whenPitIsExecuted().thenTheResultsAre(empty());
+    }
 
-	@Test
-	public void anUncoveredMutationResultReturnsZeroLineCoverage() {
-		given(fooHasNoLineCoverage()).and(anUncoveredMutationOnFoo()).whenPitIsExecuted()
-				.thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 0, 0));
-	}
+    @Test
+    public void anUncoveredMutationResultReturnsZeroLineCoverage() {
+        given(fooHasNoLineCoverage()).and(anUncoveredMutationOnFoo()).whenPitIsExecuted()
+                .thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 0, 0));
+    }
 
-	@Test
-	public void aCoveredMutationResultReturnsLineCoverage() {
-		given(fooHasFullLineCoverage()).and(aCoveredMutationOnFoo()).whenPitIsExecuted()
-				.thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 100, 100));
-	}
+    @Test
+    public void aCoveredMutationResultReturnsLineCoverage() {
+        given(fooHasFullLineCoverage()).and(aCoveredMutationOnFoo()).whenPitIsExecuted()
+                .thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 100, 100));
+    }
 }

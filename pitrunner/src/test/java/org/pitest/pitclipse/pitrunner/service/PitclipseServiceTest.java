@@ -28,78 +28,78 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitclipseServiceTest {
-	private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
+    private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 
-	private static final List<String> CLASS_PATH = of(PitServerTest.class.getCanonicalName());
+    private static final List<String> CLASS_PATH = of(PitServerTest.class.getCanonicalName());
 
-	private static final PitOptions OPTIONS = PitOptions.builder().withSourceDirectory(TMP_DIR)
-			.withClassUnderTest(PitServerTest.class.getCanonicalName()).withClassesToMutate(CLASS_PATH).build();
+    private static final PitOptions OPTIONS = PitOptions.builder().withSourceDirectory(TMP_DIR)
+            .withClassUnderTest(PitServerTest.class.getCanonicalName()).withClassesToMutate(CLASS_PATH).build();
 
-	private static final List<String> PROJECTS = ImmutableList.of("Project X", "Project Y");
+    private static final List<String> PROJECTS = ImmutableList.of("Project X", "Project Y");
 
-	private static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).withProjects(PROJECTS)
-			.build();
+    private static final PitRequest REQUEST = PitRequest.builder().withPitOptions(OPTIONS).withProjects(PROJECTS)
+            .build();
 
-	private static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).build();
-	private static final MutationsModel MODEL = MutationsModel.EMPTY_MODEL;
+    private static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).build();
+    private static final MutationsModel MODEL = MutationsModel.EMPTY_MODEL;
 
-	private static final int PORT = new Random().nextInt();
+    private static final int PORT = new Random().nextInt();
 
-	@Mock
-	private PitServerProvider serverProvider;
-	@Mock
-	private PitServer server;
-	@Mock
-	private ModelBuilder modelBuilder;
+    @Mock
+    private PitServerProvider serverProvider;
+    @Mock
+    private PitServer server;
+    @Mock
+    private ModelBuilder modelBuilder;
 
-	private PitRequest request;
+    private PitRequest request;
 
-	private PitclipseService service;
+    private PitclipseService service;
 
-	private MutationsModel model;
+    private MutationsModel model;
 
-	private PitResults results;
+    private PitResults results;
 
-	@Before
-	public void setup() {
-		request = null;
-		service = new PitclipseService(serverProvider, modelBuilder);
-	}
+    @Before
+    public void setup() {
+        request = null;
+        service = new PitclipseService(serverProvider, modelBuilder);
+    }
 
-	@Test
-	public void pitIsExecuted() {
-		givenAPitRequest(REQUEST);
-		andExpectedPitResult(RESULTS);
-		andExpectedModel(MODEL);
-		whenTheServiceIsCalled();
-		thenPitIsCalled();
-		andTheModelIsBuiltAndReturned();
-	}
+    @Test
+    public void pitIsExecuted() {
+        givenAPitRequest(REQUEST);
+        andExpectedPitResult(RESULTS);
+        andExpectedModel(MODEL);
+        whenTheServiceIsCalled();
+        thenPitIsCalled();
+        andTheModelIsBuiltAndReturned();
+    }
 
-	private void givenAPitRequest(PitRequest request) {
-		this.request = request;
-	}
+    private void givenAPitRequest(PitRequest request) {
+        this.request = request;
+    }
 
-	private void andExpectedPitResult(PitResults results) {
-		this.results = results;
-		when(server.receiveResults()).thenReturn(results);
-	}
+    private void andExpectedPitResult(PitResults results) {
+        this.results = results;
+        when(server.receiveResults()).thenReturn(results);
+    }
 
-	private void andExpectedModel(MutationsModel model) {
-		when(modelBuilder.buildFrom(results)).thenReturn(model);
-	}
+    private void andExpectedModel(MutationsModel model) {
+        when(modelBuilder.buildFrom(results)).thenReturn(model);
+    }
 
-	private void whenTheServiceIsCalled() {
-		when(serverProvider.newServerFor(PORT)).thenReturn(server);
-		model = service.analyse(PORT, request);
-	}
+    private void whenTheServiceIsCalled() {
+        when(serverProvider.newServerFor(PORT)).thenReturn(server);
+        model = service.analyse(PORT, request);
+    }
 
-	private void thenPitIsCalled() {
-		verify(server).sendRequest(request);
-	}
+    private void thenPitIsCalled() {
+        verify(server).sendRequest(request);
+    }
 
-	private void andTheModelIsBuiltAndReturned() {
-		verify(modelBuilder).buildFrom(results);
-		assertThat(model, is(equalTo(MODEL)));
-	}
+    private void andTheModelIsBuiltAndReturned() {
+        verify(modelBuilder).buildFrom(results);
+        assertThat(model, is(equalTo(MODEL)));
+    }
 }
