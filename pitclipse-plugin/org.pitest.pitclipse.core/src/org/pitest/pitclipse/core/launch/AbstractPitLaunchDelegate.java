@@ -28,64 +28,64 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
-	private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.executePit";
-	private static final String PIT_RUNNER = PitRunner.class.getCanonicalName();
-	private int portNumber;
-	private final PitConfiguration pitConfiguration;
+    private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.executePit";
+    private static final String PIT_RUNNER = PitRunner.class.getCanonicalName();
+    private int portNumber;
+    private final PitConfiguration pitConfiguration;
 
-	public AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
-		this.pitConfiguration = pitConfiguration;
-	}
+    public AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
+        this.pitConfiguration = pitConfiguration;
+    }
 
-	protected void generatePortNumber() {
-		portNumber = new SocketProvider().getFreePort();
-	}
+    protected void generatePortNumber() {
+        portNumber = new SocketProvider().getFreePort();
+    }
 
-	@Override
-	public String getMainTypeName(ILaunchConfiguration launchConfig) throws CoreException {
-		return PIT_RUNNER;
-	}
+    @Override
+    public String getMainTypeName(ILaunchConfiguration launchConfig) throws CoreException {
+        return PIT_RUNNER;
+    }
 
-	@Override
-	public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
-		List<String> newClasspath = ImmutableList.<String> builder()
-				.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig))).addAll(getDefault().getPitClasspath())
-				.build();
-		log("Classpath: " + newClasspath);
-		return newClasspath.toArray(new String[newClasspath.size()]);
-	}
+    @Override
+    public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
+        List<String> newClasspath = ImmutableList.<String> builder()
+                .addAll(ImmutableList.copyOf(super.getClasspath(launchConfig))).addAll(getDefault().getPitClasspath())
+                .build();
+        log("Classpath: " + newClasspath);
+        return newClasspath.toArray(new String[newClasspath.size()]);
+    }
 
-	@Override
-	public String getProgramArguments(ILaunchConfiguration launchConfig) throws CoreException {
-		return new StringBuilder(super.getProgramArguments(launchConfig)).append(' ').append(portNumber).toString();
-	}
+    @Override
+    public String getProgramArguments(ILaunchConfiguration launchConfig) throws CoreException {
+        return new StringBuilder(super.getProgramArguments(launchConfig)).append(' ').append(portNumber).toString();
+    }
 
-	@Override
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
-			throws CoreException {
-		generatePortNumber();
-		LaunchConfigurationWrapper configWrapper = LaunchConfigurationWrapper.builder()
-				.withLaunchConfiguration(configuration).withProjectFinder(getProjectFinder())
-				.withPackageFinder(getPackageFinder()).withClassFinder(getClassFinder())
-				.withSourceDirFinder(getSourceDirFinder()).withPitConfiguration(pitConfiguration).build();
+    @Override
+    public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+            throws CoreException {
+        generatePortNumber();
+        LaunchConfigurationWrapper configWrapper = LaunchConfigurationWrapper.builder()
+                .withLaunchConfiguration(configuration).withProjectFinder(getProjectFinder())
+                .withPackageFinder(getPackageFinder()).withClassFinder(getClassFinder())
+                .withSourceDirFinder(getSourceDirFinder()).withPitConfiguration(pitConfiguration).build();
 
-		PitOptions options = configWrapper.getPitOptions();
+        PitOptions options = configWrapper.getPitOptions();
 
-		super.launch(configuration, mode, launch, monitor);
+        super.launch(configuration, mode, launch, monitor);
 
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
+        IExtensionRegistry registry = Platform.getExtensionRegistry();
 
-		new ExtensionPointHandler<PitRuntimeOptions>(EXTENSION_POINT_ID).execute(registry, new PitRuntimeOptions(
-				portNumber, options, configWrapper.getMutatedProjects()));
+        new ExtensionPointHandler<PitRuntimeOptions>(EXTENSION_POINT_ID).execute(registry, new PitRuntimeOptions(
+                portNumber, options, configWrapper.getMutatedProjects()));
 
-	}
+    }
 
-	protected abstract ProjectFinder getProjectFinder();
+    protected abstract ProjectFinder getProjectFinder();
 
-	protected abstract SourceDirFinder getSourceDirFinder();
+    protected abstract SourceDirFinder getSourceDirFinder();
 
-	protected abstract PackageFinder getPackageFinder();
+    protected abstract PackageFinder getPackageFinder();
 
-	protected abstract ClassFinder getClassFinder();
+    protected abstract ClassFinder getClassFinder();
 
 }

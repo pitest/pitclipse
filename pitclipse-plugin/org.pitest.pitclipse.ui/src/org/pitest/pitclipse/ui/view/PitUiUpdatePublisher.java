@@ -9,23 +9,23 @@ import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
 
 public class PitUiUpdatePublisher implements ProgressListener {
 
-	private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.ui.results";
-	private final Browser browser;
-	private final ExtensionPointHandler<PitUiUpdate> handler;
+    private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.ui.results";
+    private final Browser browser;
+    private final ExtensionPointHandler<PitUiUpdate> handler;
 
-	public PitUiUpdatePublisher(Browser browser) {
-		this.browser = browser;
-		handler = new ExtensionPointHandler<PitUiUpdate>(EXTENSION_POINT_ID);
-	}
+    public PitUiUpdatePublisher(Browser browser) {
+        this.browser = browser;
+        handler = new ExtensionPointHandler<PitUiUpdate>(EXTENSION_POINT_ID);
+    }
 
-	public void changed(ProgressEvent event) {
-		// Do nothing
-	}
+    public void changed(ProgressEvent event) {
+        // Do nothing
+    }
 
-	public void completed(ProgressEvent event) {
-		PitUiUpdate update = new PitUiUpdate.Builder().withHtml(
-				browser.getText()).build();
-		handler.execute(Platform.getExtensionRegistry(), update);
-	}
+    public void completed(ProgressEvent event) {
+        PitUiUpdate update = new PitUiUpdate.Builder().withHtml(
+                browser.getText()).build();
+        handler.execute(Platform.getExtensionRegistry(), update);
+    }
 
 }

@@ -1,9 +1,9 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 public interface PackageContext {
-	String getPackageName();
+    String getPackageName();
 
-	String getSourceDir();
+    String getSourceDir();
 
-	String getProjectName();
+    String getProjectName();
 }

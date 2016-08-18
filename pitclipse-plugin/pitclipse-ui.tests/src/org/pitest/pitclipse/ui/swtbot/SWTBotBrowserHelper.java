@@ -10,36 +10,36 @@ import org.eclipse.ui.IViewReference;
 
 public class SWTBotBrowserHelper {
 
-	private static final class MenuFinder implements WidgetResult<Browser> {
-		private final SWTBotView view;
+    private static final class MenuFinder implements WidgetResult<Browser> {
+        private final SWTBotView view;
 
-		private MenuFinder(SWTBotView view) {
-			this.view = view;
-		}
+        private MenuFinder(SWTBotView view) {
+            this.view = view;
+        }
 
-		public Browser run() {
-			if (isPitView()) {
-			}
-			return null;
-		}
+        public Browser run() {
+            if (isPitView()) {
+            }
+            return null;
+        }
 
-		private boolean isPitView() {
-			IViewReference viewRef = view.getReference();
-			return "org.pitest.pitclipse-ui.PITView".equals(viewRef.getId());
-		}
-	}
+        private boolean isPitView() {
+            IViewReference viewRef = view.getReference();
+            return "org.pitest.pitclipse-ui.PITView".equals(viewRef.getId());
+        }
+    }
 
-	public SWTBotBrowserHelper() {
-	}
+    public SWTBotBrowserHelper() {
+    }
 
-	public SWTBotMenu findBrowser(final SWTBotView parentMenu) {
-		Browser menuItem = UIThreadRunnable
-				.syncExec(new MenuFinder(parentMenu));
+    public SWTBotMenu findBrowser(final SWTBotView parentMenu) {
+        Browser menuItem = UIThreadRunnable
+                .syncExec(new MenuFinder(parentMenu));
 
-		if (menuItem == null) {
-			throw new WidgetNotFoundException("Browser not found.");
-		} else {
-			return null;
-		}
-	}
+        if (menuItem == null) {
+            throw new WidgetNotFoundException("Browser not found.");
+        } else {
+            return null;
+        }
+    }
 }

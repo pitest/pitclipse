@@ -9,11 +9,11 @@ import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 
 public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 
-	private static final ModelBuilder MODEL_BUILDER = new ModelBuilder(JdtStructureService.INSTANCE);
+    private static final ModelBuilder MODEL_BUILDER = new ModelBuilder(JdtStructureService.INSTANCE);
 
-	@Override
-	public void handleResults(PitResults results) {
-		MutationsModel mutationModel = MODEL_BUILDER.buildFrom(results);
-		Display.getDefault().asyncExec(new UpdateMutations(mutationModel));
-	}
+    @Override
+    public void handleResults(PitResults results) {
+        MutationsModel mutationModel = MODEL_BUILDER.buildFrom(results);
+        Display.getDefault().asyncExec(new UpdateMutations(mutationModel));
+    }
 }

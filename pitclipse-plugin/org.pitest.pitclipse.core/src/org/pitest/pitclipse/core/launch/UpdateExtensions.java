@@ -6,17 +6,17 @@ import org.pitest.pitclipse.core.extension.handler.ExtensionPointHandler;
 import org.pitest.pitclipse.pitrunner.PitResults;
 
 public class UpdateExtensions implements Runnable {
-	private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.results";
+    private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.results";
 
-	private final PitResults results;
+    private final PitResults results;
 
-	public UpdateExtensions(PitResults results) {
-		this.results = results;
-	}
+    public UpdateExtensions(PitResults results) {
+        this.results = results;
+    }
 
-	@Override
-	public void run() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		new ExtensionPointHandler<PitResults>(EXTENSION_POINT_ID).execute(registry, results);
-	}
+    @Override
+    public void run() {
+        IExtensionRegistry registry = Platform.getExtensionRegistry();
+        new ExtensionPointHandler<PitResults>(EXTENSION_POINT_ID).execute(registry, results);
+    }
 }

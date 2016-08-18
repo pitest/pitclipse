@@ -6,28 +6,28 @@ import org.pitest.pitclipse.ui.swtbot.PitResultsView;
 
 public class PitSummaryView {
 
-	private PitResultsView lastResults = null;
+    private PitResultsView lastResults = null;
 
-	public PitSummaryView() {
-	}
+    public PitSummaryView() {
+    }
 
-	public void waitForUpdate() {
-		try {
-			lastResults = PitNotifier.INSTANCE.getResults();
-		} catch (InterruptedException e) {
-			throw new StepException(e);
-		}
-	}
+    public void waitForUpdate() {
+        try {
+            lastResults = PitNotifier.INSTANCE.getResults();
+        } catch (InterruptedException e) {
+            throw new StepException(e);
+        }
+    }
 
-	public int getClassesTested() {
-		return lastResults.getClassesTested();
-	}
+    public int getClassesTested() {
+        return lastResults.getClassesTested();
+    }
 
-	public double getOverallCoverage() {
-		return lastResults.getTotalCoverage();
-	}
+    public double getOverallCoverage() {
+        return lastResults.getTotalCoverage();
+    }
 
-	public double getMutationCoverage() {
-		return lastResults.getMutationCoverage();
-	}
+    public double getMutationCoverage() {
+        return lastResults.getMutationCoverage();
+    }
 }

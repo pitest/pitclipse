@@ -19,80 +19,80 @@ import org.pitest.pitclipse.ui.behaviours.StepException;
 
 public class AbstractSyntaxTree {
 
-	public void removeAllMethods(ClassContext context) {
-		IJavaProject javaProject = getJavaProject(context);
-		try {
-			IProgressMonitor progressMonitor = new NullProgressMonitor();
-			IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
-			for (IMethod method : type.getMethods()) {
-				method.delete(true, progressMonitor);
-			}
-		} catch (JavaModelException e) {
-			throw new StepException(e);
-		}
-	}
+    public void removeAllMethods(ClassContext context) {
+        IJavaProject javaProject = getJavaProject(context);
+        try {
+            IProgressMonitor progressMonitor = new NullProgressMonitor();
+            IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
+            for (IMethod method : type.getMethods()) {
+                method.delete(true, progressMonitor);
+            }
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
 
-	private IJavaProject getJavaProject(ClassContext context) {
-		return getJavaProject(context.getProjectName());
-	}
+    private IJavaProject getJavaProject(ClassContext context) {
+        return getJavaProject(context.getProjectName());
+    }
 
-	private IJavaProject getJavaProject(String projectName) {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		return JavaCore.create(project);
-	}
+    private IJavaProject getJavaProject(String projectName) {
+        IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        return JavaCore.create(project);
+    }
 
-	public void addMethod(ConcreteClassContext context) {
-		IJavaProject javaProject = getJavaProject(context);
-		try {
-			IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
-			NullProgressMonitor progressMonitor = new NullProgressMonitor();
-			type.createMethod(context.getMethod(), null, false, progressMonitor);
-		} catch (JavaModelException e) {
-			throw new StepException(e);
-		}
-	}
+    public void addMethod(ConcreteClassContext context) {
+        IJavaProject javaProject = getJavaProject(context);
+        try {
+            IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
+            NullProgressMonitor progressMonitor = new NullProgressMonitor();
+            type.createMethod(context.getMethod(), null, false, progressMonitor);
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
 
-	public void deleteProject(String projectName) {
-		NullProgressMonitor progressMonitor = new NullProgressMonitor();
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		try {
-			project.delete(true, progressMonitor);
-		} catch (CoreException e) {
-			throw new StepException(e);
-		}
-	}
+    public void deleteProject(String projectName) {
+        NullProgressMonitor progressMonitor = new NullProgressMonitor();
+        IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        try {
+            project.delete(true, progressMonitor);
+        } catch (CoreException e) {
+            throw new StepException(e);
+        }
+    }
 
-	public void addJUnitToClassPath(String projectName) {
-		IJavaProject project = getJavaProject(projectName);
-		try {
-			Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4");
-			IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
-			IClasspathEntry junitClasspath = JavaCore.newContainerEntry(junitEntry.getPath());
+    public void addJUnitToClassPath(String projectName) {
+        IJavaProject project = getJavaProject(projectName);
+        try {
+            Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4");
+            IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
+            IClasspathEntry junitClasspath = JavaCore.newContainerEntry(junitEntry.getPath());
 
-			List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
-					.add(junitClasspath).build();
+            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
+                    .add(junitClasspath).build();
 
-			// add a new entry using the path to the container
-			project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
-		} catch (JavaModelException e) {
-			throw new StepException(e);
-		}
-	}
+            // add a new entry using the path to the container
+            project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
 
-	public void addProjectToClassPathOfProject(String projectName, String projectToAdd) {
-		IJavaProject project = getJavaProject(projectName);
-		try {
-			Path junitPath = new Path("/" + projectToAdd);
-			IClasspathEntry junitClasspath = JavaCore.newProjectEntry(junitPath);
+    public void addProjectToClassPathOfProject(String projectName, String projectToAdd) {
+        IJavaProject project = getJavaProject(projectName);
+        try {
+            Path junitPath = new Path("/" + projectToAdd);
+            IClasspathEntry junitClasspath = JavaCore.newProjectEntry(junitPath);
 
-			List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
-					.add(junitClasspath).build();
+            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
+                    .add(junitClasspath).build();
 
-			// add a new entry using the path to the container
-			project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
-		} catch (JavaModelException e) {
-			throw new StepException(e);
-		}
-	}
+            // add a new entry using the path to the container
+            project.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
 
 }

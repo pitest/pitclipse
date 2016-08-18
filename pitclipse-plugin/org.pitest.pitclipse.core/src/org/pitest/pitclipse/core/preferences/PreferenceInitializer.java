@@ -20,22 +20,22 @@ import org.pitest.pitclipse.core.PitCoreActivator;
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
-	 * initializeDefaultPreferences()
-	 */
-	@Override
-	public void initializeDefaultPreferences() {
-		IPreferenceStore store = PitCoreActivator.getDefault().getPreferenceStore();
-		store.setDefault(PIT_EXECUTION_MODE, "containingProject");
-		store.setDefault(RUN_IN_PARALLEL, true);
-		store.setDefault(INCREMENTAL_ANALYSIS, false);
-		store.setDefault(AVOID_CALLS_TO, DEFAULT_AVOID_CALLS_TO_LIST);
-		store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
-		store.setDefault(TIMEOUT, DEFAULT_TIMEOUT);
-		store.setDefault(TIMEOUT_FACTOR, DEFAULT_TIMEOUT_FACTOR.toString());
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+     * initializeDefaultPreferences()
+     */
+    @Override
+    public void initializeDefaultPreferences() {
+        IPreferenceStore store = PitCoreActivator.getDefault().getPreferenceStore();
+        store.setDefault(PIT_EXECUTION_MODE, "containingProject");
+        store.setDefault(RUN_IN_PARALLEL, true);
+        store.setDefault(INCREMENTAL_ANALYSIS, false);
+        store.setDefault(AVOID_CALLS_TO, DEFAULT_AVOID_CALLS_TO_LIST);
+        store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
+        store.setDefault(TIMEOUT, DEFAULT_TIMEOUT);
+        store.setDefault(TIMEOUT_FACTOR, DEFAULT_TIMEOUT_FACTOR.toString());
+    }
 
 }

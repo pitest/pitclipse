@@ -28,33 +28,33 @@ import org.pitest.pitclipse.ui.behaviours.steps.SetupSteps;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class PitclipseStoriesTest extends JUnitStories {
 
-	private static final long STORY_TIMEOUT = 10l * 60 * 1000;
+    private static final long STORY_TIMEOUT = 10l * 60 * 1000;
 
-	@Override
-	public Configuration configuration() {
-		PLAYBACK_DELAY = 50L;
-		TIMEOUT = 5000L;
-		PitclipseTestActivator.getDefault().startTests();
-		return new MostUsefulConfiguration().useStoryLoader(new LoadFromURL()).useStoryReporterBuilder(
-				new StoryReporterBuilder().withDefaultFormats().withFormats(HTML, CONSOLE)
-						.withRelativeDirectory("jbehave-report"));
-	}
+    @Override
+    public Configuration configuration() {
+        PLAYBACK_DELAY = 50L;
+        TIMEOUT = 5000L;
+        PitclipseTestActivator.getDefault().startTests();
+        return new MostUsefulConfiguration().useStoryLoader(new LoadFromURL()).useStoryReporterBuilder(
+                new StoryReporterBuilder().withDefaultFormats().withFormats(HTML, CONSOLE)
+                        .withRelativeDirectory("jbehave-report"));
+    }
 
-	@Override
-	public Embedder configuredEmbedder() {
-		Embedder embedder = super.configuredEmbedder();
-		embedder.embedderControls().useStoryTimeoutInSecs(STORY_TIMEOUT);
-		return embedder;
-	}
+    @Override
+    public Embedder configuredEmbedder() {
+        Embedder embedder = super.configuredEmbedder();
+        embedder.embedderControls().useStoryTimeoutInSecs(STORY_TIMEOUT);
+        return embedder;
+    }
 
-	@Override
-	protected List<String> storyPaths() {
-		return getDefault().getStories();
-	}
+    @Override
+    protected List<String> storyPaths() {
+        return getDefault().getStories();
+    }
 
-	@Override
-	public InjectableStepsFactory stepsFactory() {
-		return new InstanceStepsFactory(configuration(), new SetupSteps(), new ProjectSteps(), new ClassSteps(),
-				new PitclipseSteps(), new PreferencesSteps(), new LaunchConfigurationSteps());
-	}
+    @Override
+    public InjectableStepsFactory stepsFactory() {
+        return new InstanceStepsFactory(configuration(), new SetupSteps(), new ProjectSteps(), new ClassSteps(),
+                new PitclipseSteps(), new PreferencesSteps(), new LaunchConfigurationSteps());
+    }
 }

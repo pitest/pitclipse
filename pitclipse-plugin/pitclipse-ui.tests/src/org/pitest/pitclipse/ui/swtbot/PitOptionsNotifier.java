@@ -6,16 +6,16 @@ import org.pitest.pitclipse.pitrunner.PitOptions;
 
 public enum PitOptionsNotifier {
 
-	INSTANCE;
+    INSTANCE;
 
-	private final AtomicReference<PitOptions> options = new AtomicReference<PitOptions>();
+    private final AtomicReference<PitOptions> options = new AtomicReference<PitOptions>();
 
-	public void setOptions(PitOptions options) {
-		this.options.set(options);
-	}
+    public void setOptions(PitOptions options) {
+        this.options.set(options);
+    }
 
-	public PitOptions getLastUsedOptions() {
-		return options.get();
-	}
+    public PitOptions getLastUsedOptions() {
+        return options.get();
+    }
 
 }

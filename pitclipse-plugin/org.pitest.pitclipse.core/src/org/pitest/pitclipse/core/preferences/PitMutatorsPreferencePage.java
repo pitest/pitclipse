@@ -9,36 +9,36 @@ import org.pitest.pitclipse.core.PitMutators;
 
 public class PitMutatorsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public static final String PIT_MUTATORS = "pitMutators";
+    public static final String PIT_MUTATORS = "pitMutators";
 
-	public PitMutatorsPreferencePage() {
-		super(GRID);
-		setPreferenceStore(PitCoreActivator.getDefault().getPreferenceStore());
-		setDescription("Mutator Preferences");
-	}
+    public PitMutatorsPreferencePage() {
+        super(GRID);
+        setPreferenceStore(PitCoreActivator.getDefault().getPreferenceStore());
+        setDescription("Mutator Preferences");
+    }
 
-	@Override
-	public void createFieldEditors() {
-		createExecutionModeRadioButtons();
-	}
+    @Override
+    public void createFieldEditors() {
+        createExecutionModeRadioButtons();
+    }
 
-	private void createExecutionModeRadioButtons() {
-		PitMutators[] values = PitMutators.values();
-		String[][] mutatorValues = new String[values.length][2];
-		for (int i = 0; i < values.length; i++) {
-			mutatorValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
-		}
-		addField(new RadioGroupFieldEditor(PIT_MUTATORS, "Mutators", 1, mutatorValues, getFieldEditorParent()));
-	}
+    private void createExecutionModeRadioButtons() {
+        PitMutators[] values = PitMutators.values();
+        String[][] mutatorValues = new String[values.length][2];
+        for (int i = 0; i < values.length; i++) {
+            mutatorValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
+        }
+        addField(new RadioGroupFieldEditor(PIT_MUTATORS, "Mutators", 1, mutatorValues, getFieldEditorParent()));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench )
-	 */
-	@Override
-	public void init(IWorkbench workbench) {
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench )
+     */
+    @Override
+    public void init(IWorkbench workbench) {
+    }
 
 }
