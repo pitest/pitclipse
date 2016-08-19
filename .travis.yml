@@ -1,2 +1,2 @@
 language: java
-script: cd pitrunner && mvn install
+script: build.sh
