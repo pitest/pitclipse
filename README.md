@@ -3,6 +3,7 @@ Pitclipse
 
 Eclipse plugin for PIT.  Please download from Eclipse Marketplace
 
+[![Build Status](https://travis-ci.org/philglover/pitclipse.svg?branch=master)](https://travis-ci.org/philglover/pitclipse)
 
 Manual Update site: http://eclipse.pitest.org/release/ (please note that this is not viewable from a browser, but will work from an Eclipse update)
 
