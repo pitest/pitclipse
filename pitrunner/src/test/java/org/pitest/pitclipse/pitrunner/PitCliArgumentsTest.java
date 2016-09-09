@@ -3,6 +3,7 @@ package org.pitest.pitclipse.pitrunner;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 import java.io.File;
@@ -55,7 +56,7 @@ public class PitCliArgumentsTest {
     @Before
     public void setup() {
         for (File dir : ImmutableList.of(testTmpDir, testSrcDir, anotherTestSrcDir, reportDir)) {
-            dir.mkdirs();
+            assertTrue("Could not create directories for test", dir.mkdirs());
             dir.deleteOnExit();
         }
         actualCliArgs = new String[0];
@@ -138,7 +139,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void alternatveAvoidListUsed() throws IOException {
+    public void alternativeAvoidListUsed() throws IOException {
         List<String> alternativeAvoidList = ImmutableList.of("org.springframework");
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withAvoidCallsTo(alternativeAvoidList)
