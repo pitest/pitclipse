@@ -126,7 +126,7 @@ class ClassSummary implements Serializable {
                 + mutationCoverage + "]";
     }
 
-    private enum DetectedMutations implements Predicate<MutationResult> {
+    private static enum DetectedMutations implements Predicate<MutationResult> {
         INSTANCE;
         @Override
         public boolean apply(MutationResult m) {

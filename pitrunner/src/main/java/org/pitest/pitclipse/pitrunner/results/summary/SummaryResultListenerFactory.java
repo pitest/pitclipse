@@ -18,7 +18,7 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
         Dispatcher<SummaryResult> dispatcher = new Dispatcher<SummaryResult>() {
             @Override
             public void dispatch(SummaryResult result) {
-                // NO OP
+                // NOOP
             }
         };
         return new SummaryResultListener(dispatcher, args.getCoverage());

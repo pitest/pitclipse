@@ -94,7 +94,7 @@ public class ObjectStreamSocketTest {
         }
     }
 
-    private void givenSomeTestObject() {
+    private void givenSomeTestObject() throws IOException {
         expectedObject = new TestSerializableObject("Some state");
     }
 
