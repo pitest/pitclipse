@@ -27,7 +27,7 @@ public final class PitResults implements Serializable {
         this.mutations = mutations;
         this.summaryResult = summaryResult;
         this.projects = projects;
-    }
+    };
 
     public File getHtmlResultFile() {
         return htmlResultFile;

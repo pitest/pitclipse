@@ -59,7 +59,7 @@ class SummaryResultListenerTestData {
         return CoverageTestData.FOO_WITH_FULL_COVERAGE.coverageDatabase;
     }
 
-    private static ClassMutationResults aClassMutationResultForFooWithStatus(DetectionStatus detectionStatus) {
+    private static final ClassMutationResults aClassMutationResultForFooWithStatus(DetectionStatus detectionStatus) {
         Location location = new Location(ClassName.fromClass(Foo.class), MethodName.fromString("doFoo"), "doFoo");
         MutationIdentifier id = new MutationIdentifier(location, 1, "SomeMutator");
         MutationDetails md = new MutationDetails(id, "org/pitest/pitclipse/example/Foo.java", TEST_FACTORY.aString(),

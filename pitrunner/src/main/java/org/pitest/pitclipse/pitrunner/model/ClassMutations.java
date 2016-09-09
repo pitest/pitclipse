@@ -70,7 +70,7 @@ public class ClassMutations implements Visitable, Countable {
 
         public ClassMutations build() {
             return new ClassMutations(packageMutations, className, mutations);
-        }
+        };
 
         private enum MutationComparator implements Comparator<Mutation> {
             INSTANCE;

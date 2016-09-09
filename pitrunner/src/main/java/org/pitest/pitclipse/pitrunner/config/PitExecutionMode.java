@@ -17,7 +17,7 @@ public enum PitExecutionMode {
     private final String label;
     private final String id;
 
-    PitExecutionMode(String id, String label) {
+    private PitExecutionMode(String id, String label) {
         this.id = id;
         this.label = label;
     }

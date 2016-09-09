@@ -10,7 +10,6 @@ import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.client.PitClient;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.mutations.RecordingMutationsDispatcher;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class PitRunner {
 
@@ -57,22 +56,13 @@ public class PitRunner {
         checkArgument(args.length == 1);
     }
 
-    private static ImmutableList<File> safeListFiles(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null)
-            return ImmutableList.copyOf(files);
-        else
-            return ImmutableList.of();
-    }
-
     private static File findResultFile(File reportDir, String fileName) {
-        ImmutableList<File> files = safeListFiles(reportDir);
-        for (File file : files) {
+        for (File file : reportDir.listFiles()) {
             if (fileName.equals(file.getName())) {
                 return file;
             }
         }
-        for (File file : files) {
+        for (File file : reportDir.listFiles()) {
             if (file.isDirectory()) {
                 File result = findResultFile(file, fileName);
                 if (null != result) {
