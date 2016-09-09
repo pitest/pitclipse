@@ -30,7 +30,7 @@ public class PitOptionsTest {
 
     private static File getBadPath() {
         if (IS_OS_WINDOWS) {
-            return new File("BADDRIVE:\\");
+            return new File("BAD_DRIVE:\\");
         }
         return new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
     }
@@ -46,14 +46,9 @@ public class PitOptionsTest {
     @Before
     public void setup() {
         for (File dir : of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
-            dir.mkdirs();
+            assertTrue("Could not create directories for test", dir.mkdirs());
             dir.deleteOnExit();
         }
-    }
-
-    @AfterClass
-    public static void cleanupFiles() {
-
     }
 
     @Test(expected = PitLaunchException.class)

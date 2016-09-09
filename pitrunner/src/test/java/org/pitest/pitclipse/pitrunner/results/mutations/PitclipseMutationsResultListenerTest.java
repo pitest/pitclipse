@@ -71,7 +71,7 @@ public class PitclipseMutationsResultListenerTest {
 class ListenerTestFixture {
     private static final ObjectFactory JAXB_OBJECT_FACTORY = new ObjectFactory();
 
-    public static final ClassMutationResults aClassMutationResult() {
+    public static ClassMutationResults aClassMutationResult() {
         Location location = new Location(ClassName.fromClass(Foo.class), MethodName.fromString("doFoo"), "doFoo");
         MutationIdentifier id = new MutationIdentifier(location, 1, "SomeMutator");
         MutationDetails md = new MutationDetails(id, "org/pitest/pitclipse/example/Foo.java", TEST_FACTORY.aString(),
@@ -82,7 +82,7 @@ class ListenerTestFixture {
         return new ClassMutationResults(ImmutableList.of(mutation));
     }
 
-    public static final Mutations aMutationResult() {
+    public static Mutations aMutationResult() {
         Mutations mutations = JAXB_OBJECT_FACTORY.createMutations();
         Mutation mutation = JAXB_OBJECT_FACTORY.createMutationsMutation();
         mutation.setDetected(true);
