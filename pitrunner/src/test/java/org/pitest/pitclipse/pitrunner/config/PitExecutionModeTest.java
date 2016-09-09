@@ -17,13 +17,13 @@ public class PitExecutionModeTest {
     private PitExecutionModeVisitor<Void> visitor;
 
     @Test
-    public void projectVisitorIsInkvoked() {
+    public void projectVisitorIsInvoked() {
         whenTheProjectExecutionModeIsVisited();
         thenTheProjectExecutionVisitorMethodIsInvoked();
     }
 
     @Test
-    public void workspaceVisitorIsInkvoked() {
+    public void workspaceVisitorIsInvoked() {
         whenTheWorkspaceExecutionModeIsVisited();
         thenTheWorkspaceExecutionVisitorMethodIsInvoked();
     }
