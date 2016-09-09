@@ -43,7 +43,7 @@ public class PitCliArguments {
         List<String> excludedClasses = options.getExcludedClasses();
         if (!excludedClasses.isEmpty()) {
             builder.add("--excludedClasses");
-            builder.add(concat(commaSeperate(excludedClasses)));
+            builder.add(concat(commaSeparate(excludedClasses)));
         }
         return builder.build();
     }
@@ -53,7 +53,7 @@ public class PitCliArguments {
         List<String> excludedMethods = options.getExcludedMethods();
         if (!excludedMethods.isEmpty()) {
             builder.add("--excludedMethods");
-            builder.add(concat(commaSeperate(excludedMethods)));
+            builder.add(concat(commaSeparate(excludedMethods)));
         }
         return builder.build();
     }
@@ -63,7 +63,7 @@ public class PitCliArguments {
         List<String> avoidCallsTo = options.getAvoidCallsTo();
         if (!avoidCallsTo.isEmpty()) {
             builder.add("--avoidCallsTo");
-            builder.add(concat(commaSeperate(avoidCallsTo)));
+            builder.add(concat(commaSeparate(avoidCallsTo)));
         }
         return builder.build();
     }
@@ -73,7 +73,7 @@ public class PitCliArguments {
         List<String> mutators = options.getMutators();
         if (!mutators.isEmpty()) {
             builder.add("--mutators");
-            builder.add(concat(commaSeperate(mutators)));
+            builder.add(concat(commaSeparate(mutators)));
         }
         return builder.build();
     }
@@ -105,18 +105,18 @@ public class PitCliArguments {
         if (packages.isEmpty()) {
             return options.getClassUnderTest();
         } else {
-            return concat(commaSeperate(packages));
+            return concat(commaSeparate(packages));
         }
     }
 
     private String sourceDirsFrom(PitOptions options) {
         List<File> sourceDirs = options.getSourceDirectories();
-        return concat(commaSeperate(fileAsStrings(sourceDirs)));
+        return concat(commaSeparate(fileAsStrings(sourceDirs)));
     }
 
     private String classpath(PitOptions options) {
         List<String> classesToMutate = options.getClassesToMutate();
-        return concat(commaSeperate(classesToMutate));
+        return concat(commaSeparate(classesToMutate));
     }
 
     private List<String> fileAsStrings(List<File> files) {
@@ -135,7 +135,7 @@ public class PitCliArguments {
         return result.toString();
     }
 
-    private List<String> commaSeperate(List<String> candidates) {
+    private List<String> commaSeparate(List<String> candidates) {
         List<String> formattedCandidates = Lists.newArrayList();
         int size = candidates.size();
         for (int i = 0; i < size; i++) {

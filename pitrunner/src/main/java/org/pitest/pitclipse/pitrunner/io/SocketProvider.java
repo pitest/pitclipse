@@ -57,9 +57,8 @@ public class SocketProvider {
 
     private void ensureClosed(ServerSocket serverSocket) {
         try {
-            if (null != serverSocket) {
+            if (null != serverSocket)
                 serverSocket.close();
-            }
         } catch (IOException e) {
             throw new SocketCreationException(e);
         }

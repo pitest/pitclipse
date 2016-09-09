@@ -4,7 +4,6 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SummaryResult implements Serializable {
