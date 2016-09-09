@@ -1,0 +1,5 @@
+language: java
+jdk:
+  - openjdk6
+
+script: cd guava-bundle && mvn install && cd ../pitest-bundles && mvn install && cd ../pitrunner && mvn install && cd ../pitclipse-plugin && mvn install
