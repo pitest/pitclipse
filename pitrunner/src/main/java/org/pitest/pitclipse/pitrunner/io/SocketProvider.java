@@ -26,6 +26,7 @@ public class SocketProvider {
     }
 
     public ObjectStreamSocket connectTo(int portNumber) {
+        long startInMillis = System.currentTimeMillis();
         try {
             InetAddress localhost = InetAddress.getByName(null);
             Socket socket = new Socket();
@@ -35,6 +36,9 @@ public class SocketProvider {
             return ObjectStreamSocket.make(socket);
         } catch (Exception e) {
             throw new SocketCreationException(e);
+        } finally {
+            long stopInMillis = System.currentTimeMillis();
+            System.out.println("Finished in " + (stopInMillis - startInMillis) + "ms");
         }
     }
 
