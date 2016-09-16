@@ -54,6 +54,8 @@ public class SocketProvider {
                 try {
                     socket.close();
                 } catch (IOException e) {
+                    System.out.println("Warning, did not close socket");
+                    e.printStackTrace();
                 }
             }
         }

@@ -1,10 +1,9 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static java.lang.Integer.toHexString;
-import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-
 import java.io.File;
 import java.util.Random;
+
+import static java.lang.Integer.toHexString;
 
 public class FileSystemSupport {
 

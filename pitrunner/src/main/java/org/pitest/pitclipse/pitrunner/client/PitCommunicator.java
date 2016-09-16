@@ -25,20 +25,8 @@ public class PitCommunicator implements Runnable {
             server.sendRequest(request);
             resultHandler.handle(server.receiveResults());
         } finally {
-            try {
-                server.close();
-            } catch (IOException e) {
-                throw new CloseException(e);
-            }
+            server.close();
         }
     }
 
-    public static final class CloseException extends RuntimeException implements Serializable {
-        public CloseException(IOException e) {
-            super(e);
-        }
-
-        private static final long serialVersionUID = -3841555200842571429L;
-
-    }
 }
