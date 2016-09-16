@@ -1,23 +1,19 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static java.lang.Integer.toHexString;
-import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
+import org.junit.Before;
+import org.junit.Test;
+import org.pitest.pitclipse.example.ExampleTest;
+import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
-import org.pitest.pitclipse.example.ExampleTest;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
+import static java.lang.Integer.toHexString;
+import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.junit.Assert.*;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 public class PitOptionsTest {
 
