@@ -155,9 +155,7 @@ public class Mutation implements Visitable {
                 return false;
         } else if (!mutator.equals(other.mutator))
             return false;
-        if (status != other.status)
-            return false;
-        return true;
+        return status == other.status;
     }
 
     @Override

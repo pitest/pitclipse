@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cd guava-bundle; mvn install ; cd ..
 cd pitest-bundles; mvn install ; cd ..
 cd jbehave-bundle; mvn install ; cd ..

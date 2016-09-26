@@ -1,8 +1,5 @@
 package org.pitest.pitclipse.pitrunner.client;
 
-import java.io.IOException;
-import java.io.Serializable;
-
 import org.pitest.pitclipse.pitrunner.PitRequest;
 import org.pitest.pitclipse.pitrunner.server.PitServer;
 
