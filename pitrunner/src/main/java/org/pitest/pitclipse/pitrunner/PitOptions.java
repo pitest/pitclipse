@@ -3,7 +3,6 @@ package org.pitest.pitclipse.pitrunner;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 
@@ -70,14 +69,14 @@ public final class PitOptions implements Serializable {
 
     public static final class PitOptionsBuilder {
         private String classUnderTest = null;
-        private ImmutableList<String> classesToMutate = of();
+        private ImmutableList<String> classesToMutate = ImmutableList.of();
         private File reportDir = null;
-        private ImmutableList<File> sourceDirs = of();
-        private ImmutableList<String> packages = of();
+        private ImmutableList<File> sourceDirs = ImmutableList.of();
+        private ImmutableList<String> packages = ImmutableList.of();
         private int threads = 1;
         private File historyLocation = null;
-        private ImmutableList<String> excludedClasses = of();
-        private ImmutableList<String> excludedMethods = of();
+        private ImmutableList<String> excludedClasses = ImmutableList.of();
+        private ImmutableList<String> excludedMethods = ImmutableList.of();
         private ImmutableList<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
         private ImmutableList<String> mutators = copyOf(split(DEFAULT_MUTATORS));
         private int timeout = 3000;
@@ -92,7 +91,7 @@ public final class PitOptions implements Serializable {
         }
 
         public PitOptionsBuilder withSourceDirectory(File sourceDir) {
-            return withSourceDirectories(of(copyOfFile(sourceDir)));
+            return withSourceDirectories(ImmutableList.of(copyOfFile(sourceDir)));
         }
 
         public PitOptionsBuilder withSourceDirectories(List<File> sourceDirs) {

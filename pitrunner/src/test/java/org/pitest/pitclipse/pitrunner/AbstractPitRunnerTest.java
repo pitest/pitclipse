@@ -2,7 +2,6 @@ package org.pitest.pitclipse.pitrunner;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 import java.io.File;
 import java.util.List;
@@ -20,7 +19,7 @@ public abstract class AbstractPitRunnerTest {
 
     protected static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 
-    protected static final List<String> CLASS_PATH = of(PitServerTest.class.getCanonicalName());
+    protected static final List<String> CLASS_PATH = ImmutableList.of(PitServerTest.class.getCanonicalName());
 
     protected static final PitResults RESULTS = PitResults.builder().withHtmlResults(TMP_DIR).build();
 

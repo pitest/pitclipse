@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,16 +14,23 @@ import java.util.Random;
 import static java.lang.Integer.toHexString;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
 import static org.junit.Assert.*;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 public class PitOptionsTest {
 
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
-    private final Random random = new Random();
+    private static final String TEST_CLASS1 = PitOptionsTest.class.getCanonicalName();
+    private static final String TEST_CLASS2 = PitRunner.class.getCanonicalName();
+    private static final List<String> CLASS_PATH = ImmutableList.of(TEST_CLASS1, TEST_CLASS2);
+    private static final String PACKAGE_1 = PitOptionsTest.class.getPackage().getName() + ".*";
+    private static final String PACKAGE_2 = ExampleTest.class.getPackage().getName() + ".*";
+    private static final List<String> PACKAGES = ImmutableList.of(PACKAGE_1, PACKAGE_2);
+    private static final File REALLY_BAD_PATH = getBadPath();
+    private static final Random RANDOM = new Random();
+
+    private final File historyLocation = randomFile();
     private final File testTmpDir = randomDir();
     private final File testSrcDir = randomDir();
     private final File anotherTestSrcDir = randomDir();
-    private static final File REALLY_BAD_PATH = getBadPath();
 
     private static File getBadPath() {
         if (IS_OS_WINDOWS) {
@@ -31,17 +39,9 @@ public class PitOptionsTest {
         return new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
     }
 
-    private static final String TEST_CLASS1 = PitOptionsTest.class.getCanonicalName();
-    private static final String TEST_CLASS2 = PitRunner.class.getCanonicalName();
-    private static final List<String> CLASS_PATH = of(TEST_CLASS1, TEST_CLASS2);
-    private static final String PACKAGE_1 = PitOptionsTest.class.getPackage().getName() + ".*";
-    private static final String PACKAGE_2 = ExampleTest.class.getPackage().getName() + ".*";
-    private static final List<String> PACKAGES = of(PACKAGE_1, PACKAGE_2);
-    private final File historyLocation = randomFile();
-
     @Before
-    public void setup() {
-        for (File dir : of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
+    public void setUp() {
+        for (File dir : ImmutableList.of(testTmpDir, testSrcDir, anotherTestSrcDir)) {
             assertTrue("Could not create directories for test", dir.mkdirs());
             dir.deleteOnExit();
         }
@@ -75,7 +75,10 @@ public class PitOptionsTest {
 
     @Test(expected = PitLaunchException.class)
     public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
-        PitOptions.builder().withSourceDirectories(of(testSrcDir, randomDir())).withClassUnderTest(TEST_CLASS1).build();
+        PitOptions.builder().
+                withSourceDirectories(ImmutableList.of(testSrcDir, randomDir())).
+                withClassUnderTest(TEST_CLASS1).
+                build();
     }
 
     @Test(expected = PitLaunchException.class)
@@ -128,7 +131,7 @@ public class PitOptionsTest {
     }
 
     private String randomString() {
-        return toHexString(random.nextInt());
+        return toHexString(RANDOM.nextInt());
     }
 
     private File randomDir() {

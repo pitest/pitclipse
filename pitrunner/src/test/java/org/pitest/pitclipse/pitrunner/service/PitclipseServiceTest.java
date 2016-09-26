@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 
 import java.io.File;
 import java.util.List;
@@ -30,7 +29,7 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 public class PitclipseServiceTest {
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
 
-    private static final List<String> CLASS_PATH = of(PitServerTest.class.getCanonicalName());
+    private static final List<String> CLASS_PATH = ImmutableList.of(PitServerTest.class.getCanonicalName());
 
     private static final PitOptions OPTIONS = PitOptions.builder().withSourceDirectory(TMP_DIR)
             .withClassUnderTest(PitServerTest.class.getCanonicalName()).withClassesToMutate(CLASS_PATH).build();

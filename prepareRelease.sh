@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 SCRIPT_NAME=$0
 
 function usage {
@@ -12,7 +12,7 @@ if [ $# -ne 1 ]; then
 fi
 
 USER_VERSION=$1
-TIMESTAMP=`date --utc +'%Y%m%d%H%M'`
+TIMESTAMP=$(date --utc +'%Y%m%d%H%M')
 VERSION=$USER_VERSION.$TIMESTAMP
 echo "Preparing release " $VERSION
 cd pitrunner
