@@ -67,12 +67,6 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     public static final String TEST_RUN_CONFIGURATION = "Select JUnit configuration to run";
     public static final String PIT_CONFIGURATION_TYPE = "org.pitest.pitclipse.core.mutationTest";
 
-    /**
-     * Default constructor.
-     */
-    public PitLaunchShortcut() {
-    }
-
     /*
      * (non-Javadoc)
      * 

@@ -38,27 +38,7 @@ import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private static final int NUMBER_OF_COLUMNS = 3;
-
-    private class ButtonSelectionAdapter extends SelectionAdapter {
-        private final Button button;
-
-        private ButtonSelectionAdapter(Button button) {
-            this.button = button;
-        }
-
-        @Override
-        public void widgetSelected(SelectionEvent e) {
-            if (button.getSelection()) {
-                testModeChanged();
-            }
-        }
-    }
-
-    private final class UpdateOnModifyListener implements ModifyListener {
-        public void modifyText(ModifyEvent evt) {
-            updateLaunchConfigurationDialog();
-        }
-    }
+    public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
 
     private Text testClassText;
     private Text projectText;
@@ -71,7 +51,6 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private Text excludedClassesText;
     private Text excludedMethodsText;
     private Text avoidCallsTo;
-    public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
 
     public void initializeFrom(ILaunchConfiguration config) {
         projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
@@ -318,4 +297,24 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         updateLaunchConfigurationDialog();
     }
 
+    private class ButtonSelectionAdapter extends SelectionAdapter {
+        private final Button button;
+
+        private ButtonSelectionAdapter(Button button) {
+            this.button = button;
+        }
+
+        @Override
+        public void widgetSelected(SelectionEvent e) {
+            if (button.getSelection()) {
+                testModeChanged();
+            }
+        }
+    }
+
+    private final class UpdateOnModifyListener implements ModifyListener {
+        public void modifyText(ModifyEvent evt) {
+            updateLaunchConfigurationDialog();
+        }
+    }
 }
