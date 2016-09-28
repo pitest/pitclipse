@@ -109,6 +109,6 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
      */
     @Override
     public void init(IWorkbench workbench) {
+    	// Not implemented - not special initialising needed
     }
-
 }

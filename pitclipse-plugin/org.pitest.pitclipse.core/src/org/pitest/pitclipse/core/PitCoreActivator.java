@@ -56,9 +56,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
     private File historyFile;
 
-    public PitCoreActivator() {
-    }
-
     public List<String> getPitClasspath() {
         return pitClasspath;
     }

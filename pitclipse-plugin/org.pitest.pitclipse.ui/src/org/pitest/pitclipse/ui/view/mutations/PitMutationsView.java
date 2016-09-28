@@ -9,20 +9,6 @@ import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
-    private class ViewUpdater implements Runnable {
-        private final MutationsModel mutations;
-
-        private ViewUpdater(MutationsModel mutations) {
-            this.mutations = mutations;
-        }
-
-        @Override
-        public void run() {
-            viewer.setInput(mutations);
-            viewer.expandAll();
-        }
-    }
-
     private static final int TREE_STYLE = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
     private TreeViewer viewer;
 
@@ -51,4 +37,17 @@ public class PitMutationsView extends ViewPart implements MutationsView {
         Display.getDefault().asyncExec(new ViewUpdater(mutations));
     }
 
+    private class ViewUpdater implements Runnable {
+        private final MutationsModel mutations;
+
+        private ViewUpdater(MutationsModel mutations) {
+            this.mutations = mutations;
+        }
+
+        @Override
+        public void run() {
+            viewer.setInput(mutations);
+            viewer.expandAll();
+        }
+    }
 }
