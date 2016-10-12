@@ -2,4 +2,4 @@
 
 . ./commonBuild.sh
 
-buildModule guava-bundle && buildModule pitest-bundles && buildModule jbehave-osgi && buildModule pitrunner && buildModule pitclipse-plugin "-Pui-test"
+buildModule guava-bundle && buildModule pitest-bundles && buildModule jbehave-bundle && buildModule pitrunner && buildModule pitclipse-plugin "-Pui-test"
