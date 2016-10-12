@@ -4,7 +4,6 @@ import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.PLAYBACK_DEL
 import static org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences.TIMEOUT;
 import static org.jbehave.core.reporters.Format.CONSOLE;
 import static org.jbehave.core.reporters.Format.HTML;
-import static org.pitest.pitclipse.ui.PitclipseTestActivator.getDefault;
 
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class PitclipseStoriesTest extends JUnitStories {
 
     @Override
     protected List<String> storyPaths() {
-        return getDefault().getStories();
+        return PitclipseTestActivator.getDefault().getStories();
     }
 
     @Override
