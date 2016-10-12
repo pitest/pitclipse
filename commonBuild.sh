@@ -6,6 +6,6 @@ function buildModule() {
   MODULE=$1
   MVNARGS=$2
 
-  cd $ROOT_DIR/$MODULE && mvn clean install $2
+  cd $ROOT_DIR/$MODULE && mvn clean install $MVNARGS
   cd $ROOT_DIR
 }
