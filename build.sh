@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cd guava-bundle; mvn install ; cd ..
-cd pitest-bundles; mvn install ; cd ..
-cd pitrunner; mvn clean install; cd ..
-cd pitclipse-plugin; mvn clean install; cd ..
+. ./commonBuild.sh
+
+buildModule guava-bundle && buildModule pitest-bundles && buildModule pitrunner && buildModule pitclipse-plugin
