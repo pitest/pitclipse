@@ -6,9 +6,13 @@
   <artifactId>org.pitest.pitclipse-ui.tests</artifactId>
   <parent>
     <groupId>org.pitest</groupId>
-    <version>1.1.7.201607061633</version>
+    <version>1.1.7.201610170601</version>
     <artifactId>pitclipse-plugin</artifactId>
   </parent>
+  <organization>
+    <name>Pitest.org</name>
+    <url>http://pitest.org/</url>
+  </organization>
   <packaging>eclipse-test-plugin</packaging>
   <repositories>
     <repository>
@@ -30,6 +34,7 @@
           <useUIHarness>true</useUIHarness>
           <useUIThread>false</useUIThread>
           <argLine>-Xms40m -Xmx512m -XX:MaxPermSize=256M</argLine>
+          <showEclipseLog>true</showEclipseLog>
 <!--           <dependencies>
             <dependency>
               <type>p2-installable-unit</type>
@@ -61,7 +66,7 @@
               <artifactId>org.eclipse.jdt.junit4.runtime</artifactId>
               <version>0.0.0</version>
             </dependency>
-          </dependencies> -->
+          </dependencies>  -->
         </configuration>
         </plugin>
         <plugin>

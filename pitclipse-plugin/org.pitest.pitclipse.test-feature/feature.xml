@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.test-feature"
       label="Pitclipse Test"
-      version="1.1.7.201607061633">
+      version="1.1.7.201610170601">
 
    <description url="http://pitest.org">
       PITest Eclipse Test plugins
@@ -30,20 +30,6 @@
 
    <plugin
          id="org.pitest.jbehave-osgi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="javax.inject"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
