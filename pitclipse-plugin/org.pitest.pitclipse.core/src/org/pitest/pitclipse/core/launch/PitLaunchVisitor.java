@@ -11,14 +11,6 @@ import org.pitest.pitclipse.pitrunner.config.PitExecutionModeVisitor;
 
 public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 
-    public class LaunchFailedException extends RuntimeException {
-        private static final long serialVersionUID = -1678956151196198597L;
-
-        public LaunchFailedException(String name) {
-            super(name);
-        }
-    }
-
     private final ILaunchConfiguration configuration;
     private final ILaunch launch;
     private final IProgressMonitor monitor;
@@ -53,4 +45,11 @@ public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
         return null;
     }
 
+    public static class LaunchFailedException extends RuntimeException {
+        private static final long serialVersionUID = -1678956151196198597L;
+
+        public LaunchFailedException(String name) {
+            super(name);
+        }
+    }
 }

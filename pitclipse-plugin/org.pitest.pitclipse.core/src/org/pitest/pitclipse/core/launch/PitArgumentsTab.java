@@ -37,8 +37,8 @@ import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
-    private static final int NUMBER_OF_COLUMNS = 3;
     public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
+    private static final int NUMBER_OF_COLUMNS = 3;
 
     private Text testClassText;
     private Text projectText;
@@ -57,8 +57,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
                 ""));
         String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME,
                 "");
-        containerId = getAttributeFromConfig(config,
-                PitArgumentsTab.ATTR_TEST_CONTAINER, "");
+        containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
         testClassText.setText(testClass);
         if (testClass.length() == 0 && containerId.length() > 0) {
             testClassText.setText("");
@@ -228,13 +227,11 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         workingCopy.setAttribute(ATTR_PROJECT_NAME, projectText.getText()
                 .trim());
         if (testClassRadioButton.getSelection()) {
-            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, testClassText
-                    .getText().trim());
-            workingCopy.setAttribute(PitArgumentsTab.ATTR_TEST_CONTAINER, "");
+            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, testClassText.getText().trim());
+            workingCopy.setAttribute(ATTR_TEST_CONTAINER, "");
         } else {
             workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
-            workingCopy.setAttribute(PitArgumentsTab.ATTR_TEST_CONTAINER,
-                    containerId);
+            workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
         }
         workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
                 runInParallel.getSelection());
