@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.core.launch;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.eclipse.jdt.core.IJavaElement.CLASS_FILE;
 import static org.eclipse.jdt.core.IJavaElement.COMPILATION_UNIT;
 import static org.eclipse.jdt.core.IJavaElement.JAVA_PROJECT;
@@ -57,7 +55,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.Optional;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 public class PitLaunchShortcut implements ILaunchShortcut2 {
@@ -321,9 +321,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      * @return the attribute names of the attributes that are compared
      */
     protected String[] getAttributeNamesToCompare() {
-        return new String[] { ATTR_PROJECT_NAME,
-                PitArgumentsTab.ATTR_TEST_CONTAINER, ATTR_MAIN_TYPE_NAME };
-        // JUnitLaunchConfigurationConstants.ATTR_TEST_METHOD_NAME };
+        return new String[] { ATTR_PROJECT_NAME, ATTR_TEST_CONTAINER, ATTR_MAIN_TYPE_NAME };
     }
 
     private static boolean hasSameAttributes(ILaunchConfiguration config1,
@@ -381,7 +379,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 .getLaunchConfigurations(configType);
         String[] attributeToCompare = getAttributeNamesToCompare();
 
-        Builder<ILaunchConfiguration> candidateConfigs = builder();
+        Builder<ILaunchConfiguration> candidateConfigs = ImmutableList.builder();
         for (ILaunchConfiguration config : configs) {
             if (hasSameAttributes(config, temporary, attributeToCompare)) {
                 candidateConfigs.add(config);
@@ -399,10 +397,8 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ss = (IStructuredSelection) selection;
             if (ss.size() == 1) {
-                List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss
-                        .getFirstElement());
-                return configs
-                        .toArray(new ILaunchConfiguration[configs.size()]);
+                List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss.getFirstElement());
+                return toArrayOfILaunchConfiguration(configs);
             }
         }
         return null;
@@ -413,19 +409,29 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      * 
      * @since 3.4
      */
-    public ILaunchConfiguration[] getLaunchConfigurations(
-            final IEditorPart editor) {
-        final ITypeRoot element = getEditorInputTypeRoot(editor
-                .getEditorInput());
-        List<ILaunchConfiguration> configs = of();
-        if (element != null) {
-            configs = findExistingLaunchConfigurations(element);
-        }
-        return configs.toArray(new ILaunchConfiguration[configs.size()]);
+    public ILaunchConfiguration[] getLaunchConfigurations(final IEditorPart editor) {
+        ITypeRoot element = getEditorInputTypeRoot(editor.getEditorInput());
+        return Optional.of(element).transform(toLaunchConfigurations()).or(emptyList()); 
     }
 
-    private List<ILaunchConfiguration> findExistingLaunchConfigurations(
-            Object candidate) {
+    private ILaunchConfiguration[] emptyList() {
+		return new ILaunchConfiguration[0];
+	}
+
+    private ILaunchConfiguration[] toArrayOfILaunchConfiguration(List<ILaunchConfiguration> l) {
+    	return l.toArray(new ILaunchConfiguration[l.size()]);
+    }
+    
+	private Function<ITypeRoot, ILaunchConfiguration[]> toLaunchConfigurations() {
+		return new Function<ITypeRoot, ILaunchConfiguration[]>() {
+			public ILaunchConfiguration[] apply(ITypeRoot r) {
+				List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(r);
+				return toArrayOfILaunchConfiguration(configs);
+			}
+		};
+	}
+
+	private List<ILaunchConfiguration> findExistingLaunchConfigurations(Object candidate) {
         if (!(candidate instanceof IJavaElement)
                 && candidate instanceof IAdaptable) {
             candidate = ((IAdaptable) candidate).getAdapter(IJavaElement.class);
@@ -451,14 +457,14 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                     break;
                 }
                 if (elementToLaunch == null) {
-                    return of();
+                    return ImmutableList.of();
                 }
                 ILaunchConfigurationWorkingCopy workingCopy = createLaunchConfiguration(elementToLaunch);
                 return findExistingLaunchConfigurations(workingCopy);
             } catch (CoreException e) {
             }
         }
-        return of();
+        return ImmutableList.of();
     }
 
     /**

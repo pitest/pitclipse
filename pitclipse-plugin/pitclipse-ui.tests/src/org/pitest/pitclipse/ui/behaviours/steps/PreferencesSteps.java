@@ -166,7 +166,7 @@ public class PreferencesSteps {
     }
 
     private static final class BigDecimalMatcher extends TypeSafeMatcher<BigDecimal> {
-        private static final BigDecimal TOLERANCE = new BigDecimal(0.01);
+        private static final BigDecimal TOLERANCE = BigDecimal.valueOf(0.01);
         private final BigDecimal expectedValue;
 
         private BigDecimalMatcher(BigDecimal expectedValue) {

@@ -33,134 +33,9 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 
 public class PitclipseSteps {
 
-    private static class SelectProject implements Runnable {
-
-        private final String projectName;
-
-        public SelectProject(String projectName) {
-            this.projectName = projectName;
-        }
-
-        @Override
-        public void run() {
-            PAGES.getPackageExplorer().selectProject(projectName);
-        }
-    }
-
-    private static final class SelectPackageRoot implements Runnable {
-        private static final class PackageRootSelector implements PackageContext {
-            private final String projectName;
-            private final String packageRoot;
-
-            public PackageRootSelector(String projectName, String packageRoot) {
-                this.projectName = projectName;
-                this.packageRoot = packageRoot;
-            }
-
-            @Override
-            public String getPackageName() {
-                return null;
-            }
-
-            @Override
-            public String getProjectName() {
-                return projectName;
-            }
-
-            @Override
-            public String getSourceDir() {
-                return packageRoot;
-            }
-        }
-
-        private final PackageRootSelector context;
-
-        private SelectPackageRoot(String packageRoot, String projectName) {
-            context = new PackageRootSelector(projectName, packageRoot);
-        }
-
-        @Override
-        public void run() {
-            PAGES.getPackageExplorer().selectPackageRoot(context);
-        }
-    }
-
-    private static final class SelectPackage implements Runnable {
-        private static final class PackageSelector implements PackageContext {
-            private final String projectName;
-            private final String packageName;
-
-            public PackageSelector(String projectName, String packageName) {
-                this.projectName = projectName;
-                this.packageName = packageName;
-            }
-
-            @Override
-            public String getPackageName() {
-                return packageName;
-            }
-
-            @Override
-            public String getProjectName() {
-                return projectName;
-            }
-
-            @Override
-            public String getSourceDir() {
-                return null;
-            }
-        }
-
-        private final PackageSelector context;
-
-        private SelectPackage(String packageName, String projectName) {
-            context = new PackageSelector(projectName, packageName);
-        }
-
-        @Override
-        public void run() {
-            PAGES.getPackageExplorer().selectPackage(context);
-        }
-    }
-
-    private static final class SelectTestClass implements Runnable {
-        private final String testClassName;
-        private final String packageName;
-        private final String projectName;
-
-        private SelectTestClass(String testClassName, String packageName, String projectName) {
-            this.testClassName = testClassName;
-            this.packageName = packageName;
-            this.projectName = projectName;
-        }
-
-        @Override
-        public void run() {
-            PAGES.getPackageExplorer().selectClass(testClassName, packageName, projectName);
-        }
-    }
-
     @When("test $testClassName in package $packageName is run for project $projectName")
     public void runTest(final String testClassName, final String packageName, final String projectName) {
         runPit(new SelectTestClass(testClassName, packageName, projectName));
-
-    }
-
-    private void runPit(Runnable runnable) {
-        int retryCount = 20;
-        int counter = 0;
-        while (counter < retryCount) {
-            try {
-                runnable.run();
-                PAGES.getRunMenu().runPit();
-                return;
-            } catch (TimeoutException te) {
-                counter++;
-            } catch (WidgetNotFoundException wfne) {
-                counter++;
-            }
-        }
-
     }
 
     @Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
@@ -197,36 +72,6 @@ public class PitclipseSteps {
         assertThat(position.lineNumber, is(equalTo(lineNumber)));
     }
 
-    private List<PitMutation> mutationsFromExampleTable(ExamplesTable tableOfMutations) {
-        ImmutableList.Builder<PitMutation> projectsBuilder = ImmutableList.builder();
-        for (Parameters mutationRow : tableOfMutations.getRowsAsParameters()) {
-            DetectionStatus status = statusValueFrom(mutationRow, "status");
-            String project = stringValueFrom(mutationRow, "project");
-            String pkg = stringValueFrom(mutationRow, "package");
-            String className = stringValueFrom(mutationRow, "class");
-            int line = intValueFrom(mutationRow, "line");
-            String mutation = stringValueFrom(mutationRow, "mutation");
-            PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
-                    .withClassName(className).withLineNumber(line).withMutation(mutation).build();
-            projectsBuilder.add(pitMutation);
-        }
-        return projectsBuilder.build();
-
-    }
-
-    private String stringValueFrom(Parameters row, String column) {
-        return row.valueAs(column, String.class);
-    }
-
-    private int intValueFrom(Parameters row, String column) {
-        return row.valueAs(column, Integer.class);
-    }
-
-    private DetectionStatus statusValueFrom(Parameters row, String column) {
-        String status = stringValueFrom(row, column);
-        return DetectionStatus.fromValue(status);
-    }
-
     @When("the PIT views are opened")
     public void thePitViewsAreOpened() {
         PAGES.getWindowsMenu().openPitSummaryView();
@@ -258,6 +103,53 @@ public class PitclipseSteps {
         PitOptions options = PAGES.getRunMenu().getLastUsedPitOptions();
         assertThat(configTable.getRowCount(), is(greaterThan(0)));
         assertThat(options, match(configTable.getRow(0)));
+    }
+    
+    private void runPit(Runnable runnable) {
+        int retryCount = 20;
+        int counter = 0;
+        while (counter < retryCount) {
+            try {
+                runnable.run();
+                PAGES.getRunMenu().runPit();
+                return;
+            } catch (TimeoutException te) {
+                counter++;
+            } catch (WidgetNotFoundException wfne) {
+                counter++;
+            }
+        }
+
+    }
+    
+    private List<PitMutation> mutationsFromExampleTable(ExamplesTable tableOfMutations) {
+        ImmutableList.Builder<PitMutation> projectsBuilder = ImmutableList.builder();
+        for (Parameters mutationRow : tableOfMutations.getRowsAsParameters()) {
+            DetectionStatus status = statusValueFrom(mutationRow, "status");
+            String project = stringValueFrom(mutationRow, "project");
+            String pkg = stringValueFrom(mutationRow, "package");
+            String className = stringValueFrom(mutationRow, "class");
+            int line = intValueFrom(mutationRow, "line");
+            String mutation = stringValueFrom(mutationRow, "mutation");
+            PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
+                    .withClassName(className).withLineNumber(line).withMutation(mutation).build();
+            projectsBuilder.add(pitMutation);
+        }
+        return projectsBuilder.build();
+
+    }
+
+    private String stringValueFrom(Parameters row, String column) {
+        return row.valueAs(column, String.class);
+    }
+
+    private int intValueFrom(Parameters row, String column) {
+        return row.valueAs(column, Integer.class);
+    }
+
+    private DetectionStatus statusValueFrom(Parameters row, String column) {
+        String status = stringValueFrom(row, column);
+        return DetectionStatus.fromValue(status);
     }
 
     private Matcher<PitOptions> match(final Map<String, String> optionRow) {
@@ -345,5 +237,111 @@ public class PitclipseSteps {
                 return match;
             }
         };
+    }
+
+    private static class SelectProject implements Runnable {
+        private final String projectName;
+
+        public SelectProject(String projectName) {
+            this.projectName = projectName;
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectProject(projectName);
+        }
+    }
+
+    private static final class SelectPackageRoot implements Runnable {
+        private final PackageRootSelector context;
+
+        private SelectPackageRoot(String packageRoot, String projectName) {
+            context = new PackageRootSelector(projectName, packageRoot);
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectPackageRoot(context);
+        }
+        
+        private static final class PackageRootSelector implements PackageContext {
+            private final String projectName;
+            private final String packageRoot;
+
+            public PackageRootSelector(String projectName, String packageRoot) {
+                this.projectName = projectName;
+                this.packageRoot = packageRoot;
+            }
+
+            @Override
+            public String getPackageName() {
+                return null;
+            }
+
+            @Override
+            public String getProjectName() {
+                return projectName;
+            }
+
+            @Override
+            public String getSourceDir() {
+                return packageRoot;
+            }
+        }
+    }
+
+    private static final class SelectPackage implements Runnable {
+        private final PackageSelector context;
+
+        private SelectPackage(String packageName, String projectName) {
+            context = new PackageSelector(projectName, packageName);
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectPackage(context);
+        }
+        
+        private static final class PackageSelector implements PackageContext {
+            private final String projectName;
+            private final String packageName;
+
+            public PackageSelector(String projectName, String packageName) {
+                this.projectName = projectName;
+                this.packageName = packageName;
+            }
+
+            @Override
+            public String getPackageName() {
+                return packageName;
+            }
+
+            @Override
+            public String getProjectName() {
+                return projectName;
+            }
+
+            @Override
+            public String getSourceDir() {
+                return null;
+            }
+        }
+    }
+
+    private static final class SelectTestClass implements Runnable {
+        private final String testClassName;
+        private final String packageName;
+        private final String projectName;
+
+        private SelectTestClass(String testClassName, String packageName, String projectName) {
+            this.testClassName = testClassName;
+            this.packageName = packageName;
+            this.projectName = projectName;
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectClass(testClassName, packageName, projectName);
+        }
     }
 }

@@ -31,14 +31,6 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
         addField(new RadioGroupFieldEditor(PIT_MUTATORS, "Mutators", 1, mutatorValues, getFieldEditorParent()));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench )
-     */
     @Override
-    public void init(IWorkbench workbench) {
-    }
-
+    public void init(IWorkbench workbench) { /* Intentionally Empty */ }
 }
