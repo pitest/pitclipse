@@ -120,7 +120,7 @@ public class PitPreferenceSelector implements Closeable {
         SWTBotTreeItem pitPrefs = expandPitPreferences();
         for (SWTBotTreeItem t : pitPrefs.getItems()) {
             if (t.getText().equals("Mutators")) {
-                return Optional.of(selectAndExpand(t));
+                return Optional.fromNullable(selectAndExpand(t));
             }
         }
         return Optional.absent();
