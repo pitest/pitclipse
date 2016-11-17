@@ -399,32 +399,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 		return new Function<IJavaElement, List<ILaunchConfiguration>>() {
 			public List<ILaunchConfiguration> apply(IJavaElement element) {
 				Optional<IJavaElement> launchElement = getLaunchElementFor(element);
-				launchElement.transform(locateLaunchConfigurations()).or(emptyLaunchConfiguration());
-		        IJavaElement elementToLaunch = null;
-		        try {
-		            switch (element.getElementType()) {
-		            case JAVA_PROJECT:
-		            case PACKAGE_FRAGMENT_ROOT:
-		            case PACKAGE_FRAGMENT:
-		            case TYPE:
-		            case METHOD:
-		                elementToLaunch = element;
-		                break;
-		            case CLASS_FILE:
-		                elementToLaunch = ((IClassFile) element).getType();
-		                break;
-		            case COMPILATION_UNIT:
-		                elementToLaunch = ((ICompilationUnit) element).findPrimaryType();
-		                break;
-		            }
-		            if (elementToLaunch == null) {
-		                return ImmutableList.of();
-		            }
-		            ILaunchConfigurationWorkingCopy workingCopy = createLaunchConfiguration(elementToLaunch);
-		            return findExistingLaunchConfigurations(workingCopy);
-		        } catch (CoreException e) {
-		        }
-		        return emptyLaunchConfiguration();
+				return launchElement.transform(locateLaunchConfigurations()).or(emptyLaunchConfiguration());
 			}
 			
 			private Function<IJavaElement, List<ILaunchConfiguration>> locateLaunchConfigurations() {
