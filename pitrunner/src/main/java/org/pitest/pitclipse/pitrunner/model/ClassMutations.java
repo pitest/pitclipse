@@ -1,13 +1,13 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 import java.util.Comparator;
 import java.util.List;
 
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
 
 public class ClassMutations implements Visitable, Countable {
     private final String className;
@@ -91,39 +91,36 @@ public class ClassMutations implements Visitable, Countable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ClassMutations that = (ClassMutations) o;
+
+        if (className != null ? !className.equals(that.className) : that.className != null) {
+            return false;
+        }
+        return mutations != null ? mutations.equals(that.mutations) : that.mutations == null;
+
+    }
+
+    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((className == null) ? 0 : className.hashCode());
-        result = prime * result + ((mutations == null) ? 0 : mutations.hashCode());
+        int result = className != null ? className.hashCode() : 0;
+        result = 31 * result + (mutations != null ? mutations.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ClassMutations other = (ClassMutations) obj;
-        if (className == null) {
-            if (other.className != null)
-                return false;
-        } else if (!className.equals(other.className))
-            return false;
-        if (mutations == null) {
-            if (other.mutations != null)
-                return false;
-        } else if (!mutations.equals(other.mutations))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ClassMutations [className=" + className + ", mutations=" + mutations + "]";
+        return "ClassMutations{" +
+                "className='" + className + '\'' +
+                ", mutations=" + mutations +
+                '}';
     }
 
     @Override

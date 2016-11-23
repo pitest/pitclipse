@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.pitrunner.results.mutations;
 
-import java.math.BigInteger;
-
 import org.pitest.functional.SideEffect1;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
@@ -12,6 +10,8 @@ import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.Mutations.Mutation;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.math.BigInteger;
 
 public class PitclipseMutationsResultListener implements MutationResultListener {
 
@@ -48,32 +48,32 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
             mutation.setDetected(result.getStatus().isDetected());
             mutation.setDescription(details.getDescription());
 
-            this.mutations = ImmutableList.<Mutation> builder().addAll(mutations).add(mutation).build();
+            this.mutations = ImmutableList.<Mutation>builder().addAll(mutations).add(mutation).build();
         }
 
     }
 
     private DetectionStatus convert(org.pitest.mutationtest.DetectionStatus status) {
         switch (status) {
-        case KILLED:
-            return DetectionStatus.KILLED;
-        case MEMORY_ERROR:
-            return DetectionStatus.MEMORY_ERROR;
-        case NON_VIABLE:
-            return DetectionStatus.NON_VIABLE;
-        case NOT_STARTED:
-            return DetectionStatus.NOT_STARTED;
-        case RUN_ERROR:
-            return DetectionStatus.RUN_ERROR;
-        case STARTED:
-            return DetectionStatus.STARTED;
-        case SURVIVED:
-            return DetectionStatus.SURVIVED;
-        case TIMED_OUT:
-            return DetectionStatus.TIMED_OUT;
-        case NO_COVERAGE:
-        default:
-            return DetectionStatus.NO_COVERAGE;
+            case KILLED:
+                return DetectionStatus.KILLED;
+            case MEMORY_ERROR:
+                return DetectionStatus.MEMORY_ERROR;
+            case NON_VIABLE:
+                return DetectionStatus.NON_VIABLE;
+            case NOT_STARTED:
+                return DetectionStatus.NOT_STARTED;
+            case RUN_ERROR:
+                return DetectionStatus.RUN_ERROR;
+            case STARTED:
+                return DetectionStatus.STARTED;
+            case SURVIVED:
+                return DetectionStatus.SURVIVED;
+            case TIMED_OUT:
+                return DetectionStatus.TIMED_OUT;
+            case NO_COVERAGE:
+            default:
+                return DetectionStatus.NO_COVERAGE;
         }
     }
 

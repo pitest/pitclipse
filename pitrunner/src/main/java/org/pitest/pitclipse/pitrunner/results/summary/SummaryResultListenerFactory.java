@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
-import java.util.Properties;
-
 import org.pitest.mutationtest.ListenerArguments;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.MutationResultListenerFactory;
 import org.pitest.pitclipse.pitrunner.results.Dispatcher;
+
+import java.util.Properties;
 
 public class SummaryResultListenerFactory implements MutationResultListenerFactory {
     @Override

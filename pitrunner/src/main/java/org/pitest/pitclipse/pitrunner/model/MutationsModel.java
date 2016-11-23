@@ -1,23 +1,23 @@
 package org.pitest.pitclipse.pitrunner.model;
 
+import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+
+import java.util.Comparator;
+import java.util.List;
+
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NO_COVERAGE;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NO_COVERAGE;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.SURVIVED;
 import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
 import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
-
-import java.util.Comparator;
-import java.util.List;
-
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
 public class MutationsModel implements Visitable, Countable {
 
@@ -33,7 +33,7 @@ public class MutationsModel implements Visitable, Countable {
         }
     }
 
-    public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<Status> of());
+    public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<Status>of());
 
     private final ImmutableList<Status> statuses;
 
@@ -61,33 +61,29 @@ public class MutationsModel implements Visitable, Countable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((statuses == null) ? 0 : statuses.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        MutationsModel that = (MutationsModel) o;
+
+        return statuses != null ? statuses.equals(that.statuses) : that.statuses == null;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        MutationsModel other = (MutationsModel) obj;
-        if (statuses == null) {
-            if (other.statuses != null)
-                return false;
-        } else if (!statuses.equals(other.statuses))
-            return false;
-        return true;
+    public int hashCode() {
+        return statuses != null ? statuses.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "MutationsModel [statuses=" + statuses + "]";
+        return "MutationsModel{" +
+                "statuses=" + statuses +
+                '}';
     }
 
     @Override

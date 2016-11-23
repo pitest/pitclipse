@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.pitrunner;
 
-import java.io.File;
-import java.util.List;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 import org.pitest.pitclipse.reloc.guava.collect.Lists;
+
+import java.io.File;
+import java.util.List;
 
 public class PitCliArguments {
 
@@ -15,10 +15,10 @@ public class PitCliArguments {
     }
 
     public static String[] from(PitOptions options) {
-        return instance.toCLIArgs(options);
+        return instance.toCliArgs(options);
     }
 
-    private String[] toCLIArgs(PitOptions options) {
+    private String[] toCliArgs(PitOptions options) {
         Builder<String> builder = ImmutableList.builder();
         int threads = options.getThreads();
         File reportDir = options.getReportDirectory();

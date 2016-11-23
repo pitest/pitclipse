@@ -23,7 +23,7 @@ public class PitRunnerTest {
     @Test
     public void runPIT() {
         PitRequest request = PitRequest.builder().withPitOptions(options()).withProjects(PROJECTS).build();
-        PitResults results = runner.runPIT(request);
+        PitResults results = runner.runPit(request);
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
         assertThat(results.getMutations(), is(notNullValue()));

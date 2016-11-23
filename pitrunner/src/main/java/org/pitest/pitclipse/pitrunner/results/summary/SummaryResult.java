@@ -16,13 +16,15 @@ public class SummaryResult implements Serializable {
         this(ImmutableList.<ClassSummary>of());
     }
 
-    private SummaryResult(ImmutableList<ClassSummary> summaries) { this.summaries = summaries;    }
+    private SummaryResult(ImmutableList<ClassSummary> summaries) {
+        this.summaries = summaries;
+    }
 
     public SummaryResult update(ClassSummary classSummary) {
-        Builder<ClassSummary> b = ImmutableList.builder();
-        b.addAll(getSummaries());
-        b.add(classSummary);
-        return new SummaryResult(b.build());
+        Builder<ClassSummary> builder = ImmutableList.builder();
+        builder.addAll(getSummaries());
+        builder.add(classSummary);
+        return new SummaryResult(builder.build());
     }
 
     @Override

@@ -1,13 +1,5 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.filterKeys;
-import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.transformValues;
-
-import java.util.Collection;
-import java.util.List;
-
 import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
@@ -17,6 +9,14 @@ import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Multimap;
 import org.pitest.pitclipse.reloc.guava.collect.Multimaps;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.filterKeys;
+import static org.pitest.pitclipse.reloc.guava.collect.Multimaps.transformValues;
 
 public class ModelBuilder {
 
@@ -44,8 +44,9 @@ public class ModelBuilder {
                 ImmutableList.Builder<ProjectMutations> projectMutations = ImmutableList.builder();
                 for (String project : projects) {
                     ProjectMutations projectMutation = buildProjectMutation(project, mutationsForStatus);
-                    if (!projectMutation.getPackageMutations().isEmpty())
+                    if (!projectMutation.getPackageMutations().isEmpty()) {
                         projectMutations.add(projectMutation);
+                    }
                 }
                 builder.add(Status.builder().withDetectionStatus(status).withProjectMutations(projectMutations.build())
                         .build());
@@ -70,9 +71,8 @@ public class ModelBuilder {
     private ProjectMutations buildProjectMutation(String project,
             List<org.pitest.pitclipse.pitrunner.results.Mutations.Mutation> mutations) {
         List<PackageMutations> packages = buildPackageMutationsFor(project, mutations);
-        ProjectMutations projectMutations = ProjectMutations.builder().withProjectName(project)
+        return ProjectMutations.builder().withProjectName(project)
                 .withPackageMutations(packages).build();
-        return projectMutations;
     }
 
     private List<PackageMutations> buildPackageMutationsFor(String project,
@@ -118,12 +118,11 @@ public class ModelBuilder {
                 new Function<org.pitest.pitclipse.pitrunner.results.Mutations.Mutation, Mutation>() {
                     @Override
                     public Mutation apply(org.pitest.pitclipse.pitrunner.results.Mutations.Mutation dtoMutation) {
-                        Mutation mutation = Mutation.builder().withKillingTest(dtoMutation.getKillingTest())
+                        return Mutation.builder().withKillingTest(dtoMutation.getKillingTest())
                                 .withLineNumber(dtoMutation.getLineNumber().intValue())
                                 .withMutatedMethod(dtoMutation.getMutatedMethod())
                                 .withMutator(dtoMutation.getMutator()).withStatus(dtoMutation.getStatus())
                                 .withDescription(dtoMutation.getDescription()).build();
-                        return mutation;
                     }
                 });
         return classMutationsFrom(transformedMutations);
