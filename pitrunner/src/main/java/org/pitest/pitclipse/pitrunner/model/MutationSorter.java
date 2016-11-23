@@ -10,12 +10,12 @@ public enum MutationSorter implements Comparator<Mutation> {
 
     @Override
     public int compare(Mutation lhs, Mutation rhs) {
-        if (lhs.getLineNumber() < rhs.getLineNumber())
+        if (lhs.getLineNumber() < rhs.getLineNumber()) {
             return LESS_THAN;
-        else if (lhs.getLineNumber() > rhs.getLineNumber())
+        } else if (lhs.getLineNumber() > rhs.getLineNumber()) {
             return GREATER_THAN;
-        else
+        } else {
             return lhs.getMutator().compareTo(rhs.getMutator());
+        }
     }
-
 }

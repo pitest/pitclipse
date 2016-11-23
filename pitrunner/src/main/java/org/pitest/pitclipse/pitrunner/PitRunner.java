@@ -1,16 +1,16 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static java.lang.Integer.valueOf;
-import static org.pitest.pitclipse.reloc.guava.base.Preconditions.checkArgument;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.pitrunner.client.PitClient;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.mutations.RecordingMutationsDispatcher;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.io.File;
+import java.io.IOException;
+
+import static java.lang.Integer.valueOf;
+import static org.pitest.pitclipse.reloc.guava.base.Preconditions.checkArgument;
 
 public class PitRunner {
 
@@ -23,7 +23,7 @@ public class PitRunner {
             System.out.println("Connected");
             PitRequest request = client.readRequest();
             System.out.println("Received request: " + request);
-            PitResults results = new PitRunner().runPIT(request);
+            PitResults results = new PitRunner().runPit(request);
             System.out.println("Sending results: " + results);
             client.sendResults(results);
         } finally {
@@ -37,7 +37,7 @@ public class PitRunner {
         }
     }
 
-    public PitResults runPIT(PitRequest request) {
+    public PitResults runPit(PitRequest request) {
         String[] cliArgs = PitCliArguments.from(request.getOptions());
         // EntryPoint e = new EntryPoint();
         // ReportOptions data = new ReportOptions();
@@ -59,10 +59,11 @@ public class PitRunner {
 
     private static ImmutableList<File> safeListFiles(File dir) {
         File[] files = dir.listFiles();
-        if (files != null)
+        if (files != null) {
             return ImmutableList.copyOf(files);
-        else
+        } else {
             return ImmutableList.of();
+        }
     }
 
     private static File findResultFile(File reportDir, String fileName) {

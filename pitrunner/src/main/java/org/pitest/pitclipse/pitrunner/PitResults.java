@@ -1,14 +1,14 @@
 package org.pitest.pitclipse.pitrunner;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.List;
-
 import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.pitrunner.results.Mutations;
 import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
 import org.pitest.pitclipse.pitrunner.results.summary.SummaryResult;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.List;
 
 public final class PitResults implements Serializable {
     private static final long serialVersionUID = 5457147591186148047L;

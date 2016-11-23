@@ -1,10 +1,10 @@
 package org.pitest.pitclipse.pitrunner.model;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
-
 import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+
+import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
 
 public class PackageMutations implements Visitable, Countable {
     private final String packageName;
@@ -86,39 +86,36 @@ public class PackageMutations implements Visitable, Countable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        PackageMutations that = (PackageMutations) o;
+
+        if (packageName != null ? !packageName.equals(that.packageName) : that.packageName != null) {
+            return false;
+        }
+        return classMutations != null ? classMutations.equals(that.classMutations) : that.classMutations == null;
+
+    }
+
+    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((classMutations == null) ? 0 : classMutations.hashCode());
-        result = prime * result + ((packageName == null) ? 0 : packageName.hashCode());
+        int result = packageName != null ? packageName.hashCode() : 0;
+        result = 31 * result + (classMutations != null ? classMutations.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PackageMutations other = (PackageMutations) obj;
-        if (classMutations == null) {
-            if (other.classMutations != null)
-                return false;
-        } else if (!classMutations.equals(other.classMutations))
-            return false;
-        if (packageName == null) {
-            if (other.packageName != null)
-                return false;
-        } else if (!packageName.equals(other.packageName))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "PackageMutations [packageName=" + packageName + ", classMutations=" + classMutations + "]";
+        return "PackageMutations{" +
+                "packageName='" + packageName + '\'' +
+                ", classMutations=" + classMutations +
+                '}';
     }
 
     @Override

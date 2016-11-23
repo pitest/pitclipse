@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Mutations implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     protected List<Mutations.Mutation> mutation;
 
     public List<Mutations.Mutation> getMutation() {
@@ -19,7 +19,7 @@ public class Mutations implements Serializable {
 
     public static class Mutation implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         protected String sourceFile;
         protected String mutatedClass;
         protected String mutatedMethod;

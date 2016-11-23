@@ -118,50 +118,55 @@ public class Mutation implements Visitable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Mutation mutation = (Mutation) o;
+
+        if (lineNumber != mutation.lineNumber) {
+            return false;
+        }
+        if (killingTest != null ? !killingTest.equals(mutation.killingTest) : mutation.killingTest != null) {
+            return false;
+        }
+        if (mutatedMethod != null ? !mutatedMethod.equals(mutation.mutatedMethod) : mutation.mutatedMethod != null) {
+            return false;
+        }
+        if (mutator != null ? !mutator.equals(mutation.mutator) : mutation.mutator != null) {
+            return false;
+        }
+        if (status != mutation.status) {
+            return false;
+        }
+        return description != null ? description.equals(mutation.description) : mutation.description == null;
+
+    }
+
+    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((killingTest == null) ? 0 : killingTest.hashCode());
-        result = prime * result + lineNumber;
-        result = prime * result + ((mutatedMethod == null) ? 0 : mutatedMethod.hashCode());
-        result = prime * result + ((mutator == null) ? 0 : mutator.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
+        int result = killingTest != null ? killingTest.hashCode() : 0;
+        result = 31 * result + lineNumber;
+        result = 31 * result + (mutatedMethod != null ? mutatedMethod.hashCode() : 0);
+        result = 31 * result + (mutator != null ? mutator.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Mutation other = (Mutation) obj;
-        if (killingTest == null) {
-            if (other.killingTest != null)
-                return false;
-        } else if (!killingTest.equals(other.killingTest))
-            return false;
-        if (lineNumber != other.lineNumber)
-            return false;
-        if (mutatedMethod == null) {
-            if (other.mutatedMethod != null)
-                return false;
-        } else if (!mutatedMethod.equals(other.mutatedMethod))
-            return false;
-        if (mutator == null) {
-            if (other.mutator != null)
-                return false;
-        } else if (!mutator.equals(other.mutator))
-            return false;
-        return status == other.status;
-    }
-
-    @Override
     public String toString() {
-        return "Mutation [killingTest=" + killingTest + ", lineNumber=" + lineNumber + ", mutatedMethod="
-                + mutatedMethod + ", mutator=" + mutator + ", status=" + status + "]";
+        return "Mutation{" +
+                "killingTest='" + killingTest + '\'' +
+                ", lineNumber=" + lineNumber +
+                ", mutatedMethod='" + mutatedMethod + '\'' +
+                ", mutator='" + mutator + '\'' +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                '}';
     }
-
 }

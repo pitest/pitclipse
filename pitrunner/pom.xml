@@ -24,6 +24,7 @@
     <pitest.version>1.1.9</pitest.version>
     <tycho.version>0.15.0</tycho.version>
     <commons.version>3.1</commons.version>
+    <checkstyle.version>2.15</checkstyle.version>
   </properties>
   <dependencies>
     <dependency>
@@ -100,6 +101,26 @@
           </instructions>
         </configuration>
       </plugin>
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-checkstyle-plugin</artifactId>
+         <version>${checkstyle.version}</version>
+         <executions>
+           <execution>
+             <id>validate</id>
+             <phase>validate</phase>
+             <configuration>
+               <configLocation>../checkstyle.xml</configLocation>
+               <encoding>UTF-8</encoding>
+               <consoleOutput>true</consoleOutput>
+               <failsOnError>true</failsOnError>
+             </configuration>
+             <goals>
+               <goal>check</goal>
+             </goals>
+           </execution>
+         </executions>
+       </plugin>
     </plugins>
     <pluginManagement>
       <plugins>

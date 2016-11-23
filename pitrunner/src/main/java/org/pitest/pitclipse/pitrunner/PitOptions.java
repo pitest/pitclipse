@@ -1,10 +1,7 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
+import org.pitest.pitclipse.reloc.guava.base.Splitter;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +9,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
+import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
 
 public final class PitOptions implements Serializable {
 
@@ -279,10 +279,10 @@ public final class PitOptions implements Serializable {
 
     @Override
     public String toString() {
-        return "PitOptions [reportDir=" + reportDir + ", classUnderTest=" + classUnderTest + ", classesToMutate="
-                + classesToMutate + ", sourceDirs=" + sourceDirs + ", packages=" + packages + ", threads=" + threads
-                + ", historyLocation=" + historyLocation + ", excludedClasses=" + excludedClasses
-                + ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + ", mutators=" + mutators
-                + ", timeoutConst=" + timeout + ", timeoutFactor=" + timeoutFactor + "]";
+        return "PitOptions [reportDir=" + reportDir + ", classUnderTest=" + classUnderTest + ", classesToMutate=" +
+                classesToMutate + ", sourceDirs=" + sourceDirs + ", packages=" + packages + ", threads=" + threads +
+                ", historyLocation=" + historyLocation + ", excludedClasses=" + excludedClasses +
+                ", excludedMethods=" + excludedMethods + ", avoidCallsTo=" + avoidCallsTo + ", mutators=" + mutators +
+                ", timeoutConst=" + timeout + ", timeoutFactor=" + timeoutFactor + "]";
     }
 }

@@ -1,12 +1,12 @@
 package org.pitest.pitclipse.pitrunner.io;
 
+import org.pitest.pitclipse.reloc.guava.annotations.VisibleForTesting;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-import org.pitest.pitclipse.reloc.guava.annotations.VisibleForTesting;
 
 public class ObjectStreamSocket implements Closeable {
 
@@ -83,7 +83,7 @@ public class ObjectStreamSocket implements Closeable {
         underlyingSocket.close();
     }
 
-    public static final class StreamInitialisationException extends RuntimeException {
+    private static final class StreamInitialisationException extends RuntimeException {
         private static final long serialVersionUID = 489374857284580542L;
 
         public StreamInitialisationException(IOException e) {
@@ -92,7 +92,7 @@ public class ObjectStreamSocket implements Closeable {
 
     }
 
-    public static final class ReadException extends RuntimeException {
+    private static final class ReadException extends RuntimeException {
         private static final long serialVersionUID = -7217167622171380199L;
 
         public ReadException(Exception e) {
@@ -100,7 +100,7 @@ public class ObjectStreamSocket implements Closeable {
         }
     }
 
-    public static final class WriteException extends RuntimeException {
+    private static final class WriteException extends RuntimeException {
         private static final long serialVersionUID = -7517131322531593708L;
 
         public WriteException(Exception e) {
