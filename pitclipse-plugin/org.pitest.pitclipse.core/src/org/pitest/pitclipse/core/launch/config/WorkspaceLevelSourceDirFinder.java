@@ -1,23 +1,22 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
@@ -50,9 +49,9 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
     }
 
     private URI getProjectLocation(IProject project) throws CoreException {
-        URI locationURI = project.getDescription().getLocationURI();
-        if (null != locationURI) {
-            return locationURI;
+        URI locationUri = project.getDescription().getLocationURI();
+        if (null != locationUri) {
+            return locationUri;
         }
         // We're using the default location under workspace
         File projLocation = new File(project.getLocation().toOSString());

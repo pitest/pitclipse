@@ -1,15 +1,14 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.util.List;
 
 public class ProjectUtils {
 

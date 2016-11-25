@@ -1,9 +1,9 @@
 package org.pitest.pitclipse.core.launch.config;
 
+import org.eclipse.core.runtime.CoreException;
+
 import java.io.File;
 import java.util.List;
-
-import org.eclipse.core.runtime.CoreException;
 
 public interface SourceDirFinder {
     List<File> getSourceDirs(

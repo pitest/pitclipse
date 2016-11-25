@@ -1,10 +1,5 @@
 package org.pitest.pitclipse.core.launch;
 
-import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
-import static org.pitest.pitclipse.core.PitCoreActivator.log;
-
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,8 +18,12 @@ import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.pitrunner.PitRunner;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.util.List;
+
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
 public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
@@ -48,7 +47,7 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     @Override
     public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
-        List<String> newClasspath = ImmutableList.<String> builder()
+        List<String> newClasspath = ImmutableList.<String>builder()
                 .addAll(ImmutableList.copyOf(super.getClasspath(launchConfig))).addAll(getDefault().getPitClasspath())
                 .build();
         log("Classpath: " + newClasspath);

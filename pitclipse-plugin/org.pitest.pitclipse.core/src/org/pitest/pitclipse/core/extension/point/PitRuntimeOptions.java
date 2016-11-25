@@ -1,10 +1,9 @@
 package org.pitest.pitclipse.core.extension.point;
 
-import java.util.List;
-
 import org.pitest.pitclipse.pitrunner.PitOptions;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.util.List;
 
 public class PitRuntimeOptions {
 

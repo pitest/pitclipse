@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.core.preferences;
 
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
-
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -10,6 +8,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+
+import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.values;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -97,8 +97,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
         for (int i = 0; i < values.length; i++) {
             executionModeValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
         }
-        addField(new RadioGroupFieldEditor(PIT_EXECUTION_MODE, "Pit execution scope", 1, executionModeValues,
-                getFieldEditorParent()));
+        addField(new RadioGroupFieldEditor(PIT_EXECUTION_MODE, "Pit execution scope", 1, executionModeValues, getFieldEditorParent()));
     }
 
     /*
@@ -109,6 +108,6 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
      */
     @Override
     public void init(IWorkbench workbench) {
-    	// Not implemented - not special initialising needed
+        // Not implemented - not special initialising needed
     }
 }
