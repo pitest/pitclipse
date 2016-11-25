@@ -28,6 +28,7 @@
     <pitest.version>1.1.9</pitest.version>
     <pitrunner.version>${project.version}</pitrunner.version>
     <tycho.version>0.22.0</tycho.version>
+    <checkstyle.version>2.15</checkstyle.version>
   </properties>
   <repositories>
     <repository>
@@ -90,6 +91,26 @@
         <artifactId>tycho-versions-plugin</artifactId>
         <version>${tycho.version}</version>
       </plugin>
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-checkstyle-plugin</artifactId>
+         <version>${checkstyle.version}</version>
+         <executions>
+           <execution>
+             <id>validate</id>
+             <phase>validate</phase>
+             <configuration>
+               <configLocation>../checkstyle.xml</configLocation>
+               <encoding>UTF-8</encoding>
+               <consoleOutput>true</consoleOutput>
+               <failsOnError>true</failsOnError>
+             </configuration>
+             <goals>
+               <goal>check</goal>
+             </goals>
+           </execution>
+         </executions>
+       </plugin>
     </plugins>
   </build>
   <profiles>

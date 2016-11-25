@@ -1,11 +1,10 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
-
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.util.List;
 
 public class ProjectLevelProjectFinder implements ProjectFinder {
 

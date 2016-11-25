@@ -1,13 +1,5 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
-
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -20,11 +12,19 @@ import org.eclipse.jdt.core.JavaCore;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
-import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
+import org.pitest.pitclipse.pitrunner.PitOptions;
 import org.pitest.pitclipse.reloc.guava.base.Splitter;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 public class LaunchConfigurationWrapper {
 

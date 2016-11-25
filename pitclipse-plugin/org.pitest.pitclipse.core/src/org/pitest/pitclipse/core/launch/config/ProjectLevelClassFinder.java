@@ -1,11 +1,5 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.builder;
-
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -16,6 +10,12 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.builder;
 
 public class ProjectLevelClassFinder implements ClassFinder {
 

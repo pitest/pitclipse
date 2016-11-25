@@ -1,16 +1,15 @@
 package org.pitest.pitclipse.core.launch.config;
 
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaProject;
-
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
+import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
 
 public class WorkspaceLevelProjectFinder implements ProjectFinder {
     @Override

@@ -1,13 +1,13 @@
 package org.pitest.pitclipse.core.extension.handler;
 
-import static org.pitest.pitclipse.core.PitCoreActivator.warn;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.SafeRunner;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
+
+import static org.pitest.pitclipse.core.PitCoreActivator.warn;
 
 public class ExtensionPointHandler<T> {
     private final String extensionPointId;
@@ -24,10 +24,10 @@ public class ExtensionPointHandler<T> {
         IConfigurationElement[] config = registry.getConfigurationElementsFor(extensionPointId);
         try {
             for (IConfigurationElement e : config) {
-                Object o = e.createExecutableExtension("class");
-                if (o instanceof ResultNotifier) {
+                Object obj = e.createExecutableExtension("class");
+                if (obj instanceof ResultNotifier) {
                     @SuppressWarnings("unchecked")
-                    final ResultNotifier<U> notifier = (ResultNotifier<U>) o;
+                    final ResultNotifier<U> notifier = (ResultNotifier<U>) obj;
                     executeExtension(new NotifierRunnable<U>(notifier, results));
                 }
             }

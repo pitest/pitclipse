@@ -1,13 +1,13 @@
 package org.pitest.pitclipse.core.launch;
 
-import static org.eclipse.debug.core.ILaunchManager.RUN_MODE;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 import org.pitest.pitclipse.pitrunner.config.PitExecutionModeVisitor;
+
+import static org.eclipse.debug.core.ILaunchManager.RUN_MODE;
 
 public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 

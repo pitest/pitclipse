@@ -1,5 +1,9 @@
 package org.pitest.pitclipse.core.preferences;
 
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.pitest.pitclipse.core.PitCoreActivator;
+
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
@@ -10,10 +14,6 @@ import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVO
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_TIMEOUT;
 import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_TIMEOUT_FACTOR;
-
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.pitest.pitclipse.core.PitCoreActivator;
 
 /**
  * Class used to initialize default preference values.

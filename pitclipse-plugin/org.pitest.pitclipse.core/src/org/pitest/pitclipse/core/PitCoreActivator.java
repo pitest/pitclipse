@@ -1,5 +1,24 @@
 package org.pitest.pitclipse.core;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
+import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage.PIT_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
@@ -14,25 +33,6 @@ import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
 import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
-
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -60,7 +60,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
         return pitClasspath;
     }
 
-    private void setPITClasspath(List<String> classpath) {
+    private void setPitClasspath(List<String> classpath) {
         pitClasspath = copyOf(classpath);
     }
 
@@ -84,7 +84,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
         builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
         builder.add(getBundleFile(Platform.getBundle("org.pitest.pitrunner")).getCanonicalPath());
         builder.add(getBundleFile(Platform.getBundle("org.pitest.guava-shade-osgi")).getCanonicalPath());
-        setPITClasspath(builder.build());
+        setPitClasspath(builder.build());
     }
 
     private void setupStateDirectories() {
@@ -135,7 +135,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
                                                                 // class defines
                                                                 // signature
         List<String> emptyPath = of();
-        setPITClasspath(emptyPath);
+        setPitClasspath(emptyPath);
         setActivator(null);
         super.stop(context);
     }
@@ -165,16 +165,16 @@ public class PitCoreActivator extends AbstractUIPlugin {
         log(Status.INFO, msg, null);
     }
 
+    private static void log(int status, String msg, Throwable t) {
+        getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, t));
+    }
+    
     public static void warn(String msg) {
         warn(msg, null);
     }
 
     public static void warn(String msg, Throwable t) {
         log(Status.WARNING, msg, t);
-    }
-
-    private static void log(int status, String msg, Throwable t) {
-        getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, t));
     }
 
     public static Shell getActiveWorkbenchShell() {
@@ -239,6 +239,7 @@ public class PitCoreActivator extends AbstractUIPlugin {
             builder.withTimeout(Integer.valueOf(timeout));
             builder.withTimeoutFactor(new BigDecimal(timeoutFactor));
         } catch (NumberFormatException ignoreMe) {
+            // defaults will be used
         }
 
         for (PitExecutionMode pitExecutionMode : PitExecutionMode.values()) {

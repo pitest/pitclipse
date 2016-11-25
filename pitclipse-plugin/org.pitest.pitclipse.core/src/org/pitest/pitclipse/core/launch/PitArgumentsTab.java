@@ -1,19 +1,5 @@
 package org.pitest.pitclipse.core.launch;
 
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.USE_INCREMENTAL_ANALYSIS;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -36,6 +22,20 @@ import org.eclipse.swt.widgets.Text;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
 
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
+import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_METHODS_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferencePage.USE_INCREMENTAL_ANALYSIS;
+
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
     private static final int NUMBER_OF_COLUMNS = 3;
@@ -53,20 +53,16 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private Text avoidCallsTo;
 
     public void initializeFrom(ILaunchConfiguration config) {
-        projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME,
-                ""));
-        String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME,
-                "");
+        projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
+        String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME, "");
         containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
         testClassText.setText(testClass);
         if (testClass.length() == 0 && containerId.length() > 0) {
             testClassText.setText("");
             IJavaElement containerElement = JavaCore.create(containerId);
-            testDirText.setText(new JavaElementLabelProvider()
-                    .getText(containerElement));
+            testDirText.setText(new JavaElementLabelProvider().getText(containerElement));
             testClassRadioButton.setSelection(false);
             testDirectoryRadioButton.setSelection(true);
-
         } else {
             testClassText.setText(testClass);
             testDirText.setText("");
@@ -75,7 +71,6 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         }
         initialiseWithPreferenceDefaults(config);
         testModeChanged();
-
     }
 
     private void initialiseWithPreferenceDefaults(ILaunchConfiguration config) {
@@ -98,13 +93,14 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void createControl(Composite parent) {
-        Font font = parent.getFont();
         Composite comp = new Composite(parent, SWT.NONE);
         setControl(comp);
         GridLayout topLayout = new GridLayout();
         topLayout.verticalSpacing = 0;
         topLayout.numColumns = NUMBER_OF_COLUMNS;
         comp.setLayout(topLayout);
+
+        Font font = parent.getFont();
         comp.setFont(font);
 
         createSpacer(comp);

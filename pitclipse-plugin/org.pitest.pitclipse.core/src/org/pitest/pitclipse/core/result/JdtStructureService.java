@@ -41,8 +41,9 @@ public enum JdtStructureService implements ProjectStructureService {
     private IJavaProject javaProject(String projectName) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         for (IProject project : root.getProjects()) {
-            if (projectName.equals(project.getName()) && project.isOpen())
+            if (projectName.equals(project.getName()) && project.isOpen()) {
                 return JavaCore.create(project);
+            }
         }
         throw new ProjectNotFoundException(projectName);
     }
