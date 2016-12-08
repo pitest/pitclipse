@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
+import org.pitest.pitclipse.reloc.guava.base.Objects;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -40,23 +42,15 @@ class Coverage implements Serializable {
             return false;
         }
 
-        Coverage coverage1 = (Coverage) o;
+        Coverage rhs = (Coverage) o;
 
-        if (covered != coverage1.covered) {
-            return false;
-        }
-        if (total != coverage1.total) {
-            return false;
-        }
-        return coverage != null ? coverage.equals(coverage1.coverage) : coverage1.coverage == null;
+        return Objects.equal(this.covered, rhs.covered) &&
+                Objects.equal(this.total, rhs.total);
     }
 
     @Override
     public int hashCode() {
-        int result = covered;
-        result = 31 * result + total;
-        result = 31 * result + (coverage != null ? coverage.hashCode() : 0);
-        return result;
+        return Objects.hashCode(this.covered, this.total);
     }
 
     @Override

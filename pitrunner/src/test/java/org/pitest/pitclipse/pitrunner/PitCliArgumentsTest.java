@@ -1,16 +1,5 @@
 package org.pitest.pitclipse.pitrunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
@@ -19,6 +8,16 @@ import org.pitest.pitclipse.reloc.guava.base.Splitter;
 import org.pitest.pitclipse.reloc.guava.collect.Collections2;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 public class PitCliArgumentsTest {
 
@@ -63,7 +62,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void minimumOptionsSet() throws IOException {
+    public void minimumOptionsSet() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
         whenArgumentsAreMadeFrom(options);
@@ -83,7 +82,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void multipleSourceDirectoriesExist() throws IOException {
+    public void multipleSourceDirectoriesExist() {
         List<File> srcDirs = ImmutableList.of(testSrcDir, anotherTestSrcDir);
         PitOptions options = PitOptions.builder().withSourceDirectories(srcDirs).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
@@ -94,7 +93,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void differentNumberOfThreads() throws IOException {
+    public void differentNumberOfThreads() {
         int nonStandardThreadCount = 123456;
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withThreads(nonStandardThreadCount)
@@ -117,7 +116,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void excludedClassesSet() throws IOException {
+    public void excludedClassesSet() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withExcludedClasses(EXCLUDED_CLASSES)
                 .withMutators(MUTATORS).build();
@@ -128,7 +127,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void excludedClassesAndMethodsSet() throws IOException {
+    public void excludedClassesAndMethodsSet() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withExcludedClasses(EXCLUDED_CLASSES)
                 .withMutators(MUTATORS).withExcludedMethods(EXCLUDED_METHODS).build();
@@ -139,7 +138,7 @@ public class PitCliArgumentsTest {
     }
 
     @Test
-    public void alternativeAvoidListUsed() throws IOException {
+    public void alternativeAvoidListUsed() {
         List<String> alternativeAvoidList = ImmutableList.of("org.springframework");
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withAvoidCallsTo(alternativeAvoidList)
@@ -161,7 +160,8 @@ public class PitCliArgumentsTest {
                 .withClassUnderTest(testClass).withTargetClasses(classesToMutate)
                 .withSourceDirectories(filesAsStrings(testSrcDirs)).withHistoryLocation(historyFile)
                 .withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods).withMutators(MUTATORS)
-                .withAvoidCallsTo(avoidCallsTo).withMutators(mutators).build();
+                .withAvoidCallsTo(avoidCallsTo).withMutators(mutators).withTimeout(timeout).withTimeoutFactor(timeoutFactor)
+                .build();
         assertThat(actualCliArgs, is(equalTo(expectedCliArgs)));
     }
 
@@ -177,7 +177,7 @@ public class PitCliArgumentsTest {
     private static final class ExpectedArgsBuilder {
 
         private static final ImmutableList<String> DEFAULT_PIT_ARGS = ImmutableList.of("--failWhenNoMutations",
-                "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS", "--verbose");
+                "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY", "--verbose");
         private File reportDir;
         private int threadCount = DEFAULT_NUMBER_OF_THREADS;
         private String classUnderTest;
@@ -188,8 +188,8 @@ public class PitCliArgumentsTest {
         private List<String> excludedMethods = NO_EXCLUDED_METHODS;
         private List<String> avoidCallsTo = DEFAULT_AVOID_LIST;
         private List<String> mutators = MUTATORS;
-        private final int timeout = DEFAULT_TIMEOUT;
-        private final BigDecimal timeoutFactor = DEFAULT_TIMEOUT_FACTOR;
+        private int timeout = DEFAULT_TIMEOUT;
+        private BigDecimal timeoutFactor = DEFAULT_TIMEOUT_FACTOR;
 
         public String[] build() {
             Builder<String> resultBuilder = ImmutableList.builder();
@@ -245,20 +245,32 @@ public class PitCliArgumentsTest {
             return this;
         }
 
+        public ExpectedArgsBuilder withTimeout(int timeout) {
+            this.timeout = timeout;
+            return this;
+        }
+
+        public ExpectedArgsBuilder withTimeoutFactor(BigDecimal timeoutFactor) {
+            if (null != timeoutFactor) {
+                this.timeoutFactor = timeoutFactor;
+            }
+            return this;
+        }
+
         private List<String> addIfKnown(String param, List<String> someCollection) {
             if (null == someCollection || someCollection.isEmpty()) {
                 return ImmutableList.of();
             }
-            String result = "";
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < someCollection.size(); i++) {
                 String value = someCollection.get(i);
                 if (i == someCollection.size() - 1) {
-                    result += value;
+                    result.append(value);
                 } else {
-                    result += value + ",";
+                    result.append(value).append(",");
                 }
             }
-            return ImmutableList.of(param, result);
+            return ImmutableList.of(param, result.toString());
         }
 
         private List<String> addIfKnown(String param, String someValue) {

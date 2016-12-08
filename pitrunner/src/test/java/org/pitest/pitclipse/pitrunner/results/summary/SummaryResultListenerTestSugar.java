@@ -1,21 +1,10 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.pitest.pitclipse.pitrunner.results.MutationResultListenerLifecycle.using;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.pitrunner.results.ListenerContext;
 import org.pitest.pitclipse.pitrunner.results.ListenerFactory;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
@@ -45,56 +34,6 @@ class SummaryResultListenerTestSugar {
         }
     }
 
-    static class SetupState {
-
-        private final ImmutableList<ClassMutationResults> results;
-        private final CoverageDatabase coverageDatabase;
-
-        public SetupState(CoverageDatabase coverageDatabase, ImmutableList<ClassMutationResults> results) {
-            this.coverageDatabase = coverageDatabase;
-            this.results = results;
-        }
-
-        public Verification whenPitIsExecuted() {
-            Optional<SummaryResult> result = using(SummaryListenerFactory.INSTANCE, coverageDatabase)
-                    .handleMutationResults(results);
-            return new Verification(result);
-        }
-    }
-
-    static class Verification {
-        private final Optional<SummaryResult> actualResult;
-
-        public Verification(Optional<SummaryResult> actualResult) {
-            this.actualResult = actualResult;
-        }
-
-        public void thenTheResultsAre(SummaryResult expectedResult) {
-            assertThat(actualResult.isPresent(), is(equalTo(true)));
-            assertThat(actualResult.get(), is(sameAs(expectedResult)));
-        }
-
-        private Matcher<SummaryResult> sameAs(final SummaryResult expected) {
-            return new TypeSafeDiagnosingMatcher<SummaryResult>() {
-
-                @Override
-                public void describeTo(Description description) {
-                    description.appendValue(reflectionToString(expected));
-                }
-
-                @Override
-                protected boolean matchesSafely(SummaryResult actual, Description mismatchDescription) {
-                    mismatchDescription.appendValue(reflectionToString(actual));
-                    return reflectionEquals(expected, actual);
-                }
-            };
-        }
-
-        public void thenTheResultsAre(SummaryResultWrapper wrapper) {
-            thenTheResultsAre(wrapper.getResult());
-        }
-    }
-
     static SummaryResult empty() {
         return SummaryResult.EMPTY;
     }
@@ -107,9 +46,9 @@ class SummaryResultListenerTestSugar {
             this.result = result;
         }
 
-        public SummaryResultWrapper withCoverageOf(String className, int lineCov, int mutationCov) {
-            Coverage lineCoverage = Coverage.from(lineCov, 100);
-            Coverage mutationCoverage = Coverage.from(mutationCov, 100);
+        public SummaryResultWrapper withCoverageOf(String className, int linesCovered, int totalLines, int mutationsCovered, int totalMutations) {
+            Coverage lineCoverage = Coverage.from(linesCovered, totalLines);
+            Coverage mutationCoverage = Coverage.from(mutationsCovered, totalMutations);
             ClassSummary classSummary = ClassSummary.from(className, lineCoverage, mutationCoverage);
             return new SummaryResultWrapper(result.update(classSummary));
         }

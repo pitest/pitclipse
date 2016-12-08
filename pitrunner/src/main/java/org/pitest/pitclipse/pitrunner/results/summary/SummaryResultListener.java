@@ -4,19 +4,11 @@ import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
-import org.pitest.mutationtest.MutationResult;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.pitrunner.results.Dispatcher;
-import org.pitest.pitclipse.reloc.guava.base.Predicate;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Collection;
 import java.util.List;
-
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
 
 public class SummaryResultListener implements MutationResultListener {
 
