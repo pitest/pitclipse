@@ -72,22 +72,24 @@ class SummaryResultListenerTestData {
 
     private static class CoverageTestData {
 
-        public static final CoverageTestData FOO_WITH_FULL_COVERAGE = new CoverageTestData(Foo.class, fooInfo(100));
-        public static final CoverageTestData FOO_WITH_NO_COVERAGE = new CoverageTestData(Foo.class, fooInfo(0));
+        public static final CoverageTestData FOO_WITH_FULL_COVERAGE = new CoverageTestData(Foo.class, fooInfo(1), 1);
+        public static final CoverageTestData FOO_WITH_NO_COVERAGE = new CoverageTestData(Foo.class, fooInfo(1), 0);
 
         public final ClassName className;
         public final ClassInfo classInfo;
+        public final int linesCovered;
         public final StubbedCoverage coverageDatabase;
 
-        private CoverageTestData(Class<?> clazz, ClassInfo classInfo) {
+        private CoverageTestData(Class<?> clazz, ClassInfo classInfo, int linesCovered) {
             this.className = ClassName.fromClass(clazz);
             this.classInfo = classInfo;
+            this.linesCovered = linesCovered;
             this.coverageDatabase = new StubbedCoverage(this);
         }
 
-        private static ClassInfo fooInfo(int lineCoverage) {
+        private static ClassInfo fooInfo(int totalLines) {
             ClassInfo info = mock(ClassInfo.class);
-            when(info.getNumberOfCodeLines()).thenReturn(lineCoverage);
+            when(info.getNumberOfCodeLines()).thenReturn(totalLines);
             return info;
         }
     }
@@ -100,7 +102,7 @@ class SummaryResultListenerTestData {
 
         private StubbedCoverage(CoverageTestData coverageTestData) {
             classInfo = ImmutableMap.of(coverageTestData.className, coverageTestData.classInfo);
-            classCoverage = ImmutableMap.of(coverageTestData.className, 100);
+            classCoverage = ImmutableMap.of(coverageTestData.className, coverageTestData.linesCovered);
         }
 
         private StubbedCoverage() {

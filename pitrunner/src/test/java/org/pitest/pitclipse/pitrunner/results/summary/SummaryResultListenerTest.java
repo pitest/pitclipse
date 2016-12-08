@@ -15,18 +15,29 @@ import org.pitest.pitclipse.example.Foo;
 public class SummaryResultListenerTest {
     @Test
     public void noResultsReturnsAnEmptyResult() {
-        given(anEmptyCoverageDatabase()).andNoMutations().whenPitIsExecuted().thenTheResultsAre(empty());
+        given(anEmptyCoverageDatabase())
+            .andNoMutations()
+            .whenPitIsExecuted()
+            .thenTheResultsAre(empty());
     }
 
     @Test
     public void anUncoveredMutationResultReturnsZeroLineCoverage() {
-        given(fooHasNoLineCoverage()).and(anUncoveredMutationOnFoo()).whenPitIsExecuted()
-                .thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 0, 0));
+        given(fooHasNoLineCoverage())
+            .and(anUncoveredMutationOnFoo())
+            .whenPitIsExecuted()
+            .thenTheResultsAre(
+                aSummary().withCoverageOf(Foo.class.getCanonicalName(), 0, 1, 0, 1)
+            );
     }
 
     @Test
     public void aCoveredMutationResultReturnsLineCoverage() {
-        given(fooHasFullLineCoverage()).and(aCoveredMutationOnFoo()).whenPitIsExecuted()
-                .thenTheResultsAre(aSummary().withCoverageOf(Foo.class.getCanonicalName(), 100, 100));
+        given(fooHasFullLineCoverage())
+            .and(aCoveredMutationOnFoo())
+            .whenPitIsExecuted()
+            .thenTheResultsAre(
+                aSummary().withCoverageOf(Foo.class.getCanonicalName(), 1, 1, 1, 1)
+            );
     }
 }
