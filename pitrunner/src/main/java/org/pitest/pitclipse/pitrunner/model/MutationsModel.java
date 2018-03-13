@@ -2,6 +2,8 @@ package org.pitest.pitclipse.pitrunner.model;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
@@ -68,22 +70,20 @@ public class MutationsModel implements Visitable, Countable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         MutationsModel that = (MutationsModel) o;
-
-        return statuses != null ? statuses.equals(that.statuses) : that.statuses == null;
+        return Objects.equal(statuses, that.statuses);
     }
 
     @Override
     public int hashCode() {
-        return statuses != null ? statuses.hashCode() : 0;
+        return Objects.hashCode(statuses);
     }
 
     @Override
     public String toString() {
-        return "MutationsModel{" +
-                "statuses=" + statuses +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("statuses", statuses)
+            .toString();
     }
 
     @Override

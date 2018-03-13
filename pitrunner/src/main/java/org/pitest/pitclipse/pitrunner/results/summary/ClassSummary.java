@@ -3,6 +3,8 @@ package org.pitest.pitclipse.pitrunner.results.summary;
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 import org.pitest.pitclipse.reloc.guava.base.Predicate;
 
 import java.io.Serializable;
@@ -54,31 +56,23 @@ class ClassSummary implements Serializable {
 
         ClassSummary that = (ClassSummary) o;
 
-        if (lineCoverage != null ? !lineCoverage.equals(that.lineCoverage) : that.lineCoverage != null) {
-            return false;
-        }
-        if (className != null ? !className.equals(that.className) : that.className != null) {
-            return false;
-        }
-        return mutationCoverage != null ? mutationCoverage.equals(that.mutationCoverage) : that.mutationCoverage == null;
-
+        return Objects.equal(className, that.className) &&
+            Objects.equal(lineCoverage, that.lineCoverage) &&
+            Objects.equal(mutationCoverage, that.mutationCoverage);
     }
 
     @Override
     public int hashCode() {
-        int result = lineCoverage != null ? lineCoverage.hashCode() : 0;
-        result = 31 * result + (className != null ? className.hashCode() : 0);
-        result = 31 * result + (mutationCoverage != null ? mutationCoverage.hashCode() : 0);
-        return result;
+        return Objects.hashCode(lineCoverage, className, mutationCoverage);
     }
 
     @Override
     public String toString() {
-        return "ClassSummary{" +
-                "lineCoverage=" + lineCoverage +
-                ", className='" + className + '\'' +
-                ", mutationCoverage=" + mutationCoverage +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("className", className)
+            .add("lineCoverage", lineCoverage)
+            .add("mutationCoverage", mutationCoverage)
+            .toString();
     }
 
     private enum DetectedMutations implements Predicate<MutationResult> {
