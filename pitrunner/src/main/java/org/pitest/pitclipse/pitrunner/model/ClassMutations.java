@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.pitrunner.model;
 
 import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
@@ -98,29 +100,22 @@ public class ClassMutations implements Visitable, Countable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         ClassMutations that = (ClassMutations) o;
-
-        if (className != null ? !className.equals(that.className) : that.className != null) {
-            return false;
-        }
-        return mutations != null ? mutations.equals(that.mutations) : that.mutations == null;
-
+        return Objects.equal(className, that.className) &&
+            Objects.equal(mutations, that.mutations);
     }
 
     @Override
     public int hashCode() {
-        int result = className != null ? className.hashCode() : 0;
-        result = 31 * result + (mutations != null ? mutations.hashCode() : 0);
-        return result;
+        return Objects.hashCode(className, mutations);
     }
 
     @Override
     public String toString() {
-        return "ClassMutations{" +
-                "className='" + className + '\'' +
-                ", mutations=" + mutations +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("className", className)
+            .add("mutations", mutations)
+            .toString();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.pitrunner.model;
 
 import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
@@ -93,29 +95,22 @@ public class PackageMutations implements Visitable, Countable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         PackageMutations that = (PackageMutations) o;
-
-        if (packageName != null ? !packageName.equals(that.packageName) : that.packageName != null) {
-            return false;
-        }
-        return classMutations != null ? classMutations.equals(that.classMutations) : that.classMutations == null;
-
+        return Objects.equal(packageName, that.packageName) &&
+            Objects.equal(classMutations, that.classMutations);
     }
 
     @Override
     public int hashCode() {
-        int result = packageName != null ? packageName.hashCode() : 0;
-        result = 31 * result + (classMutations != null ? classMutations.hashCode() : 0);
-        return result;
+        return Objects.hashCode(packageName, classMutations);
     }
 
     @Override
     public String toString() {
-        return "PackageMutations{" +
-                "packageName='" + packageName + '\'' +
-                ", classMutations=" + classMutations +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("packageName", packageName)
+            .add("classMutations", classMutations)
+            .toString();
     }
 
     @Override

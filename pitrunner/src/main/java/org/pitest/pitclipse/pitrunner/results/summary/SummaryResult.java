@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
@@ -29,7 +30,7 @@ public class SummaryResult implements Serializable {
 
     @Override
     public String toString() {
-        return "SummaryResult [summaries=" + getSummaries() + "]";
+        return MoreObjects.toStringHelper(this).add("summaries", summaries).toString();
     }
 
     public List<ClassSummary> getSummaries() {

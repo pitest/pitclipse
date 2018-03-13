@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.pitrunner.results.summary;
 
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
 import org.pitest.pitclipse.reloc.guava.base.Objects;
 
 import java.io.Serializable;
@@ -55,10 +56,10 @@ class Coverage implements Serializable {
 
     @Override
     public String toString() {
-        return "Coverage{" +
-                "covered=" + covered +
-                ", total=" + total +
-                ", coverage=" + coverage +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("covered", covered)
+            .add("total", total)
+            .add("coverage", coverage)
+            .toString();
     }
 }

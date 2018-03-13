@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.pitrunner.model;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 
 public class Mutation implements Visitable {
 
@@ -125,48 +127,29 @@ public class Mutation implements Visitable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         Mutation mutation = (Mutation) o;
-
-        if (lineNumber != mutation.lineNumber) {
-            return false;
-        }
-        if (killingTest != null ? !killingTest.equals(mutation.killingTest) : mutation.killingTest != null) {
-            return false;
-        }
-        if (mutatedMethod != null ? !mutatedMethod.equals(mutation.mutatedMethod) : mutation.mutatedMethod != null) {
-            return false;
-        }
-        if (mutator != null ? !mutator.equals(mutation.mutator) : mutation.mutator != null) {
-            return false;
-        }
-        if (status != mutation.status) {
-            return false;
-        }
-        return description != null ? description.equals(mutation.description) : mutation.description == null;
-
+        return lineNumber == mutation.lineNumber &&
+            Objects.equal(killingTest, mutation.killingTest) &&
+            Objects.equal(mutatedMethod, mutation.mutatedMethod) &&
+            Objects.equal(mutator, mutation.mutator) &&
+            status == mutation.status &&
+            Objects.equal(description, mutation.description);
     }
 
     @Override
     public int hashCode() {
-        int result = killingTest != null ? killingTest.hashCode() : 0;
-        result = 31 * result + lineNumber;
-        result = 31 * result + (mutatedMethod != null ? mutatedMethod.hashCode() : 0);
-        result = 31 * result + (mutator != null ? mutator.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
+        return Objects.hashCode(killingTest, lineNumber, mutatedMethod, mutator, status, description);
     }
 
     @Override
     public String toString() {
-        return "Mutation{" +
-                "killingTest='" + killingTest + '\'' +
-                ", lineNumber=" + lineNumber +
-                ", mutatedMethod='" + mutatedMethod + '\'' +
-                ", mutator='" + mutator + '\'' +
-                ", status=" + status +
-                ", description='" + description + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this)
+            .add("killingTest", killingTest)
+            .add("lineNumber", lineNumber)
+            .add("mutatedMethod", mutatedMethod)
+            .add("mutator", mutator)
+            .add("status", status)
+            .add("description", description)
+            .toString();
     }
 }

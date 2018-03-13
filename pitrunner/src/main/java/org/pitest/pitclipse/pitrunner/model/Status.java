@@ -2,6 +2,7 @@ package org.pitest.pitclipse.pitrunner.model;
 
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
 import org.pitest.pitclipse.reloc.guava.base.Function;
+import org.pitest.pitclipse.reloc.guava.base.Objects;
 import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 import org.pitest.pitclipse.reloc.guava.collect.Ordering;
 
@@ -82,21 +83,14 @@ public class Status implements Visitable, Countable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         Status status = (Status) o;
-
-        if (detectionStatus != status.detectionStatus) {
-            return false;
-        }
-        return projectMutations != null ? projectMutations.equals(status.projectMutations) : status.projectMutations == null;
-
+        return detectionStatus == status.detectionStatus &&
+            Objects.equal(projectMutations, status.projectMutations);
     }
 
     @Override
     public int hashCode() {
-        int result = detectionStatus != null ? detectionStatus.hashCode() : 0;
-        result = 31 * result + (projectMutations != null ? projectMutations.hashCode() : 0);
-        return result;
+        return Objects.hashCode(detectionStatus, projectMutations);
     }
 
     @Override
