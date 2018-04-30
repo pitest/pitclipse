@@ -17,6 +17,7 @@ import org.pitest.pitclipse.pitrunner.PitResults;
 import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
 import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.pitrunner.io.SocketProvider;
+import org.pitest.pitclipse.reloc.guava.base.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitClientTest extends AbstractPitRunnerTest {
@@ -35,14 +36,14 @@ public class PitClientTest extends AbstractPitRunnerTest {
     }
 
     @Test
-    public void clientConnectsToServer() throws IOException {
+    public void clientConnectsToServer() {
         givenThePortNumber(PORT);
         whenThePitClientIsStarted();
         thenTheClientConnectsOnThePort();
     }
 
     @Test
-    public void clientSendsOptionsAndReceivesResults() throws IOException, ClassNotFoundException {
+    public void clientSendsOptionsAndReceivesResults() {
         givenThePortNumber(PORT);
         whenThePitClientIsStarted();
         thenTheClientConnectsOnThePort();
@@ -77,14 +78,14 @@ public class PitClientTest extends AbstractPitRunnerTest {
     private void whenThePitClientIsStarted() {
         PitClient client = new PitClient(context.getPortNumber(), socketProvider);
         context.setPitClient(client);
-        when(socketProvider.connectTo(context.getPortNumber())).thenReturn(connectionSocket);
+        when(socketProvider.connectTo(context.getPortNumber())).thenReturn(Optional.of(connectionSocket));
         client.connect();
     }
 
     private void whenTheClientReceivesOptions() {
         when(connectionSocket.read()).thenReturn(context.getRequest());
         PitClient client = context.getPitClient();
-        context.setTransmittedRequest(client.readRequest());
+        context.setTransmittedRequest(client.readRequest().get());
     }
 
     private void whenTheClientSendsResults() {

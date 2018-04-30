@@ -1,11 +1,5 @@
 package org.pitest.pitclipse.ui.view;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.newHashSet;
-
-import java.io.File;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -13,6 +7,12 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.pitest.pitclipse.pitrunner.model.MutationsModel;
 import org.pitest.pitclipse.ui.view.mutations.MutationsView;
+
+import java.io.File;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.newHashSet;
 
 public enum PitViewFinder {
     INSTANCE;
@@ -77,17 +77,19 @@ public enum PitViewFinder {
     }
 
     public SummaryView getSummaryView() {
-        if (null == getView(PIT_SUMMARY_VIEW))
+        if (null == getView(PIT_SUMMARY_VIEW)) {
             return NoOpSummaryView.INSTANCE;
-        else
+        } else {
             return getView(PIT_SUMMARY_VIEW);
+        }
     }
 
     public MutationsView getMutationsView() {
-        if (null == getView(PIT_MUTATIONS_VIEW))
+        if (null == getView(PIT_MUTATIONS_VIEW)) {
             return NoOpMutationsView.INSTANCE;
-        else
+        } else {
             return getView(PIT_MUTATIONS_VIEW);
+        }
     }
 
     private <T extends IViewPart> T getView(String viewId) {

@@ -1,18 +1,5 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
-import static org.pitest.pitclipse.reloc.guava.base.Strings.isNullOrEmpty;
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
-
-import java.net.URL;
-import java.util.Set;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.ui.JavaUI;
@@ -34,6 +21,19 @@ import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
 import org.pitest.pitclipse.pitrunner.model.Status;
 import org.pitest.pitclipse.pitrunner.model.Visitable;
 import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+
+import java.net.URL;
+import java.util.Set;
+
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
+import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
+import static org.pitest.pitclipse.reloc.guava.base.Strings.isNullOrEmpty;
+import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
 
 public class ViewLabelProvider extends LabelProvider {
 
@@ -83,8 +83,9 @@ public class ViewLabelProvider extends LabelProvider {
         @Override
         public String visitPackage(PackageMutations packageMutations) {
             String label = packageMutations.getPackageName();
-            if (isNullOrEmpty(label))
+            if (isNullOrEmpty(label)) {
                 label = "(default package)";
+            }
             return label + countString(packageMutations);
         }
 

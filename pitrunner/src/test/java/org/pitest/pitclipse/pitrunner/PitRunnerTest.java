@@ -18,12 +18,11 @@ public class PitRunnerTest {
     private static final String TEST_CLASS = PitOptionsTest.class.getCanonicalName();
     private static final List<String> CLASS_PATH = ImmutableList.of("org.pitest.pitclipse.pitrunner.*");
     private static final List<String> PROJECTS = ImmutableList.of("project1", "project2");
-    private final PitRunner runner = new PitRunner();
 
     @Test
     public void runPIT() {
         PitRequest request = PitRequest.builder().withPitOptions(options()).withProjects(PROJECTS).build();
-        PitResults results = runner.runPit(request);
+        PitResults results = PitRunner.executePit().apply(request);
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
         assertThat(results.getMutations(), is(notNullValue()));
@@ -34,20 +33,20 @@ public class PitRunnerTest {
         return new TypeSafeMatcher<T>() {
             @Override
             protected boolean matchesSafely(T candidate) {
-        try {
-          ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-          new ObjectOutputStream(byteStream).writeObject(candidate);
+                try {
+                    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                    new ObjectOutputStream(byteStream).writeObject(candidate);
                     new ObjectInputStream(new ByteArrayInputStream(byteStream.toByteArray())).readObject();
                     return true;
-        } catch (Exception e) {
-          return false ;
-        }
+                } catch (Exception e) {
+                    return false;
+                }
             }
 
             @Override
-      public void describeTo(Description description) {
-        description.appendText("is serializable");
-      }
+            public void describeTo(Description description) {
+                description.appendText("is serializable");
+            }
         };
     }
 
@@ -69,8 +68,8 @@ public class PitRunnerTest {
         File srcDir = new File(System.getProperty("user.dir") + File.separator + "src" + File.separator + "main"
                 + File.separator + "java");
 
-    return PitOptions.builder().withSourceDirectory(srcDir).withClassUnderTest(TEST_CLASS)
-        .withClassesToMutate(CLASS_PATH).build();
+        return PitOptions.builder().withSourceDirectory(srcDir).withClassUnderTest(TEST_CLASS)
+                .withClassesToMutate(CLASS_PATH).build();
     }
 
 }
