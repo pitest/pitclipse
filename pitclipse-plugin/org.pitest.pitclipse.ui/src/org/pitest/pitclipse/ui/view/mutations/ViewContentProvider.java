@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.pitest.pitclipse.pitrunner.model.ClassMutations;
@@ -65,27 +63,23 @@ public class ViewContentProvider implements ITreeContentProvider {
 
         @Override
         public Object[] visitModel(MutationsModel mutationsModel) {
-            List<Status> statuses = mutationsModel.getStatuses();
-            return statuses.toArray();
+            return mutationsModel.getStatuses().toArray();
 
         }
 
         @Override
         public Object[] visitProject(ProjectMutations projectMutations) {
-            List<PackageMutations> packageMutations = projectMutations.getPackageMutations();
-            return packageMutations.toArray();
+            return projectMutations.getPackageMutations().toArray();
         }
 
         @Override
         public Object[] visitPackage(PackageMutations packageMutations) {
-            List<ClassMutations> classMutations = packageMutations.getClassMutations();
-            return classMutations.toArray();
+            return packageMutations.getClassMutations().toArray();
         }
 
         @Override
         public Object[] visitClass(ClassMutations classMutations) {
-            List<Mutation> mutations = classMutations.getMutations();
-            return mutations.toArray();
+            return classMutations.getMutations().toArray();
         }
 
         @Override
@@ -95,8 +89,7 @@ public class ViewContentProvider implements ITreeContentProvider {
 
         @Override
         public Object[] visitStatus(Status status) {
-            List<ProjectMutations> projectMutations = status.getProjectMutations();
-            return projectMutations.toArray();
+            return status.getProjectMutations().toArray();
         }
     }
 

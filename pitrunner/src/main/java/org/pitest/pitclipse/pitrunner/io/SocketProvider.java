@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.pitrunner.io;
 
+import org.pitest.pitclipse.reloc.guava.base.Optional;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,7 +11,8 @@ import java.net.SocketAddress;
 
 public class SocketProvider {
 
-    private static final int DEFAULT_TIMEOUT = 20000;
+    private static final int DEFAULT_TIMEOUT = 5000;
+    private static final int RETRY_COUNT = 100;
 
     public ObjectStreamSocket listen(int portNumber) {
         ServerSocket serverSocket = null;
@@ -25,20 +28,36 @@ public class SocketProvider {
         }
     }
 
-    public ObjectStreamSocket connectTo(int portNumber) {
-        long startInMillis = System.currentTimeMillis();
+    private long currentTime() {
+        return  System.currentTimeMillis();
+    }
+
+    public Optional<ObjectStreamSocket> connectTo(int portNumber) {
+        long startInMillis = currentTime();
+        Optional<ObjectStreamSocket> socket;
+        do {
+            socket = doConnect(portNumber);
+            if (!socket.isPresent()) {
+                try {
+                    Thread.sleep(DEFAULT_TIMEOUT / RETRY_COUNT);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } while (!socket.isPresent() && (currentTime() - startInMillis < DEFAULT_TIMEOUT));
+        return socket;
+    }
+
+    private Optional<ObjectStreamSocket> doConnect(int portNumber) {
         try {
             InetAddress localhost = InetAddress.getByName(null);
             Socket socket = new Socket();
             System.out.println("Connecting to: " + localhost + ":" + portNumber);
             SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
             socket.connect(endpoint, DEFAULT_TIMEOUT);
-            return ObjectStreamSocket.make(socket);
+            return Optional.of(ObjectStreamSocket.make(socket));
         } catch (Exception e) {
-            throw new SocketCreationException(e);
-        } finally {
-            long stopInMillis = System.currentTimeMillis();
-            System.out.println("Finished in " + (stopInMillis - startInMillis) + "ms");
+            return Optional.absent();
         }
     }
 

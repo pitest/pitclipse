@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
-import static org.eclipse.ui.ide.IDE.openEditor;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -37,6 +35,8 @@ import org.pitest.pitclipse.pitrunner.model.Status;
 import org.pitest.pitclipse.pitrunner.model.Visitable;
 import org.pitest.pitclipse.reloc.guava.base.Function;
 import org.pitest.pitclipse.reloc.guava.base.Optional;
+
+import static org.eclipse.ui.ide.IDE.openEditor;
 
 public enum OpenMutationDoubleClick implements IDoubleClickListener {
     LISTENER;
@@ -122,6 +122,7 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
                                 IType type = javaProject.get().findType(className);
                                 return Optional.fromNullable(root.getFile(type.getPath()));
                             } catch (JavaModelException e) {
+                                // Maybe type no longer exists. Do nothing
                             }
                         }
                     }
@@ -169,6 +170,7 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
                         IRegion line = document.getLineInformation(lineNumber);
                         textEditor.selectAndReveal(line.getOffset(), line.getLength());
                     } catch (BadLocationException e) {
+                        // Invalid line number - perhaps file has since changed.  Do nothing
                     } finally {
                         provider.disconnect(editorInput);
                     }

@@ -1,13 +1,13 @@
 package org.pitest.pitclipse.ui.view;
 
-import java.io.File;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.part.ViewPart;
+
+import java.io.File;
 
 public class PitView extends ViewPart implements SummaryView {
     private Browser browser = null;
