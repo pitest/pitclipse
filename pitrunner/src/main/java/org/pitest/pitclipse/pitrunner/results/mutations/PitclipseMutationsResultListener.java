@@ -33,12 +33,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 			MutationDetails details = result.getDetails();
 			final Mutation mutation = OBJECT_FACTORY.createMutationsMutation();
 			mutation.setIndex(BigInteger.valueOf(details.getFirstIndex()));
-			result.getKillingTest().forEach(new SideEffect1<String>() {
-				@Override
-				public void apply(String killingTest) {
-					mutation.setKillingTest(killingTest);
-				}
-			});
+			result.getKillingTest().ifPresent((String killingTest) -> mutation.setKillingTest(killingTest));
 			mutation.setLineNumber(BigInteger.valueOf(details.getLineNumber()));
 			mutation.setMutatedClass(details.getClassName().asJavaName());
 			mutation.setMutatedMethod(details.getMethod().name());
