@@ -13,9 +13,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching;bundle-version="3.6.101",
  org.eclipse.jdt.ui;bundle-version="3.8.2",
  org.pitest.pitrunner;bundle-version="1.1.6",
- org.pitest.osgi;bundle-version="1.1.9",
- org.pitest.command-line-osgi;bundle-version="1.1.9",
- org.pitest.html-report-osgi;bundle-version="1.1.9",
+ org.pitest.osgi;bundle-version="1.4.0",
+ org.pitest.command-line-osgi;bundle-version="1.4.0",
+ org.pitest.html-report-osgi;bundle-version="1.4.0",
  org.pitest.guava-shade-osgi;bundle-version="18.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -7,7 +7,7 @@
   <artifactId>pitest-bundles</artifactId>
   <name>pitest-bundles</name>
   <packaging>pom</packaging>
-  <version>1.1.9</version>
+  <version>1.4.0</version>
   <organization>
     <name>Pitest.org</name>
     <url>http://pitest.org/</url>
@@ -17,7 +17,7 @@
     <felix.version>2.5.3</felix.version>
     <maven.compiler.version>3.3</maven.compiler.version>
     <maven.jarsigner.version>1.4</maven.jarsigner.version>
-    <pitest.version>1.1.9</pitest.version>
+    <pitest.version>1.4.0</pitest.version>
     <jarsigner.version>1.4</jarsigner.version>
   </properties>
   <dependencyManagement>

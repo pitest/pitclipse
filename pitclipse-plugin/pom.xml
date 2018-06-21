@@ -25,7 +25,7 @@
     <maven.compiler.version>3.3</maven.compiler.version>
     <maven.jarsigner.version>1.4</maven.jarsigner.version>
     <mockito.version>1.9.5</mockito.version>
-    <pitest.version>1.1.9</pitest.version>
+    <pitest.version>1.4.0</pitest.version>
     <pitrunner.version>${project.version}</pitrunner.version>
     <tycho.version>0.22.0</tycho.version>
   </properties>
