@@ -16,5 +16,12 @@ addons:
 before_script:
   - sh -e /etc/init.d/xvfb start
   - metacity --sm-disable --replace 2> metacity.err &
+  # Prevent installed packages from being used during build
+  - rm -rfv "$HOME/.m2/repository/org/pitest/"
 
 script: mvn verify
+
+# Keep p2 information
+cache:
+   directories:
+     - "$HOME/.m2/repository"
