@@ -1,25 +1,78 @@
-Pitclipse
-=========
+# Pitclipse
 
-Eclipse plugin for PIT.  Please download from Eclipse Marketplace
+[![Build Status](https://travis-ci.com/pitest/pitclipse.svg?branch=master)](https://travis-ci.com/pitest/pitclipse) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=coverage)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=ncloc)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse)
 
-[![Build Status](https://travis-ci.org/philglover/pitclipse.svg?branch=master)](https://travis-ci.org/philglover/pitclipse)
-
-Manual Update site: http://eclipse.pitest.org/release/ (please note that this is not viewable from a browser, but will work from an Eclipse update)
+Provides support for [PIT (Pitest)](http://pitest.org) within the Eclipse IDE. Allows to compute the mutation coverage of your code and shows the result within dedicated views.
 
 [Notable previous versions are described here](OLD_MILESTONES.md)
 
-Plugin Build Requirements
-=========================
-If you wish to build the plugin from source, you will need the following.
+## How to use Pitclipse?
 
-* Maven 3.0
+First of all, you need to install Pitclipse in your Eclipse IDE (see `Installation` below).
 
-Plugin Command line build
-=========================
+Once the plug-in is installed, you can run Pitest. To this end:
+- Right-clic on a Java project defining unit tests
+- `Run As` > `PIT Mutation Test`
 
-The plugin and all bundled dependencies can be built by running build.sh in the root.
+Wait a few seconds, two views should open to show the results:
+- **PIT Summary**: shows the percentage of mutation coverage
+- **PIT Mutations**: shows the detected mutations and their location in code
 
-The contents of pitclipse-plugin/org.pitest.pitclipse.site/target/repository/ can then be used as an update site.
+It is also possible to run a single JUnit test class. Specific PIT options can be configured from the Launch Configuration window:
+- `Run` > `Run Configurations...`
+- Double-click on `PIT Mutation Test`
+- Specify the options
+- Press `Run`
 
-NB - there is also a ui-test profile which should run the UI tests.  However, for reasons not yet ascertained, the eclipse instance started by tycho does not seem to be able to add JUnit to the classpath of the test projects.
+> **/!\\** JUnit 5 is not supported at the moment
+
+## Installation
+
+### From the Eclipse Marketplace
+
+The plug-in is available in the [Eclipse Marketplace](https://marketplace.eclipse.org/content/pitclipse).
+
+Drag the following button to your running Eclipse workspace to start the installation:
+<div align="center">
+  <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1426461" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img typeof="foaf:Image" class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a>
+</div>
+
+### From the update site
+Alternatively, the plug-in can also be installed from the following update site:
+
+- [http://eclipse.pitest.org/release/](http://eclipse.pitest.org/release/)
+
+To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
+
+> **Note**: this URL is not viewable from a browser.
+
+## How to contribute?
+
+### Requirements
+
+You will need [Maven 3.x](https://maven.apache.org/download.cgi), [Java 8 JDK](https://adoptopenjdk.net/upstream.html) and the latest [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) release.
+
+### Setup the environment
+
+First of all, clone the repository:
+
+```
+git clone https://github.com/philglover/pitclipse.git
+```
+
+Then:
+
+1. Import all the plug-ins within your Eclipse IDE workspace
+2. Open the `releng/org.pitest.pitclipse.target/org.pitest.pitclipse.target.target` file
+3. Click on "_Set as Active Target Platform_"
+4. Wait for the dependencies to be loaded (may take a while)
+
+### Commit your changes
+
+Make your changes, then make sure the tests still pass:
+```
+mvn clean verify
+```
+Commit your changes, then submit a PR.
+
+> See [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
