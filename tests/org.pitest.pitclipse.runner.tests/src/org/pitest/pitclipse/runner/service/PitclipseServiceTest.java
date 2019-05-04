@@ -1,29 +1,30 @@
-package org.pitest.pitclipse.pitrunner.service;
+package org.pitest.pitclipse.runner.service;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.util.List;
-import java.util.Random;
+import com.google.common.collect.ImmutableList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.pitrunner.PitRequest;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.model.ModelBuilder;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
-import org.pitest.pitclipse.pitrunner.server.PitServerProvider;
-import org.pitest.pitclipse.pitrunner.server.PitServerTest;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.PitOptions;
+import org.pitest.pitclipse.runner.PitRequest;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.model.ModelBuilder;
+import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.runner.server.PitServer;
+import org.pitest.pitclipse.runner.server.PitServerProvider;
+import org.pitest.pitclipse.runner.server.PitServerTest;
+
+import java.io.File;
+import java.util.List;
+import java.util.Random;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitclipseServiceTest {

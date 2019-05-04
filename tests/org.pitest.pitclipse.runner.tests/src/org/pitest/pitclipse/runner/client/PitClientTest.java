@@ -1,23 +1,24 @@
-package org.pitest.pitclipse.pitrunner.client;
+package org.pitest.pitclipse.runner.client;
 
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
+import com.google.common.base.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.pitest.pitclipse.pitrunner.AbstractPitRunnerTest;
-import org.pitest.pitclipse.pitrunner.PitRequest;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.PitRunnerTestContext;
-import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
-import org.pitest.pitclipse.pitrunner.io.SocketProvider;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
+import org.pitest.pitclipse.runner.AbstractPitRunnerTest;
+import org.pitest.pitclipse.runner.PitRequest;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.PitRunnerTestContext;
+import org.pitest.pitclipse.runner.io.ObjectStreamSocket;
+import org.pitest.pitclipse.runner.io.SocketProvider;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitClientTest extends AbstractPitRunnerTest {

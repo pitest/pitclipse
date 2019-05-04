@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pitclipse Runner
+Bundle-SymbolicName: org.pitest.pitclipse.runner
+Bundle-Version: 2.0.0.qualifier
+Bundle-Vendor: Pitest.org
+Automatic-Module-Name: org.pitest.pitclipse.runner
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: com.google.guava;bundle-version="[21.0.0,22.0.0)",
+ org.pitest;bundle-version="1.4.6"
+Export-Package: org.pitest.pitclipse.runner,
+ org.pitest.pitclipse.runner.client,
+ org.pitest.pitclipse.runner.config,
+ org.pitest.pitclipse.runner.io,
+ org.pitest.pitclipse.runner.model,
+ org.pitest.pitclipse.runner.results,
+ org.pitest.pitclipse.runner.results.mutations,
+ org.pitest.pitclipse.runner.results.summary,
+ org.pitest.pitclipse.runner.server,
+ org.pitest.pitclipse.runner.service

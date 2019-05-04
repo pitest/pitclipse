@@ -1,0 +1,2 @@
+org.pitest.pitclipse.runner.results.mutations.MutationsResultListenerFactory2
+org.pitest.pitclipse.runner.results.summary.SummaryResultListenerFactory2

@@ -1,5 +1,8 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -25,16 +28,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.pitest.pitclipse.pitrunner.model.ClassMutations;
-import org.pitest.pitclipse.pitrunner.model.Mutation;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
-import org.pitest.pitclipse.pitrunner.model.MutationsModelVisitor;
-import org.pitest.pitclipse.pitrunner.model.PackageMutations;
-import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
-import org.pitest.pitclipse.pitrunner.model.Status;
-import org.pitest.pitclipse.pitrunner.model.Visitable;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
+import org.pitest.pitclipse.runner.model.ClassMutations;
+import org.pitest.pitclipse.runner.model.Mutation;
+import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.runner.model.MutationsModelVisitor;
+import org.pitest.pitclipse.runner.model.PackageMutations;
+import org.pitest.pitclipse.runner.model.ProjectMutations;
+import org.pitest.pitclipse.runner.model.Status;
+import org.pitest.pitclipse.runner.model.Visitable;
 
 import static org.eclipse.ui.ide.IDE.openEditor;
 

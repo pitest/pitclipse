@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.io;
+package org.pitest.pitclipse.runner.io;
 
 
 public final class SocketCreationException extends RuntimeException {

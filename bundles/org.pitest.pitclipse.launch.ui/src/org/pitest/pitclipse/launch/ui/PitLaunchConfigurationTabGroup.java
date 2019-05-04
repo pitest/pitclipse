@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch.ui;
 
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;

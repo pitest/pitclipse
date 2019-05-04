@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+        icon="icons/pit.gif"
+        configTypeID="org.pitest.pitclipse.launch.mutationTest"
+        id="org.pitest.pitclipse.launch.mutationTest.icon">
+    </launchConfigurationTypeImage>
+  </extension>
+  <extension point="org.eclipse.debug.ui.launchShortcuts">
+    <shortcut
+      id="org.pitest.pitclipse.launch.mutationTest.shortcut"
+      class="org.pitest.pitclipse.launch.ui.PitLaunchShortcut"
+      label="PIT Mutation Test"
+      icon="icons/pit.gif"
+      modes="run">
+      <contextualLaunch>
+        <contextLabel mode="run" label="PIT Mutation Test" />
+        <enablement>
+          
+        </enablement>
+       </contextualLaunch>
+    </shortcut>
+  </extension>
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+       type="org.pitest.pitclipse.launch.mutationTest"
+       class="org.pitest.pitclipse.launch.ui.PitLaunchConfigurationTabGroup"
+       id="org.pitest.pitclipse.core.mutationTest.config">
+    </launchConfigurationTabGroup>
+  </extension>
+</plugin>

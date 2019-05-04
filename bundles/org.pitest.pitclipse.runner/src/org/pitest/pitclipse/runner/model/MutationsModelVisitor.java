@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
 public interface MutationsModelVisitor<T> {
     T visitModel(MutationsModel mutationsModel);

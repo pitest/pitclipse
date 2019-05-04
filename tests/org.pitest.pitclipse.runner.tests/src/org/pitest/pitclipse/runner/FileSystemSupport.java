@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
 import java.io.File;
 import java.util.Random;

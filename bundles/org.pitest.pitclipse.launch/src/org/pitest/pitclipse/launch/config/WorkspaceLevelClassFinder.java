@@ -1,4 +1,7 @@
-package org.pitest.pitclipse.core.launch.config;
+package org.pitest.pitclipse.launch.config;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet.Builder;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -6,14 +9,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 import java.util.List;
 
-import static org.pitest.pitclipse.core.launch.config.ProjectLevelClassFinder.getClassesFromProject;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableSet.builder;
+import static org.pitest.pitclipse.launch.config.ProjectLevelClassFinder.getClassesFromProject;
 
 public class WorkspaceLevelClassFinder implements ClassFinder {
 

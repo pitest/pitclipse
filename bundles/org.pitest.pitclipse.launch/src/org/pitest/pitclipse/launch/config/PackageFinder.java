@@ -1,4 +1,7 @@
-package org.pitest.pitclipse.core.launch.config;
+package org.pitest.pitclipse.launch.config;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -11,19 +14,17 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.ImmutableList.copyOf;
 import static org.eclipse.core.resources.IResource.FOLDER;
 import static org.eclipse.core.resources.IResource.NONE;
 import static org.eclipse.core.resources.IResource.PROJECT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
 import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jdt.core.IPackageFragment.DEFAULT_PACKAGE_NAME;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
 
 public class PackageFinder {
 

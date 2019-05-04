@@ -1,14 +1,15 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
+
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 import java.util.List;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+import static com.google.common.collect.Collections2.transform;
 
 public class Status implements Visitable, Countable {
 

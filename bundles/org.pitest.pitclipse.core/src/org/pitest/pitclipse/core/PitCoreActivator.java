@@ -1,54 +1,56 @@
 package org.pitest.pitclipse.core;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableList.of;
+import static com.google.common.io.Files.createParentDirs;
+import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage.PIT_MUTATORS;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_CLASSES;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDED_METHODS;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT_FACTOR;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.of;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class PitCoreActivator extends AbstractUIPlugin {
+public class PitCoreActivator extends Plugin {
 
     private static final String HTML_RESULTS_DIR = "html_results";
     private static final String HTML_FILE = "index.html";
     private static final String STATE_FILE = "state-1.1.0.out";
     private static final String HISTORY_DIR = "history";
-
+    
     // The plug-in ID
     public static final String PLUGIN_ID = "org.pitest.pitclipse.core"; //$NON-NLS-1$
 
     // The shared instance
     private static PitCoreActivator plugin;
+    
+    private IPreferenceStore preferences;
 
     private ImmutableList<String> pitClasspath = of();
 
@@ -63,6 +65,13 @@ public class PitCoreActivator extends AbstractUIPlugin {
     private void setPitClasspath(List<String> classpath) {
         pitClasspath = copyOf(classpath);
     }
+    
+    public IPreferenceStore getPreferenceStore() {
+        if (preferences == null) {
+            preferences = new ScopedPreferenceStore(InstanceScope.INSTANCE, PLUGIN_ID);
+        }
+        return preferences;
+    }
 
     /*
      * (non-Javadoc)
@@ -76,21 +85,38 @@ public class PitCoreActivator extends AbstractUIPlugin {
                                                                 // class defines
                                                                 // signature
         super.start(context);
+        plugin = this;
+//        this.context = context;
         setActivator(this);
         setupStateDirectories();
-        ImmutableList.Builder<String> builder = ImmutableList.builder();
-        builder.add(getBundleFile(Platform.getBundle("org.pitest.command-line-osgi")).getCanonicalPath());
-        builder.add(getBundleFile(Platform.getBundle("org.pitest.html-report-osgi")).getCanonicalPath());
-        builder.add(getBundleFile(Platform.getBundle("org.pitest.osgi")).getCanonicalPath());
-        builder.add(getBundleFile(Platform.getBundle("org.pitest.pitrunner")).getCanonicalPath());
-        builder.add(getBundleFile(Platform.getBundle("org.pitest.guava-shade-osgi")).getCanonicalPath());
-        setPitClasspath(builder.build());
+        
+        ImmutableList<String> pitestClasspath = ImmutableList.of(
+                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
+                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
+                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + "bin",
+                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-1.4.6.jar",
+                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-entry-1.4.6.jar",
+                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-command-line-1.4.6.jar",
+                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-html-report-1.4.6.jar",
+                getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
+        );
+        Builder<String> pitclipseClasspath = ImmutableList.<String>builder().addAll(pitestClasspath);
+        
+        if (Platform.getBundle("org.pitest.pitclipse.listeners") != null) {
+            pitclipseClasspath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.listeners")).getCanonicalPath());
+            pitclipseClasspath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.listeners")).getCanonicalPath() + File.separator + "bin");
+        }
+        setPitClasspath(pitclipseClasspath.build());
     }
 
     private void setupStateDirectories() {
         setupResultDir();
         setupHistoryFile();
     }
+    
+//    private static IPath getStateLocation() {
+//        return Platform.getStateLocation(context.getBundle());
+//    }
 
     private void setupHistoryFile() {
         IPath pluginLocation = getStateLocation();
@@ -149,17 +175,17 @@ public class PitCoreActivator extends AbstractUIPlugin {
         return plugin;
     }
 
-    /**
-     * Returns an image descriptor for the image file at the given plug-in
-     * relative path
-     * 
-     * @param path
-     *            the path
-     * @return the image descriptor
-     */
-    public static ImageDescriptor getImageDescriptor(String path) {
-        return imageDescriptorFromPlugin(PLUGIN_ID, path);
-    }
+//    /**
+//     * Returns an image descriptor for the image file at the given plug-in
+//     * relative path
+//     * 
+//     * @param path
+//     *            the path
+//     * @return the image descriptor
+//     */
+//    public static ImageDescriptor getImageDescriptor(String path) {
+//        return imageDescriptorFromPlugin(PLUGIN_ID, path);
+//    }
 
     public static void log(String msg) {
         log(Status.INFO, msg, null);
@@ -175,30 +201,6 @@ public class PitCoreActivator extends AbstractUIPlugin {
 
     public static void warn(String msg, Throwable t) {
         log(Status.WARNING, msg, t);
-    }
-
-    public static Shell getActiveWorkbenchShell() {
-        IWorkbenchWindow workBenchWindow = getActiveWorkbenchWindow();
-        if (workBenchWindow == null) {
-            return null;
-        }
-        return workBenchWindow.getShell();
-    }
-
-    /**
-     * Returns the active workbench window
-     * 
-     * @return the active workbench window
-     */
-    public static IWorkbenchWindow getActiveWorkbenchWindow() {
-        if (plugin == null) {
-            return null;
-        }
-        IWorkbench workBench = plugin.getWorkbench();
-        if (workBench == null) {
-            return null;
-        }
-        return workBench.getActiveWorkbenchWindow();
     }
 
     public File emptyResultDir() {

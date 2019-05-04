@@ -1,13 +1,13 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch;
 
-import org.pitest.pitclipse.core.launch.config.ClassFinder;
-import org.pitest.pitclipse.core.launch.config.PackageFinder;
-import org.pitest.pitclipse.core.launch.config.ProjectFinder;
-import org.pitest.pitclipse.core.launch.config.SourceDirFinder;
-import org.pitest.pitclipse.core.launch.config.WorkspaceLevelClassFinder;
-import org.pitest.pitclipse.core.launch.config.WorkspaceLevelProjectFinder;
-import org.pitest.pitclipse.core.launch.config.WorkspaceLevelSourceDirFinder;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.launch.config.ClassFinder;
+import org.pitest.pitclipse.launch.config.PackageFinder;
+import org.pitest.pitclipse.launch.config.ProjectFinder;
+import org.pitest.pitclipse.launch.config.SourceDirFinder;
+import org.pitest.pitclipse.launch.config.WorkspaceLevelClassFinder;
+import org.pitest.pitclipse.launch.config.WorkspaceLevelProjectFinder;
+import org.pitest.pitclipse.launch.config.WorkspaceLevelSourceDirFinder;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 public class WorkspaceLevelLaunchDelegate extends AbstractPitLaunchDelegate {
 

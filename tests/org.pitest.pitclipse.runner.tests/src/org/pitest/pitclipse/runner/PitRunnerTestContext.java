@@ -1,9 +1,9 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
+
+import org.pitest.pitclipse.runner.client.PitClient;
+import org.pitest.pitclipse.runner.server.PitServer;
 
 import java.io.ByteArrayOutputStream;
-
-import org.pitest.pitclipse.pitrunner.client.PitClient;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
 
 public final class PitRunnerTestContext {
 

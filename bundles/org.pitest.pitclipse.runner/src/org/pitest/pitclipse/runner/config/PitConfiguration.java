@@ -1,8 +1,8 @@
-package org.pitest.pitclipse.pitrunner.config;
+package org.pitest.pitclipse.runner.config;
 
 import java.math.BigDecimal;
 
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
 
 public class PitConfiguration {
     public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging";

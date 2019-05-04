@@ -1,6 +1,6 @@
-package org.pitest.pitclipse.pitrunner.client;
+package org.pitest.pitclipse.runner.client;
 
-import org.pitest.pitclipse.pitrunner.PitResults;
+import org.pitest.pitclipse.runner.PitResults;
 
 public interface PitResultHandler {
     void handle(PitResults results);

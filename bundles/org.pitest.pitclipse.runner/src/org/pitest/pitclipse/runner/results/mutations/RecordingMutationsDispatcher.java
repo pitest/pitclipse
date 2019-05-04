@@ -1,7 +1,8 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
 
-import org.pitest.pitclipse.pitrunner.results.Mutations;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
+import com.google.common.base.Optional;
+
+import org.pitest.pitclipse.runner.results.Mutations;
 
 public enum RecordingMutationsDispatcher implements MutationsDispatcher {
     INSTANCE;

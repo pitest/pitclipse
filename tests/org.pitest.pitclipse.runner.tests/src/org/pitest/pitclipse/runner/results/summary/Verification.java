@@ -1,9 +1,10 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
+
+import com.google.common.base.Optional;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -22,6 +23,10 @@ class Verification {
         assertThat(actualResult.isPresent(), is(equalTo(true)));
         assertThat(actualResult.get(), is(sameAs(expectedResult)));
     }
+    
+    public void thenTheResultsAre(SummaryResultListenerTestSugar.SummaryResultWrapper wrapper) {
+        thenTheResultsAre(wrapper.getResult());
+    }
 
     private Matcher<SummaryResult> sameAs(final SummaryResult expected) {
         return new TypeSafeDiagnosingMatcher<SummaryResult>() {
@@ -37,9 +42,5 @@ class Verification {
                 return reflectionEquals(expected, actual);
             }
         };
-    }
-
-    public void thenTheResultsAre(SummaryResultListenerTestSugar.SummaryResultWrapper wrapper) {
-        thenTheResultsAre(wrapper.getResult());
     }
 }

@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.results;
+package org.pitest.pitclipse.runner.results;
 
 import java.io.Serializable;
 import java.math.BigInteger;

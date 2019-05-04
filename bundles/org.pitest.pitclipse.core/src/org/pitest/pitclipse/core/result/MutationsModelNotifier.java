@@ -1,11 +1,13 @@
 package org.pitest.pitclipse.core.result;
 
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import org.pitest.pitclipse.core.launch.UpdateMutations;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.model.ModelBuilder;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.model.ModelBuilder;
+import org.pitest.pitclipse.runner.model.MutationsModel;
 
 public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 
@@ -14,6 +16,9 @@ public class MutationsModelNotifier implements ResultNotifier<PitResults> {
     @Override
     public void handleResults(PitResults results) {
         MutationsModel mutationModel = MODEL_BUILDER.buildFrom(results);
-        Display.getDefault().asyncExec(new UpdateMutations(mutationModel));
+        Job.create("Reporting detected mutations", monitor -> {
+            new UpdateMutations(mutationModel).run();
+            return new Status(IStatus.OK, "org.pitest.pitclipse.core", "ok");
+        }).schedule();
     }
 }

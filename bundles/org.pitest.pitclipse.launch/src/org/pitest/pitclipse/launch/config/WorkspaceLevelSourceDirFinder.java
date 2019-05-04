@@ -1,22 +1,23 @@
-package org.pitest.pitclipse.core.launch.config;
+package org.pitest.pitclipse.launch.config;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.Builder;
 
 import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.getOpenJavaProjects;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.onClassPathOf;
-import static org.pitest.pitclipse.core.launch.config.ProjectUtils.sameProject;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.getOpenJavaProjects;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.onClassPathOf;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.sameProject;
 
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 

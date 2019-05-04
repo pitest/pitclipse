@@ -1,10 +1,11 @@
-package org.pitest.pitclipse.pitrunner.results;
+package org.pitest.pitclipse.runner.results;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 public class MutationResultListenerLifecycle<T, F extends ListenerFactory<T>> {
 
@@ -21,8 +22,9 @@ public class MutationResultListenerLifecycle<T, F extends ListenerFactory<T>> {
         ListenerContext<T> context = new ListenerContext<T>(recordingDispatcher, coverageData);
         MutationResultListener listener = factory.apply(context);
         listener.runStart();
-        for (ClassMutationResults r : results)
+        for (ClassMutationResults r : results) {
             listener.handleMutationResult(r);
+        }
         listener.runEnd();
         return recordingDispatcher.getResult();
     }

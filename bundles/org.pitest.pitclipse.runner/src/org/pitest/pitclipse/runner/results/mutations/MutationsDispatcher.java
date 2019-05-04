@@ -1,7 +1,7 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
 
-import org.pitest.pitclipse.pitrunner.results.Dispatcher;
-import org.pitest.pitclipse.pitrunner.results.Mutations;
+import org.pitest.pitclipse.runner.results.Dispatcher;
+import org.pitest.pitclipse.runner.results.Mutations;
 
 public interface MutationsDispatcher extends Dispatcher<Mutations> {
 }

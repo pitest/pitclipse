@@ -1,10 +1,11 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
-import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
-import org.pitest.pitclipse.pitrunner.results.Mutations;
-import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
-import org.pitest.pitclipse.pitrunner.results.summary.SummaryResult;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
+
+import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
+import org.pitest.pitclipse.runner.results.Mutations;
+import org.pitest.pitclipse.runner.results.ObjectFactory;
+import org.pitest.pitclipse.runner.results.summary.SummaryResult;
 
 import java.io.File;
 import java.io.Serializable;

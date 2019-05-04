@@ -1,10 +1,10 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
+
+import org.pitest.mutationtest.DetectionStatus;
 
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Random;
-
-import org.pitest.mutationtest.DetectionStatus;
 
 public enum TestFactory {
     TEST_FACTORY;

@@ -5,7 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
+import org.pitest.pitclipse.runner.model.MutationsModel;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 

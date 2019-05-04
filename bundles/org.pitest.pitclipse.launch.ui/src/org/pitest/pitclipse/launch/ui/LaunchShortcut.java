@@ -1,4 +1,8 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch.ui;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -7,15 +11,12 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorInput;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
 
 import java.util.List;
 
 import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 
-class LaunchShortcut {
+final class LaunchShortcut {
 
     static <T> Optional<T> forEditorInputDo(IEditorInput i, Function<ITypeRoot, Optional<T>> onFound, Function<Void, Optional<T>> notFound) {
         Optional<ITypeRoot> element = Optional.fromNullable(getEditorInputTypeRoot(i));
@@ -71,5 +72,6 @@ class LaunchShortcut {
     }
 
     private LaunchShortcut() {
+        // utility class should not be instantiated
     }
 }

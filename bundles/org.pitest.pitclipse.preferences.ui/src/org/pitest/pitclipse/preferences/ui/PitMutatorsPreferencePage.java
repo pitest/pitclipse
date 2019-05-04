@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.preferences;
+package org.pitest.pitclipse.preferences.ui;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -7,9 +7,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 
-public class PitMutatorsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
 
-    public static final String PIT_MUTATORS = "pitMutators";
+public class PitMutatorsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
     public PitMutatorsPreferencePage() {
         super(GRID);

@@ -1,8 +1,8 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
-import org.pitest.pitclipse.reloc.guava.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Lists;
 
 import java.io.File;
 import java.util.List;
@@ -34,6 +34,10 @@ public class PitCliArguments {
         builder.addAll(mutatorsFrom(options));
         builder.add("--timeoutConst", Integer.toString(options.getTimeout()));
         builder.add("--timeoutFactor", options.getTimeoutFactor().toPlainString());
+        String additionalClasspath = additionalClassPath(options);
+        if (!additionalClasspath.isEmpty()) {
+            builder.add("--classPath", additionalClasspath);
+        }
         List<String> args = builder.build();
         return args.toArray(new String[args.size()]);
     }
@@ -117,6 +121,11 @@ public class PitCliArguments {
     private String classpath(PitOptions options) {
         List<String> classesToMutate = options.getClassesToMutate();
         return concat(commaSeparate(classesToMutate));
+    }
+
+    private String additionalClassPath(PitOptions options) {
+        List<String> classPath = options.getClassPath();
+        return concat(commaSeparate(classPath));
     }
 
     private List<String> fileAsStrings(List<File> files) {

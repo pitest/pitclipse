@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
 
 public class MutationsBuilder {
 

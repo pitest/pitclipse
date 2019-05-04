@@ -4,7 +4,7 @@ import org.pitest.pitclipse.core.extension.point.PitRuntimeOptions;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import org.pitest.pitclipse.ui.view.mutations.MutationsView;
 
-import static org.pitest.pitclipse.pitrunner.model.MutationsModel.EMPTY_MODEL;
+import static org.pitest.pitclipse.runner.model.MutationsModel.EMPTY_MODEL;
 
 public class PitExecutionStarted implements ResultNotifier<PitRuntimeOptions> {
     @Override

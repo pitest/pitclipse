@@ -1,6 +1,6 @@
-package org.pitest.pitclipse.pitrunner.io;
+package org.pitest.pitclipse.runner.io;
 
-import org.pitest.pitclipse.reloc.guava.base.Optional;
+import com.google.common.base.Optional;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -44,7 +44,9 @@ public class SocketProvider {
                     e.printStackTrace();
                 }
             }
-        } while (!socket.isPresent() && (currentTime() - startInMillis < DEFAULT_TIMEOUT));
+        } 
+        while (!socket.isPresent() && (currentTime() - startInMillis < DEFAULT_TIMEOUT));
+        
         return socket;
     }
 

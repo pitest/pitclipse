@@ -1,12 +1,13 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
-import org.pitest.pitclipse.pitrunner.results.ListenerContext;
-import org.pitest.pitclipse.pitrunner.results.ListenerFactory;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.runner.results.ListenerContext;
+import org.pitest.pitclipse.runner.results.ListenerFactory;
 
 class SummaryResultListenerTestSugar {
 
@@ -20,13 +21,14 @@ class SummaryResultListenerTestSugar {
         public SetupState and(ClassMutationResults first, ClassMutationResults... others) {
             final Builder<ClassMutationResults> r = ImmutableList.builder();
             r.add(first);
-            if (null != others)
+            if (null != others) {
                 r.add(others);
+            }
             return new SetupState(coverageDatabase, r.build());
         }
 
         public SetupState andNoMutations() {
-            return new SetupState(coverageDatabase, ImmutableList.<ClassMutationResults> of());
+            return new SetupState(coverageDatabase, ImmutableList.<ClassMutationResults>of());
         }
 
         static CoverageState given(CoverageDatabase coverageDatabase) {
@@ -57,13 +59,13 @@ class SummaryResultListenerTestSugar {
             return result;
         }
     }
-}
+    
+    enum SummaryListenerFactory implements ListenerFactory<SummaryResult> {
+        INSTANCE;
 
-enum SummaryListenerFactory implements ListenerFactory<SummaryResult> {
-    INSTANCE;
-
-    @Override
-    public MutationResultListener apply(ListenerContext<SummaryResult> context) {
-        return new SummaryResultListener(context.dispatcher, context.coverageData);
+        @Override
+        public MutationResultListener apply(ListenerContext<SummaryResult> context) {
+            return new SummaryResultListener(context.dispatcher, context.coverageData);
+        }
     }
 }

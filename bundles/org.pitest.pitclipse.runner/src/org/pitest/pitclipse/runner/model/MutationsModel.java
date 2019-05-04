@@ -1,25 +1,26 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
+
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 import java.util.Comparator;
 import java.util.List;
 
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NO_COVERAGE;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.SURVIVED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+import static com.google.common.collect.Collections2.transform;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.MEMORY_ERROR;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.NON_VIABLE;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.NOT_STARTED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.NO_COVERAGE;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.RUN_ERROR;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.STARTED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.SURVIVED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.TIMED_OUT;
 
 public class MutationsModel implements Visitable, Countable {
 

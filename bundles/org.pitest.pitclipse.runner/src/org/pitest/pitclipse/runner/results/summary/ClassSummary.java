@@ -1,16 +1,17 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
-import org.pitest.pitclipse.reloc.guava.base.Predicate;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.filter;
 
 class ClassSummary implements Serializable {
 

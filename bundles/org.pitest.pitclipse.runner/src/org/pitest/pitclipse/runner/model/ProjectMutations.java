@@ -1,14 +1,14 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.Ordering;
+import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
 
 import java.util.List;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
+import static com.google.common.collect.Collections2.transform;
 
 public class ProjectMutations implements Visitable, Countable {
     private final String projectName;

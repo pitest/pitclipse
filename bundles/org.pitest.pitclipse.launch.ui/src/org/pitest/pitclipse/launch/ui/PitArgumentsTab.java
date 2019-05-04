@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch.ui;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -20,24 +20,24 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_FROM_PIT;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
+import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
-    public static final String ATTR_TEST_CONTAINER = "org.pitest.pitclipse.core.test.container";
     private static final int NUMBER_OF_COLUMNS = 3;
 
     private Text testClassText;
