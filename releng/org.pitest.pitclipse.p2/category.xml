@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.pitest.pitclipse.feature_1.1.7.201805090619.jar" id="org.pitest.pitclipse.feature" version="1.1.7.201805090619">
-      <category name="Pitclipse"/>
+   <feature url="features/org.pitest.pitclipse.core.feature_2.0.0.qualifier.jar" id="org.pitest.pitclipse.core.feature" version="2.0.0.qualifier">
+      <category name="org.pitest.pitclipse"/>
    </feature>
-   <category-def name="Pitclipse" label="Pitclipse"/>
+   <feature url="features/org.pitest.pitclipse.ui.feature_2.0.0.qualifier.jar" id="org.pitest.pitclipse.ui.feature" version="2.0.0.qualifier">
+      <category name="org.pitest.pitclipse"/>
+   </feature>
+   <feature url="features/org.pitest.feature_1.4.6.jar" id="org.pitest.feature" version="1.4.6">
+      <category name="org.pitest.pitclipse"/>
+   </feature>
+   <category-def name="org.pitest.pitclipse" label="Pitclipse">
+      <description>
+         Eclipse support for Pitest (PIT), a state of the art mutation testing system
+      </description>
+   </category-def>
 </site>

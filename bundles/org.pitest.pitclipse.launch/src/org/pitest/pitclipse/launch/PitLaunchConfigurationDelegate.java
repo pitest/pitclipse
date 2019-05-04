@@ -1,12 +1,12 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 

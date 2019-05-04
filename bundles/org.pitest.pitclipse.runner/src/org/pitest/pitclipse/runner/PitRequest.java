@@ -1,6 +1,6 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 import java.io.File;
 import java.io.Serializable;

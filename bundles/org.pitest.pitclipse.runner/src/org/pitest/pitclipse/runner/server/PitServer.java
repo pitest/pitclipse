@@ -1,9 +1,9 @@
-package org.pitest.pitclipse.pitrunner.server;
+package org.pitest.pitclipse.runner.server;
 
-import org.pitest.pitclipse.pitrunner.PitRequest;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.io.ObjectStreamSocket;
-import org.pitest.pitclipse.pitrunner.io.SocketProvider;
+import org.pitest.pitclipse.runner.PitRequest;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.io.ObjectStreamSocket;
+import org.pitest.pitclipse.runner.io.SocketProvider;
 
 import java.io.Closeable;
 import java.io.IOException;

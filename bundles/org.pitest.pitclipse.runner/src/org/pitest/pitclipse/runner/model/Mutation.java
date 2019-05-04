@@ -1,8 +1,9 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public class Mutation implements Visitable {
 

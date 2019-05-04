@@ -1,68 +1,57 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
-import org.pitest.pitclipse.pitrunner.client.PitClient;
-import org.pitest.pitclipse.pitrunner.results.Mutations;
-import org.pitest.pitclipse.pitrunner.results.mutations.RecordingMutationsDispatcher;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.client.PitClient;
+import org.pitest.pitclipse.runner.results.Mutations;
+import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
 
 import java.io.File;
 import java.io.IOException;
 
-import static java.lang.Integer.valueOf;
-import static org.pitest.pitclipse.reloc.guava.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.Integer.parseInt;
 
 public class PitRunner {
 
     public static void main(String[] args) {
         validateArgs(args);
-        int port = valueOf(args[0]);
-        PitClient client = new PitClient(port);
-        try {
+        int port = parseInt(args[0]);
+        
+        try (PitClient client = new PitClient(port)) {
             client.connect();
             System.out.println("Connected");
             Optional<PitRequest> request = client.readRequest();
             Optional<PitResults> results = request.transform(executePit());
 
-            results.transform(sendTo(client));
-        } finally {
-            try {
-                System.out.println("Closing server");
-                client.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Closed");
+            results.toJavaUtil().ifPresent(client::sendResults);
+            System.out.println("Closing server");
+            
+        } catch (IOException e) {
+            // An error occurred while closing the client
+            e.printStackTrace();
         }
-    }
-
-    private static Function<PitResults, Void> sendTo(final PitClient client) {
-        return new Function<PitResults, Void>() {
-            public Void apply(PitResults pitResults) {
-                client.sendResults(pitResults);
-                return null;
-            }
-        };
+        System.out.println("Closed");
     }
 
     public static Function<PitRequest, PitResults> executePit() {
-        return new Function<PitRequest, PitResults>() {
-            public PitResults apply(PitRequest request) {
-                System.out.println("Received request: " + request);
-                String[] cliArgs = PitCliArguments.from(request.getOptions());
-
-                MutationCoverageReport.main(cliArgs);
-                File reportDir = request.getReportDirectory();
-                File htmlResultFile = findResultFile(reportDir, "index.html");
-                Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
-
-                PitResults results = PitResults.builder().withHtmlResults(htmlResultFile).withProjects(request.getProjects())
-                        .withMutations(mutations).build();
-                System.out.println("Sending results: " + results);
-                return results;
-            }
+        return request -> {
+            System.out.println("Received request: " + request);
+            String[] cliArgs = PitCliArguments.from(request.getOptions());
+            MutationCoverageReport.main(cliArgs);
+            File reportDir = request.getReportDirectory();
+            File htmlResultFile = findResultFile(reportDir, "index.html");
+            Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
+            PitResults results = PitResults.builder()
+                                           .withHtmlResults(htmlResultFile)
+                                           .withProjects(request.getProjects())
+                                           .withMutations(mutations)
+                                           .build();
+            System.out.println("Sending results: " + results);
+            return results;
         };
     }
 

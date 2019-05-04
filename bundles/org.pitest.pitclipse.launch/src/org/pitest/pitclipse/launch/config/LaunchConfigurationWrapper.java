@@ -1,4 +1,7 @@
-package org.pitest.pitclipse.core.launch.config;
+package org.pitest.pitclipse.launch.config;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -12,11 +15,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitOptionsBuilder;
-import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.PitOptions;
+import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.io.File;
 import java.math.BigDecimal;

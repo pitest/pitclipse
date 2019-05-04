@@ -1,4 +1,9 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch.ui;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,11 +31,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.util.List;
 
@@ -46,28 +47,28 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_P
 import static org.eclipse.jdt.ui.JavaElementLabels.ALL_FULLY_QUALIFIED;
 import static org.eclipse.jdt.ui.JavaElementLabels.getTextLabel;
 import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.asJavaElement;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.emptyLaunchConfiguration;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.emptyList;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.forEditorInputDo;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.getCorrespondingResource;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.nothing;
-import static org.pitest.pitclipse.core.launch.LaunchShortcut.toArrayOfILaunchConfiguration;
-import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
-import static org.pitest.pitclipse.core.launch.PitMigrationDelegate.mapResources;
-import static org.pitest.pitclipse.core.PitCoreActivator.getActiveWorkbenchShell;
+import static org.pitest.pitclipse.launch.ui.PitLaunchUiActivator.getActiveWorkbenchShell;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.asJavaElement;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.emptyLaunchConfiguration;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.emptyList;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.forEditorInputDo;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.getCorrespondingResource;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.nothing;
+import static org.pitest.pitclipse.launch.ui.LaunchShortcut.toArrayOfILaunchConfiguration;
+import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
+import static org.pitest.pitclipse.launch.ui.PitMigrationDelegate.mapResources;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
 public class PitLaunchShortcut implements ILaunchShortcut2 {
 
     private static final String EMPTY_STRING = ""; //$NON-NLS-1$
     public static final String TEST_CONFIGURATION = "Select a Test Configuration";
     public static final String TEST_RUN_CONFIGURATION = "Select JUnit configuration to run";
-    public static final String PIT_CONFIGURATION_TYPE = "org.pitest.pitclipse.core.mutationTest";
+    public static final String PIT_CONFIGURATION_TYPE = "org.pitest.pitclipse.launch.mutationTest";
 
     @Override
     public void launch(IEditorPart editor, String mode) {
@@ -98,7 +99,9 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                     performLaunch(launchElement.get(), mode);
                 }
             }
-            showNoTestsFoundDialog();
+            else {
+                showNoTestsFoundDialog();
+            }
         } catch (InterruptedException e) {
             // OK, silently move on
         } catch (CoreException e) {

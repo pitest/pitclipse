@@ -1,9 +1,9 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
 
 import org.pitest.mutationtest.ListenerArguments;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.MutationResultListenerFactory;
-import org.pitest.pitclipse.pitrunner.results.Dispatcher;
+import org.pitest.pitclipse.runner.results.Dispatcher;
 
 import java.util.Properties;
 

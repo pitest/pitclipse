@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.server;
+package org.pitest.pitclipse.runner.server;
 
 public enum PitServerProviderImpl implements PitServerProvider {
     INSTANCE;

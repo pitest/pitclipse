@@ -1,7 +1,7 @@
-package org.pitest.pitclipse.pitrunner.client;
+package org.pitest.pitclipse.runner.client;
 
-import org.pitest.pitclipse.pitrunner.PitRequest;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
+import org.pitest.pitclipse.runner.PitRequest;
+import org.pitest.pitclipse.runner.server.PitServer;
 
 public class PitCommunicator implements Runnable {
 
@@ -17,10 +17,15 @@ public class PitCommunicator implements Runnable {
 
     @Override
     public void run() {
+        // TODO Enhance this to make objects immutable & use try-with-resource
+        // (exceptions may be swallowed her)
         try {
             server.listen();
             server.sendRequest(request);
             resultHandler.handle(server.receiveResults());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         } finally {
             server.close();
         }

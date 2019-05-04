@@ -1,8 +1,8 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
 
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import java.io.Serializable;
 import java.util.List;

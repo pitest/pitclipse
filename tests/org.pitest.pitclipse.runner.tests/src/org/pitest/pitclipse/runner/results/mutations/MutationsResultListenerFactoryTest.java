@@ -1,4 +1,9 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
+
+import org.junit.Test;
+import org.pitest.mutationtest.ListenerArguments;
+
+import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -6,11 +11,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.util.Properties;
-
-import org.junit.Test;
-import org.pitest.mutationtest.ListenerArguments;
 
 public class MutationsResultListenerFactoryTest {
 
@@ -31,5 +31,8 @@ public class MutationsResultListenerFactoryTest {
     private ListenerArguments someArgs() {
         return null;
     }
-    private Properties someProperties() { return null;    }
+    
+    private Properties someProperties() { 
+        return null;
+    }
 }

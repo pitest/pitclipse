@@ -1,14 +1,14 @@
-package org.pitest.pitclipse.pitrunner.config;
-
-import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.verify;
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
+package org.pitest.pitclipse.runner.config;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.runner.config.PitExecutionMode.WORKSPACE;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PitExecutionModeTest {

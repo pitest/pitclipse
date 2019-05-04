@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pitclipse Preferences UI
+Bundle-SymbolicName: org.pitest.pitclipse.preferences.ui;singleton:=true
+Bundle-Version: 2.0.0.qualifier
+Bundle-Vendor: Pitest.org
+Automatic-Module-Name: org.pitest.pitclipse.preferences.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.jface;bundle-version="[3.11.1,4.0.0)",
+ org.eclipse.ui.workbench;bundle-version="[3.107.1,4.0.0)",
+ org.pitest.pitclipse.core,
+ org.pitest.pitclipse.runner

@@ -1,17 +1,18 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-
-import java.io.File;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.pitest.pitclipse.pitrunner.server.PitServerTest;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.server.PitServerTest;
+
+import java.io.File;
+import java.util.List;
+
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public abstract class AbstractPitRunnerTest {
 

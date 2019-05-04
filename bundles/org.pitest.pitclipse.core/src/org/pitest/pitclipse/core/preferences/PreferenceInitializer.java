@@ -4,16 +4,17 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.pitest.pitclipse.core.PitCoreActivator;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT;
-import static org.pitest.pitclipse.core.preferences.PitPreferencePage.TIMEOUT_FACTOR;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_TIMEOUT;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_TIMEOUT_FACTOR;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_TIMEOUT;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_TIMEOUT_FACTOR;
 
 /**
  * Class used to initialize default preference values.

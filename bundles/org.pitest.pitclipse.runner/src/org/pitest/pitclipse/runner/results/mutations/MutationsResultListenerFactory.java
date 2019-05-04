@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
 
 import org.pitest.mutationtest.ListenerArguments;
 import org.pitest.mutationtest.MutationResultListener;

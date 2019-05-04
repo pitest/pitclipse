@@ -1,15 +1,15 @@
-package org.pitest.pitclipse.pitrunner.results.mutations;
+package org.pitest.pitclipse.runner.results.mutations;
 
-import org.pitest.functional.SideEffect1;
+import com.google.common.collect.ImmutableList;
+
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.engine.MutationDetails;
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.pitrunner.results.Mutations;
-import org.pitest.pitclipse.pitrunner.results.Mutations.Mutation;
-import org.pitest.pitclipse.pitrunner.results.ObjectFactory;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.results.Mutations;
+import org.pitest.pitclipse.runner.results.Mutations.Mutation;
+import org.pitest.pitclipse.runner.results.ObjectFactory;
 
 import java.math.BigInteger;
 
@@ -25,6 +25,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 
     @Override
     public void runStart() {
+        // nothing to do
     }
 
     @Override
@@ -33,12 +34,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
             MutationDetails details = result.getDetails();
             final Mutation mutation = OBJECT_FACTORY.createMutationsMutation();
             mutation.setIndex(BigInteger.valueOf(details.getFirstIndex()));
-            result.getKillingTest().forEach(new SideEffect1<String>() {
-                @Override
-                public void apply(String killingTest) {
-                    mutation.setKillingTest(killingTest);
-                }
-            });
+            result.getKillingTest().ifPresent(mutation::setKillingTest);
             mutation.setLineNumber(BigInteger.valueOf(details.getLineNumber()));
             mutation.setMutatedClass(details.getClassName().asJavaName());
             mutation.setMutatedMethod(details.getMethod().name());

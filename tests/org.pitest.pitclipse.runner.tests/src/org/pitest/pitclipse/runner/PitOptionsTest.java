@@ -1,10 +1,11 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
+
+import com.google.common.collect.ImmutableList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
-import org.pitest.pitclipse.pitrunner.PitOptions.PitLaunchException;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,10 @@ import java.util.Random;
 
 import static java.lang.Integer.toHexString;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class PitOptionsTest {
 
@@ -75,10 +79,10 @@ public class PitOptionsTest {
 
     @Test(expected = PitLaunchException.class)
     public void multipleSourceDirectoriesOneDoesNotExist() throws IOException {
-        PitOptions.builder().
-                withSourceDirectories(ImmutableList.of(testSrcDir, randomDir())).
-                withClassUnderTest(TEST_CLASS1).
-                build();
+        PitOptions.builder()
+                  .withSourceDirectories(ImmutableList.of(testSrcDir, randomDir()))
+                  .withClassUnderTest(TEST_CLASS1)
+                  .build();
     }
 
     @Test(expected = PitLaunchException.class)

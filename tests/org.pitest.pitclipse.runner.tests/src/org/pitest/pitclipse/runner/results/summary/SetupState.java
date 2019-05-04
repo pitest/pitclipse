@@ -1,11 +1,13 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.results.summary.SummaryResultListenerTestSugar.SummaryListenerFactory;
 
-import static org.pitest.pitclipse.pitrunner.results.MutationResultListenerLifecycle.using;
+import static org.pitest.pitclipse.runner.results.MutationResultListenerLifecycle.using;
 
 class SetupState {
 

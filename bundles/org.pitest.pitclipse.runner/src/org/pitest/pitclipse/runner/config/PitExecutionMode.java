@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.config;
+package org.pitest.pitclipse.runner.config;
 
 public enum PitExecutionMode {
     PROJECT_ISOLATION("containingProject", "&Project containing test only") {

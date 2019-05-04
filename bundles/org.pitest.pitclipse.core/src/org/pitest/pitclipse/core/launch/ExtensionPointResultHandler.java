@@ -1,13 +1,18 @@
 package org.pitest.pitclipse.core.launch;
 
-import org.eclipse.swt.widgets.Display;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.client.PitResultHandler;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.client.PitResultHandler;
 
 public class ExtensionPointResultHandler implements PitResultHandler {
 
     public void handle(PitResults results) {
-        Display.getDefault().asyncExec(new UpdateExtensions(results));
+        Job.create("Reporting Pit results", monitor -> {
+            new UpdateExtensions(results).run();
+            return new Status(IStatus.OK, "org.pitest.pitclipse.core.launch", "ok");
+        }).schedule();
     }
 
 }

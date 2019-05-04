@@ -1,4 +1,6 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch;
+
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -9,16 +11,15 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.pitclipse.core.extension.handler.ExtensionPointHandler;
 import org.pitest.pitclipse.core.extension.point.PitRuntimeOptions;
-import org.pitest.pitclipse.core.launch.config.ClassFinder;
-import org.pitest.pitclipse.core.launch.config.LaunchConfigurationWrapper;
-import org.pitest.pitclipse.core.launch.config.PackageFinder;
-import org.pitest.pitclipse.core.launch.config.ProjectFinder;
-import org.pitest.pitclipse.core.launch.config.SourceDirFinder;
-import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.pitrunner.PitRunner;
-import org.pitest.pitclipse.pitrunner.config.PitConfiguration;
-import org.pitest.pitclipse.pitrunner.io.SocketProvider;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.launch.config.ClassFinder;
+import org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper;
+import org.pitest.pitclipse.launch.config.PackageFinder;
+import org.pitest.pitclipse.launch.config.ProjectFinder;
+import org.pitest.pitclipse.launch.config.SourceDirFinder;
+import org.pitest.pitclipse.runner.PitOptions;
+import org.pitest.pitclipse.runner.PitRunner;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.io.SocketProvider;
 
 import java.util.List;
 

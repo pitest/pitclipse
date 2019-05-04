@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.launch.config;
+package org.pitest.pitclipse.launch.config;
 
 import org.eclipse.core.runtime.CoreException;
 

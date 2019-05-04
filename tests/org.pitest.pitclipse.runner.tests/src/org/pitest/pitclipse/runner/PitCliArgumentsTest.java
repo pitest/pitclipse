@@ -1,13 +1,14 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
+
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.Collections2;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 public class PitCliArgumentsTest {
 

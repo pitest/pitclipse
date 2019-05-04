@@ -1,11 +1,11 @@
-package org.pitest.pitclipse.pitrunner.service;
+package org.pitest.pitclipse.runner.service;
 
-import org.pitest.pitclipse.pitrunner.PitRequest;
-import org.pitest.pitclipse.pitrunner.PitResults;
-import org.pitest.pitclipse.pitrunner.model.ModelBuilder;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
-import org.pitest.pitclipse.pitrunner.server.PitServer;
-import org.pitest.pitclipse.pitrunner.server.PitServerProvider;
+import org.pitest.pitclipse.runner.PitRequest;
+import org.pitest.pitclipse.runner.PitResults;
+import org.pitest.pitclipse.runner.model.ModelBuilder;
+import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.runner.server.PitServer;
+import org.pitest.pitclipse.runner.server.PitServerProvider;
 
 public class PitclipseService {
     private final PitServerProvider serverProvider;

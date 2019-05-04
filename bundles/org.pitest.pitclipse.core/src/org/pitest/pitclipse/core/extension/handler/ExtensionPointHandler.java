@@ -9,6 +9,10 @@ import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.warn;
 
+/**
+ * 
+ * @param <T> 
+ */
 public class ExtensionPointHandler<T> {
     private final String extensionPointId;
 

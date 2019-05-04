@@ -1,17 +1,9 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.pitest.mutationtest.DetectionStatus.KILLED;
-import static org.pitest.mutationtest.DetectionStatus.NO_COVERAGE;
-import static org.pitest.pitclipse.pitrunner.TestFactory.TEST_FACTORY;
-import static org.pitest.pitclipse.reloc.guava.base.Predicates.notNull;
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.filter;
-import static org.pitest.pitclipse.reloc.guava.collect.Collections2.transform;
-
-import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Map;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
@@ -28,11 +20,20 @@ import org.pitest.mutationtest.engine.MethodName;
 import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.pitclipse.example.Foo;
-import org.pitest.pitclipse.pitrunner.results.summary.SummaryResultListenerTestSugar.SummaryResultWrapper;
-import org.pitest.pitclipse.reloc.guava.base.Function;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableMap;
+import org.pitest.pitclipse.runner.results.summary.SummaryResultListenerTestSugar.SummaryResultWrapper;
+
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Map;
+
+import static com.google.common.base.Predicates.notNull;
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.transform;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.pitest.mutationtest.DetectionStatus.KILLED;
+import static org.pitest.mutationtest.DetectionStatus.NO_COVERAGE;
+import static org.pitest.pitclipse.runner.TestFactory.TEST_FACTORY;
 
 class SummaryResultListenerTestData {
     public static ClassMutationResults anUncoveredMutationOnFoo() {
@@ -63,7 +64,7 @@ class SummaryResultListenerTestData {
         Location location = new Location(ClassName.fromClass(Foo.class), MethodName.fromString("doFoo"), "doFoo");
         MutationIdentifier id = new MutationIdentifier(location, 1, "SomeMutator");
         MutationDetails md = new MutationDetails(id, "org/pitest/pitclipse/example/Foo.java", TEST_FACTORY.aString(),
-                9, TEST_FACTORY.aRandomInt(), TEST_FACTORY.aRandomBoolean(), TEST_FACTORY.aRandomBoolean());
+                9, TEST_FACTORY.aRandomInt());
         MutationStatusTestPair status = new MutationStatusTestPair(TEST_FACTORY.aRandomInt(), detectionStatus,
                 "org.pitest.pitclipse.example.ExampleTest");
         MutationResult mutation = new MutationResult(md, status);
@@ -118,9 +119,9 @@ class SummaryResultListenerTestData {
         @Override
         public int getNumberOfCoveredLines(Collection<ClassName> classes) {
             int total = 0;
-            for (ClassName className : classes)
+            for (ClassName className : classes) {
                 total += coverageFor(className);
-
+            }
             return total;
         }
 

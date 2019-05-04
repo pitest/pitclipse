@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.pitrunner.config;
+package org.pitest.pitclipse.runner.config;
 
 public interface PitExecutionModeVisitor<T> {
     T visitProjectLevelConfiguration();

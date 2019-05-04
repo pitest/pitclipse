@@ -2,14 +2,14 @@ package org.pitest.pitclipse.ui.view.mutations;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.pitest.pitclipse.pitrunner.model.ClassMutations;
-import org.pitest.pitclipse.pitrunner.model.Mutation;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
-import org.pitest.pitclipse.pitrunner.model.MutationsModelVisitor;
-import org.pitest.pitclipse.pitrunner.model.PackageMutations;
-import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
-import org.pitest.pitclipse.pitrunner.model.Status;
-import org.pitest.pitclipse.pitrunner.model.Visitable;
+import org.pitest.pitclipse.runner.model.ClassMutations;
+import org.pitest.pitclipse.runner.model.Mutation;
+import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.runner.model.MutationsModelVisitor;
+import org.pitest.pitclipse.runner.model.PackageMutations;
+import org.pitest.pitclipse.runner.model.ProjectMutations;
+import org.pitest.pitclipse.runner.model.Status;
+import org.pitest.pitclipse.runner.model.Visitable;
 
 public class ViewContentProvider implements ITreeContentProvider {
 

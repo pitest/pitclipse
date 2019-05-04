@@ -1,8 +1,9 @@
-package org.pitest.pitclipse.pitrunner.model;
+package org.pitest.pitclipse.runner.model;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.pitrunner.results.Mutations.Mutation;
-import org.pitest.pitclipse.reloc.guava.collect.Multimap;
+import com.google.common.collect.Multimap;
+
+import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.results.Mutations.Mutation;
 
 public interface MutationsByStatus extends Multimap<DetectionStatus, Mutation> {
 }

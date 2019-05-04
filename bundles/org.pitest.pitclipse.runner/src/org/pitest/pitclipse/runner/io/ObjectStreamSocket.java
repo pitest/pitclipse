@@ -1,6 +1,6 @@
-package org.pitest.pitclipse.pitrunner.io;
+package org.pitest.pitclipse.runner.io;
 
-import org.pitest.pitclipse.reloc.guava.annotations.VisibleForTesting;
+import com.google.common.annotations.VisibleForTesting;
 
 import java.io.Closeable;
 import java.io.IOException;

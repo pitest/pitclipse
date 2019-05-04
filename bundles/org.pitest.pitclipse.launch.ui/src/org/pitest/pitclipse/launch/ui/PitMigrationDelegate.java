@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.core.launch;
+package org.pitest.pitclipse.launch.ui;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -14,11 +14,12 @@ import org.eclipse.jdt.core.JavaCore;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.launch.PitArgumentsTab.ATTR_TEST_CONTAINER;
+import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 
 public final class PitMigrationDelegate {
 
     private PitMigrationDelegate() {
+        // utility class should not be instantiated
     }
 
     public static void mapResources(ILaunchConfigurationWorkingCopy config)
@@ -44,10 +45,8 @@ public final class PitMigrationDelegate {
     private static IResource getResource(ILaunchConfiguration config)
             throws CoreException {
         String projName = config.getAttribute(ATTR_PROJECT_NAME, (String) null);
-        String typeName = config.getAttribute(ATTR_MAIN_TYPE_NAME,
-                (String) null);
-        String container = config.getAttribute(ATTR_TEST_CONTAINER,
-                (String) null);
+        String typeName = config.getAttribute(ATTR_MAIN_TYPE_NAME, (String) null);
+        String container = config.getAttribute(ATTR_TEST_CONTAINER, (String) null);
         IJavaElement element = null;
         if (projName != null && Path.ROOT.isValidSegment(projName)) {
             IJavaProject javaProject = getJavaModel().getJavaProject(projName);

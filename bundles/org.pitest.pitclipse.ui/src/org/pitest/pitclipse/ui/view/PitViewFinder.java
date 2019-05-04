@@ -5,14 +5,14 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
+import org.pitest.pitclipse.runner.model.MutationsModel;
 import org.pitest.pitclipse.ui.view.mutations.MutationsView;
 
 import java.io.File;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newHashSet;
 
 public enum PitViewFinder {
     INSTANCE;

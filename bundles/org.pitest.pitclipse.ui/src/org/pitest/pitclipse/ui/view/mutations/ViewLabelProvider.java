@@ -11,29 +11,29 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
-import org.pitest.pitclipse.pitrunner.model.ClassMutations;
-import org.pitest.pitclipse.pitrunner.model.Countable;
-import org.pitest.pitclipse.pitrunner.model.Mutation;
-import org.pitest.pitclipse.pitrunner.model.MutationsModel;
-import org.pitest.pitclipse.pitrunner.model.MutationsModelVisitor;
-import org.pitest.pitclipse.pitrunner.model.PackageMutations;
-import org.pitest.pitclipse.pitrunner.model.ProjectMutations;
-import org.pitest.pitclipse.pitrunner.model.Status;
-import org.pitest.pitclipse.pitrunner.model.Visitable;
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.model.ClassMutations;
+import org.pitest.pitclipse.runner.model.Countable;
+import org.pitest.pitclipse.runner.model.Mutation;
+import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.runner.model.MutationsModelVisitor;
+import org.pitest.pitclipse.runner.model.PackageMutations;
+import org.pitest.pitclipse.runner.model.ProjectMutations;
+import org.pitest.pitclipse.runner.model.Status;
+import org.pitest.pitclipse.runner.model.Visitable;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 import java.net.URL;
 import java.util.Set;
 
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.KILLED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.MEMORY_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NON_VIABLE;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.NOT_STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.RUN_ERROR;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.STARTED;
-import static org.pitest.pitclipse.pitrunner.results.DetectionStatus.TIMED_OUT;
-import static org.pitest.pitclipse.reloc.guava.base.Strings.isNullOrEmpty;
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.immutableEnumSet;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Sets.immutableEnumSet;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.MEMORY_ERROR;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.NON_VIABLE;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.NOT_STARTED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.RUN_ERROR;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.STARTED;
+import static org.pitest.pitclipse.runner.results.DetectionStatus.TIMED_OUT;
 
 public class ViewLabelProvider extends LabelProvider {
 

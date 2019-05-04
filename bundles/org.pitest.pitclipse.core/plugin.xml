@@ -4,64 +4,7 @@
   <extension-point id="org.pitest.pitclipse.core.results" name="PitResults" schema="schema/org.pitest.pitclipse.core.results.exsd"/>
   <extension-point id="org.pitest.pitclipse.core.mutations.results" name="PitMutationsResults" schema="schema/org.pitest.pitclipse.core.mutations.results.exsd"/>
   <extension-point id="org.pitest.pitclipse.core.executePit" name="PitExecutor" schema="schema/org.pitest.pitclipse.core.executePit.exsd"/>
-  <extension
-      point="org.eclipse.debug.core.launchConfigurationTypes">
-    <launchConfigurationType
-      name="PIT Mutation Test"
-      delegate="org.pitest.pitclipse.core.launch.PitLaunchConfigurationDelegate"
-      modes="run"               
-      id="org.pitest.pitclipse.core.mutationTest">        
-    </launchConfigurationType>
-  </extension>
-  <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-    <launchConfigurationTypeImage
-        icon="icons/pit.gif"
-        configTypeID="org.pitest.pitclipse.core.mutationTest"
-        id="org.pitest.pitclipse.core.mutationTest.icon">
-    </launchConfigurationTypeImage>
-  </extension>
-  <extension point="org.eclipse.debug.ui.launchShortcuts">
-    <shortcut
-      id="org.pitest.pitclipse.core.mutationTest.shortcut"
-      class="org.pitest.pitclipse.core.launch.PitLaunchShortcut"
-      label="PIT Mutation Test"
-      icon="icons/pit.gif"
-      modes="run">
-      <contextualLaunch>
-        <contextLabel mode="run" label="PIT Mutation Test" />
-        <enablement>
-          
-        </enablement>
-       </contextualLaunch>
-    </shortcut>
-  </extension>
-  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-    <launchConfigurationTabGroup
-       type="org.pitest.pitclipse.core.mutationTest"
-       class="org.pitest.pitclipse.core.launch.PitLaunchConfigurationTabGroup"
-       id="org.pitest.pitclipse.core.mutationTest.config">
-    </launchConfigurationTabGroup>
-  </extension>
-  <extension
-        point="org.eclipse.ui.preferencePages">
-     <page
-           class="org.pitest.pitclipse.core.preferences.PitPreferencePage"
-           id="org.pitest.pitclipse.core.preferences.PitPreferencePage"
-           name="Pitest">
-     </page>
-     <page 
-         id="org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage" 
-         name="Mutators" 
-         class="org.pitest.pitclipse.core.preferences.PitMutatorsPreferencePage" 
-         category="org.pitest.pitclipse.core.preferences.PitPreferencePage"> 
-      </page> 
-  </extension>
-  <extension
-        point="org.eclipse.core.runtime.preferences">
-     <initializer
-           class="org.pitest.pitclipse.core.preferences.PreferenceInitializer">
-     </initializer>
-  </extension>
+  
   <extension
         point="org.pitest.pitclipse.core.executePit">
      <pit_options
@@ -72,5 +15,11 @@
         point="org.pitest.pitclipse.core.results">
      <results
            class="org.pitest.pitclipse.core.result.MutationsModelNotifier"></results>
+  </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="org.pitest.pitclipse.core.preferences.PreferenceInitializer">
+     </initializer>
   </extension>
 </plugin>

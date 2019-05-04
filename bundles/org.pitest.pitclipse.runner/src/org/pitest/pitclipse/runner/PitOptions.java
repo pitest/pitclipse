@@ -1,7 +1,7 @@
-package org.pitest.pitclipse.pitrunner;
+package org.pitest.pitclipse.runner;
 
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createParentDirs;
-import static org.pitest.pitclipse.reloc.guava.io.Files.createTempDir;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.io.Files.createParentDirs;
+import static com.google.common.io.Files.createTempDir;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
 
 public final class PitOptions implements Serializable {
 
@@ -23,6 +23,7 @@ public final class PitOptions implements Serializable {
     private final ImmutableList<String> classesToMutate;
     private final ImmutableList<File> sourceDirs;
     private final ImmutableList<String> packages;
+    private final ImmutableList<String> classPath;
     private final int threads;
     private final File historyLocation;
     private final ImmutableList<String> excludedClasses;
@@ -33,13 +34,14 @@ public final class PitOptions implements Serializable {
     private final BigDecimal timeoutFactor;
 
     private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
-            File reportDir, ImmutableList<String> packages, int threads, File historyLocation,
+            File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
             ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
             ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor) {
         this.classUnderTest = classUnderTest;
         this.threads = threads;
         this.historyLocation = historyLocation;
         this.packages = packages;
+        this.classPath = classPath;
         this.classesToMutate = classesToMutate;
         this.sourceDirs = sourceDirs;
         this.reportDir = reportDir;
@@ -73,6 +75,7 @@ public final class PitOptions implements Serializable {
         private File reportDir = null;
         private ImmutableList<File> sourceDirs = ImmutableList.of();
         private ImmutableList<String> packages = ImmutableList.of();
+        private ImmutableList<String> classPath = ImmutableList.of();
         private int threads = 1;
         private File historyLocation = null;
         private ImmutableList<String> excludedClasses = ImmutableList.of();
@@ -114,7 +117,7 @@ public final class PitOptions implements Serializable {
             validateTestClass();
             initialiseReportDir();
             initialiseHistoryLocation();
-            return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, threads,
+            return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, classPath, threads,
                     historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);
         }
 
@@ -183,6 +186,11 @@ public final class PitOptions implements Serializable {
 
         public PitOptionsBuilder withPackagesToTest(List<String> packages) {
             this.packages = copyOf(packages);
+            return this;
+        }
+        
+        public PitOptionsBuilder withClassPath(List<String> classPath) {
+            this.classPath = copyOf(classPath);
             return this;
         }
 
@@ -259,6 +267,10 @@ public final class PitOptions implements Serializable {
 
     public List<String> getPackages() {
         return packages;
+    }
+    
+    public List<String> getClassPath() {
+        return classPath;
     }
 
     public List<String> getAvoidCallsTo() {

@@ -1,7 +1,7 @@
-package org.pitest.pitclipse.pitrunner.results.summary;
+package org.pitest.pitclipse.runner.results.summary;
 
-import org.pitest.pitclipse.reloc.guava.base.MoreObjects;
-import org.pitest.pitclipse.reloc.guava.base.Objects;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
