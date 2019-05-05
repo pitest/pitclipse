@@ -23,7 +23,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
      * initializeDefaultPreferences()
      */
@@ -37,6 +37,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
         store.setDefault(TIMEOUT, DEFAULT_TIMEOUT);
         store.setDefault(TIMEOUT_FACTOR, DEFAULT_TIMEOUT_FACTOR.toString());
+        store.setDefault(EXCLUDED_CLASSES, "*Test");
     }
 
 }

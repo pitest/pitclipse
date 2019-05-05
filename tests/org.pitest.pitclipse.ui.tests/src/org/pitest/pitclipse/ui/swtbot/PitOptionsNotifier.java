@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui.swtbot;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.pitest.pitclipse.runner.PitOptions;
 
 public enum PitOptionsNotifier {
 

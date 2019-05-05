@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <groupId>org.pitest</groupId>
+    <artifactId>org.pitest.pitclipse.ui.tests</artifactId>
+    <packaging>eclipse-test-plugin</packaging>
+
+	<parent>
+		<groupId>org.pitest</groupId>
+		<artifactId>org.pitest.pitclipse.tests</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<build>
+        <plugins>
+			<!-- 
+				Required to run SWTBot 
+			 -->
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <useUIHarness>true</useUIHarness>
+                    <useUIThread>false</useUIThread>
+                    <product>org.eclipse.platform.ide</product>
+                    <application>org.eclipse.ui.ide.workbench</application>
+                    <showEclipseLog>true</showEclipseLog>
+                </configuration>
+            </plugin>
+			<!-- 
+				Explicit dependency to the listeners fragment:
+				make Pitclipse's mutation listeners available during test runtime 
+			 -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.pitest.pitclipse.listeners</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -6,7 +6,7 @@
       provider-name="Pitest.org">
 
    <description url="https://github.com/philglover/pitclipse">
-      UI integration of Pitest (PIT), a state of the art mutation systemfor the JVM.
+      UI integration of Pitest (PIT), a state of the art mutation system for the JVM.
 Provides views and contextual actions to search the code for mutations and show vulnerabilities.
    </description>
 
@@ -234,6 +234,20 @@ Provides views and contextual actions to search the code for mutations and show 
 
    <plugin
          id="org.pitest.pitclipse.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.pitest.pitclipse.launch.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.pitest.pitclipse.preferences.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

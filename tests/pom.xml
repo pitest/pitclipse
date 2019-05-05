@@ -19,7 +19,12 @@
     </properties>
 
 	<modules>
+        <!-- Test fragments -->
         <module>org.pitest.pitclipse.runner.tests</module>
+        <module>org.pitest.pitclipse.ui.tests</module>
+
+        <!-- Test dependencies -->
+        <module>io.cucumber</module>
 	</modules>
 
     <build>

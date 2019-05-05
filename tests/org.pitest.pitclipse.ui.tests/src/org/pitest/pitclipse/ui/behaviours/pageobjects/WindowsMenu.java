@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import java.math.BigDecimal;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
+
+import java.math.BigDecimal;
 
 public class WindowsMenu {
 
@@ -14,7 +14,7 @@ public class WindowsMenu {
     private static final String OTHER = "Other...";
     private static final String PREFERENCES = "Preferences";
     private static final String SHOW_VIEW = "Show View";
-    private final SWTWorkbenchBot bot;
+    private SWTWorkbenchBot bot;
     private final PerspectiveSelector perspectiveSelector;
     private final PitPreferenceSelector preferenceSelector;
     private final ViewSelector viewSelector;
@@ -27,8 +27,13 @@ public class WindowsMenu {
     }
 
     public void openJavaPerspective() {
-        bot.menu(WINDOWS).menu(OPEN_PERSPECTIVES).menu(OTHER).click();
+        bot.menu(WINDOWS).menu("Perspective").menu(OPEN_PERSPECTIVES).menu(OTHER).click();
         perspectiveSelector.selectPerspective("Java");
+//        for (IPerspectiveDescriptor descriptor : PlatformUI.getWorkbench().getPerspectiveRegistry().getPerspectives()) {
+//            System.out.println(descriptor.getLabel() + " -- " + descriptor.getId());
+//        }
+//        IPerspectiveDescriptor javaPerspective = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId("org.eclipse.jdt.ui.JavaPerspective");
+//        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(javaPerspective);
     }
 
     public void setPitExecutionMode(PitExecutionMode mode) {

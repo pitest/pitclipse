@@ -1,5 +1,11 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -7,13 +13,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
-import java.util.List;
-import java.util.Map;
-
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.model.ExamplesTable;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 public class LaunchConfigurationSteps {
 
@@ -24,10 +26,9 @@ public class LaunchConfigurationSteps {
         assertTrue(PAGES.getRunMenu().runConfigurations().isEmpty());
     }
 
-    @Then("a launch configuration with name $name is created")
+    @Then("a launch configuration with name {word} is created")
     public void openPitConfig(String name) {
-        for (PitRunConfiguration pitRunConfiguration : PAGES.getRunMenu()
-                .runConfigurations()) {
+        for (PitRunConfiguration pitRunConfiguration : PAGES.getRunMenu().runConfigurations()) {
             if (name.equals(pitRunConfiguration.getName())) {
                 return;
             }
@@ -35,7 +36,7 @@ public class LaunchConfigurationSteps {
         fail("Configuration not found: " + name);
     }
 
-    @When("the launch configuration with name $name is selected")
+    @When("the launch configuration with name {word} is selected")
     public void selectConfig(String name) {
         for (PitRunConfiguration pitRunConfiguration : PAGES.getRunMenu()
                 .runConfigurations()) {
@@ -60,7 +61,7 @@ public class LaunchConfigurationSteps {
         assertTrue(excludedClasses.isEmpty());
     }
 
-    @Then("the excluded classes option on the launch configuration is set to \"$excludedClasses\"")
+    @Then("the excluded classes option on the launch configuration is set to {string}")
     public void launchConfigurationExcludesClasses(String classes) {
         String excludedClasses = launchConfig.getExcludedClasses();
         assertEquals(classes, excludedClasses);
@@ -81,16 +82,16 @@ public class LaunchConfigurationSteps {
         assertTrue(launchConfig.isIncrementalAnalysis());
     }
 
-    @Then("the launch configurations are configured as: $configTable")
-    public void launchConfigurationsMatch(ExamplesTable configTable) {
-        List<PitRunConfiguration> launchConfigurations = PAGES.getRunMenu()
-                .runConfigurations();
-        configurationsMatch(configTable.getRows(), launchConfigurations);
+    @Then("the launch configuration(s) is/are configured as(:)")
+    public void launchConfigurationsMatch(DataTable configTable) {
+        List<PitRunConfiguration> launchConfigurations = PAGES.getRunMenu().runConfigurations();
+        configurationsMatch(configTable.asMaps(), launchConfigurations);
     }
 
-    private void configurationsMatch(List<Map<String, String>> expectedRows,
-            List<PitRunConfiguration> launchConfigurations) {
-        assertEquals(expectedRows.size(), launchConfigurations.size());
+    private void configurationsMatch(List<Map<String, String>> expectedRows, List<PitRunConfiguration> launchConfigurations) {
+        launchConfigurations = new ArrayList<>(launchConfigurations);
+        launchConfigurations.removeIf(conf -> conf.getName().contains("("));
+        assertEquals("The number of existing configurations is not the expected one", expectedRows.size(), launchConfigurations.size());
         for (int i = 0; i < expectedRows.size(); i++) {
             assertEquivalent(expectedRows.get(i), launchConfigurations.get(i));
         }

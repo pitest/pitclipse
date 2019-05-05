@@ -12,4 +12,8 @@ public class AssertUtil {
     public static void assertDoubleEquals(double expected, double actual) {
         assertEquals(expected, actual, TOLERANCE);
     }
+    
+    public static void assertDoubleEquals(String message, double expected, double actual) {
+        assertEquals(message, expected, actual, TOLERANCE);
+    }
 }

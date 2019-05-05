@@ -1,5 +1,20 @@
 language: java
+
 jdk:
   - openjdk8
+
+# Prevent "mvn install" default step
+install: true
+
+env: DISPLAY=:99.0
+
+addons:
+  apt:
+    packages:
+      - metacity
+
+before_script:
+  - sh -e /etc/init.d/xvfb start
+  - metacity --sm-disable --replace 2> metacity.err &
 
 script: mvn verify

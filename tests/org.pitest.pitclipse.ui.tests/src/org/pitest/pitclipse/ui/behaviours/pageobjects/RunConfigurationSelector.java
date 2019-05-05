@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
+import static com.google.common.collect.ImmutableList.builder;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration.Builder;
 
 public class RunConfigurationSelector {

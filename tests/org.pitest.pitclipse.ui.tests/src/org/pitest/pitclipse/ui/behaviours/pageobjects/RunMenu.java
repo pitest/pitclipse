@@ -1,11 +1,12 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import java.util.List;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.pitest.pitclipse.pitrunner.PitOptions;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.ui.swtbot.PitOptionsNotifier;
 import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
+
+import java.util.List;
 
 public class RunMenu {
 
@@ -30,7 +31,12 @@ public class RunMenu {
     public void runPit() {
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
         menuHelper.findMenu(bot.menu(RUN).menu(RUN_AS), PIT_MUTATION_TEST)
-                .click();
+                  .click();
+        try {
+            bot.shell("Select a Test Configuration").bot().button("OK").click();
+        } catch (WidgetNotFoundException e) {
+            // the dialog has not opened: it is likely the first time Pit is launched
+        }
     }
 
     public List<PitRunConfiguration> runConfigurations() {

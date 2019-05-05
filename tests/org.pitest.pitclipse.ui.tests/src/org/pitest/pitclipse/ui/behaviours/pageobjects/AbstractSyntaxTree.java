@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -14,7 +15,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.StepException;
 
 public class AbstractSyntaxTree {

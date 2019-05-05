@@ -11,8 +11,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
-import org.pitest.pitclipse.reloc.guava.base.Optional;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
+import com.google.common.base.Optional;
 
 public class PitPreferenceSelector implements Closeable {
 
