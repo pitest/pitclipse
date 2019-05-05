@@ -58,8 +58,8 @@ public class SWTBotMenuHelper {
                 parentMenu, searchString));
 
         if (menuItem == null) {
-            throw new WidgetNotFoundException("MenuItem \"" + searchString
-                    + "\" not found.");
+            throw new WidgetNotFoundException("MenuItem \"" + searchString +
+                    "\" not found.");
         } else {
             return new SWTBotMenu(menuItem);
         }

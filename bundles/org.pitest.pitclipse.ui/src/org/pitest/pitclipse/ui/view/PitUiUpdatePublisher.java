@@ -23,6 +23,11 @@ import org.eclipse.swt.browser.ProgressListener;
 import org.pitest.pitclipse.core.extension.handler.ExtensionPointHandler;
 import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
 
+/**
+ * A progress listener that notifies contributions to the
+ * {@code org.pitest.pitclipse.ui.results} extension point
+ * when the <i>PIT Summary</i> view is fully loaded.
+ */
 public class PitUiUpdatePublisher implements ProgressListener {
 
     private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.ui.results";
@@ -31,7 +36,7 @@ public class PitUiUpdatePublisher implements ProgressListener {
 
     public PitUiUpdatePublisher(Browser browser) {
         this.browser = browser;
-        handler = new ExtensionPointHandler<PitUiUpdate>(EXTENSION_POINT_ID);
+        this.handler = new ExtensionPointHandler<>(EXTENSION_POINT_ID);
     }
 
     public void changed(ProgressEvent event) {

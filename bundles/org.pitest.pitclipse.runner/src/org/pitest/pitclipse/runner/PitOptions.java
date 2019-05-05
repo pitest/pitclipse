@@ -31,6 +31,12 @@ import static com.google.common.io.Files.createTempDir;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
 
+/**
+ * <p>Options used to parameterize a PIT analysis.</p>
+ * 
+ * <p>An instance of this class is <strong>immutable</strong> and, once built,
+ * is inherently <strong>thread-safe</strong>.</p>
+ */
 public final class PitOptions implements Serializable {
 
     private static final long serialVersionUID = 1543633254516962868L;
@@ -75,10 +81,6 @@ public final class PitOptions implements Serializable {
 
     public ImmutableList<File> getSourceDirectories() {
         return sourceDirs;
-    }
-
-    private static File copyOfFile(File sourceDir) {
-        return new File(sourceDir.getPath());
     }
 
     public static PitOptionsBuilder builder() {
@@ -242,6 +244,10 @@ public final class PitOptions implements Serializable {
 
         private static List<String> split(String toSplit) {
             return ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings().split(toSplit));
+        }
+
+        private static File copyOfFile(File sourceDir) {
+            return new File(sourceDir.getPath());
         }
     }
 

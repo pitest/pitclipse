@@ -22,6 +22,11 @@ import org.pitest.pitclipse.ui.view.mutations.MutationsView;
 
 import static org.pitest.pitclipse.runner.model.MutationsModel.EMPTY_MODEL;
 
+/**
+ * <p>Empty Pitclipse's {@link MutationsView}.</p>
+ * 
+ *  <p>Called by Pitclipse's core each time PIT is launched.</p>
+ */
 public class PitExecutionStarted implements ResultNotifier<PitRuntimeOptions> {
     @Override
     public void handleResults(PitRuntimeOptions options) {

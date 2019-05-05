@@ -16,9 +16,9 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static org.pitest.pitclipse.ui.behaviours.steps.TestFactory.TEST_FACTORY;
-
 import org.pitest.pitclipse.runner.results.DetectionStatus;
+
+import static org.pitest.pitclipse.ui.behaviours.steps.TestFactory.TEST_FACTORY;
 
 public class PitMutation {
 
@@ -104,44 +104,57 @@ public class PitMutation {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         PitMutation other = (PitMutation) obj;
         if (className == null) {
-            if (other.className != null)
+            if (other.className != null) {
                 return false;
-        } else if (!className.equals(other.className))
+            }
+        } else if (!className.equals(other.className)) {
             return false;
-        if (lineNumber != other.lineNumber)
+        }
+        if (lineNumber != other.lineNumber) {
             return false;
+        }
         if (mutation == null) {
-            if (other.mutation != null)
+            if (other.mutation != null) {
                 return false;
-        } else if (!mutation.equals(other.mutation))
+            }
+        } else if (!mutation.equals(other.mutation)) {
             return false;
+        }
         if (pkg == null) {
-            if (other.pkg != null)
+            if (other.pkg != null) {
                 return false;
-        } else if (!pkg.equals(other.pkg))
+            }
+        } else if (!pkg.equals(other.pkg)) {
             return false;
+        }
         if (project == null) {
-            if (other.project != null)
+            if (other.project != null) {
                 return false;
-        } else if (!project.equals(other.project))
+            }
+        } else if (!project.equals(other.project)) {
             return false;
-        if (status != other.status)
+        }
+        if (status != other.status) {
             return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "PitMutation [status=" + status + ", project=" + project + ", pkg=" + pkg + ", className=" + className
-                + ", lineNumber=" + lineNumber + ", mutation=" + mutation + "]";
+        return "PitMutation [status=" + status + ", project=" + project + ", pkg=" + pkg + ", className=" + className +
+                ", lineNumber=" + lineNumber + ", mutation=" + mutation + "]";
     }
 
     public DetectionStatus getStatus() {

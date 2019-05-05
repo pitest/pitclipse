@@ -16,9 +16,19 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
+
+import java.math.BigDecimal;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -30,16 +40,6 @@ import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATO
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-
-import java.math.BigDecimal;
-
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import org.pitest.pitclipse.core.PitMutators;
-import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 public class PreferencesSteps {
 

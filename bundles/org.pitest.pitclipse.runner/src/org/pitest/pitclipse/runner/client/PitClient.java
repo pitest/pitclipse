@@ -28,6 +28,11 @@ import org.pitest.pitclipse.runner.io.SocketProvider;
 import java.io.Closeable;
 import java.io.IOException;
 
+/**
+ * <p>A client used to receive the parameters of a PIT analysis and to send the results.</p>
+ * 
+ * <p>This client is supposed to be launched from the background VM running PIT.</p>
+ */
 public class PitClient implements Closeable {
 
     private final int portNumber;

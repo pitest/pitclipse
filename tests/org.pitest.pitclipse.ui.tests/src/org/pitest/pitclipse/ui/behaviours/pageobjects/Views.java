@@ -16,10 +16,10 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import java.util.List;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+
+import java.util.List;
 
 public class Views {
 

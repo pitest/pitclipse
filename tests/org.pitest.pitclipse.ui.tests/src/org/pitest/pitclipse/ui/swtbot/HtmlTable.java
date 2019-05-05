@@ -16,14 +16,14 @@
 
 package org.pitest.pitclipse.ui.swtbot;
 
-import static org.pitest.pitclipse.ui.swtbot.ResultsParser.caseInsensitveIndexOf;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.ImmutableMap;
+import static org.pitest.pitclipse.ui.swtbot.ResultsParser.caseInsensitveIndexOf;
 
 public class HtmlTable {
 
@@ -72,10 +72,10 @@ public class HtmlTable {
         Builder<String> resultBuilder = ImmutableList.builder();
         int position = caseInsensitveIndexOf(row, "<td>");
         while (caseInsensitveIndexOf(row, "<td>", position) != -1) {
-            String cell = stripOutTag(row.substring(position), "<td>", "</td>").
-                    replaceAll("<div.*>", "").
-                    replaceAll("<DIV.*>", "").
-                    trim();
+            String cell = stripOutTag(row.substring(position), "<td>", "</td>")
+                    .replaceAll("<div.*>", "")
+                    .replaceAll("<DIV.*>", "")
+                    .trim();
 
             resultBuilder.add(cell);
             position = caseInsensitveIndexOf(row, "<td>", position) + 9;
@@ -96,14 +96,14 @@ public class HtmlTable {
 
     private String stripOutTag(String html, String startString, String endString) {
         String tagValue = getValue(html, startString, endString);
-        return tagValue.
-                replaceFirst(startString, "").
-                replaceFirst(startString.toLowerCase(), "").
-                replaceFirst(startString.toUpperCase(), "").
-                replaceFirst(endString, "").
-                replaceFirst(endString.toUpperCase(), "").
-                replaceFirst(endString.toLowerCase(), "").
-                trim();
+        return tagValue
+                .replaceFirst(startString, "")
+                .replaceFirst(startString.toLowerCase(), "")
+                .replaceFirst(startString.toUpperCase(), "")
+                .replaceFirst(endString, "")
+                .replaceFirst(endString.toUpperCase(), "")
+                .replaceFirst(endString.toLowerCase(), "")
+                .trim();
     }
 
     private String getValue(String html, String startString, String endString) {

@@ -25,11 +25,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+/**
+ * Provides objects easing reading objects and writing objects to a given port. 
+ */
 public class SocketProvider {
 
     private static final int DEFAULT_TIMEOUT = 5000;
     private static final int RETRY_COUNT = 100;
 
+    /**
+     * <p>Returns an object allowing to write objects to the given port.</p>
+     * 
+     * <p>This method blocks until a client accepts the connection.</p>
+     * 
+     * @param portNumber
+     *          The number of port to listen for a client.
+     *          
+     * @return an object allowing to write and read objects from the given port
+     */
     public ObjectStreamSocket listen(int portNumber) {
         ServerSocket serverSocket = null;
         try {
@@ -48,6 +61,16 @@ public class SocketProvider {
         return  System.currentTimeMillis();
     }
 
+    /**
+     * <p>Returns an object allowing to write objects to the given port.</p>
+     * 
+     * <p>This method blocks until a server accepts the connection.</p>
+     * 
+     * @param portNumber
+     *          The number of port to connect to a server.
+     *          
+     * @return an object allowing to write objects to the given port
+     */
     public Optional<ObjectStreamSocket> connectTo(int portNumber) {
         long startInMillis = currentTime();
         Optional<ObjectStreamSocket> socket;
@@ -57,6 +80,7 @@ public class SocketProvider {
                 try {
                     Thread.sleep(DEFAULT_TIMEOUT / RETRY_COUNT);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     e.printStackTrace();
                 }
             }
@@ -79,6 +103,10 @@ public class SocketProvider {
         }
     }
 
+    /**
+     * Returns the number of a port that is not currently used
+     * @return the number of a port that can be used
+     */
     public int getFreePort() {
         ServerSocket socket = null;
         try {

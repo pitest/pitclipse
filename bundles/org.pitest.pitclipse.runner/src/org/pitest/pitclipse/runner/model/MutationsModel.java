@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.Function;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
@@ -57,12 +56,9 @@ public class MutationsModel implements Visitable, Countable {
     private final ImmutableList<Status> statuses;
 
     private MutationsModel(ImmutableList<Status> statuses) {
-        this.statuses = ImmutableList.copyOf(transform(statuses, new Function<Status, Status>() {
-            @Override
-            public Status apply(Status input) {
-                return input.copyOf().withModel(MutationsModel.this).build();
-            }
-        }));
+        this.statuses = ImmutableList.copyOf(
+                transform(statuses, input -> input.copyOf().withModel(MutationsModel.this).build())
+        );
     }
 
     public static MutationsModel make(List<Status> statuses) {

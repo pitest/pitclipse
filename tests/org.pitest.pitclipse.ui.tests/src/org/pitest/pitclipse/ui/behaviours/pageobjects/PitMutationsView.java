@@ -16,12 +16,8 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
-import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
-
-import java.util.List;
-import java.util.regex.Pattern;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
@@ -30,10 +26,15 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.steps.FilePosition;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
+
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
+import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
 public class PitMutationsView {
 
@@ -143,9 +144,11 @@ public class PitMutationsView {
 
         public void select(PitMutation mutation) {
             String status = mutation.getStatus().toString();
-            for (StatusTree statusTree : statuses)
-                if (status.equals(statusTree.statusName))
+            for (StatusTree statusTree : statuses) {
+                if (status.equals(statusTree.statusName)) {
                     statusTree.select(mutation);
+                }
+            }
         }
 
         public static MutationsTree from(SWTBotTree mutationTree) {
@@ -167,9 +170,11 @@ public class PitMutationsView {
         }
 
         public void select(PitMutation mutation) {
-            for (ProjectTree projectTree : projects)
-                if (mutation.getProject().equals(projectTree.projectName))
+            for (ProjectTree projectTree : projects) {
+                if (mutation.getProject().equals(projectTree.projectName)) {
                     projectTree.select(mutation);
+                }
+            }
         }
 
         public static StatusTree from(SWTBotTreeItem statusTree) {
@@ -193,10 +198,11 @@ public class PitMutationsView {
         }
 
         public void select(PitMutation mutation) {
-            for (PackageTree packageTree : packages)
-                if (mutation.getPkg().equals(packageTree.packageName))
+            for (PackageTree packageTree : packages) {
+                if (mutation.getPkg().equals(packageTree.packageName)) {
                     packageTree.select(mutation);
-
+                }
+            }
         }
 
         public static ProjectTree from(SWTBotTreeItem projectTree) {
@@ -220,9 +226,11 @@ public class PitMutationsView {
         }
 
         public void select(PitMutation mutation) {
-            for (ClassTree classTree : classes)
-                if (mutation.getClassName().equals(classTree.className))
+            for (ClassTree classTree : classes) {
+                if (mutation.getClassName().equals(classTree.className)) {
                     classTree.select(mutation);
+                }
+            }
         }
 
         public static PackageTree from(SWTBotTreeItem packageTree) {
@@ -246,10 +254,12 @@ public class PitMutationsView {
         }
 
         public void select(PitMutation mutation) {
-            for (MutationTree mutationTree : mutations)
-                if (mutation.getLineNumber() == mutationTree.lineNumber
-                        && mutation.getMutation().equals(mutationTree.mutation))
+            for (MutationTree mutationTree : mutations) {
+                if (mutation.getLineNumber() == mutationTree.lineNumber &&
+                        mutation.getMutation().equals(mutationTree.mutation)) {
                     mutationTree.select();
+                }
+            }
         }
 
         public static ClassTree from(SWTBotTreeItem classTree) {

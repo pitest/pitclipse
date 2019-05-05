@@ -37,13 +37,9 @@ public class Status implements Visitable, Countable {
             ImmutableList<ProjectMutations> projectMutations) {
         this.mutationsModel = mutationsModel;
         this.detectionStatus = detectionStatus;
-        this.projectMutations = ImmutableList.copyOf(transform(projectMutations,
-                new Function<ProjectMutations, ProjectMutations>() {
-                    @Override
-                    public ProjectMutations apply(ProjectMutations input) {
-                        return input.copyOf().withStatus(Status.this).build();
-                    }
-                }));
+        this.projectMutations = ImmutableList.copyOf(
+                transform(projectMutations, input -> input.copyOf().withStatus(Status.this).build())
+        );
     }
 
     public DetectionStatus getDetectionStatus() {

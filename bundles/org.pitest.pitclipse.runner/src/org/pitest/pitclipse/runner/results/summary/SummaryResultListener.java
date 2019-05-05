@@ -27,12 +27,27 @@ import org.pitest.pitclipse.runner.results.Dispatcher;
 
 import java.util.List;
 
+/**
+ * <p>Listens for mutations results sent by PIT in order to sum them up.</p>
+ * 
+ * <p>Once PIT analysis ends, the results are dispatched as a {@link SummaryResult} instance.</p>
+ * 
+ * <p>Instances of this class are provided to PIT thanks to {@link SummaryResultListenerFactory}.</p>
+ */
 public class SummaryResultListener implements MutationResultListener {
 
     private SummaryResult result = SummaryResult.EMPTY;
     private final Dispatcher<SummaryResult> dispatcher;
     private final CoverageDatabase coverage;
 
+    /**
+     * Creates a new listener that will compute a summary of the whole PIT analysis.
+     * 
+     * @param dispatcher
+     *          The dispatcher use to forward the summary at the end of the summary.
+     * @param coverage
+     *          The coverage computed from the tests.
+     */
     public SummaryResultListener(Dispatcher<SummaryResult> dispatcher, CoverageDatabase coverage) {
         this.dispatcher = dispatcher;
         this.coverage = coverage;

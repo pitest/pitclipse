@@ -16,12 +16,12 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static com.google.common.collect.ImmutableList.copyOf;
+import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 
 public class PitRunConfiguration {
 

@@ -16,16 +16,17 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static com.google.common.collect.ImmutableList.builder;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
-
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration.Builder;
+
+import java.util.List;
+
+import static com.google.common.collect.ImmutableList.builder;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 public class RunConfigurationSelector {
 

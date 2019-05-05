@@ -22,6 +22,12 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.client.PitResultHandler;
 
+/**
+ * <p>Notifies all contributions to the {@code results} extension point
+ * that new results have been produced by PIT.</p>
+ * 
+ * <p>Contributions are notified in a background job.</p>
+ */
 public class ExtensionPointResultHandler implements PitResultHandler {
 
     public void handle(PitResults results) {

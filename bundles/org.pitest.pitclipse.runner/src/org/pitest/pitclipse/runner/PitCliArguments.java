@@ -23,6 +23,10 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Turns {@link PitOptions} instances into CLI arguments
+ * that can be understand by PIT. 
+ */
 public class PitCliArguments {
 
     private static final PitCliArguments instance = new PitCliArguments();

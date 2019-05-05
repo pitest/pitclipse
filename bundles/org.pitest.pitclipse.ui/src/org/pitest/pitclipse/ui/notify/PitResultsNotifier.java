@@ -22,7 +22,14 @@ import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.ui.view.PitViewFinder;
 import org.pitest.pitclipse.ui.view.SummaryView;
 
+/**
+ * <p>Updates the <i>Summary View</i> with given PIT results.</p>
+ * 
+ * <p>This class is registered through the {@code results} extension point
+ * and is hence called each time new results are produced by PIT.</p>
+ */
 public class PitResultsNotifier implements ResultNotifier<PitResults> {
+    
     @Override
     public void handleResults(PitResults results) {
         Display.getDefault().asyncExec(() -> {
@@ -30,4 +37,5 @@ public class PitResultsNotifier implements ResultNotifier<PitResults> {
             view.update(results.getHtmlResultFile());
         });
     }
+    
 }

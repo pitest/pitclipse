@@ -26,6 +26,9 @@ import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
+/**
+ * Launches PIT, delegating the actual behavior to a {@link PitLaunchVisitor}. 
+ */
 public class PitLaunchConfigurationDelegate extends AbstractJavaLaunchConfigurationDelegate {
 
     @Override

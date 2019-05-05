@@ -18,6 +18,18 @@ package org.pitest.pitclipse.runner.client;
 
 import org.pitest.pitclipse.runner.PitResults;
 
+/**
+ * An object able to process results produced by a PIT application.
+ */
+@FunctionalInterface
 public interface PitResultHandler {
+    
+    /**
+     * Processes PIT results.
+     * 
+     * @param results
+     *          The results to process.
+     */
     void handle(PitResults results);
+    
 }

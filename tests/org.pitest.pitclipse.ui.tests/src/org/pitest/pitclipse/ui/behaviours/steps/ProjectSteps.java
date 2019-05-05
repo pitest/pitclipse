@@ -16,7 +16,9 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import org.eclipse.core.resources.IProject;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.pitest.pitclipse.core.PitCoreActivator;
 
 import java.io.File;
@@ -24,10 +26,6 @@ import java.io.File;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 
 public class ProjectSteps {
 

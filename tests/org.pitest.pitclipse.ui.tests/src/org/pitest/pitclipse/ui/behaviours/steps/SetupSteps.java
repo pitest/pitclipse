@@ -16,9 +16,9 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-
 import cucumber.api.java.en.Given;
+
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 public class SetupSteps {
 

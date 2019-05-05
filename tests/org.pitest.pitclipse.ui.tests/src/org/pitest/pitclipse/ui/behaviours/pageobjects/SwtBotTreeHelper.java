@@ -25,10 +25,12 @@ public class SwtBotTreeHelper {
     }
 
     public static SWTBotTreeItem expand(SWTBotTreeItem item) {
-        if (item.isExpanded())
+        if (item.isExpanded()) {
             return item;
-        else
+        }
+        else {
             return item.expand();
+        }
     }
 
     private SwtBotTreeHelper() {
