@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 public class NewProjectWizard {
@@ -18,6 +19,9 @@ public class NewProjectWizard {
         bot.button("Next >").click();
         bot.textWithLabel("Project name:").setText(projectName);
         bot.button("Finish").click();
+        
+        // Ensure the project is fully created before moving on
+        bot.waitUntil(Conditions.shellCloses(shell));
     }
 
 }

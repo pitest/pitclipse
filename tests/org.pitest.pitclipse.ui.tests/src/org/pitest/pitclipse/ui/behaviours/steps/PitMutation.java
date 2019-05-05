@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.pitest.pitclipse.ui.behaviours.steps.TestFactory.TEST_FACTORY;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public class PitMutation {
 

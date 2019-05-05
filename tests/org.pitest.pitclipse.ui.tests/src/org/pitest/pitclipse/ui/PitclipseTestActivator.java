@@ -1,9 +1,9 @@
 package org.pitest.pitclipse.ui;
 
 import static org.eclipse.core.runtime.FileLocator.toFileURL;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.builder;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
-import static org.pitest.pitclipse.reloc.guava.collect.Sets.newTreeSet;
+import static com.google.common.collect.ImmutableList.builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Sets.newTreeSet;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -26,7 +26,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
     public static final String PLUGIN_ID = "org.pitest.pitclipse-ui.tests"; //$NON-NLS-1$
 
     // The shared instance
-    private static PitclipseTestActivator plugin;
+    private static final PitclipseTestActivator plugin = new PitclipseTestActivator();
 
     private ImmutableList<String> stories = ImmutableList.of();
 
@@ -79,7 +79,7 @@ public class PitclipseTestActivator extends AbstractUIPlugin {
     }
 
     private static void setActivator(PitclipseTestActivator pitActivator) {
-        plugin = pitActivator;
+//        plugin = pitActivator;
     }
 
     /*

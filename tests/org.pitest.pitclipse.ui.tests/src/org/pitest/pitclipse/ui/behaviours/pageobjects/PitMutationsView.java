@@ -13,9 +13,9 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.steps.FilePosition;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 

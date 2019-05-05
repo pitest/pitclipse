@@ -5,9 +5,9 @@ import static org.pitest.pitclipse.ui.swtbot.ResultsParser.caseInsensitveIndexOf
 import java.util.List;
 import java.util.Map;
 
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList.Builder;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.ImmutableMap;
 
 public class HtmlTable {
 
@@ -31,7 +31,7 @@ public class HtmlTable {
         List<List<String>> rows = getRows(table);
         Builder<Map<String, String>> resultBuilder = ImmutableList.builder();
         for (List<String> row : rows) {
-            org.pitest.pitclipse.reloc.guava.collect.ImmutableMap.Builder<String, String> rowBuilder = ImmutableMap
+            com.google.common.collect.ImmutableMap.Builder<String, String> rowBuilder = ImmutableMap
                     .builder();
             for (int i = 0; i < headers.size(); i++) {
                 rowBuilder.put(headers.get(i), row.get(i));

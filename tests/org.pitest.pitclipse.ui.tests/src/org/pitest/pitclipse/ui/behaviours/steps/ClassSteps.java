@@ -1,23 +1,24 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static junit.framework.Assert.assertTrue;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.ConcreteClassContext;
+
+import static org.junit.Assert.assertTrue;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.ConcreteClassContext;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
 public final class ClassSteps {
 
     private ConcreteClassContext concreteClassContext = null;
 
-    @When("a class $className in package $packageName is created in project $projectName")
+    @When("a class {word} in package {word} is created in project {word}")
     public void classIsCreated(String className, String packageName, String projectName) {
         createClass(className, packageName, projectName);
     }
 
-    @Given("a bad test for class $className in package $packageName is created in project $projectName")
+    @Given("a bad test for class {word} in package {word} is created in project {word}")
     public void createClassWithBadTest(String className, String packageName, String projectName) {
         String testClass = className + "Test";
         createClass(testClass, packageName, projectName);
@@ -28,7 +29,7 @@ public final class ClassSteps {
         createMethod("public int f(int i) {ArrayList<Object> pointless = new ArrayList<Object>(); if (pointless.size() == 1) return i + 1; else return 0;}");
     }
 
-    @Given("a bad test for class $className is created in the default package in project $projectName")
+    @Given("a bad test for class {word} is created in the default package in project {word}")
     public void createClassWithBadTestInDefaultPackage(String className, String projectName) {
         String packageName = "";
         String testClass = className + "Test";
@@ -40,25 +41,25 @@ public final class ClassSteps {
         createMethod("public int f(int i) {ArrayList<Object> pointless = new ArrayList<Object>(); if (pointless.size() == 1) return i + 1; else return 0;}");
     }
 
-    @Then("package $packageName exists in project $projectName")
+    @Then("package {word} exists in project {word}")
     public void verifyPackageExists(String packageName, String projectName) {
         assertTrue("Package: " + packageName + " not found",
                 PAGES.getPackageExplorer().doesPackageExistInProject(packageName, projectName));
     }
 
-    @Then("class $className exists in package $packageName in project $projectName")
+    @Then("class {word} exists in package {word} in project {word}")
     public void verifyClassExists(String className, String packageName, String projectName) {
         assertTrue("Class: " + className + " not found",
                 PAGES.getPackageExplorer().doesClassExistInProject(className, packageName, projectName));
     }
 
-    @Given("the class $testClassName in package $packageName in project $projectName is selected")
+    @Given("the class {word} in package {word} in project {word} is selected")
     public void selectClass(String className, String packageName, String projectName) {
         concreteClassContext = new ConcreteClassContext.Builder().withProjectName(projectName)
                 .withPackageName(packageName).withClassName(className).build();
     }
 
-    @When("a method \"$method\" is created")
+    @When("a method {string} is created")
     public void createMethod(String method) {
         concreteClassContext = new ConcreteClassContext.Builder().clone(concreteClassContext).withMethod(method)
                 .build();
@@ -71,7 +72,7 @@ public final class ClassSteps {
         PAGES.getBuildProgress().waitForBuild();
     }
 
-    @When("the class is renamed to $newClassName")
+    @When("the class is renamed to {word}")
     public void renameClass(String newClassName) {
         PAGES.getBuildProgress().listenForBuild();
         PAGES.getPackageExplorer().selectClass(concreteClassContext.getClassName(),
@@ -80,13 +81,13 @@ public final class ClassSteps {
         PAGES.getBuildProgress().waitForBuild();
     }
 
-    @Given("the package $packageName in project $projectName is selected")
+    @Given("the package {word} in project {word} is selected")
     public void selectPackage(String packageName, String projectName) {
         concreteClassContext = new ConcreteClassContext.Builder().withProjectName(projectName)
                 .withPackageName(packageName).build();
     }
 
-    @When("the package is renamed to $packageName")
+    @When("the package is renamed to {word}")
     public void renamePackage(String packageName) {
         PAGES.getBuildProgress().listenForBuild();
         PAGES.getPackageExplorer().selectPackage(concreteClassContext);

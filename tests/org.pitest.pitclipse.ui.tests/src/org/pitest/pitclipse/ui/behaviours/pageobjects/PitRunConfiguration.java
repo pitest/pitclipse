@@ -1,11 +1,11 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static com.google.common.collect.ImmutableList.copyOf;
 
 import java.util.List;
 
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 public class PitRunConfiguration {
 

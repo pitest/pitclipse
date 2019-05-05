@@ -1,13 +1,17 @@
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.pitest.pitclipse.reloc.guava.collect.ImmutableSet.copyOf;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.pitest.pitclipse.runner.PitOptions;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -15,57 +19,55 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-import org.jbehave.core.model.ExamplesTable;
-import org.jbehave.core.steps.Parameters;
-import org.pitest.pitclipse.pitrunner.PitOptions;
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
-import org.pitest.pitclipse.reloc.guava.base.Splitter;
-import org.pitest.pitclipse.reloc.guava.collect.ImmutableList;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
+import static com.google.common.collect.ImmutableSet.copyOf;
+import static java.lang.Integer.parseInt;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
+import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
+
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 public class PitclipseSteps {
 
-    @When("test $testClassName in package $packageName is run for project $projectName")
+    @When("test {word} in package {word} is run for project {word}")
     public void runTest(final String testClassName, final String packageName, final String projectName) {
         runPit(new SelectTestClass(testClassName, packageName, projectName));
     }
 
-    @Then("a coverage report is generated with $classes classes tested with overall coverage of $totalCoverage% and mutation coverage of $mutationCoverage%")
+    @Then("a coverage report is generated with {int} class/classes tested with overall coverage of {int}% and mutation coverage of {int}%")
     public void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
         PitSummaryView pitView = PAGES.getPitSummaryView();
         pitView.waitForUpdate();
         try {
-            assertEquals(classes, pitView.getClassesTested());
-            assertDoubleEquals(totalCoverage, pitView.getOverallCoverage());
-            assertDoubleEquals(mutationCoverage, pitView.getMutationCoverage());
+            assertEquals("Number of tested classes mismatch", classes, pitView.getClassesTested());
+            assertDoubleEquals("Total coverage mismatch", totalCoverage, pitView.getOverallCoverage());
+            assertDoubleEquals("Mutation coverage mismatch", mutationCoverage, pitView.getMutationCoverage());
         } catch (Error e) {
             e.printStackTrace();
             throw e;
         }
     }
 
-    @Then("the mutation results are $tableOfMutations")
-    public void mutationsAre(ExamplesTable tableOfMutations) {
+    @Then("the mutation results are")
+    public void mutationsAre(DataTable tableOfMutations) {
         List<PitMutation> expectedMutations = mutationsFromExampleTable(tableOfMutations);
         List<PitMutation> actualMutations = PAGES.getPitMutationsView().getMutations();
         assertThat(actualMutations, is(equalTo(expectedMutations)));
     }
 
-    @When("the following mutation is selected $tableOfMutations")
-    public void mutationIsSelected(ExamplesTable tableOfMutations) {
+    @When("the following mutation is selected")
+    public void mutationIsSelected(DataTable tableOfMutations) {
         PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
         PAGES.getPitMutationsView().select(mutation);
     }
 
-    @Then("the file $fileName is opened at line number $lineNumber")
+    @Then("the file {string} is opened at line number {int}")
     public void mutationIsOpened(String fileName, int lineNumber) {
         FilePosition position = PAGES.getPitMutationsView().getLastSelectedMutation();
         assertThat(position.className, is(equalTo(fileName)));
@@ -83,26 +85,26 @@ public class PitclipseSteps {
         PAGES.views().closeConsole();
     }
 
-    @When("tests in package $packageName are run for project $projectName")
+    @When("tests in package {word} are run for project {word}")
     public void runPackageTest(final String packageName, final String projectName) {
         runPit(new SelectPackage(packageName, projectName));
     }
 
-    @When("tests in source root $packageRoot are run for project $projectName")
+    @When("tests in source root {word} are run for project {word}")
     public void runPackageRootTest(final String packageRoot, final String projectName) {
         runPit(new SelectPackageRoot(packageRoot, projectName));
     }
 
-    @When("tests are run for project $projectName")
+    @When("tests are run for project {word}")
     public void runProjectTest(String projectName) {
         runPit(new SelectProject(projectName));
     }
 
-    @Then("the options passed to Pit match: $configTable")
-    public void runtimeOptionsMatch(ExamplesTable configTable) {
+    @Then("the options passed to Pit match(:)")
+    public void runtimeOptionsMatch(DataTable configTable) {
         PitOptions options = PAGES.getRunMenu().getLastUsedPitOptions();
-        assertThat(configTable.getRowCount(), is(greaterThan(0)));
-        assertThat(options, match(configTable.getRow(0)));
+        assertThat(configTable.height(), is(greaterThan(0)));
+        assertThat(options, match(configTable.asMaps().get(0)));
     }
     
     private void runPit(Runnable runnable) {
@@ -119,37 +121,23 @@ public class PitclipseSteps {
                 counter++;
             }
         }
-
     }
     
-    private List<PitMutation> mutationsFromExampleTable(ExamplesTable tableOfMutations) {
+    private List<PitMutation> mutationsFromExampleTable(DataTable tableOfMutations) {
         ImmutableList.Builder<PitMutation> projectsBuilder = ImmutableList.builder();
-        for (Parameters mutationRow : tableOfMutations.getRowsAsParameters()) {
-            DetectionStatus status = statusValueFrom(mutationRow, "status");
-            String project = stringValueFrom(mutationRow, "project");
-            String pkg = stringValueFrom(mutationRow, "package");
-            String className = stringValueFrom(mutationRow, "class");
-            int line = intValueFrom(mutationRow, "line");
-            String mutation = stringValueFrom(mutationRow, "mutation");
+        for (Map<String, String> mutationRow : tableOfMutations.asMaps()) {
+            DetectionStatus status = DetectionStatus.valueOf(mutationRow.get("status"));
+            String project = mutationRow.get("project");
+            String pkg = mutationRow.get("package");
+            String className = mutationRow.get("class");
+            int line = parseInt(mutationRow.get("line"));
+            String mutation = mutationRow.get("mutation");
             PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
                     .withClassName(className).withLineNumber(line).withMutation(mutation).build();
             projectsBuilder.add(pitMutation);
         }
         return projectsBuilder.build();
-
-    }
-
-    private String stringValueFrom(Parameters row, String column) {
-        return row.valueAs(column, String.class);
-    }
-
-    private int intValueFrom(Parameters row, String column) {
-        return row.valueAs(column, Integer.class);
-    }
-
-    private DetectionStatus statusValueFrom(Parameters row, String column) {
-        String status = stringValueFrom(row, column);
-        return DetectionStatus.fromValue(status);
+        
     }
 
     private Matcher<PitOptions> match(final Map<String, String> optionRow) {

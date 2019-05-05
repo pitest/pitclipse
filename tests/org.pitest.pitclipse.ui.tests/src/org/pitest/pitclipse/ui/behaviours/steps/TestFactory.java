@@ -3,7 +3,7 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import java.util.Date;
 import java.util.Random;
 
-import org.pitest.pitclipse.pitrunner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public enum TestFactory {
     TEST_FACTORY;

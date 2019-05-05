@@ -28,6 +28,10 @@ public class AbstractClassContext implements ClassContext {
     }
 
     public String getFullyQualifiedTestClassName() {
+        boolean isWithinDefaultPackage = packageName.isEmpty();
+        if (isWithinDefaultPackage) {
+            return className;
+        }
         return packageName + "." + className;
     }
 

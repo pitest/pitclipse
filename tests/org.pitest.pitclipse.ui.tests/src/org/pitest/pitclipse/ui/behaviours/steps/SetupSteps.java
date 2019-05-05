@@ -2,7 +2,7 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
-import org.jbehave.core.annotations.Given;
+import cucumber.api.java.en.Given;
 
 public class SetupSteps {
 

@@ -9,21 +9,21 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.pitest.pitclipse.core.PitMutators.ALL;
 import static org.pitest.pitclipse.core.PitMutators.STRONGER;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.pitrunner.config.PitConfiguration.DEFAULT_MUTATORS;
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.PROJECT_ISOLATION;
-import static org.pitest.pitclipse.pitrunner.config.PitExecutionMode.WORKSPACE;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
+import static org.pitest.pitclipse.runner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.math.BigDecimal;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.pitest.pitclipse.core.PitMutators;
-import org.pitest.pitclipse.pitrunner.config.PitExecutionMode;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 public class PreferencesSteps {
 
@@ -42,7 +42,7 @@ public class PreferencesSteps {
         PAGES.getWindowsMenu().setPitExecutionMode(WORKSPACE);
     }
 
-    @Then("the workspace level scope preference is selected")
+    @Then("the level scope preference is set to workspace")
     public void workspacePreferenceIsChosen() {
         PitExecutionMode pitExecutionMode = PAGES.getWindowsMenu().getPitExecutionMode();
         assertEquals(WORKSPACE, pitExecutionMode);
@@ -53,7 +53,7 @@ public class PreferencesSteps {
         assertTrue(PAGES.getWindowsMenu().isPitRunInParallel());
     }
 
-    @When("the mutation tests run in parallel preference is selected")
+    @When("the run mutation tests in parallel preference is selected")
     public void setPreferenceToRunInParallel() {
         PAGES.getWindowsMenu().setPitRunInParallel(true);
     }
@@ -78,12 +78,12 @@ public class PreferencesSteps {
         assertFalse(PAGES.getWindowsMenu().isIncrementalAnalysisEnabled());
     }
 
-    @When("the excluded classes preference is not set")
+    @When("the excluded classes preference is unset")
     public void setNoClassesAreExcluded() {
         PAGES.getWindowsMenu().setExcludedClasses("");
     }
 
-    @When("the excluded classes preference is set to \"$excludedClasses\"")
+    @When("the excluded classes preference is set to {string}")
     public void setExcludedClasses(String excludedClasses) {
         PAGES.getWindowsMenu().setExcludedClasses(excludedClasses);
     }
@@ -92,7 +92,15 @@ public class PreferencesSteps {
     public void noClassesAreExcluded() {
         String excludedClasses = PAGES.getWindowsMenu().getExcludedClasses();
         assertNotNull(excludedClasses);
-        assertTrue(excludedClasses.isEmpty());
+        assertTrue("The 'Excluded Classes' preference should be an empty string", excludedClasses.isEmpty());
+    }
+
+    @Then("the excluded classes preference is {string}")
+    public void excludedClassesAre(String expectedExcludedClasses) {
+        String excludedClasses = PAGES.getWindowsMenu().getExcludedClasses();
+        assertNotNull(excludedClasses);
+        assertEquals("The 'Excluded Classes' preference has not the expected value", 
+                     expectedExcludedClasses, excludedClasses);
     }
 
     @Then("the excluded methods preference is not set")
@@ -108,17 +116,17 @@ public class PreferencesSteps {
         assertThat(avoidCallsTo, is(equalTo(DEFAULT_AVOID_CALLS_TO_LIST)));
     }
 
-    @When("the excluded methods preference is not set")
+    @When("the excluded methods preference is unset")
     public void setNoMethodsAreExcluded() {
         PAGES.getWindowsMenu().setExcludedMethods("");
     }
 
-    @When("the excluded methods preference is set to \"$excludedMethods\"")
+    @When("the excluded methods preference is set to {string}")
     public void setExcludedMethods(String excludedMethods) {
         PAGES.getWindowsMenu().setExcludedMethods(excludedMethods);
     }
 
-    @When("the avoid calls to preference is set to \"$avoidCallsTo\"")
+    @When("the avoid calls to preference is set to {string}")
     public void setAvoidCalls(String avoidCallsTo) {
         PAGES.getWindowsMenu().setAvoidCallsTo(avoidCallsTo);
     }
@@ -139,23 +147,29 @@ public class PreferencesSteps {
         PAGES.getWindowsMenu().setMutators(ALL);
     }
 
-    @Given("the timeout constant is $timeout")
+    @Given("the timeout constant is {int}")
     public void updateTimeoutConstant(int timeout) {
         PAGES.getWindowsMenu().setTimeoutConstant(timeout);
     }
 
-    @Given("the timeout factor is $factor")
+    @Given("the timeout factor is {int}")
     public void updateTimeoutFactor(int factor) {
         PAGES.getWindowsMenu().setTimeoutFactor(factor);
     }
 
-    @Then("the default timeout is $defaultTimeout")
+    @Then("the default timeout is {int}")
     public void defaultTimeout(int defaultTimeout) {
         int actualTimeout = PAGES.getWindowsMenu().getTimeout();
         assertThat(actualTimeout, is(equalTo(defaultTimeout)));
     }
+    
+    @Then("the default timeout factor is {float}")
+    public void defaultTimeout(double defaultTimeoutFactor) {
+        BigDecimal timeoutFactor = PAGES.getWindowsMenu().getTimeoutFactor();
+        assertThat(timeoutFactor, is(closeEnoughTo(new BigDecimal(defaultTimeoutFactor))));
+    }
 
-    @Then("the default timeout factor is $defaultTimeoutFactor")
+    @Then("the default timeout factor is {string}")
     public void defaultTimeout(String defaultTimeoutFactor) {
         BigDecimal timeoutFactor = PAGES.getWindowsMenu().getTimeoutFactor();
         assertThat(timeoutFactor, is(closeEnoughTo(new BigDecimal(defaultTimeoutFactor))));

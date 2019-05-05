@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="cucumber-core-4.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="cucumber-expressions-6.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="cucumber-java-4.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="cucumber-junit-4.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="datatable-1.1.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="datatable-dependencies-1.1.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="gherkin-5.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="tag-expressions-1.1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -42,8 +42,20 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
         File projectRoot = new File(location);
         for (IPackageFragmentRoot packageRoot : packageRoots) {
             if (!packageRoot.isArchive()) {
-                File packagePath = removeProjectFromPackagePath(project, packageRoot.getPath());
-                sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
+                IPath packagePath = packageRoot.getPath();
+
+                boolean pathIsRelativeToWorkspace = ! (packagePath.isAbsolute() && packageRoot.isExternal());
+                if (pathIsRelativeToWorkspace) {
+                    packagePath = removeProjectFromPackagePath(project, packageRoot.getPath());
+                    sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
+                }
+                else {
+                    // FIXME Commenting out this line leads UI tests to fail during Maven build
+                    // because projects seem to have an additional source directory (which they
+                    // do not have when tests are run by Eclipse IDE).
+                    // It seems however that ignoring this case may cause issues in the future.
+//                    sourceDirBuilder.add(packagePath.toFile());
+                }
             }
         }
         return sourceDirBuilder.build();
@@ -59,8 +71,7 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
         return projLocation.toURI();
     }
 
-    private File removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
-        IPath newPath = packagePath.removeFirstSegments(1);
-        return newPath.toFile();
+    private IPath removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
+        return packagePath.removeFirstSegments(1);
     }
 }
