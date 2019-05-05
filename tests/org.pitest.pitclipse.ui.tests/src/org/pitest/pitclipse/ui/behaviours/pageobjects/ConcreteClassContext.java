@@ -38,9 +38,6 @@ public class ConcreteClassContext extends AbstractClassContext {
         private String method;
         private String sourceDir;
 
-        public Builder() {
-        };
-
         public Builder withClassName(String className) {
             this.className = className;
             return this;

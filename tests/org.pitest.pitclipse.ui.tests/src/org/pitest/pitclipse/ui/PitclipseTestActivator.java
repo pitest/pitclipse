@@ -16,10 +16,11 @@
 
 package org.pitest.pitclipse.ui;
 
-import static org.eclipse.core.runtime.FileLocator.toFileURL;
-import static com.google.common.collect.ImmutableList.builder;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Sets.newTreeSet;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,10 +29,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+import static com.google.common.collect.ImmutableList.builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Sets.newTreeSet;
+import static org.eclipse.core.runtime.FileLocator.toFileURL;
 
 /**
  * The activator class controls the plug-in life cycle

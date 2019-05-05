@@ -16,11 +16,11 @@
 
 package org.pitest.pitclipse.ui.swtbot;
 
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
-
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 public class ResultsParser {
 

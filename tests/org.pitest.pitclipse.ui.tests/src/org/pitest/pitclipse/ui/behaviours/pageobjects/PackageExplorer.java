@@ -16,17 +16,18 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static junit.framework.Assert.fail;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
-import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
-
-import java.util.List;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
+
+import java.util.List;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static junit.framework.Assert.fail;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
+import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
 public class PackageExplorer {
 
@@ -135,8 +136,8 @@ public class PackageExplorer {
     public SWTBotTreeItem selectPackageRoot(String projectName, String src) {
         SWTBotTreeItem project = getProject(projectName);
         for (SWTBotTreeItem srcDir : project.getItems()) {
-            SWTBotTreeItem t = selectAndExpand(srcDir);
-            if (t.getText().equals(src)) {
+            SWTBotTreeItem item = selectAndExpand(srcDir);
+            if (item.getText().equals(src)) {
                 return srcDir;
             }
         }

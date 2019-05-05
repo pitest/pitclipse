@@ -19,5 +19,8 @@ package org.pitest.pitclipse.runner.results.mutations;
 import org.pitest.pitclipse.runner.results.Dispatcher;
 import org.pitest.pitclipse.runner.results.Mutations;
 
+/**
+ * An object that dispatches PIT mutation results once they are available.
+ */
 public interface MutationsDispatcher extends Dispatcher<Mutations> {
 }

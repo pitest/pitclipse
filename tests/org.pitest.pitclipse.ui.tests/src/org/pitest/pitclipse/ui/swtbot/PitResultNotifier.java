@@ -24,8 +24,9 @@ import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
 public class PitResultNotifier implements ResultNotifier<PitUiUpdate> {
     @Override
     public void handleResults(PitUiUpdate updateEvent) {
-        if (testsAreInProgress())
+        if (testsAreInProgress()) {
             notifiyTestsOfHtmlResults(updateEvent);
+        }
     }
 
     private void notifiyTestsOfHtmlResults(PitUiUpdate updateEvent) {

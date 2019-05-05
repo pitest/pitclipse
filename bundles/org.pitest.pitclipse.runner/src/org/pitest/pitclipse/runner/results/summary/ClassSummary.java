@@ -29,6 +29,12 @@ import java.util.Collection;
 
 import static com.google.common.collect.Collections2.filter;
 
+/**
+ * <p>Summary of the PIT analysis about a specific class.</p>
+ * 
+ * <p>This class is serializable so that it can be sent from the PIT
+ * application running in a background VM to the Eclipse listeners.</p>
+ */
 class ClassSummary implements Serializable {
 
     private static final long serialVersionUID = 6039947777282909605L;

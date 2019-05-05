@@ -16,7 +16,10 @@
 
 package org.pitest.pitclipse.core.preferences;
 
-public class PitPreferences {
+/**
+ * Constants used to deal with Pitclipse's preferences.
+ */
+public final class PitPreferences {
 
     public static final String PIT_MUTATORS = "pitMutators";
 
@@ -35,5 +38,9 @@ public class PitPreferences {
     public static final String RUN_IN_PARALLEL = "runInParallel";
     public static final String TIMEOUT = "pitTimeout";
     public static final String TIMEOUT_FACTOR = "pitTimeoutFactor";
+    
+    private PitPreferences() {
+        // utility class should not be instantiated
+    }
 
 }

@@ -16,6 +16,16 @@
 
 package org.pitest.pitclipse.runner.model;
 
+/**
+ * A collection of objects that can be counted.
+ */
+@FunctionalInterface
 public interface Countable {
+    
+    /**
+     * Returns the number of objects within the collection.
+     * @return the number of objects within the collection
+     */
     long count();
+    
 }

@@ -16,11 +16,7 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static java.math.BigDecimal.ZERO;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
-
-import java.io.Closeable;
-import java.math.BigDecimal;
+import com.google.common.base.Optional;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -28,7 +24,12 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
-import com.google.common.base.Optional;
+
+import java.io.Closeable;
+import java.math.BigDecimal;
+
+import static java.math.BigDecimal.ZERO;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 public class PitPreferenceSelector implements Closeable {
 
@@ -192,10 +193,12 @@ public class PitPreferenceSelector implements Closeable {
             updatePreference(new PreferenceSetter<Boolean>() {
                 @Override
                 public void setPreference() {
-                    if (value)
+                    if (value) {
                         bot.checkBox(label).select();
-                    else
+                    }
+                    else {
                         bot.checkBox(label).deselect();
+                    }
                 }
             });
         }

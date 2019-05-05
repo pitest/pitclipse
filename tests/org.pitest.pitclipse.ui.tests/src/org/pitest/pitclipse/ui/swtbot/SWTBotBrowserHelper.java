@@ -35,6 +35,7 @@ public class SWTBotBrowserHelper {
 
         public Browser run() {
             if (isPitView()) {
+                // FIXME This condition is empty, but I guess that some code should be written here...
             }
             return null;
         }

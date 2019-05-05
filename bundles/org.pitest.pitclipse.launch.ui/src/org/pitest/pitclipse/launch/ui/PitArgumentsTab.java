@@ -53,6 +53,9 @@ import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 
+/**
+ * Tab allowing to configure a PIT analyze. 
+ */
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private static final int NUMBER_OF_COLUMNS = 3;
 

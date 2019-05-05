@@ -20,6 +20,9 @@ import com.google.common.base.Optional;
 
 import org.pitest.pitclipse.runner.results.Mutations;
 
+/**
+ * <p>A singleton providing access to the latest mutations computed by PIT.</p>
+ */
 public enum RecordingMutationsDispatcher implements MutationsDispatcher {
     INSTANCE;
 

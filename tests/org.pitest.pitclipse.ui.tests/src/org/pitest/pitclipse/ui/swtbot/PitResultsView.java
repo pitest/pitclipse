@@ -43,9 +43,9 @@ public class PitResultsView {
 
     @Override
     public String toString() {
-        return "PitResultsView [totalCoverage=" + totalCoverage
-                + ", mutationCoverage=" + mutationCoverage + ", classesTested="
-                + classesTested + "]";
+        return "PitResultsView [totalCoverage=" + totalCoverage +
+                ", mutationCoverage=" + mutationCoverage + ", classesTested=" +
+                classesTested + "]";
     }
 
     public static final class Builder {
@@ -55,7 +55,8 @@ public class PitResultsView {
         private int classesTested = 0;
 
         private Builder() {
-        };
+            // private constructor to prevent instantiation
+        }
 
         public PitResultsView build() {
             return new PitResultsView(classesTested, totalCoverage,

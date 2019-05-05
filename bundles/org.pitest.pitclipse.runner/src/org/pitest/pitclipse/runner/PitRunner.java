@@ -31,6 +31,9 @@ import java.io.IOException;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Integer.parseInt;
 
+/**
+ * Executes PIT.
+ */
 public class PitRunner {
 
     public static void main(String[] args) {

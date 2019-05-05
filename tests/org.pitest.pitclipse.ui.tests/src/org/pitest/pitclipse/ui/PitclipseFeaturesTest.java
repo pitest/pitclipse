@@ -16,9 +16,8 @@
 
 package org.pitest.pitclipse.ui;
 
-import org.junit.runner.RunWith;
-
 import cucumber.api.CucumberOptions;
+import org.junit.runner.RunWith;
 
 @RunWith(OsgiCucumberRunner.class)
 @CucumberOptions(
@@ -27,6 +26,7 @@ import cucumber.api.CucumberOptions;
         tags = "~@ignored", 
         plugin = { "pretty" }
 )
+@SuppressWarnings("squid:S2187") // Suppress 'add tests to this class' warning
 public class PitclipseFeaturesTest {
 
 }

@@ -16,15 +16,15 @@
 
 package org.pitest.pitclipse.ui.swtbot;
 
-import static org.eclipse.core.resources.IResourceChangeEvent.POST_BUILD;
-
-import java.io.Closeable;
-import java.io.IOException;
-
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+import static org.eclipse.core.resources.IResourceChangeEvent.POST_BUILD;
 
 public class WaitForBuildCondition extends DefaultCondition implements
         Closeable {

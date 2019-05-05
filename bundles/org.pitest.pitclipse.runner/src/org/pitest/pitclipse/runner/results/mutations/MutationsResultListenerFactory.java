@@ -22,6 +22,13 @@ import org.pitest.mutationtest.MutationResultListenerFactory;
 
 import java.util.Properties;
 
+/**
+ * <p>Creates listeners keeping track of all the mutations detected by PIT.</p>
+ * 
+ * <p>This factory is directly called by Pitest when new results are computed.
+ * This factory is made available to Pitest by the {@code org.pitest.pitclipse.listeners}
+ * fragment.</p>
+ */
 public class MutationsResultListenerFactory implements MutationResultListenerFactory {
 
     @Override

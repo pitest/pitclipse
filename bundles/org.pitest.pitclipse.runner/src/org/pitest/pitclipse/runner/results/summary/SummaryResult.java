@@ -23,6 +23,12 @@ import com.google.common.collect.ImmutableList.Builder;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * <p>Summary of the whole PIT analysis.</p>
+ * 
+ * <p>This class is serializable so that it can be sent from the PIT
+ * application running in a background VM to the Eclipse listeners.</p>
+ */
 public class SummaryResult implements Serializable {
 
     public static final SummaryResult EMPTY = new SummaryResult();

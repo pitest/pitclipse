@@ -24,6 +24,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Wraps a {@link Socket} in order to ease read an write operations involving objects.
+ */
 public class ObjectStreamSocket implements Closeable {
 
     private final Socket underlyingSocket;
@@ -36,6 +39,14 @@ public class ObjectStreamSocket implements Closeable {
         this.outputStream = outputStream;
     }
 
+    /**
+     * Creates a new instance to ease read and write operations involving objects on the given socket.
+     * 
+     * @param underlyingSocket
+     *          The socket on which objects must be read or written.
+     *          
+     * @return a new {@link ObjectStreamSocket}.
+     */
     public static ObjectStreamSocket make(Socket underlyingSocket) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(underlyingSocket.getOutputStream());
@@ -52,6 +63,17 @@ public class ObjectStreamSocket implements Closeable {
         return new ObjectStreamSocket(underlyingSocket, inputStream, outputStream);
     }
 
+    /**
+     * Reads an object from the socket.
+     * 
+     * @param <T>
+     *          The type of the object to read.
+     * 
+     * @return the object read
+     * 
+     * @throws ClassCastException if the object cannot be casted to &lt;T&gt;
+     * @throws ReadException if an error occurs while reading the socket
+     */
     @SuppressWarnings("unchecked")
     public <T> T read() {
         try {
@@ -61,7 +83,13 @@ public class ObjectStreamSocket implements Closeable {
         }
     }
 
-    public <T> void write(T someObject) {
+    /**
+     * Writes an object to the socket.
+     * 
+     * @param someObject
+     *          The object to write.
+     */
+    public void write(Object someObject) {
         try {
             outputStream.writeObject(someObject);
             outputStream.flush();

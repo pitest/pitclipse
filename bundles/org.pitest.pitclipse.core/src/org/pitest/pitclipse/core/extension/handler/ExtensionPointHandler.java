@@ -26,21 +26,49 @@ import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import static org.pitest.pitclipse.core.PitCoreActivator.warn;
 
 /**
+ * <p>Manages contributions to a given extension point.</p>
  * 
- * @param <T> 
+ * <p>This extension point must provide a "class" attribute
+ * that correspond to a fully qualified name of a Java class
+ * implementing the {@link ResultNotifier} interface.</p>
+ * 
+ * @param <U>
+ *          The type of results expected by the extensions
  */
-public class ExtensionPointHandler<T> {
+public class ExtensionPointHandler<U> {
     private final String extensionPointId;
 
+    /**
+     * Creates a new handler to manage contributions to the given extension point.
+     * 
+     * @param extensionPointId
+     *          The id of the extension points which contributions must be handled.
+     */
     public ExtensionPointHandler(String extensionPointId) {
         this.extensionPointId = extensionPointId;
     }
 
-    public <U> void execute(IExtensionRegistry registry, U results) {
+    /**
+     * <p>Makes contributions to the extension points handling given results.</p>
+     * 
+     * <p>More specifically, this method:
+     * <ol>
+     *  <li>Browse all contributions to the extension point
+     *  <li>Create a new instance corresponding the "class" attribute of each of these contributions
+     *  <li>Cast these instances as {@link ResultNotifier ResultNotifier&lt;U&gt;}
+     *  <li>Call {@link ResultNotifier#handleResults(Object) notifier.handleResults} with given results as parameter
+     * </ol>
+     * 
+     * @param registry
+     *          The registry providing available extensions.
+     * @param results
+     *          The results to be handled by the extensions.
+     */
+    public void execute(IExtensionRegistry registry, U results) {
         evaluate(registry, results);
     }
 
-    private <U> void evaluate(IExtensionRegistry registry, final U results) {
+    private void evaluate(IExtensionRegistry registry, final U results) {
         IConfigurationElement[] config = registry.getConfigurationElementsFor(extensionPointId);
         try {
             for (IConfigurationElement e : config) {
@@ -48,7 +76,7 @@ public class ExtensionPointHandler<T> {
                 if (obj instanceof ResultNotifier) {
                     @SuppressWarnings("unchecked")
                     final ResultNotifier<U> notifier = (ResultNotifier<U>) obj;
-                    executeExtension(new NotifierRunnable<U>(notifier, results));
+                    executeExtension(() -> notifier.handleResults(results));
                 }
             }
         } catch (CoreException ex) {
@@ -56,7 +84,7 @@ public class ExtensionPointHandler<T> {
         }
     }
 
-    private <U> void executeExtension(final Runnable extension) {
+    private void executeExtension(final Runnable extension) {
         ISafeRunnable runnable = new ISafeRunnable() {
             @Override
             public void handleException(Throwable e) {

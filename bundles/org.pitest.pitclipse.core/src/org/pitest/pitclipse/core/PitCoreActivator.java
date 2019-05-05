@@ -102,7 +102,6 @@ public class PitCoreActivator extends Plugin {
                                                                 // signature
         super.start(context);
         plugin = this;
-//        this.context = context;
         setActivator(this);
         setupStateDirectories();
         
@@ -130,10 +129,6 @@ public class PitCoreActivator extends Plugin {
         setupHistoryFile();
     }
     
-//    private static IPath getStateLocation() {
-//        return Platform.getStateLocation(context.getBundle());
-//    }
-
     private void setupHistoryFile() {
         IPath pluginLocation = getStateLocation();
         File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE).toFile();
@@ -190,18 +185,6 @@ public class PitCoreActivator extends Plugin {
     public static PitCoreActivator getDefault() {
         return plugin;
     }
-
-//    /**
-//     * Returns an image descriptor for the image file at the given plug-in
-//     * relative path
-//     * 
-//     * @param path
-//     *            the path
-//     * @return the image descriptor
-//     */
-//    public static ImageDescriptor getImageDescriptor(String path) {
-//        return imageDescriptorFromPlugin(PLUGIN_ID, path);
-//    }
 
     public static void log(String msg) {
         log(Status.INFO, msg, null);

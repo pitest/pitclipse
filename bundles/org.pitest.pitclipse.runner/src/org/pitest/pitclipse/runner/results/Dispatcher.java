@@ -16,6 +16,13 @@
 
 package org.pitest.pitclipse.runner.results;
 
+/**
+ * An object that dispatches PIT results once they are available.
+ * 
+ * @param <T>
+ *          The actual type of PIT results.
+ */
+@FunctionalInterface
 public interface Dispatcher<T> {
     void dispatch(T result);
 }

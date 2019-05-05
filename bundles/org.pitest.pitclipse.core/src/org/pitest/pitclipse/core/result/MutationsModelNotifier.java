@@ -25,6 +25,16 @@ import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.model.ModelBuilder;
 import org.pitest.pitclipse.runner.model.MutationsModel;
 
+/**
+ * <p>Launches a background job that updates all contributions to the {@code mutation.results}
+ * extension point.</p>
+ * 
+ * <p>Those contributions are updated with a {@link MutationsModel} build by a {@link ModelBuilder}
+ * from the given PIT results.</p>
+ * 
+ * <p>This class is registered through the {@code results} extension point
+ * and is hence called each time new results are produced by PIT.</p>
+ */
 public class MutationsModelNotifier implements ResultNotifier<PitResults> {
 
     private static final ModelBuilder MODEL_BUILDER = new ModelBuilder(JdtStructureService.INSTANCE);

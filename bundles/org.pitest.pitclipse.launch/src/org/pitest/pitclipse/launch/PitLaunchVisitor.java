@@ -25,6 +25,10 @@ import org.pitest.pitclipse.runner.config.PitExecutionModeVisitor;
 
 import static org.eclipse.debug.core.ILaunchManager.RUN_MODE;
 
+/**
+ * Launches either a {@link ProjectLevelLaunchDelegate} or a {@link WorkspaceLevelLaunchDelegate}
+ * depending on the visited execution mode. 
+ */
 public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 
     private final ILaunchConfiguration configuration;
@@ -36,15 +40,14 @@ public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
             ILaunchConfiguration launchConfig, ILaunch launch,
             IProgressMonitor monitor) {
         this.pitConfiguration = pitConfiguration;
-        configuration = launchConfig;
+        this.configuration = launchConfig;
         this.launch = launch;
         this.monitor = monitor;
     }
 
     public Void visitProjectLevelConfiguration() {
         try {
-            new ProjectLevelLaunchDelegate(pitConfiguration).launch(
-                    configuration, RUN_MODE, launch, monitor);
+            new ProjectLevelLaunchDelegate(pitConfiguration).launch(configuration, RUN_MODE, launch, monitor);
         } catch (CoreException e) {
             throw new LaunchFailedException(configuration.getName());
         }
@@ -53,8 +56,7 @@ public class PitLaunchVisitor implements PitExecutionModeVisitor<Void> {
 
     public Void visitWorkspaceLevelConfiguration() {
         try {
-            new WorkspaceLevelLaunchDelegate(pitConfiguration).launch(
-                    configuration, RUN_MODE, launch, monitor);
+            new WorkspaceLevelLaunchDelegate(pitConfiguration).launch(configuration, RUN_MODE, launch, monitor);
         } catch (CoreException e) {
             throw new LaunchFailedException(configuration.getName());
         }

@@ -29,6 +29,13 @@ import org.pitest.pitclipse.runner.results.ObjectFactory;
 
 import java.math.BigInteger;
 
+/**
+ * <p>Listens for mutations results sent by PIT in order to make them all available to Pitclipse.</p>
+ * 
+ * <p>Once PIT analysis ends, the results are dispatched as a {@link Mutations} instance.</p>
+ * 
+ * <p>Instances of this class are provided to PIT thanks to {@link MutationsResultListenerFactory}.</p>
+ */
 public class PitclipseMutationsResultListener implements MutationResultListener {
 
     private final MutationsDispatcher dispatcher;

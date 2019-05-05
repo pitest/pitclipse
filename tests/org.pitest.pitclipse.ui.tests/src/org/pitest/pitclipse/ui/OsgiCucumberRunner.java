@@ -16,18 +16,6 @@
 
 package org.pitest.pitclipse.ui;
 
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.ParentRunner;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import static java.util.Arrays.asList;
-
 import cucumber.api.StepDefinitionReporter;
 import cucumber.api.event.TestRunFinished;
 import cucumber.api.event.TestRunStarted;
@@ -57,6 +45,17 @@ import cucumber.runtime.junit.JUnitOptions;
 import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.FeatureLoader;
 import io.cucumber.stepexpression.TypeRegistry;
+import org.junit.runner.Description;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.ParentRunner;
+import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static java.util.Arrays.asList;
 
 public class OsgiCucumberRunner extends ParentRunner<FeatureRunner> {
     private final List<FeatureRunner> children = new ArrayList<>();

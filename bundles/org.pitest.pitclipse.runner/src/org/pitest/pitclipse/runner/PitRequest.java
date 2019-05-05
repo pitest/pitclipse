@@ -22,6 +22,11 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * <p>Parameters of a PIT analysis.</p>
+ * 
+ * <p>Supposed to be sent to a {@link PitRunner} through network.</p> 
+ */
 public class PitRequest implements Serializable {
     private static final long serialVersionUID = 2058881520214195050L;
     private final PitOptions options;

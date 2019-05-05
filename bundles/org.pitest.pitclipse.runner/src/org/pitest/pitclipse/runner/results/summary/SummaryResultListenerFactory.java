@@ -23,6 +23,13 @@ import org.pitest.pitclipse.runner.results.Dispatcher;
 
 import java.util.Properties;
 
+/**
+ * <p>Creates listeners used to sum up mutations detected by PIT.</p>
+ * 
+ * <p>This factory is directly called by Pitest when new results are computed.
+ * This factory is made available to Pitest by the {@code org.pitest.pitclipse.listeners}
+ * fragment.</p>
+ */
 public class SummaryResultListenerFactory implements MutationResultListenerFactory {
     @Override
     public String description() {
@@ -31,12 +38,7 @@ public class SummaryResultListenerFactory implements MutationResultListenerFacto
 
     @Override
     public MutationResultListener getListener(Properties properties, ListenerArguments args) {
-        Dispatcher<SummaryResult> dispatcher = new Dispatcher<SummaryResult>() {
-            @Override
-            public void dispatch(SummaryResult result) {
-                // NO OP
-            }
-        };
+        Dispatcher<SummaryResult> dispatcher = result -> { /* NO OP */ };
         return new SummaryResultListener(dispatcher, args.getCoverage());
     }
 

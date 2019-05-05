@@ -19,6 +19,9 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
@@ -44,10 +47,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
-
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
 
 public class PitclipseSteps {
 
@@ -192,8 +191,9 @@ public class PitclipseSteps {
                             allMatch &= sourceDirectories.get(i).toString().contains(paths.get(i));
                         }
                         return allMatch;
-                    } else
+                    } else {
                         return false;
+                    }
                 }
                 return match;
             }

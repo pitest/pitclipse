@@ -21,6 +21,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>A collection of mutations.</p>
+ * 
+ * <p>This class is serializable so that it can be sent from the PIT
+ * application running in a background VM to the Eclipse listeners.</p>
+ */
 public class Mutations implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,11 +34,17 @@ public class Mutations implements Serializable {
 
     public List<Mutations.Mutation> getMutation() {
         if (mutation == null) {
-            mutation = new ArrayList<Mutations.Mutation>();
+            mutation = new ArrayList<>();
         }
         return this.mutation;
     }
 
+    /**
+     * <p>A mutation detected by PIT.</p>
+     * 
+     * <p>This class is serializable so that it can be sent from the PIT
+     * application running in a background VM to the Eclipse listeners.</p>
+     */
     public static class Mutation implements Serializable {
 
         private static final long serialVersionUID = 1L;

@@ -16,8 +16,7 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -31,8 +30,9 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import com.google.common.collect.ImmutableList;
 import org.pitest.pitclipse.ui.behaviours.StepException;
+
+import java.util.List;
 
 public class AbstractSyntaxTree {
 
@@ -86,7 +86,7 @@ public class AbstractSyntaxTree {
             IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
             IClasspathEntry junitClasspath = JavaCore.newContainerEntry(junitEntry.getPath());
 
-            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
+            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry>builder().add(project.getRawClasspath())
                     .add(junitClasspath).build();
 
             // add a new entry using the path to the container
@@ -102,7 +102,7 @@ public class AbstractSyntaxTree {
             Path junitPath = new Path("/" + projectToAdd);
             IClasspathEntry junitClasspath = JavaCore.newProjectEntry(junitPath);
 
-            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry> builder().add(project.getRawClasspath())
+            List<IClasspathEntry> entries = ImmutableList.<IClasspathEntry>builder().add(project.getRawClasspath())
                     .add(junitClasspath).build();
 
             // add a new entry using the path to the container

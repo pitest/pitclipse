@@ -30,6 +30,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.common.collect.Sets.newHashSet;
 
+/**
+ * Singleton making easier to find Pitclipse views. 
+ */
 public enum PitViewFinder {
     INSTANCE;
 
@@ -46,7 +49,7 @@ public enum PitViewFinder {
 
     private static final class ViewSearch implements Runnable {
         private static Set<String> initialisedViews = newHashSet();
-        private final AtomicReference<IViewPart> viewRef = new AtomicReference<IViewPart>();
+        private final AtomicReference<IViewPart> viewRef = new AtomicReference<>();
         private final String viewId;
 
         public ViewSearch(String viewId) {
@@ -70,8 +73,7 @@ public enum PitViewFinder {
         private IViewPart tryFindView(String viewId) throws PartInitException {
             activateViewOnceAndOnceOnly(viewId);
             IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            IViewPart view = activePage.findView(viewId);
-            return view;
+            return activePage.findView(viewId);
         }
 
         private static synchronized void activateViewOnceAndOnceOnly(String viewId) throws PartInitException {

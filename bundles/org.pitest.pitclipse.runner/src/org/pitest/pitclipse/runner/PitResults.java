@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Results produced by PIT during an analyze.
+ */
 public final class PitResults implements Serializable {
     private static final long serialVersionUID = 5457147591186148047L;
 

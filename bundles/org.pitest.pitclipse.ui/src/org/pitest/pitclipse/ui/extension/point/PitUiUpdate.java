@@ -16,6 +16,11 @@
 
 package org.pitest.pitclipse.ui.extension.point;
 
+import org.pitest.pitclipse.ui.view.PitView;
+
+/**
+ * Represents an update of Pitclipse's summary view {@link PitView}.
+ */
 public class PitUiUpdate {
 
     private final String html;

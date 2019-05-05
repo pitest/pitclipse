@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.resources.IResource;
@@ -29,35 +27,30 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorInput;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 
 final class LaunchShortcut {
 
-    static <T> Optional<T> forEditorInputDo(IEditorInput i, Function<ITypeRoot, Optional<T>> onFound, Function<Void, Optional<T>> notFound) {
-        Optional<ITypeRoot> element = Optional.fromNullable(getEditorInputTypeRoot(i));
+    static <T> Optional<T> forEditorInputDo(IEditorInput i, Function<ITypeRoot, Optional<T>> onFound, Supplier<Optional<T>> notFound) {
+        Optional<ITypeRoot> element = Optional.ofNullable(getEditorInputTypeRoot(i));
         if (element.isPresent()) {
-            return element.transform(onFound).get();
+            return element.map(onFound).get();
         } else {
-            return notFound.apply(null);
+            return notFound.get();
         }
-    }
-
-    static <T> Function<Void, Optional<IResource>> nothing() {
-        return new Function<Void, Optional<IResource>>() {
-            public Optional<IResource> apply(Void v) {
-                return Optional.absent();
-            }
-        };
     }
 
     static Function<ITypeRoot, Optional<IResource>> getCorrespondingResource() {
         return new Function<ITypeRoot, Optional<IResource>>() {
             public Optional<IResource> apply(ITypeRoot t) {
                 try {
-                    return Optional.fromNullable(t.getCorrespondingResource());
+                    return Optional.ofNullable(t.getCorrespondingResource());
                 } catch (JavaModelException e) {
-                    return Optional.absent();
+                    return Optional.empty();
                 }
             }
         };
@@ -69,9 +62,9 @@ final class LaunchShortcut {
             return Optional.of(element);
         } else if (o instanceof IAdaptable) {
             Object adapted = ((IAdaptable) o).getAdapter(IJavaElement.class);
-            return Optional.fromNullable((IJavaElement) adapted);
+            return Optional.ofNullable((IJavaElement) adapted);
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

@@ -17,7 +17,7 @@
 package org.pitest.pitclipse.core.extension.point;
 
 /**
- * An object able to process some results.
+ * An object able to process Pitest's results.
  * 
  * @param <T> the type of expected results
  */

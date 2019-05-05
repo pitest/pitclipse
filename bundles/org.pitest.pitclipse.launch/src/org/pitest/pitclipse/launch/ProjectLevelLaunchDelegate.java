@@ -25,6 +25,9 @@ import org.pitest.pitclipse.launch.config.ProjectLevelSourceDirFinder;
 import org.pitest.pitclipse.launch.config.SourceDirFinder;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
+/**
+ * Launches a PIT analyze on the selected project.
+ */
 public class ProjectLevelLaunchDelegate extends AbstractPitLaunchDelegate {
 
     public ProjectLevelLaunchDelegate(PitConfiguration pitConfiguration) {

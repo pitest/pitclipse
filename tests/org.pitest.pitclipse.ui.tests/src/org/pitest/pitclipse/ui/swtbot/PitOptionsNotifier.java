@@ -16,9 +16,9 @@
 
 package org.pitest.pitclipse.ui.swtbot;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.pitest.pitclipse.runner.PitOptions;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public enum PitOptionsNotifier {
 

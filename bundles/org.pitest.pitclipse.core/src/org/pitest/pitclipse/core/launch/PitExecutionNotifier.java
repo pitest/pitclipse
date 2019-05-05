@@ -26,6 +26,13 @@ import org.pitest.pitclipse.runner.server.PitServer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * <p>Launches a server that will update all contributions to the {@code results} 
+ * extension point with the results produced by the currently running PIT application.</p>
+ * 
+ * <p>This class is registered through the {@code executePit} extension point
+ * and is hence called each time a new PIT application is launched.</p>
+ */
 public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -35,6 +42,7 @@ public class PitExecutionNotifier implements ResultNotifier<PitRuntimeOptions> {
         PitServer server = new PitServer(runtimeOptions.getPortNumber());
         PitRequest request = PitRequest.builder().withPitOptions(runtimeOptions.getOptions())
                 .withProjects(runtimeOptions.getMutatedProjects()).build();
+        // TODO Check whether it can be replaced by Jobs API
         executorService.execute(new PitCommunicator(server, request, resultHandler));
     }
 }

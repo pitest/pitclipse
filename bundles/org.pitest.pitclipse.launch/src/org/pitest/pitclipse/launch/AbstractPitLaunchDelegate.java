@@ -42,6 +42,14 @@ import java.util.List;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
+/**
+ * <p>Abstract launch configuration used to execute PIT in a background VM.</p>
+ * 
+ * <p>Pitest is executed by calling {@link PitRunner#main(String[])}.</p>
+ * 
+ * <p>Right after the VM has been launched, contributions to the {@code results}
+ * extension points are notified thanks to {@link ExtensionPointHandler}.</p>
+ */
 public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.executePit";

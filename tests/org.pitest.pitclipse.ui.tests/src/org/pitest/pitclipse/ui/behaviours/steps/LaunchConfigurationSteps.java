@@ -16,6 +16,9 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 
 import java.util.ArrayList;
@@ -28,10 +31,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
 
 public class LaunchConfigurationSteps {
 
