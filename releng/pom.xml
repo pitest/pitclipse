@@ -17,4 +17,8 @@
 		<module>org.pitest.pitclipse.target</module>
 		<module>org.pitest.pitclipse.p2</module>
 	</modules>
+
+	<properties>
+		<sonar.skip>true</sonar.skip>
+	</properties>
 </project>
