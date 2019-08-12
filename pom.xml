@@ -25,12 +25,27 @@
 		<!-- DEPENDENCIES -->
 		<tycho-version>1.4.0</tycho-version>
 		<jacoco-version>0.8.1</jacoco-version>
+
+		<!-- SONARQUBE -->
+		<sonar.projectName>Pitclipse</sonar.projectName>
+
+		<sonar.organization>echebbi-github</sonar.organization>
+		<sonar.links.ci>https://travis-ci.com/pitest/pitclipse</sonar.links.ci>
+		<sonar.links.scm>https://github.com/pitest/pitclipse</sonar.links.scm>
+		<sonar.links.issue>https://github.com/pitest/pitclipse/issues</sonar.links.issue>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.java.source>8</sonar.java.source>
+		<!-- Ignore :
+				- Exceptions,
+				- untestable activators -->
+		<sonar.exclusions>**/*Exception.java,**/Activator.java</sonar.exclusions>
+		<sonar.jacoco.reportPaths>../../tests/${project.artifactId}.tests/target/jacoco.exec</sonar.jacoco.reportPaths>
 	</properties>
 
 	<!-- COMMANDS:
 	    * Build project:
 	    	mvn clean verify
-	    	
+
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug
 	-->

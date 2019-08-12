@@ -6,20 +6,31 @@ jdk:
 # Prevent "mvn install" default step
 install: true
 
-env: DISPLAY=:99.0
-
 addons:
+  sonarcloud:
+    organization: "echebbi-github"
+    token:
+      secure: "YQklJf56eYXw36/OAbJGQ85qNXrYqR1D8MjicMNtg7oB3+lKvCVVaTx+NnS35Gp//TbOuOs7TMyLFENKFxhLBMDbBpDF4FGMOShgCbUpiuep+kkRj5G9c5PRSyjT+Q/UehOI3zmc16RV3RtJQPXDp1mY97gcWCJPonbteteSZCvrvZycJG6BwxrFLNir2rpHgt/SvGGknj9cJKZHwPy7Co838dqVr5fVa9WzElkcEgw5B9rt8o9gkKAdOpO/7JJijyVYuPBDS9DzJ6t7XurVT6nIpufqwVob8xv2uxyyN4icjKA4qcuXIwZBOD00lrhXoIkE7uK8VFEY0WbpMn6HuorqD6NFfpan4hxrrOTr5E19K6OneyaZtums04p9lf0Ev5t7vsx+ai1rZSzhIokZrvd0qZItUPJMRqeZ054kR+TMnkgOv5j77jGOi4bPz71BYB7JQgF8I3S8QcxfFMtgPRBYqHl61+HidNqPb2IfdLAEFG7bPpE+ll12D/CrcYUVtlegcrYX1Fks+KThyK6mbEhYNvNP86GpSBBf807c406XwzYchybdljEPV7Y5wJljdzvx7IksugiTe7SAyibTyFTPqbNxUBvSzT7UcM28y27P81XQEpwVORy2uI6nqtESr0VT3wk8JQAea3fON0HNlXE1+p7mUxY1tJWFIBvlnR8="
   apt:
     packages:
+      # Required by XVFB
       - metacity
 
+# Allow UI tests
+dist: trusty
+
 before_script:
-  - sh -e /etc/init.d/xvfb start
+  # Prepare the environment for UI tests
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
   - metacity --sm-disable --replace 2> metacity.err &
   # Prevent installed packages from being used during build
   - rm -rfv "$HOME/.m2/repository/org/pitest/"
 
-script: mvn verify -P jacoco
+# build.sh is responsible of checking whether Sonar analysis can be run
+script: bash .travis/build.sh
+
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -28,3 +39,4 @@ after_success:
 cache:
    directories:
      - "$HOME/.m2/repository"
+     - "$HOME/.sonar/cache"
