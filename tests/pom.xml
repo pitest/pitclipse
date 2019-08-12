@@ -25,6 +25,9 @@
 
         <!-- Test dependencies -->
         <module>io.cucumber</module>
+
+        <!-- Global utilities -->
+        <module>org.pitest.pitclipse.tests.coverage.report</module>
 	</modules>
 
     <build>
@@ -40,4 +43,39 @@
             </plugin>
         </plugins>
     </build>
+
+	<profiles>
+        <!-- mvn -Pjacoco to activate code coverage -->
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-version}</version>
+                        <configuration>
+                            <excludes>
+                                <!-- Ignore Exceptions -->
+                                <exclude>**/*Exception.class</exclude>
+
+                                <!-- Ignore untestable Activators -->
+                                <exclude>**/Activator.class</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
 </project>

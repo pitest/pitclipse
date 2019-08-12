@@ -19,7 +19,10 @@ before_script:
   # Prevent installed packages from being used during build
   - rm -rfv "$HOME/.m2/repository/org/pitest/"
 
-script: mvn verify
+script: mvn verify -P jacoco
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 # Keep p2 information
 cache:

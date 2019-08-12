@@ -1,0 +1,6 @@
+coverage:
+  status:
+    patch: off
+ignore:
+  - "**/*Exception.java"
+  - "**/Activator.java"
