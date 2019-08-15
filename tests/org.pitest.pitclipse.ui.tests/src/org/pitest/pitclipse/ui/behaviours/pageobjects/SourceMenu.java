@@ -31,11 +31,15 @@ public class SourceMenu {
     }
 
     public void organizeImports() {
-        bot.menu(SOURCE).menu(ORGANIZE_IMPORTS).click();
+        bot.menu(SOURCE)
+           .menu(ORGANIZE_IMPORTS)
+           .click();
     }
 
     public void format() {
-        bot.menu(SOURCE).menu(FORMAT).click();
+        bot.menu(SOURCE)
+           .menu(FORMAT)
+           .click();
     }
 
 }

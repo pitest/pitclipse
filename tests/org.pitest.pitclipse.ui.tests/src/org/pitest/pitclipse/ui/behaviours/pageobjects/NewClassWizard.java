@@ -17,6 +17,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 public class NewClassWizard {
@@ -33,6 +34,9 @@ public class NewClassWizard {
         bot.textWithLabel("Package:").setText(packageName);
         bot.textWithLabel("Name:").setText(className);
         bot.button("Finish").click();
+        
+        // Ensure the class is fully created before moving on
+        bot.waitUntil(Conditions.shellCloses(shell));
     }
 
 }

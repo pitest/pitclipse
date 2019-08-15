@@ -42,10 +42,6 @@ public class FileMenu {
     }
 
     public void createClass(String packageName, String className) {
-//        bot.menu(FILE)
-//           .menu(NEW)
-//           .menu(CLASS)
-//           .click();
         bot.tree()
            .contextMenu()
            .menu(NEW)
