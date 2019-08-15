@@ -21,7 +21,9 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 public class SwtBotTreeHelper {
 
     public static SWTBotTreeItem selectAndExpand(SWTBotTreeItem item) {
-        return expand(item.select().click());
+        SWTBotTreeItem selectedItem = item.select()
+                                          .click();
+        return expand(selectedItem);
     }
 
     public static SWTBotTreeItem expand(SWTBotTreeItem item) {

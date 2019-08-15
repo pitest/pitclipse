@@ -23,6 +23,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.junit.Assert.fail;
@@ -105,7 +106,14 @@ public class PackageExplorer {
     public void selectClass(String className, String packageName, String projectName) {
         SWTBotTreeItem project = getProject(projectName);
         SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
-        selectAndExpand(getClassFromPackage(pkg, className));
+        SWTBotTreeItem classItem = getClassFromPackage(pkg, className);
+        
+        if (classItem == null) {
+            throw new NoSuchElementException("class " + className + 
+                                             " not found in package " + packageName + 
+                                             " of project " + projectName);
+        }
+        selectAndExpand(classItem);
     }
 
     public boolean doesClassExistInProject(String className, String packageName, String projectName) {
@@ -116,7 +124,14 @@ public class PackageExplorer {
 
     public void openClass(ClassContext context) {
         SWTBotTreeItem pkg = selectAndExpand(getPackage(context));
-        SWTBotTreeItem clazz = selectAndExpand(getClassFromPackage(pkg, context.getClassName()));
+        SWTBotTreeItem classItem = getClassFromPackage(pkg, context.getClassName());
+        
+        if (classItem == null) {
+            throw new NoSuchElementException("class " + context.getClassName() + 
+                                             " not found in package " + context.getPackageName() + 
+                                             " of project " + context.getProjectName());
+        }
+        SWTBotTreeItem clazz = selectAndExpand(classItem);
         clazz.doubleClick();
     }
 

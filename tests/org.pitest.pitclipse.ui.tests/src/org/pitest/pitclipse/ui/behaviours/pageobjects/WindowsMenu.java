@@ -43,7 +43,11 @@ public class WindowsMenu {
     }
 
     public void openJavaPerspective() {
-        bot.menu(WINDOWS).menu("Perspective").menu(OPEN_PERSPECTIVES).menu(OTHER).click();
+        bot.menu(WINDOWS)
+           .menu("Perspective")
+           .menu(OPEN_PERSPECTIVES)
+           .menu(OTHER)
+           .click();
         perspectiveSelector.selectPerspective("Java");
 //        for (IPerspectiveDescriptor descriptor : PlatformUI.getWorkbench().getPerspectiveRegistry().getPerspectives()) {
 //            System.out.println(descriptor.getLabel() + " -- " + descriptor.getId());
