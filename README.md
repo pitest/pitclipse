@@ -59,7 +59,7 @@ You will need [Maven 3.x](https://maven.apache.org/download.cgi), [Java 8 JDK](h
 First of all, clone the repository:
 
 ```
-git clone https://github.com/philglover/pitclipse.git
+git clone https://github.com/pitest/pitclipse.git
 ```
 
 Then:
