@@ -13,4 +13,125 @@
 	<artifactId>org.pitest.pitclipse.p2</artifactId>
 	<packaging>eclipse-repository</packaging>
 
+	<properties>
+		<bintray.repo>Pitclipse</bintray.repo>
+		<!-- The name of Bintray repository's package for releases -->
+		<bintray.package>releases</bintray.package>
+		<!-- The label for the Composite sites -->
+		<site.label>Pitclipse</site.label>
+
+		<bintray.owner>${bintray.user}</bintray.owner>
+
+		<!-- Default values for remote directories -->
+		<bintray.releases.path>releases</bintray.releases.path>
+		<bintray.composite.path>updates</bintray.composite.path>
+		<bintray.zip.path>zipped</bintray.zip.path>
+		<!-- note that the following must be consistent with the path schema
+			used to publish child composite repositories and actual released p2 repositories -->
+		<child.repository.path.prefix>../../releases/</child.repository.path.prefix>
+	</properties>
+
+    <profiles>
+		<profile>
+			<!-- Activate this profile to release a legacy version (x.y.z) to Bintray -->
+			<id>release-composite</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- Retrieve possibly existing remote composite metadata -->
+								<id>update-local-repository</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<target>
+										<ant antfile="${basedir}/bintray.ant" target="get-composite-metadata">
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+
+							<execution>
+								<!-- Deploy p2 repository, p2 composite updated metadata and zipped p2 repository -->
+								<id>deploy-repository</id>
+								<phase>verify</phase>
+								<configuration>
+									<target>
+										<ant antfile="${basedir}/bintray.ant" target="push-to-bintray">
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.eclipse.tycho.extras</groupId>
+						<artifactId>tycho-eclipserun-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<configuration>
+							<!-- Update p2 composite metadata or create it -->
+							<!-- IMPORTANT: DO NOT split the arg line -->
+							<appArgLine>-application org.eclipse.ant.core.antRunner -buildfile packaging-p2composite.ant p2.composite.add -Dsite.label="${site.label}" -Dproject.build.directory=${project.build.directory} -DunqualifiedVersion=${unqualifiedVersion} -Dchild.repository.path.prefix="${child.repository.path.prefix}"</appArgLine>
+							<repositories>
+								<repository>
+									<id>mars</id>
+									<layout>p2</layout>
+									<url>http://download.eclipse.org/releases/mars</url>
+								</repository>
+							</repositories>
+							<dependencies>
+								<dependency>
+									<artifactId>org.eclipse.ant.core</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.apache.ant</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.eclipse.equinox.p2.repository.tools</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.eclipse.equinox.p2.core.feature</artifactId>
+									<type>eclipse-feature</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.eclipse.equinox.p2.extras.feature</artifactId>
+									<type>eclipse-feature</type>
+								</dependency>
+								<dependency>
+									<artifactId>org.eclipse.equinox.ds</artifactId>
+									<type>eclipse-plugin</type>
+								</dependency>
+							</dependencies>
+						</configuration>
+						<executions>
+							<execution>
+								<id>add-p2-composite-repository</id>
+								<phase>package</phase>
+								<goals>
+									<goal>eclipse-run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
