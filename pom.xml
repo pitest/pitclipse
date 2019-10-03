@@ -48,6 +48,10 @@
 
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug
+
+		* Publish current version to Bintray (caution: version *must* be legacy, e.g. x.y.z, no snapshot):
+			mvn clean verify -P release-composite -D skipTests
+		  Also note that it requires my (@echebbi) Bintray credentials.
 	-->
 
 	<build>
