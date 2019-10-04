@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.pitest.pitclipse.core.feature"
-      label="Pitest Core"
+      label="Pitclipse Core"
       version="2.0.0"
       provider-name="Pitest.org">
 
-   <description url="https://github.com/philglover/pitclipse">
+   <description url="https://github.com/pitest/pitclipse">
       Eclipse IDE integration of Pitest (PIT), a state of the art mutation system for the JVM.
    </description>
 
@@ -218,20 +218,21 @@
    </license>
 
    <url>
-      <update label="Pitclipse" url="http://eclipse.pitest.org/release/"/>
+      <update label="Pitclipse" url="https://dl.bintray.com/kazejiyu/Pitclipse/updates/"/>
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui" version="3.107.0" match="compatible"/>
       <import plugin="org.eclipse.core.runtime" version="3.11.1" match="compatible"/>
-      <import plugin="org.eclipse.core.resources" version="3.10.1" match="compatible"/>
       <import plugin="org.eclipse.jdt.core" version="3.11.2" match="compatible"/>
-      <import plugin="org.eclipse.debug.ui" version="3.11.101" match="compatible"/>
-      <import plugin="org.eclipse.jdt.debug.ui" version="3.7.101" match="compatible"/>
-      <import plugin="org.eclipse.jdt.launching" version="3.8.0" match="compatible"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.11.2" match="compatible"/>
-      <import plugin="org.pitest" version="1.4.6" match="compatible"/>
       <import plugin="com.google.guava" version="21.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.10.1" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.107.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching" version="3.8.0" match="compatible"/>
+      <import plugin="org.pitest.pitclipse.runner" version="2.0.0" match="compatible"/>
+      <import plugin="org.pitest" version="1.4.6" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.debug.core" version="3.10.0" match="compatible"/>
    </requires>
 
    <plugin
