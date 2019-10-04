@@ -14,4 +14,5 @@
          Eclipse support for Pitest (PIT), a state of the art mutation testing system
       </description>
    </category-def>
+   <repository-reference location="https://download.eclipse.org/tools/orbit/downloads/drops/R20170818183741/repository" enabled="true" />
 </site>
