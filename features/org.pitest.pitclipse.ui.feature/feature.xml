@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.pitest.pitclipse.ui.feature"
-      label="Pitest UI"
+      label="Pitclipse UI"
       version="2.0.0"
       provider-name="Pitest.org">
 
-   <description url="https://github.com/philglover/pitclipse">
+   <description url="https://github.com/pitest/pitclipse">
       UI integration of Pitest (PIT), a state of the art mutation system for the JVM.
 Provides views and contextual actions to search the code for mutations and show vulnerabilities.
    </description>
@@ -215,7 +215,7 @@ Provides views and contextual actions to search the code for mutations and show 
    </license>
 
    <url>
-      <update label="Pitclipse" url="http://eclipse.pitest.org/release/"/>
+      <update label="Pitclipse" url="https://dl.bintray.com/kazejiyu/Pitclipse/updates/"/>
    </url>
 
    <requires>
@@ -229,7 +229,13 @@ Provides views and contextual actions to search the code for mutations and show 
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.9.100" match="compatible"/>
       <import plugin="org.eclipse.jface.text" version="3.10.0" match="compatible"/>
       <import plugin="org.pitest.pitclipse.runner"/>
-      <import plugin="com.google.guava" version="21.0.0" match="greaterOrEqual"/>
+      <import plugin="com.google.guava" version="21.0.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.ui" version="3.11.101" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching" version="3.8.0" match="compatible"/>
+      <import plugin="org.pitest.pitclipse.launch"/>
+      <import plugin="org.eclipse.jface" version="3.11.1" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.107.1" match="compatible"/>
+      <import plugin="org.eclipse.jdt.debug.ui" version="3.7.101" match="compatible"/>
    </requires>
 
    <plugin
