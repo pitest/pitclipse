@@ -4,14 +4,12 @@
 
 Provides support for [PIT (Pitest)](http://pitest.org) within the Eclipse IDE. Allows to compute the mutation coverage of your code and shows the result within dedicated views.
 
-[Notable previous versions are described here](OLD_MILESTONES.md)
-
 ## How to use Pitclipse?
 
 First of all, you need to install Pitclipse in your Eclipse IDE (see `Installation` below).
 
-Once the plug-in is installed, you can run Pitest. To this end:
-- Right-clic on a Java project defining unit tests
+Once the plug-in is installed, you can run Pitest:
+- Right-click on a Java project defining unit tests
 - `Run As` > `PIT Mutation Test`
 
 Wait a few seconds, two views should open to show the results:
@@ -23,6 +21,8 @@ It is also possible to run a single JUnit test class. Specific PIT options can b
 - Double-click on `PIT Mutation Test`
 - Specify the options
 - Press `Run`
+
+Preferences also allow to change mutation settings (`Window > Preferences > Pitest`).
 
 > **/!\\** JUnit 5 is not supported at the moment
 
@@ -36,8 +36,6 @@ Drag the following button to your running Eclipse workspace to start the install
 <div align="center">
   <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1426461" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img typeof="foaf:Image" class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a>
 </div>
-
-> **/!\\** Not up-to-date at the moment, please use the update site below
 
 ### From the update site
 Alternatively, the plug-in can also be installed from the following (temporary) update site:
