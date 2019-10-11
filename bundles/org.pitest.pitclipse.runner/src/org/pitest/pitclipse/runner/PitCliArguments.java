@@ -54,6 +54,10 @@ public class PitCliArguments {
         builder.addAll(mutatorsFrom(options));
         builder.add("--timeoutConst", Integer.toString(options.getTimeout()));
         builder.add("--timeoutFactor", options.getTimeoutFactor().toPlainString());
+        if (options.getUseJUnit5()) {
+            // Specify that the 'pitest-junit5-plugin' should be used to discover tests
+            builder.add("--testPlugin", "junit5");
+        }
         String additionalClasspath = additionalClassPath(options);
         if (!additionalClasspath.isEmpty()) {
             builder.add("--classPath", additionalClasspath);

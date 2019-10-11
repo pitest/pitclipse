@@ -55,6 +55,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTO
  */
 public class PitCoreActivator extends Plugin {
 
+    private static final String ORG_PITEST_JUNIT5_PLUGIN = "org.pitest.pitest-junit5-plugin";
     private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
     private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
     private static final String ORG_PITEST = "org.pitest";
@@ -72,6 +73,8 @@ public class PitCoreActivator extends Plugin {
     private IPreferenceStore preferences;
 
     private ImmutableList<String> pitClasspath = of();
+    
+    private ImmutableList<String> pitestJunit5PluginClasspath = of();
 
     private File resultDir;
 
@@ -83,6 +86,10 @@ public class PitCoreActivator extends Plugin {
 
     private void setPitClasspath(List<String> classpath) {
         pitClasspath = copyOf(classpath);
+    }
+    
+    public List<String> getPitestJunit5PluginClasspath() {
+        return pitestJunit5PluginClasspath;
     }
     
     public IPreferenceStore getPreferenceStore() {
@@ -130,6 +137,12 @@ public class PitCoreActivator extends Plugin {
             pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + "bin");
         }
         setPitClasspath(pitclipseClasspath.build());
+        
+        if (Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN) != null) {
+            pitestJunit5PluginClasspath = ImmutableList.of(
+                getBundleFile(Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN)).getCanonicalPath() + File.separator + jarDir + File.separator + "pitest-junit5-plugin.jar"
+            );
+        }
     }
 
     private void setupStateDirectories() {

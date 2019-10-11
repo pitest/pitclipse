@@ -24,6 +24,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.pitest.pitclipse.core.extension.handler.ExtensionPointHandler;
 import org.pitest.pitclipse.core.extension.point.PitRuntimeOptions;
@@ -33,6 +37,7 @@ import org.pitest.pitclipse.launch.config.PackageFinder;
 import org.pitest.pitclipse.launch.config.ProjectFinder;
 import org.pitest.pitclipse.launch.config.SourceDirFinder;
 import org.pitest.pitclipse.runner.PitOptions;
+import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.PitRunner;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.io.SocketProvider;
@@ -56,6 +61,7 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
     private static final String PIT_RUNNER = PitRunner.class.getCanonicalName();
     private int portNumber;
     private final PitConfiguration pitConfiguration;
+    private boolean projectUsesJunit5 = false;
 
     public AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
         this.pitConfiguration = pitConfiguration;
@@ -72,10 +78,15 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     @Override
     public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
-        List<String> newClasspath = ImmutableList.<String>builder()
-                .addAll(getDefault().getPitClasspath())
-                .addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
-                .build();
+        ImmutableList.Builder<String> builder = ImmutableList.<String>builder()
+                .addAll(getDefault().getPitClasspath());
+        builder.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)));
+        if (projectUsesJunit5) {
+            // Allow Pitest to detect Junit5 tests
+            builder.addAll(getDefault().getPitestJunit5PluginClasspath());
+        }
+        List<String> newClasspath = builder.build();
+        
         log("Classpath: " + newClasspath);
         return newClasspath.toArray(new String[newClasspath.size()]);
     }
@@ -94,7 +105,10 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
                 .withPackageFinder(getPackageFinder()).withClassFinder(getClassFinder())
                 .withSourceDirFinder(getSourceDirFinder()).withPitConfiguration(pitConfiguration).build();
 
-        PitOptions options = configWrapper.getPitOptions();
+        projectUsesJunit5 = isJUnit5InClasspathOf(configWrapper.getProject());
+        PitOptionsBuilder optionsBuilder = configWrapper.getPitOptionsBuilder();
+        PitOptions options = optionsBuilder.withUseJUnit5(projectUsesJunit5)
+                                           .build();
 
         super.launch(configuration, mode, launch, monitor);
 
@@ -103,6 +117,15 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
         new ExtensionPointHandler<PitRuntimeOptions>(EXTENSION_POINT_ID).execute(registry, new PitRuntimeOptions(
                 portNumber, options, configWrapper.getMutatedProjects()));
 
+    }
+    
+    private static boolean isJUnit5InClasspathOf(IJavaProject project) throws JavaModelException {
+        for (IClasspathEntry classpathEntry : project.getRawClasspath()) {
+            if (JUnitCore.JUNIT5_CONTAINER_PATH.equals(classpathEntry.getPath())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected abstract ProjectFinder getProjectFinder();

@@ -24,8 +24,6 @@ It is also possible to run a single JUnit test class. Specific PIT options can b
 
 Preferences also allow to change mutation settings (`Window > Preferences > Pitest`).
 
-> **/!\\** JUnit 5 is not supported at the moment
-
 ## Installation
 
 ### From the Eclipse Marketplace

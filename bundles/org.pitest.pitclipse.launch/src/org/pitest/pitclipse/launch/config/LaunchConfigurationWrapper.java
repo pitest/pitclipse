@@ -111,6 +111,10 @@ public class LaunchConfigurationWrapper {
     }
 
     public PitOptions getPitOptions() throws CoreException {
+        return getPitOptionsBuilder().build();
+    }
+    
+    public PitOptions.PitOptionsBuilder getPitOptionsBuilder() throws CoreException {
         List<String> classPath = getClassesFromProject();
         List<File> sourceDirs = getSourceDirsForProject();
         int threadCount = getThreadCount();
@@ -137,7 +141,7 @@ public class LaunchConfigurationWrapper {
             List<String> packages = getPackagesToTest();
             builder.withPackagesToTest(packages);
         }
-        return builder.build();
+        return builder;
     }
 
     public static Builder builder() {
