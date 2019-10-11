@@ -30,8 +30,8 @@ public class PerspectiveSelector {
     public void selectPerspective(String perspectiveName) {
         SWTBotShell shell = bot.shell("Open Perspective");
         shell.activate();
-        bot.table().select(perspectiveName);
-        bot.button("OK").click();
+        bot.table().getTableItem(perspectiveName).select();
+        bot.button("Open").click();
     }
 
 }

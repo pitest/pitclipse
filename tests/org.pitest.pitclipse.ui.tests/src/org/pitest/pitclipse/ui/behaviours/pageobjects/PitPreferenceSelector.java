@@ -64,7 +64,7 @@ public class PitPreferenceSelector implements Closeable {
 
     @Override
     public void close() {
-        bot.button("OK").click();
+        bot.button("Apply and Close").click();
     }
 
     private SWTBotTreeItem expandPitPreferences() {

@@ -48,7 +48,12 @@ public class WindowsMenu {
            .menu(OPEN_PERSPECTIVES)
            .menu(OTHER)
            .click();
-        perspectiveSelector.selectPerspective("Java");
+        try {
+            perspectiveSelector.selectPerspective("Java");
+        }
+        catch (Exception e) {
+            perspectiveSelector.selectPerspective("Java (default)");
+        }
 //        for (IPerspectiveDescriptor descriptor : PlatformUI.getWorkbench().getPerspectiveRegistry().getPerspectives()) {
 //            System.out.println(descriptor.getLabel() + " -- " + descriptor.getId());
 //        }
