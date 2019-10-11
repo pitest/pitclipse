@@ -213,8 +213,18 @@
    limitations under the License.
    </license>
 
+   <requires>
+      <import plugin="org.junit" version="4.12.0" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="org.pitest"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.pitest.pitest-junit5-plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

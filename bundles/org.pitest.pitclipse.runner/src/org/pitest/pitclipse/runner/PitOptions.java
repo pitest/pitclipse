@@ -54,11 +54,12 @@ public final class PitOptions implements Serializable {
     private final ImmutableList<String> mutators;
     private final int timeout;
     private final BigDecimal timeoutFactor;
+    private final boolean useJUnit5;
 
     private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
             File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
             ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
-            ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor) {
+            ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor, boolean useJUnit5) {
         this.classUnderTest = classUnderTest;
         this.threads = threads;
         this.historyLocation = historyLocation;
@@ -73,6 +74,7 @@ public final class PitOptions implements Serializable {
         this.mutators = mutators;
         this.timeout = timeout;
         this.timeoutFactor = timeoutFactor;
+        this.useJUnit5 = useJUnit5;
     }
 
     public File getReportDirectory() {
@@ -102,6 +104,7 @@ public final class PitOptions implements Serializable {
         private ImmutableList<String> mutators = copyOf(split(DEFAULT_MUTATORS));
         private int timeout = 3000;
         private BigDecimal timeoutFactor = BigDecimal.valueOf(1.25);
+        private boolean useJUnit5 = false;
 
         private PitOptionsBuilder() {
         }
@@ -136,7 +139,8 @@ public final class PitOptions implements Serializable {
             initialiseReportDir();
             initialiseHistoryLocation();
             return new PitOptions(classUnderTest, classesToMutate, sourceDirs, reportDir, packages, classPath, threads,
-                    historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);
+                    historyLocation, excludedClasses, excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor,
+                    useJUnit5);
         }
 
         private void initialiseReportDir() {
@@ -242,6 +246,11 @@ public final class PitOptions implements Serializable {
             return this;
         }
 
+        public PitOptionsBuilder withUseJUnit5(boolean useJUnit5) {
+            this.useJUnit5 = useJUnit5;
+            return this;
+        }
+
         private static List<String> split(String toSplit) {
             return ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings().split(toSplit));
         }
@@ -309,6 +318,10 @@ public final class PitOptions implements Serializable {
 
     public BigDecimal getTimeoutFactor() {
         return timeoutFactor;
+    }
+    
+    public boolean getUseJUnit5() {
+        return useJUnit5;
     }
 
     @Override

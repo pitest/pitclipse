@@ -235,6 +235,7 @@
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.debug.core" version="3.10.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.8.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.junit.core"/>
    </requires>
 
    <plugin

@@ -1,25 +1,26 @@
 # Pitclipse Architecture <!-- omit in toc -->
 
-- [Overview](#Overview)
-- [Event flow](#Event-flow)
-- [How can I be notified when a new PIT application is launched?](#How-can-I-be-notified-when-a-new-PIT-application-is-launched)
-- [How do I listen for new PIT results?](#How-do-I-listen-for-new-PIT-results)
-- [How do I listen for new PIT mutations results?](#How-do-I-listen-for-new-PIT-mutations-results)
+- [Overview](#overview)
+- [Event flow](#event-flow)
+- [How can I be notified when a new PIT application is launched?](#how-can-i-be-notified-when-a-new-pit-application-is-launched)
+- [How do I listen for new PIT results?](#how-do-i-listen-for-new-pit-results)
+- [How do I listen for new PIT mutations results?](#how-do-i-listen-for-new-pit-mutations-results)
 
 ## Overview
 
 This folder defines Pitclipse's source plug-ins. Here is an overview of their purposes.
 
-Bundle | Purpose
------- | -------
-`org.pitest` | Wraps Pitest JAR as an Eclipse plug-in
-`org.pitest.pitclipse.core` | Defines extension points and handlers forwarding Pitest results to registered extensions.
-`org.pitest.pitclipse.launch` | Provides a PIT Mutation launch configuration.
-`org.pitest.pitclipse.launch.ui` | Integrates Pitclipse's launch configurations within Eclipse IDE's UI.
-`org.pitest.pitclipse.listeners` | Fragment for `org.pitest` allowing Pitest to discover Pitclipse's mutation listeners.
-`org.pitest.pitclipse.preferences.ui` | Provides a Pitclipse Preferences page.
-`org.pitest.pitclipse.runner` | Allows to execute Pitest within an Eclipse runtime.
-`org.pitest.pitclipse.ui` | Provides views to display Pitest's results.
+| Bundle                                | Purpose                                                                                                        |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `org.pitest`                          | Wraps Pitest JARs as an Eclipse plug-in                                                                        |
+| `org.pitest.pitest-junit5-plugin`     | Wraps JARs of the [pitest-junit5-plugin](https://github.com/pitest/pitest-junit5-plugin) as an Eclipse plug-in |
+| `org.pitest.pitclipse.core`           | Defines extension points and handlers forwarding Pitest results to registered extensions.                      |
+| `org.pitest.pitclipse.launch`         | Provides a PIT Mutation launch configuration.                                                                  |
+| `org.pitest.pitclipse.launch.ui`      | Integrates Pitclipse's launch configurations within Eclipse IDE's UI.                                          |
+| `org.pitest.pitclipse.listeners`      | Fragment for `org.pitest` allowing Pitest to discover Pitclipse's mutation listeners.                          |
+| `org.pitest.pitclipse.preferences.ui` | Provides a Pitclipse Preferences page.                                                                         |
+| `org.pitest.pitclipse.runner`         | Allows to execute Pitest within an Eclipse runtime.                                                            |
+| `org.pitest.pitclipse.ui`             | Provides views to display Pitest's results.                                                                    |
 
 ## Event flow
 
