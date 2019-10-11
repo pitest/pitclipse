@@ -28,5 +28,28 @@
 			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.7.0.201806111355"/>
 			<unit id="org.eclipse.swtbot.eclipse.source.feature.group" version="2.7.0.201806111355"/>
 		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.junit.jupiter.api" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.api.source" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.engine" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.engine.source" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.migrationsupport" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.migrationsupport.source" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.params" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.jupiter.params.source" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.commons" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.commons.source" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.engine" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.engine.source" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.launcher" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.launcher.source" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.runner" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.runner.source" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.suite.api" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.platform.suite.api.source" version="1.1.0.v20180327-1502"/>
+			<unit id="org.junit.vintage.engine" version="5.1.0.v20180327-1502"/>
+			<unit id="org.junit.vintage.engine.source" version="5.1.0.v20180327-1502"/>
+			<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository"/>
+		</location>
 	</locations>
 </target>

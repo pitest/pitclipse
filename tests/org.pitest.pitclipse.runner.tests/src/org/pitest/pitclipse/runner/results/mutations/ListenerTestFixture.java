@@ -41,8 +41,8 @@ import org.pitest.pitclipse.runner.results.ObjectFactory;
 import java.math.BigInteger;
 import java.util.List;
 
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.pitest.pitclipse.runner.TestFactory.TEST_FACTORY;
 
 class ListenerTestFixture {
