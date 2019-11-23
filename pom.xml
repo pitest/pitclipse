@@ -23,7 +23,7 @@
 
 	<properties>
 		<!-- DEPENDENCIES -->
-		<tycho-version>1.5.0-SNAPSHOT</tycho-version>
+		<tycho-version>1.5.1</tycho-version>
 		<jacoco-version>0.8.1</jacoco-version>
 
 		<!-- SONARQUBE -->
@@ -53,13 +53,6 @@
 			mvn clean verify -P release-composite -D skipTests
 		  Also note that it requires my (@echebbi) Bintray credentials.
 	-->
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>tycho-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<build>
 		<plugins>
