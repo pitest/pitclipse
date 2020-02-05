@@ -17,10 +17,10 @@ Feature: Default preferences apply to launch configuration
     Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | classUnderTest           | classesToMutate          | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.SomeNewClassTest | foo.bar.SomeNewClassTest | project5 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.SomeNewClassTest | foo.bar.SomeNewClassTest | project5 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     Then the launch configurations are configured as:
       | name             | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               |
-      | SomeNewClassTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | SomeNewClassTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Change the timeout Constant
     Given the timeout constant is 500
@@ -46,11 +46,11 @@ Feature: Default preferences apply to launch configuration
     Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | classUnderTest              | classesToMutate                                       | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.AnotherNewClassTest | foo.bar.AnotherNewClassTest, foo.bar.SomeNewClassTest | project5 | *Test           |                 | false         | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.AnotherNewClassTest | foo.bar.AnotherNewClassTest, foo.bar.SomeNewClassTest | project5 | *Test           |                 | false         | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     Then the launch configurations are configured as:
       | name                | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               |
-      | AnotherNewClassTest | false         | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | SomeNewClassTest    | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | AnotherNewClassTest | false         | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | SomeNewClassTest    | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Change the run incremental analysis preference
     When the run mutation tests in parallel preference is selected
@@ -61,12 +61,12 @@ Feature: Default preferences apply to launch configuration
     Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | classUnderTest              | classesToMutate                                                                    | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.YetAnotherClassTest | foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest | project5 | *Test           |                 | true          | true                | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.YetAnotherClassTest | foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest | project5 | *Test           |                 | true          | true                | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     Then the launch configurations are configured as:
       | name                | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               |
-      | AnotherNewClassTest | false         | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | SomeNewClassTest    | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | YetAnotherClassTest | true          | true                   | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | AnotherNewClassTest | false         | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | SomeNewClassTest    | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | YetAnotherClassTest | true          | true                   | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Change the excluded classes preference
     When the mutation tests use incremental analysis preference is deselected
@@ -76,13 +76,13 @@ Feature: Default preferences apply to launch configuration
     Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | classUnderTest            | classesToMutate                                                                                               | projects | excludedClasses           | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.NoNotAnotherClass | foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest | project5 | org.foo.*IntTest, *DbTest |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.NoNotAnotherClass | foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.YetAnotherClassTest | project5 | org.foo.*IntTest, *DbTest |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     Then the launch configurations are configured as:
       | name                | runInParallel | useIncrementalAnalysis | excludedClasses           | excludedMethods | avoidCallsTo                                                               |
-      | AnotherNewClassTest | false         | false                  | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | NoNotAnotherClass   | true          | false                  | org.foo.*IntTest, *DbTest |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | SomeNewClassTest    | true          | false                  | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | YetAnotherClassTest | true          | true                   | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | AnotherNewClassTest | false         | false                  | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | NoNotAnotherClass   | true          | false                  | org.foo.*IntTest, *DbTest |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | SomeNewClassTest    | true          | false                  | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | YetAnotherClassTest | true          | true                   | *Test                     |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Change the excluded methods preference
     When the excluded classes preference is unset
@@ -92,14 +92,14 @@ Feature: Default preferences apply to launch configuration
     Then a coverage report is generated with 0 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | classUnderTest           | classesToMutate                                                                                                                         | projects | excludedClasses | excludedMethods            | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.ClassMadnessTest | foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.ClassMadnessTest, foo.bar.YetAnotherClassTest | project5 |                 | *toString*, doNotMutateMe* | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.ClassMadnessTest | foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.ClassMadnessTest, foo.bar.YetAnotherClassTest | project5 |                 | *toString*, doNotMutateMe* | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     Then the launch configurations are configured as:
       | name                | runInParallel | useIncrementalAnalysis | excludedClasses           | excludedMethods            | avoidCallsTo                                                               |
-      | AnotherNewClassTest | false         | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | ClassMadnessTest    | true          | false                  |                           | *toString*, doNotMutateMe* | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | NoNotAnotherClass   | true          | false                  | org.foo.*IntTest, *DbTest |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | SomeNewClassTest    | true          | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | YetAnotherClassTest | true          | true                   | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | AnotherNewClassTest | false         | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | ClassMadnessTest    | true          | false                  |                           | *toString*, doNotMutateMe* | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | NoNotAnotherClass   | true          | false                  | org.foo.*IntTest, *DbTest |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | SomeNewClassTest    | true          | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | YetAnotherClassTest | true          | true                   | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Change the avoid Calls To preference
     When the excluded methods preference is unset
@@ -112,9 +112,9 @@ Feature: Default preferences apply to launch configuration
       | foo.bar.TestAvoidClassesTest | foo.bar.TestAvoidClassesTest, foo.bar.NoNotAnotherClass, foo.bar.SomeNewClassTest, foo.bar.AnotherNewClassTest, foo.bar.ClassMadnessTest, foo.bar.YetAnotherClassTest | project5 |                 |                 | true          | false               | org.slf4j, org.apache |
     Then the launch configurations are configured as:
       | name                 | runInParallel | useIncrementalAnalysis | excludedClasses           | excludedMethods            | avoidCallsTo                                                               |
-      | AnotherNewClassTest  | false         | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | ClassMadnessTest     | true          | false                  |                           | *toString*, doNotMutateMe* | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | NoNotAnotherClass    | true          | false                  | org.foo.*IntTest, *DbTest |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
-      | SomeNewClassTest     | true          | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | AnotherNewClassTest  | false         | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | ClassMadnessTest     | true          | false                  |                           | *toString*, doNotMutateMe* | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | NoNotAnotherClass    | true          | false                  | org.foo.*IntTest, *DbTest |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
+      | SomeNewClassTest     | true          | false                  | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
       | TestAvoidClassesTest | true          | false                  |                           |                            | org.slf4j, org.apache                                                      |
-      | YetAnotherClassTest  | true          | true                   | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | YetAnotherClassTest  | true          | true                   | *Test                     |                            | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |

@@ -62,22 +62,22 @@ Feature: Code analysis on multiple projects
     Then a coverage report is generated with 1 classes tested with overall coverage of 50% and mutation coverage of 0%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate              | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.*         | foo.bar.Foo, foo.bar.FooTest | project1 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.*         | foo.bar.Foo, foo.bar.FooTest | project1 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project2
     Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | packagesUnderTest           | classesToMutate                                                              | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | sea.fish.*,lake.amphibian.* | sea.fish.Cod, sea.fish.CodTest, lake.amphibian.Frog, lake.amphibian.FrogTest | project2 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | sea.fish.*,lake.amphibian.* | sea.fish.Cod, sea.fish.CodTest, lake.amphibian.Frog, lake.amphibian.FrogTest | project2 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project3
     Then a coverage report is generated with 2 classes tested with overall coverage of 50% and mutation coverage of 50%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate                                                                   | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.plebs.*   | foo.bar.plebs.NormaJean, foo.bar.plebs.TrevorBrookes, foo.bar.plebs.NormaJeanTest | project3 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.plebs.*   | foo.bar.plebs.NormaJean, foo.bar.plebs.TrevorBrookes, foo.bar.plebs.NormaJeanTest | project3 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project4
     Then a coverage report is generated with 1 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate                                  | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.suite.*   | foo.bar.suite.TestAll, foo.bar.suite.TestAllTest | project4 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.suite.*   | foo.bar.suite.TestAll, foo.bar.suite.TestAllTest | project4 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
 
   Scenario: Run tests at a workspace level
     When the workspace level scope preference is selected
@@ -86,19 +86,19 @@ Feature: Code analysis on multiple projects
     Then a coverage report is generated with 1 classes tested with overall coverage of 50% and mutation coverage of 0%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate             | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.*         | foo.bar.Foo,foo.bar.FooTest | project1 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.*         | foo.bar.Foo,foo.bar.FooTest | project1 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project2
     Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
     Then the options passed to Pit match:
       | packagesUnderTest           | classesToMutate                                                           | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | sea.fish.*,lake.amphibian.* | lake.amphibian.Frog,lake.amphibian.FrogTest,sea.fish.CodTest,sea.fish.Cod | project2 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | sea.fish.*,lake.amphibian.* | lake.amphibian.Frog,lake.amphibian.FrogTest,sea.fish.CodTest,sea.fish.Cod | project2 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project3
     Then a coverage report is generated with 2 classes tested with overall coverage of 50% and mutation coverage of 50%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate                                                                 | projects | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.plebs.*   | foo.bar.plebs.NormaJean,foo.bar.plebs.TrevorBrookes,foo.bar.plebs.NormaJeanTest | project3 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.plebs.*   | foo.bar.plebs.NormaJean,foo.bar.plebs.TrevorBrookes,foo.bar.plebs.NormaJeanTest | project3 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
     When tests are run for project project4
     Then a coverage report is generated with 6 classes tested with overall coverage of 73% and mutation coverage of 64%
     Then the options passed to Pit match:
       | packagesUnderTest | classesToMutate                                                                                                                                                                                                                       | projects                            | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               |
-      | foo.bar.suite.*   | foo.bar.Foo,foo.bar.FooTest,lake.amphibian.Frog,lake.amphibian.FrogTest,sea.fish.CodTest,sea.fish.Cod,foo.bar.plebs.NormaJean,foo.bar.plebs.TrevorBrookes,foo.bar.plebs.NormaJeanTest,foo.bar.suite.TestAllTest,foo.bar.suite.TestAll | project1,project2,project3,project4 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging |
+      | foo.bar.suite.*   | foo.bar.Foo,foo.bar.FooTest,lake.amphibian.Frog,lake.amphibian.FrogTest,sea.fish.CodTest,sea.fish.Cod,foo.bar.plebs.NormaJean,foo.bar.plebs.TrevorBrookes,foo.bar.plebs.NormaJeanTest,foo.bar.suite.TestAllTest,foo.bar.suite.TestAll | project1,project2,project3,project4 | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |
