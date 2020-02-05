@@ -9,6 +9,5 @@
 # Maven
 target/
 # Eclipse
-.settings/
 bin/
 *.versionsBackup
