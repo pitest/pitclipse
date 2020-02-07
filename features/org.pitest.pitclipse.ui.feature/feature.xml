@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.ui.feature"
       label="Pitclipse UI"
-      version="2.0.0"
+      version="2.0.1"
       provider-name="Pitest.org">
 
    <description url="https://github.com/pitest/pitclipse">
@@ -217,6 +217,10 @@ Provides views and contextual actions to search the code for mutations and show 
    <url>
       <update label="Pitclipse" url="https://dl.bintray.com/kazejiyu/Pitclipse/updates/"/>
    </url>
+
+   <includes
+         id="org.pitest.pitclipse.core.feature"
+         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui" version="3.107.0" match="compatible"/>
