@@ -25,7 +25,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static junit.framework.Assert.fail;
+import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
 
