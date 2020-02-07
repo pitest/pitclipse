@@ -27,6 +27,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
+			<artifactId>pitest</artifactId>
+			<version>${project.version}</version>
+			<classifier>javadoc</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
 			<artifactId>pitest-command-line</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -35,6 +41,12 @@
 			<artifactId>pitest-command-line</artifactId>
 			<version>${project.version}</version>
 			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>pitest-command-line</artifactId>
+			<version>${project.version}</version>
+			<classifier>javadoc</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
@@ -49,6 +61,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
+			<artifactId>pitest-entry</artifactId>
+			<version>${project.version}</version>
+			<classifier>javadoc</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
 			<artifactId>pitest-html-report</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -57,6 +75,12 @@
 			<artifactId>pitest-html-report</artifactId>
 			<version>${project.version}</version>
 			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>pitest-html-report</artifactId>
+			<version>${project.version}</version>
+			<classifier>javadoc</classifier>
 		</dependency>
 	</dependencies>
 
