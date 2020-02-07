@@ -3,18 +3,18 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Pitest
 Bundle-SymbolicName: org.pitest
 Bundle-Version: 1.4.6
-Bundle-ClassPath: pitest-1.4.6.jar,
- pitest-1.4.6-javadoc.jar,
- pitest-1.4.6-sources.jar,
- pitest-command-line-1.4.6.jar,
- pitest-command-line-1.4.6-javadoc.jar,
- pitest-command-line-1.4.6-sources.jar,
- pitest-entry-1.4.6.jar,
- pitest-entry-1.4.6-javadoc.jar,
- pitest-entry-1.4.6-sources.jar,
- pitest-html-report-1.4.6.jar,
- pitest-html-report-1.4.6-javadoc.jar,
- pitest-html-report-1.4.6-sources.jar
+Bundle-ClassPath: lib/pitest-command-line-javadoc.jar,
+ lib/pitest-command-line-sources.jar,
+ lib/pitest-command-line.jar,
+ lib/pitest-entry-javadoc.jar,
+ lib/pitest-entry-sources.jar,
+ lib/pitest-entry.jar,
+ lib/pitest-html-report-javadoc.jar,
+ lib/pitest-html-report-sources.jar,
+ lib/pitest-html-report.jar,
+ lib/pitest-javadoc.jar,
+ lib/pitest-sources.jar,
+ lib/pitest.jar
 Bundle-Vendor: Henry Coles
 Export-Package: joptsimple,
  joptsimple.internal,
