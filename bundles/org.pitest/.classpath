@@ -2,33 +2,33 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="output" path="target/classes"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line.jar" sourcepath="lib/pitest-command-line-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-command-line-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-entry-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-entry-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-entry.jar" sourcepath="lib/pitest-entry-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-entry-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report.jar" sourcepath="lib/pitest-html-report-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-html-report-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pitest-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/pitest.jar" sourcepath="lib/pitest-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line.jar" sourcepath="lib/pitest-command-line-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-command-line-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-command-line-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-entry.jar" sourcepath="lib/pitest-entry-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-entry-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-entry-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-entry-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report.jar" sourcepath="lib/pitest-html-report-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.pitest/lib/pitest-html-report-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pitest-html-report-sources.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
