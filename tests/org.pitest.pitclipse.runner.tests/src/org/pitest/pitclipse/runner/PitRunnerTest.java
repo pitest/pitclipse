@@ -119,15 +119,20 @@ public class PitRunnerTest {
     }
     
     private static List<String> classPathWithPitestAndJUnit() throws IOException {
+        final String jarDir = "lib";
         return asList(
             // TODO [Refactor] Pitest's classpath should be managed by the org.pitest bundle
             getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
             getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
             getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + "bin",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-1.4.6.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-entry-1.4.6.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-command-line-1.4.6.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-html-report-1.4.6.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-entry.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-command-line.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-html-report.jar",
             getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath(),
             // Add .class files to mutate
             new File("bin").getAbsolutePath(),
