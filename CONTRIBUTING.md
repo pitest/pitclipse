@@ -136,10 +136,12 @@ mvn clean verify
 ```
 
 Alternatively, tests can be run from Eclipse:
-1. Right-click on a test project or a test class
-2. `Run As` > `JUnit Plug-in Test`
+In `tests` project you find some stored "Launch configurations", ending with `.launch`; it is best to use such launch configurations to run all the tests of that project, since they are already configured correctly:
 
-A new Eclipse window should open during the time of the tests, before closing automatically.
+1. Right-click on such a `.launch` file
+2. `Run As` and select the single menu entry
+
+For UI tests, a new Eclipse window should open during the time of the tests, before closing automatically. Please, do not interact with such a window or you will break test execution.
 
 ## How can I manually test the plug-in?
 
