@@ -23,7 +23,7 @@
 
 	<properties>
 		<!-- DEPENDENCIES -->
-		<tycho-version>1.5.1</tycho-version>
+		<tycho-version>1.6.0</tycho-version>
 		<jacoco-version>0.8.1</jacoco-version>
 
 		<!-- SONARQUBE -->
