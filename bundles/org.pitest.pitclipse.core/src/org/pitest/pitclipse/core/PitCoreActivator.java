@@ -56,9 +56,9 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTO
 public class PitCoreActivator extends Plugin {
 
     private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
-	private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
-	private static final String ORG_PITEST = "org.pitest";
-	private static final String HTML_RESULTS_DIR = "html_results";
+    private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
+    private static final String ORG_PITEST = "org.pitest";
+    private static final String HTML_RESULTS_DIR = "html_results";
     private static final String HTML_FILE = "index.html";
     private static final String STATE_FILE = "state-1.1.0.out";
     private static final String HISTORY_DIR = "history";
