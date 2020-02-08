@@ -104,16 +104,21 @@ public class PitCoreActivator extends Plugin {
         plugin = this;
         setActivator(this);
         setupStateDirectories();
-        
+
+        final String jarDir = "lib";
         ImmutableList<String> pitestClasspath = ImmutableList.of(
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
-                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
-                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + "bin",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-entry-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-command-line-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-html-report-1.4.6.jar",
-                getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
+            getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
+            getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + "bin",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-entry.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-command-line.jar",
+            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-html-report.jar",
+            getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
         );
         Builder<String> pitclipseClasspath = ImmutableList.<String>builder().addAll(pitestClasspath);
         
