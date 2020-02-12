@@ -55,6 +55,9 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTO
  */
 public class PitCoreActivator extends Plugin {
 
+    private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
+    private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
+    private static final String ORG_PITEST = "org.pitest";
     private static final String HTML_RESULTS_DIR = "html_results";
     private static final String HTML_FILE = "index.html";
     private static final String STATE_FILE = "state-1.1.0.out";
@@ -104,22 +107,27 @@ public class PitCoreActivator extends Plugin {
         plugin = this;
         setActivator(this);
         setupStateDirectories();
-        
+
+        final String jarDir = "lib";
         ImmutableList<String> pitestClasspath = ImmutableList.of(
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
-                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
-                getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + "bin",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-entry-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-command-line-1.4.6.jar",
-                getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath() + File.separator + "pitest-html-report-1.4.6.jar",
-                getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
+            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath(),
+            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath(),
+            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath() + File.separator + "bin",
+            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest.jar",
+            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-entry.jar",
+            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-command-line.jar",
+            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
+               + File.separator + jarDir + File.separator + "pitest-html-report.jar",
+            getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
         );
         Builder<String> pitclipseClasspath = ImmutableList.<String>builder().addAll(pitestClasspath);
         
-        if (Platform.getBundle("org.pitest.pitclipse.listeners") != null) {
-            pitclipseClasspath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.listeners")).getCanonicalPath());
-            pitclipseClasspath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.listeners")).getCanonicalPath() + File.separator + "bin");
+        if (Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS) != null) {
+            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath());
+            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + "bin");
         }
         setPitClasspath(pitclipseClasspath.build());
     }
