@@ -60,22 +60,17 @@ The projects can be imported from Eclipse IDE:
 4. Check all projects
 5. `Finish`
 
-Wait for all projects to be imported. Depending on the Eclipse package you are using many errors may come up: some projects' dependencies may be missing. To solve this, we have to tell Eclipse IDE to use a specific environment. Our development environment is specified through a [target platform](https://www.vogella.com/tutorials/EclipseTargetPlatform/article.html). This target platform is located within the `releng` directory; to use it:
+Wait for all projects to be imported. Depending on the Eclipse package you are using many errors may come up: some projects' dependencies may be missing. To solve this, we have to tell Eclipse IDE to use a specific environment and to adjust a few other things, related to Maven JARs. Our development environment is specified through a [target platform](https://www.vogella.com/tutorials/EclipseTargetPlatform/article.html). This target platform is located within the `releng` directory; to use it:
 
 1. `File` > `Import...`
 2. `Existing Projects into Workspace`
 3. Type to the path of the `releng` directory in the `Select root directory` field
 4. Check only the `org.pitest.pitclipse.target` project
 5. `Finish`
-6. Open the `org.pitest.pitclipse.target.target` file
-7. On the top-right corner of the editor, click on _Set as Active Target Platform_.
-
-Eclipse IDE starts downloading all the dependencies, which may take some time. The process can be followed thanks to the _Progress_ view.
-
-If the compilation errors do not disappear even after the target platform is set, a full rebuild should fix the issue:
-1. `Project` > `Clean...`
-2. Check `Clean all projects`
-3. Click on `Click`
+6. Open the `org.pitest.pitclipse.target.target` file; Eclipse IDE starts downloading all the dependencies, which may take some time. The process can be followed thanks to the _Progress_ view
+7. On the top-right corner of the editor, click on _Set as Active Target Platform_
+8. Open the `pom.xml` in the project `org.pitest`, navigate to the `<execution>` element marked with error, use the menu "Edit" > "Quick Fix" and select "Discover new m2e connectors"; in the dialog select `maven-dependency-plugin` and press "Finish"; conclude the installation procedure and restart Eclipse when prompted
+9. Use the menu "Project" > "Clean" and clean all projects; you should now have an error free workspace.
 
 > **Note**: in some rare cases errors still remain. In such a case, opening the `org.pitest.pitclipse.target.target` file and clicking on _Reload target platform_ or restarting Eclipse IDE should definitely fix them.
 
