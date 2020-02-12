@@ -66,6 +66,8 @@ Then:
 2. Open the `releng/org.pitest.pitclipse.target/org.pitest.pitclipse.target.target` file
 3. Click on "_Set as Active Target Platform_"
 4. Wait for the dependencies to be loaded (may take a while)
+5. Open the `pom.xml` in the project `org.pitest`, navigate to the `<execution>` element marked with error, use the menu "Edit" > "Quick Fix" and select "Discover new m2e connectors"; in the dialog select `maven-dependency-plugin` and press "Finish"; conclude the installation procedure and restart Eclipse when prompted
+6. Use the menu "Project" > "Clean" and clean all projects; you should now have an error free workspace.
 
 ### Commit your changes
 
