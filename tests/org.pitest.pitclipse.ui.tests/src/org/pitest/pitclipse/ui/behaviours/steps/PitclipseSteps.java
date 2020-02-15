@@ -22,6 +22,11 @@ import com.google.common.collect.ImmutableList;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
+
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
@@ -51,7 +56,10 @@ import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 public class PitclipseSteps {
 
     @When("test {word} in package {word} is run for project {word}")
-    public void runTest(final String testClassName, final String packageName, final String projectName) {
+    public void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
+        // Build the whole workspace to prevent random compilation failures
+        ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        
         runPit(new SelectTestClass(testClassName, packageName, projectName));
     }
 
@@ -79,12 +87,13 @@ public class PitclipseSteps {
     @When("the following mutation is selected")
     public void mutationIsSelected(DataTable tableOfMutations) {
         PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
-        PAGES.getPitMutationsView().select(mutation);
+        PAGES.getPitMutationsView()
+             .select(mutation);
     }
 
     @Then("the file {string} is opened at line number {int}")
     public void mutationIsOpened(String fileName, int lineNumber) {
-        FilePosition position = PAGES.getPitMutationsView().getLastSelectedMutation();
+        FilePosition position = PAGES.getPitMutationsView().getLastSelectedMutation(fileName);
         assertThat(position.className, is(equalTo(fileName)));
         assertThat(position.lineNumber, is(equalTo(lineNumber)));
     }

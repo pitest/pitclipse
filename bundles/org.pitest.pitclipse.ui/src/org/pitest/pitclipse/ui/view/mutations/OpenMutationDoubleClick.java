@@ -16,9 +16,6 @@
 
 package org.pitest.pitclipse.ui.view.mutations;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -53,10 +50,22 @@ import org.pitest.pitclipse.runner.model.ProjectMutations;
 import org.pitest.pitclipse.runner.model.Status;
 import org.pitest.pitclipse.runner.model.Visitable;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import static org.eclipse.ui.ide.IDE.openEditor;
 
 public enum OpenMutationDoubleClick implements IDoubleClickListener {
+    
     LISTENER;
+    
+    /**
+     * The family to which any Eclipse Job scheduled by this listener belongs to.
+     * <p>
+     * Especially useful during tests to ensure that any background processing
+     * is over before moving on.
+     */
+    public static final Class<OpenMutationDoubleClick> JOB_FAMILY = OpenMutationDoubleClick.class; 
 
     @Override
     public void doubleClick(DoubleClickEvent event) {
@@ -125,26 +134,32 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor arg0) {
-                return findClass(projectName, className).transform(new OpenFileInEditorAtLine(lineNumber)).or(
-                        org.eclipse.core.runtime.Status.OK_STATUS);
+                return findClass(projectName, className)
+                        .map(new OpenFileInEditorAtLine(lineNumber))
+                        .orElse(org.eclipse.core.runtime.Status.OK_STATUS);
+            }
+            
+            @Override
+            public boolean belongsTo(Object family) {
+                return JOB_FAMILY.equals(family);
             }
 
             private Optional<IFile> findClass(final String projectName, final String className) {
                 IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
                 for (IProject project : root.getProjects()) {
                     if (project.getName().equals(projectName) && project.isOpen()) {
-                        Optional<IJavaProject> javaProject = Optional.fromNullable(JavaCore.create(project));
-                        if (javaProject.isPresent()) {
+                        IJavaProject javaProject = JavaCore.create(project);
+                        if (javaProject != null) {
                             try {
-                                IType type = javaProject.get().findType(className);
-                                return Optional.fromNullable(root.getFile(type.getPath()));
+                                IType type = javaProject.findType(className);
+                                return Optional.ofNullable(root.getFile(type.getPath()));
                             } catch (JavaModelException e) {
                                 // Maybe type no longer exists. Do nothing
                             }
                         }
                     }
                 }
-                return Optional.absent();
+                return Optional.empty();
             }
 
             private static final class OpenFileInEditorAtLine implements Function<IFile, IStatus> {
@@ -156,12 +171,10 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
 
                 @Override
                 public IStatus apply(final IFile file) {
-                    Optional<IWorkbenchWindow> workbench = Optional.fromNullable(PlatformUI.getWorkbench()
-                            .getActiveWorkbenchWindow());
-                    if (workbench.isPresent()) {
-                        IWorkbenchWindow wb = workbench.get();
+                    IWorkbenchWindow workbench = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+                    if (workbench != null) {
                         try {
-                            tryToOpen(wb, file);
+                            tryToOpen(workbench, file);
                         } catch (CoreException e) {
                             return org.eclipse.core.runtime.Status.CANCEL_STATUS;
                         }
