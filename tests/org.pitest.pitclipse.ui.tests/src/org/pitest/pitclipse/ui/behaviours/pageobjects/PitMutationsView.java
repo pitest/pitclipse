@@ -19,6 +19,9 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
+import junit.framework.AssertionFailedError;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
@@ -28,8 +31,10 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.ui.behaviours.steps.FilePosition;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
+import org.pitest.pitclipse.ui.view.mutations.OpenMutationDoubleClick;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
@@ -54,6 +59,8 @@ public class PitMutationsView {
     private SWTBotTree mutationTreeRoot() {
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
+        // Make sure the 'PIT Mutations' view is opened
+        bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         SWTBotTree mutationTree = mutationsView.bot().tree();
         return mutationTree;
     }
@@ -147,8 +154,11 @@ public class PitMutationsView {
             for (StatusTree statusTree : statuses) {
                 if (status.equals(statusTree.statusName)) {
                     statusTree.select(mutation);
+                    return;
                 }
             }
+            throw new AssertionFailedError(
+                    "Cannot select mutation from the PIT Mutations view: no mutation with status '" + status + "' is shown (" + mutation + ")");
         }
 
         public static MutationsTree from(SWTBotTree mutationTree) {
@@ -173,8 +183,11 @@ public class PitMutationsView {
             for (ProjectTree projectTree : projects) {
                 if (mutation.getProject().equals(projectTree.projectName)) {
                     projectTree.select(mutation);
+                    return;
                 }
             }
+            throw new AssertionFailedError(
+                    "Cannot select mutation from the PIT Mutations view: no mutation with project '" + mutation.getProject() + "' is shown (" + mutation + ")");
         }
 
         public static StatusTree from(SWTBotTreeItem statusTree) {
@@ -201,8 +214,11 @@ public class PitMutationsView {
             for (PackageTree packageTree : packages) {
                 if (mutation.getPkg().equals(packageTree.packageName)) {
                     packageTree.select(mutation);
+                    return;
                 }
             }
+            throw new AssertionFailedError(
+                    "Cannot select mutation from the PIT Mutations view: no mutation with package '" + mutation.getPkg() + "' is shown (" + mutation + ")");
         }
 
         public static ProjectTree from(SWTBotTreeItem projectTree) {
@@ -229,8 +245,11 @@ public class PitMutationsView {
             for (ClassTree classTree : classes) {
                 if (mutation.getClassName().equals(classTree.className)) {
                     classTree.select(mutation);
+                    return;
                 }
             }
+            throw new AssertionFailedError(
+                    "Cannot select mutation from the PIT Mutations view: no mutation of class '" + mutation.getClassName() + "' is shown (" + mutation + ")");
         }
 
         public static PackageTree from(SWTBotTreeItem packageTree) {
@@ -258,8 +277,12 @@ public class PitMutationsView {
                 if (mutation.getLineNumber() == mutationTree.lineNumber &&
                         mutation.getMutation().equals(mutationTree.mutation)) {
                     mutationTree.select();
+                    return;
                 }
             }
+            throw new AssertionFailedError(
+                    "Cannot select mutation from the PIT Mutations view: no mutation defined as \"" + mutation.getLineNumber() + "\"" +
+                    " and located at line " + mutation.getLineNumber() + " is shown (" + mutation + ")");
         }
 
         public static ClassTree from(SWTBotTreeItem classTree) {
@@ -285,7 +308,8 @@ public class PitMutationsView {
         }
 
         public void select() {
-            treeItem.select().doubleClick();
+            treeItem.select()
+                    .doubleClick();
         }
 
         public static MutationTree from(SWTBotTreeItem mutationNode) {
@@ -306,7 +330,14 @@ public class PitMutationsView {
         }
     }
 
-    public FilePosition getLastSelectedMutation() {
+    public FilePosition getLastSelectedMutation(String expectedFileName) {
+        try {
+            waitForBackgroundJobsToEnd();
+        } catch (TimeoutException e) {
+            // Not re-throwing the exception is OK because tests may pass anyway
+            // We print the error because it may help debug build failures
+            e.printStackTrace();
+        }
         SWTBotEditor editor = bot.activeEditor();
         String fileName = editor.getTitle();
         SWTBotEclipseEditor textEditor = editor.toTextEditor();
@@ -320,5 +351,31 @@ public class PitMutationsView {
             }
         }
         return FilePosition.builder().withFileName(fileName).withLineNumber(lineNumber).build();
+    }
+
+    /**
+     * Waits for all Jobs launched by the PIT Mutation view.
+     * <p>
+     * Those Jobs are notably used to open the Java editor at a line that produced
+     * a mutant. Not waiting for them could lead some tests to fail.
+     * 
+     * @throws TimeoutException if this method waits more than 15 seconds
+     */
+    private void waitForBackgroundJobsToEnd() throws TimeoutException {
+        IJobManager jobs = Job.getJobManager();
+
+        long timeAtStart = System.currentTimeMillis();
+        boolean backgroundJobsAreRunning = true;
+        
+        while (backgroundJobsAreRunning) {
+            boolean fifteenSecondsElapsed = System.currentTimeMillis() - timeAtStart >= 15000;
+            if (fifteenSecondsElapsed) {
+                throw new TimeoutException("After waiting 15s the PIT Mutations view still has jobs running in background." +
+                                           "An infinite loop is suspected, please check the code. " +
+                                           "Tests are moving on which may lead some assertions to fail.");
+            }
+            Job[] runningJobs = jobs.find(OpenMutationDoubleClick.JOB_FAMILY);
+            backgroundJobsAreRunning = runningJobs.length > 0;
+        }
     }
 }
