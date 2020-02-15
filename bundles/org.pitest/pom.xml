@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>org.pitest</artifactId>
-	<version>1.4.6</version>
+	<version>1.4.11</version>
 	<packaging>eclipse-plugin</packaging>
 	<description>Wraps Pitest JAR as an Eclipse plug-in</description>
 
@@ -121,7 +121,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
