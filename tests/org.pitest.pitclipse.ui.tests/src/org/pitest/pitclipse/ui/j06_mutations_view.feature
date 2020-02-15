@@ -14,13 +14,11 @@ Feature: Mutation view shows analysis results
     And the mutation results are
       | status      | project  | package | class       | line | mutation                                                     |
       | SURVIVED    | project1 | foo.bar | foo.bar.Bar |    9 | negated conditional                                          |
-      | SURVIVED    | project1 | foo.bar | foo.bar.Bar |   12 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
       | SURVIVED    | project1 | foo.bar | foo.bar.Foo |    9 | negated conditional                                          |
-      | SURVIVED    | project1 | foo.bar | foo.bar.Foo |   12 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | replaced int return with 0 for foo/bar/Bar::f                |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | replaced int return with 0 for foo/bar/Foo::f                |
 
   Scenario: Selecting a mutation opens the class in question at the right line number
     When the following mutation is selected
@@ -36,14 +34,12 @@ Feature: Mutation view shows analysis results
       | status      | project  | package | class       | line | mutation                                                     |
       | SURVIVED    | project1 | foo.bar | foo.bar.Bar |    9 | negated conditional                                          |
       | SURVIVED    | project1 | foo.bar | foo.bar.Bar |    9 | removed conditional - replaced equality check with false     |
-      | SURVIVED    | project1 | foo.bar | foo.bar.Bar |   12 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
       | SURVIVED    | project1 | foo.bar | foo.bar.Foo |    9 | negated conditional                                          |
       | SURVIVED    | project1 | foo.bar | foo.bar.Foo |    9 | removed conditional - replaced equality check with false     |
-      | SURVIVED    | project1 | foo.bar | foo.bar.Foo |   12 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |   10 | replaced int return with 0 for foo/bar/Bar::f                |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |   10 | replaced int return with 0 for foo/bar/Foo::f                |
 
   # This scenario does not pass anymore
   # This is likely due to the fact that Eclipse IDE creates new launch configuration

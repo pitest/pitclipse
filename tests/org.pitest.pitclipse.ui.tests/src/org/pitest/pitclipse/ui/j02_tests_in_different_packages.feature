@@ -30,16 +30,16 @@ Feature: Code mutation analysis in different packages
 
   Scenario: Run mutation testing at a package level
     When tests in package sea.fish are run for project project2
-    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 14%
+    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 17%
     When tests in package lake.fish are run for project project2
-    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 14%
+    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 17%
     When tests in package lake.amphibian are run for project project2
-    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 14%
+    Then a coverage report is generated with 4 classes tested with overall coverage of 25% and mutation coverage of 17%
 
   Scenario: Run mutation testing at a package root level
     When tests in source root src are run for project project2
-    Then a coverage report is generated with 4 classes tested with overall coverage of 100% and mutation coverage of 43%
+    Then a coverage report is generated with 4 classes tested with overall coverage of 100% and mutation coverage of 50%
 
   Scenario: Run mutation testing at a project level
     When tests are run for project project2
-    Then a coverage report is generated with 4 classes tested with overall coverage of 100% and mutation coverage of 43%
+    Then a coverage report is generated with 4 classes tested with overall coverage of 100% and mutation coverage of 50%

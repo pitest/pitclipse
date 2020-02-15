@@ -26,6 +26,7 @@ import org.pitest.classinfo.ClassName;
 import org.pitest.coverage.ClassLine;
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.coverage.CoverageSummary;
+import org.pitest.coverage.InstructionLocation;
 import org.pitest.coverage.TestInfo;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.DetectionStatus;
@@ -40,6 +41,7 @@ import org.pitest.pitclipse.runner.results.summary.SummaryResultListenerTestSuga
 
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import static com.google.common.base.Predicates.notNull;
@@ -177,6 +179,11 @@ class SummaryResultListenerTestData {
                     return classInfo.get(input);
                 }
             };
+        }
+
+        @Override
+        public Collection<TestInfo> getTestsForInstructionLocation(InstructionLocation location) {
+            return Collections.emptyList();
         }
     }
 }

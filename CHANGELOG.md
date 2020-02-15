@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Changed
+- [#107](https://github.com/pitest/pitclipse/issues/107) Upgrade Pitest to 1.4.11
 
 ## [2.0.1] - 2020-02-06
 ### Added
@@ -20,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Pitclipse is now released at [https://dl.bintray.com/kazejiyu/Pitclipse/updates/](https://dl.bintray.com/kazejiyu/Pitclipse/updates/)
-- [#80](https://github.com/pitest/pitclipse/pull/80) Use Pitest 1.4.6
+- [#80](https://github.com/pitest/pitclipse/pull/80) Upgrade Pitest to 1.4.6
 - [#80](https://github.com/pitest/pitclipse/pull/80) Use Java 1.8
 
 ## [1.1.4] - 2016-04-19

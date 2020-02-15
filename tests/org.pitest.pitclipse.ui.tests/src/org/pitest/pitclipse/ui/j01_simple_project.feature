@@ -36,7 +36,7 @@ Feature: Code mutation analysis
     And the mutation results are
       | status      | project  | package | class       | line | mutation                                                     |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo            |
 
   Scenario: Create a bad test for doFoo
     Given the class FooTest in package foo.bar in project project1 is selected
@@ -46,7 +46,7 @@ Feature: Code mutation analysis
     And the mutation results are
       | status   | project  | package | class       | line | mutation                                                     |
       | SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
-      | SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo           |
 
   Scenario: Create a better test for doFoo
     Given the class FooTest in package foo.bar in project project1 is selected
@@ -56,7 +56,7 @@ Feature: Code mutation analysis
     And the mutation results are
       | status | project  | package | class       | line | mutation                                                     |
       | KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
-      | KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo           |
 
   Scenario: Run mutation tests at package, package root & project level
     When tests in package foo.bar are run for project project1
@@ -78,22 +78,22 @@ Feature: Code mutation analysis
 
   Scenario: Run the new test
     When test BarTest in package foo.bar is run for project project1
-    Then a coverage report is generated with 2 classes tested with overall coverage of 50% and mutation coverage of 50%
+    Then a coverage report is generated with 2 classes tested with overall coverage of 50% and mutation coverage of 25%
     And the mutation results are
       | status      | project  | package | class       | line | mutation                                                     |
+      | SURVIVED    | project1 | foo.bar | foo.bar.Bar |    6 | replaced int return with 0 for foo/bar/Bar::doBar            |
       | KILLED      | project1 | foo.bar | foo.bar.Bar |    6 | Replaced integer subtraction with addition                   |
-      | KILLED      | project1 | foo.bar | foo.bar.Bar |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
       | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
-      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo            |
     When tests in package foo.bar are run for project project1
-    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
+    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 75%
     And the mutation results are
-      | status | project  | package | class       | line | mutation                                                     |
-      | KILLED | project1 | foo.bar | foo.bar.Bar |    6 | Replaced integer subtraction with addition                   |
-      | KILLED | project1 | foo.bar | foo.bar.Bar |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
-      | KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
-      | KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced return of integer sized value with (x == 0 ? 1 : 0) |
+      | status   | project  | package | class       | line | mutation                                                     |
+      | SURVIVED | project1 | foo.bar | foo.bar.Bar |    6 | replaced int return with 0 for foo/bar/Bar::doBar            |
+      | KILLED   | project1 | foo.bar | foo.bar.Bar |    6 | Replaced integer subtraction with addition                   |
+      | KILLED   | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction                   |
+      | KILLED   | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo            |
     When tests in source root src are run for project project1
-    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
+    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 75%
     When tests are run for project project1
-    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 100%
+    Then a coverage report is generated with 2 classes tested with overall coverage of 100% and mutation coverage of 75%

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitest
 Bundle-SymbolicName: org.pitest
-Bundle-Version: 1.4.6
+Bundle-Version: 1.4.11
 Bundle-ClassPath: lib/pitest-command-line-javadoc.jar,
  lib/pitest-command-line-sources.jar,
  lib/pitest-command-line.jar,
