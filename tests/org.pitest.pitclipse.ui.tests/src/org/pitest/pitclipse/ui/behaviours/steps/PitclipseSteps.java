@@ -19,15 +19,16 @@ package org.pitest.pitclipse.ui.behaviours.steps;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
-
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -39,9 +40,14 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import io.cucumber.datatable.DataTable;
 
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static java.lang.Integer.parseInt;
@@ -132,6 +138,8 @@ public class PitclipseSteps {
     }
     
     private void runPit(Runnable runnable) {
+        assertPitCanRun();
+        
         int retryCount = 20;
         int counter = 0;
         while (counter < retryCount) {
@@ -145,6 +153,69 @@ public class PitclipseSteps {
                 counter++;
             }
         }
+    }
+    
+    /**
+     * This method is an attempt to "fix" a flaky test, or at least
+     * to reduce its effects by:
+     *      1) failing fast (instead of freezing the whole build)
+     *      2) giving details about the failure
+     * 
+     * The test seems to be flaky because of compilation errors produced
+     * by missing imports and that's why this method uses 'auto import'
+     * on all open editors as an attempt to work around the issue.
+     * 
+     * See https://github.com/pitest/pitclipse/issues/81
+     */
+    private final void assertPitCanRun() {
+        Set<String> errors = errorsInProblemsView();
+        if (errors.isEmpty()) {
+            // So far, so good. Let's run PIT.
+            return;
+        }
+        for (SWTBotEditor editor : new SWTWorkbenchBot().editors()) {
+            editor.setFocus();
+            try {
+                PAGES.getSourceMenu().organizeImports();
+                PAGES.getSourceMenu().format();
+            } catch (TimeoutException e) {
+                System.err.println("Errors have been found, but attempt to fix them failed on editor " + editor.getTitle() + " => " + e.getMessage());
+            }
+        }
+        Set<String> errorsAfterCleaning = errorsInProblemsView();
+        if (! errorsAfterCleaning.isEmpty()) {
+            throw new IllegalStateException("Unexpected errors may prevent PIT from running. This is likely due to a flaky test; please relaunch the build." +
+                                            "\n    Errors are: " + errorsAfterCleaning);
+        }
+        else {
+            System.err.println("Unexpected errors have been detected before running PIT but have been succesfully fixed." +
+                               "\n      Errors were: " + errors);
+        }
+    }
+    
+    /** @return all the Errors shown in the 'Problems' view */
+    private final Set<String> errorsInProblemsView() {
+        Set<String> errors = new HashSet<>();
+        String category = "Errors";
+        
+        SWTBotView view = new SWTWorkbenchBot().viewByPartName("Problems");
+        view.show();
+        SWTBotTree tree = view.bot().tree();
+        
+        for (SWTBotTreeItem item : tree.getAllItems()) {
+            String text = item.getText();
+            if (text != null && text.startsWith(category)) {
+                item.expand();
+                for (String problem : item.getNodes()) {
+                    // Sometimes "Unknown" errors are reported but do not seem to be relevant
+                    if (! "Unknown".equals(problem)) {
+                        errors.add(problem);
+                    }
+                }
+                break;
+            }
+        }
+        return errors;
     }
     
     private List<PitMutation> mutationsFromExampleTable(DataTable tableOfMutations) {
