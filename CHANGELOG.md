@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [2.0.2] - 2020-02-18
 ### Changed
 - [#74](https://github.com/pitest/pitclipse/issues/74) Prevent the dependencies of analyzed projects from messing up with Pitest
 - [#107](https://github.com/pitest/pitclipse/issues/107) Upgrade Pitest to 1.4.11

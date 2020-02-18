@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.ui.feature"
       label="Pitclipse UI"
-      version="2.0.1"
+      version="2.0.2"
       provider-name="Pitest.org">
 
    <description url="https://github.com/pitest/pitclipse">
