@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Changed
+- [#74](https://github.com/pitest/pitclipse/issues/74) Prevent the dependencies of analyzed projects from messing up with Pitest
 - [#107](https://github.com/pitest/pitclipse/issues/107) Upgrade Pitest to 1.4.11
 
 ## [2.0.1] - 2020-02-06

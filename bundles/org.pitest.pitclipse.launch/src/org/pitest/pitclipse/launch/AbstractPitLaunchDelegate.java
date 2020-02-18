@@ -73,7 +73,8 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
     @Override
     public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
         List<String> newClasspath = ImmutableList.<String>builder()
-                .addAll(ImmutableList.copyOf(super.getClasspath(launchConfig))).addAll(getDefault().getPitClasspath())
+                .addAll(getDefault().getPitClasspath())
+                .addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)))
                 .build();
         log("Classpath: " + newClasspath);
         return newClasspath.toArray(new String[newClasspath.size()]);
