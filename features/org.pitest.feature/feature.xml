@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.feature"
       label="Pitest"
-      version="1.4.6"
+      version="1.4.11"
       provider-name="Henry Coles">
 
    <description url="http://pitest.org">
