@@ -44,8 +44,6 @@ Alternatively, the plug-in can also be installed from the following (temporary) 
 
 To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
 
-> **Note**: this URL is not viewable from a browser.
-
 ## How to contribute?
 
 ### Requirements
