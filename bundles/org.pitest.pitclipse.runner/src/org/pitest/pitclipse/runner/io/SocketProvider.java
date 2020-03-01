@@ -47,7 +47,6 @@ public class SocketProvider {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(portNumber);
-            System.out.println("Listening on: " + serverSocket.getInetAddress() + ":" + portNumber);
             Socket connection = serverSocket.accept();
             return ObjectStreamSocket.make(connection);
         } catch (IOException e) {
@@ -94,7 +93,6 @@ public class SocketProvider {
         try {
             InetAddress localhost = InetAddress.getByName(null);
             Socket socket = new Socket();
-            System.out.println("Connecting to: " + localhost + ":" + portNumber);
             SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
             socket.connect(endpoint, DEFAULT_TIMEOUT);
             return Optional.of(ObjectStreamSocket.make(socket));

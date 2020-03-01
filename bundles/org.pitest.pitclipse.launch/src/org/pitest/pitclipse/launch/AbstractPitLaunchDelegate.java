@@ -45,7 +45,6 @@ import org.pitest.pitclipse.runner.io.SocketProvider;
 import java.util.List;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
-import static org.pitest.pitclipse.core.PitCoreActivator.log;
 
 /**
  * <p>Abstract launch configuration used to execute PIT in a background VM.</p>
@@ -87,7 +86,6 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
         }
         List<String> newClasspath = builder.build();
         
-        log("Classpath: " + newClasspath);
         return newClasspath.toArray(new String[newClasspath.size()]);
     }
 

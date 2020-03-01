@@ -42,23 +42,19 @@ public class PitRunner {
         
         try (PitClient client = new PitClient(port)) {
             client.connect();
-            System.out.println("Connected");
             Optional<PitRequest> request = client.readRequest();
             Optional<PitResults> results = request.transform(executePit());
 
             results.toJavaUtil().ifPresent(client::sendResults);
-            System.out.println("Closing server");
             
         } catch (IOException e) {
             // An error occurred while closing the client
             e.printStackTrace();
         }
-        System.out.println("Closed");
     }
 
     public static Function<PitRequest, PitResults> executePit() {
         return request -> {
-            System.out.println("Received request: " + request);
             String[] cliArgs = PitCliArguments.from(request.getOptions());
             MutationCoverageReport.main(cliArgs);
             File reportDir = request.getReportDirectory();
@@ -69,7 +65,6 @@ public class PitRunner {
                                            .withProjects(request.getProjects())
                                            .withMutations(mutations)
                                            .build();
-            System.out.println("Sending results: " + results);
             return results;
         };
     }
