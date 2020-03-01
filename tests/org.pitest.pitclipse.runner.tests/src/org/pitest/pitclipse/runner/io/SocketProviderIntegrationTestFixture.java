@@ -50,7 +50,6 @@ class SocketProviderIntegrationTestFixture {
     static Future<ReturnStatus> listenOn(final int port) {
         Callable<ReturnStatus> socketTest = new Callable<ReturnStatus>() {
             public ReturnStatus call() throws Exception {
-                System.out.println("Listening on port " + port);
                 ObjectStreamSocket server = new SocketProvider().listen(port);
                 try {
                     server.write(ECHO);
