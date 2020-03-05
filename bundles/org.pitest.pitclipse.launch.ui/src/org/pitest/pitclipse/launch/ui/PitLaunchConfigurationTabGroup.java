@@ -32,6 +32,7 @@ public class PitLaunchConfigurationTabGroup extends AbstractLaunchConfigurationT
     public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
         final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
                 new PitArgumentsTab(),
+                new PitMutatorsTab(),
                 new JavaArgumentsTab(),
                 new JavaJRETab(),
                 new JavaClasspathTab(), 
