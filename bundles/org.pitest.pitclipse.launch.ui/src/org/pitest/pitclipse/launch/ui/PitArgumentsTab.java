@@ -17,26 +17,35 @@
 package org.pitest.pitclipse.launch.ui;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.framework.Bundle;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+
+import java.net.URL;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
@@ -46,18 +55,20 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASS
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
-import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 
 /**
  * Tab allowing to configure a PIT analyze. 
  */
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private static final int NUMBER_OF_COLUMNS = 3;
+    
+    private Image icon;
 
     private Text testClassText;
     private Text projectText;
@@ -70,6 +81,22 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private Text excludedClassesText;
     private Text excludedMethodsText;
     private Text avoidCallsTo;
+    
+    @Override
+    public Image getImage() {
+        Bundle bundle = Platform.getBundle(PitLaunchUiActivator.PLUGIN_ID);
+        Path path = new Path("icons/pit.gif");
+        URL iconURL = FileLocator.find(bundle, path, null);
+        icon = ImageDescriptor.createFromURL(iconURL).createImage();
+        return icon;
+    }
+    
+    @Override
+    public void dispose() {
+        if (icon != null) {
+            icon.dispose();
+        }
+    }
 
     public void initializeFrom(ILaunchConfiguration config) {
         projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
@@ -125,43 +152,61 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         createSpacer(comp);
         createProjectWidgets(font, comp);
         createSpacer(comp);
-        createTestClassWidgets(font, comp);
+        createMutationScopeWidgets(font, comp);
         createSpacer(comp);
-        createTestDirWidgets(font, comp);
+        createFilters(font, comp);
         createSpacer(comp);
         createPreferences(font, comp);
+    }
+    
+    private void createMutationScopeWidgets(Font font, Composite comp) {
+        Group group = new Group(comp, SWT.NONE);
+        group.setText(" Mutation Scope ");
+        group.setFont(font);
+        GridData groupGrid = new GridData(FILL_HORIZONTAL);
+        groupGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        group.setLayoutData(groupGrid);
+        GridLayout groupLayout = new GridLayout(2, false);
+        group.setLayout(groupLayout);
+        
+        createTestClassWidgets(font, group, groupLayout.numColumns);
+        createSpacer(group);
+        createTestDirWidgets(font, group, groupLayout.numColumns);
     }
 
     private void createProjectWidgets(Font font, Composite comp) {
         Label projectLabel = new Label(comp, SWT.NONE);
-        projectLabel.setText("Project to mutate:");
-        GridData gd = new GridData(FILL_HORIZONTAL);
+        projectLabel.setText("Project to mutate: ");
+        GridData gd = new GridData();
         gd.horizontalSpan = 1;
         projectLabel.setLayoutData(gd);
         projectLabel.setFont(font);
 
         gd = new GridData(FILL_HORIZONTAL);
-        gd.horizontalSpan = NUMBER_OF_COLUMNS;
+        gd.horizontalSpan = NUMBER_OF_COLUMNS - 1;
         projectText = new Text(comp, SWT.SINGLE | SWT.BORDER);
         projectText.setLayoutData(gd);
         projectText.addModifyListener(new UpdateOnModifyListener());
     }
 
-    private void createTestClassWidgets(Font font, Composite comp) {
+    private void createTestClassWidgets(Font font, Composite comp, int columnsInParent) {
         testClassRadioButton = createTestRadioButton(comp,
                 "Run mutations from a unit test");
+        GridData testClassGrid = new GridData(FILL_HORIZONTAL);
+        testClassGrid.horizontalSpan = columnsInParent;
+        testClassRadioButton.setLayoutData(testClassGrid);
 
         Label testClassLabel = new Label(comp, SWT.NONE);
         testClassLabel.setText("Test Class:");
-        GridData labelGrid = new GridData(FILL_HORIZONTAL);
+        GridData labelGrid = new GridData();
         labelGrid.horizontalIndent = 25;
-        labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        labelGrid.horizontalSpan = 1;
         testClassLabel.setLayoutData(labelGrid);
         testClassLabel.setFont(font);
 
         GridData textGrid = new GridData(FILL_HORIZONTAL);
-        textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
-        textGrid.horizontalIndent = 25;
+        textGrid.horizontalSpan = columnsInParent - 1;
+        textGrid.grabExcessHorizontalSpace = true;
         testClassText = new Text(comp, SWT.SINGLE | SWT.BORDER);
         testClassText.setLayoutData(textGrid);
         testClassText.addModifyListener(new UpdateOnModifyListener());
@@ -174,61 +219,83 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         return button;
     }
 
-    private void createTestDirWidgets(Font font, Composite comp) {
+    private void createTestDirWidgets(Font font, Composite comp, int columnsInParent) {
         testDirectoryRadioButton = createTestRadioButton(comp,
                 "Run mutations against a package or directory");
-
-        GridData labelGrid = new GridData(FILL_HORIZONTAL);
+        GridData testDirGrid = new GridData(FILL_HORIZONTAL);
+        testDirGrid.horizontalSpan = columnsInParent;
+        testDirectoryRadioButton.setLayoutData(testDirGrid);
+        
+        GridData labelGrid = new GridData();
         labelGrid.horizontalIndent = 25;
-        labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        labelGrid.horizontalSpan = 1;
         Label testDirectoryLabel = new Label(comp, SWT.NONE);
         testDirectoryLabel.setText("Directory:");
         testDirectoryLabel.setLayoutData(labelGrid);
         testDirectoryLabel.setFont(font);
 
         GridData textGrid = new GridData(FILL_HORIZONTAL);
-        textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
-        textGrid.horizontalIndent = 25;
+        textGrid.horizontalSpan = columnsInParent - 1;
         testDirText = new Text(comp, SWT.SINGLE | SWT.BORDER);
         testDirText.setLayoutData(textGrid);
         testDirText.addModifyListener(new UpdateOnModifyListener());
     }
 
-    private void createPreferences(Font font, Composite comp) {
-        runInParallel = createNewCheckBox(font, comp,
+    private void createFilters(Font font, Composite comp) {
+        Group group = new Group(comp, SWT.NONE);
+        group.setText(" Filters ");
+        group.setFont(font);
+        GridData groupGrid = new GridData(FILL_HORIZONTAL);
+        groupGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        group.setLayoutData(groupGrid);
+        GridLayout groupLayout = new GridLayout(1, false);
+        group.setLayout(groupLayout);
+        
+        runInParallel = createNewCheckBox(font, group, groupLayout.numColumns,
                 MUTATION_TESTS_RUN_IN_PARALLEL);
-        incrementalAnalysis = createNewCheckBox(font, comp,
+        incrementalAnalysis = createNewCheckBox(font, group, groupLayout.numColumns,
                 USE_INCREMENTAL_ANALYSIS);
-        excludedClassesText = createTextPreference(font, comp,
+    }
+       
+        private void createPreferences(Font font, Composite comp) {
+        Group misc = new Group(comp, SWT.NONE);
+        misc.setText(" Preferences ");
+        misc.setFont(font);
+        GridData miscGrid = new GridData(FILL_HORIZONTAL);
+        miscGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        misc.setLayoutData(miscGrid);
+        GridLayout miscLayout = new GridLayout(2, false);
+        misc.setLayout(miscLayout);
+        
+        excludedClassesText = createTextPreference(font, misc, miscLayout.numColumns,
                 EXCLUDE_CLASSES_FROM_PIT);
-        excludedMethodsText = createTextPreference(font, comp,
+        excludedMethodsText = createTextPreference(font, misc, miscLayout.numColumns,
                 EXCLUDE_METHODS_FROM_PIT);
-        avoidCallsTo = createTextPreference(font, comp, AVOID_CALLS_FROM_PIT);
+        avoidCallsTo = createTextPreference(font, misc, miscLayout.numColumns,
+                AVOID_CALLS_FROM_PIT);
     }
 
-    private Text createTextPreference(Font font, Composite comp, String label) {
-        GridData labelGrid = new GridData(FILL_HORIZONTAL);
-        labelGrid.horizontalIndent = 25;
-        labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+    private Text createTextPreference(Font font, Composite comp, int columnsInParent, String label) {
+        GridData labelGrid = new GridData();
+        labelGrid.horizontalSpan = 1;
         Label testDirectoryLabel = new Label(comp, SWT.NONE);
         testDirectoryLabel.setText(label);
         testDirectoryLabel.setLayoutData(labelGrid);
         testDirectoryLabel.setFont(font);
 
         GridData textGrid = new GridData(FILL_HORIZONTAL);
-        textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
-        textGrid.horizontalIndent = 25;
+        textGrid.horizontalSpan = columnsInParent - 1;
         Text textBox = new Text(comp, SWT.SINGLE | SWT.BORDER);
         textBox.setLayoutData(textGrid);
         textBox.addModifyListener(new UpdateOnModifyListener());
         return textBox;
     }
 
-    private Button createNewCheckBox(Font font, Composite comp, String label) {
+    private Button createNewCheckBox(Font font, Composite comp, int columnsInParent, String label) {
         Button checkBox = new Button(comp, SWT.CHECK);
         checkBox.setText(label);
         GridData labelGrid = new GridData(FILL_HORIZONTAL);
-        labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        labelGrid.horizontalSpan = columnsInParent - 1;
         checkBox.setLayoutData(labelGrid);
         checkBox.setFont(font);
         return checkBox;
