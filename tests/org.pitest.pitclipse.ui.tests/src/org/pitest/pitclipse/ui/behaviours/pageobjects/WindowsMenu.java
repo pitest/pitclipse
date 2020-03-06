@@ -18,7 +18,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.MutatorGroups;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import java.math.BigDecimal;
@@ -137,11 +137,11 @@ public class WindowsMenu {
         viewSelector.selectView("PIT", "PIT Mutations");
     }
 
-    public PitMutators getMutators() {
+    public MutatorGroups getMutators() {
         return openPreferences().andThen().getMutators();
     }
 
-    public void setMutators(PitMutators mutators) {
+    public void setMutators(MutatorGroups mutators) {
         PitCoreActivator.getDefault().setMutators(mutators);
     }
 
