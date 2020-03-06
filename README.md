@@ -1,8 +1,23 @@
-# Pitclipse
+<h1 align="center">
+  <a name="logo" href="https://gemoc.org/ale-lang"><img src="https://pitest.org/images/pit-black-150x152.png" alt="ALE logo" width="25"/></a>
+  Pitclipse
+</h1>
+
+<div align="center">
 
 [![Build Status](https://travis-ci.com/pitest/pitclipse.svg?branch=master)](https://travis-ci.com/pitest/pitclipse) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=coverage)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=ncloc)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [ ![Download](https://api.bintray.com/packages/kazejiyu/Pitclipse/releases/images/download.svg) ](https://bintray.com/kazejiyu/Pitclipse/releases/_latestVersion)
 
-Provides support for [PIT (Pitest)](http://pitest.org) within the Eclipse IDE. Allows to compute the mutation coverage of your code and shows the result within dedicated views.
+</div>
+
+Provides mutation coverage for your Java programs into the Eclipse IDE. Built on [PIT (Pitest)](http://pitest.org) for reliability.
+
+## What is mutation testing?
+
+> Faults (or mutations) are automatically seeded into your code, then your tests are run. If your tests fail then the mutation is killed, if your tests pass then the mutation lived.
+>
+> The quality of your tests can be gauged from the percentage of mutations killed.
+>
+> *Henry Coles, [pitest.org](https://pitest.org)*
 
 ## How to use Pitclipse?
 
@@ -44,11 +59,19 @@ To use it from Eclipse IDE, click on `Help` > `Install new software...` and then
 
 ## How to contribute?
 
-### Requirements
+<details>
 
-You will need [Maven 3.x](https://maven.apache.org/download.cgi), [Java 8 JDK](https://adoptopenjdk.net/upstream.html) and the latest [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) release.
+  <summary><b>Requirements</b></summary>
 
-### Setup the environment
+- [Maven 3.x](https://maven.apache.org/download.cgi)
+- [Java 8 JDK](https://adoptopenjdk.net/upstream.html)
+- latest [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) release
+
+</details>
+
+<details>
+
+  <summary><b>Setup your dev environment</b></summary>
 
 First of all, clone the repository:
 
@@ -65,12 +88,19 @@ Then:
 5. Open the `pom.xml` in the project `org.pitest`, navigate to the `<execution>` element marked with error, use the menu "Edit" > "Quick Fix" and select "Discover new m2e connectors"; in the dialog select `maven-dependency-plugin` and press "Finish"; conclude the installation procedure and restart Eclipse when prompted
 6. Use the menu "Project" > "Clean" and clean all projects; you should now have an error free workspace.
 
-### Commit your changes
+</details>
+
+<details>
+
+  <summary><b>Submit your changes</b></summary>
+
 
 Make your changes, then make sure the tests still pass:
 ```
 mvn clean verify
 ```
 Commit your changes, then submit a PR.
+
+</details>
 
 > See [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
