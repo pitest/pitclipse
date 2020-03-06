@@ -21,7 +21,7 @@ import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.MutatorGroups;
 
 import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
 
@@ -39,7 +39,7 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
     }
 
     private void createExecutionModeRadioButtons() {
-        PitMutators[] values = PitMutators.values();
+        MutatorGroups[] values = MutatorGroups.values();
         String[][] mutatorValues = new String[values.length][2];
         for (int i = 0; i < values.length; i++) {
             mutatorValues[i] = new String[] { values[i].getLabel(), values[i].getId() };

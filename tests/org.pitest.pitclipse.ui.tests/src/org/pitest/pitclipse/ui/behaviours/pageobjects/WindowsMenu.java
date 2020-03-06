@@ -25,7 +25,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.MutatorGroups;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 public class WindowsMenu {
@@ -155,11 +155,11 @@ public class WindowsMenu {
         viewSelector.selectView("PIT", "PIT Mutations");
     }
 
-    public PitMutators getMutators() {
+    public MutatorGroups getMutators() {
         return openPreferences().andThen().getMutators();
     }
 
-    public void setMutators(PitMutators mutators) {
+    public void setMutators(MutatorGroups mutators) {
         PitCoreActivator.getDefault().setMutators(mutators);
     }
 

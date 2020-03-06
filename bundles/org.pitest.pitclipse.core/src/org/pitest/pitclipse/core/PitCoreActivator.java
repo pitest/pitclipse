@@ -284,7 +284,7 @@ public class PitCoreActivator extends Plugin {
                 break;
             }
         }
-        for (PitMutators mutatorMode : PitMutators.values()) {
+        for (MutatorGroups mutatorMode : MutatorGroups.values()) {
             if (mutatorMode.getId().equals(mutators)) {
                 builder.withMutators(mutatorMode.toString());
                 break;
@@ -297,7 +297,7 @@ public class PitCoreActivator extends Plugin {
         getPreferenceStore().setValue(PIT_EXECUTION_MODE, pitExecutionMode.getId());
     }
 
-    public void setMutators(PitMutators mutators) {
+    public void setMutators(MutatorGroups mutators) {
         getPreferenceStore().setValue(PIT_MUTATORS, mutators.getId());
     }
 }

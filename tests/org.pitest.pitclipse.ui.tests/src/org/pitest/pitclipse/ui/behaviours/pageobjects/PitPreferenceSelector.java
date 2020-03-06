@@ -21,7 +21,8 @@ import com.google.common.base.Optional;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.core.MutatorGroups;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import java.io.Closeable;
@@ -124,7 +125,7 @@ public class PitPreferenceSelector implements Closeable {
         setTextFor(AVOID_CALLS_TO_LABEL).to(avoidCallsTo);
     }
 
-    public PitMutators getMutators() {
+    public MutatorGroups getMutators() {
         return getSelectedMutators().from(MUTATORS_LABEL);
     }
 
@@ -263,17 +264,17 @@ public class PitPreferenceSelector implements Closeable {
         });
     }
 
-    private PreferenceGetterBuilder<PitMutators> getSelectedMutators() {
-        return new PreferenceGetterBuilder<PitMutators>(new PreferenceGetter<PitMutators>() {
+    private PreferenceGetterBuilder<MutatorGroups> getSelectedMutators() {
+        return new PreferenceGetterBuilder<MutatorGroups>(new PreferenceGetter<MutatorGroups>() {
             @Override
-            public PitMutators getPreference(String label) {
+            public MutatorGroups getPreference(String label) {
                 expandPitMutatorPreferences();
-                for (PitMutators mutator : PitMutators.values()) {
+                for (MutatorGroups mutator : MutatorGroups.values()) {
                     if (bot.radio(mutator.getLabel()).isSelected()) {
                         return mutator;
                     }
                 }
-                return PitMutators.DEFAULTS;
+                return MutatorGroups.DEFAULTS;
             }
         });
     }

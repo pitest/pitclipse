@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.core;
 
-public enum PitMutators {
+public enum MutatorGroups {
     
     DEFAULTS("defaultMutators", "&Default Mutators"), 
     STRONGER("strongerMutators", "&Stronger Mutators"), 
@@ -25,7 +25,7 @@ public enum PitMutators {
     private final String label;
     private final String id;
 
-    private PitMutators(String id, String label) {
+    private MutatorGroups(String id, String label) {
         this.id = id;
         this.label = label;
     }
