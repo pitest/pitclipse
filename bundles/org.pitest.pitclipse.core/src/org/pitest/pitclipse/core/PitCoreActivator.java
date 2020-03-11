@@ -286,4 +286,8 @@ public class PitCoreActivator extends Plugin {
     public void setMutators(MutatorGroups mutators) {
         getPreferenceStore().setValue(PIT_MUTATORS, mutators.getId());
     }
+    
+    public String getDefaultMutators() {
+        return getPreferenceStore().getString(PIT_MUTATORS);
+    }
 }

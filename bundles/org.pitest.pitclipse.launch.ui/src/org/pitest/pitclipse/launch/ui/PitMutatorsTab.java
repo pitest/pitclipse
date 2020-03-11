@@ -23,10 +23,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -42,20 +43,19 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
+import org.pitest.pitclipse.core.MutatorGroups;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.net.URL;
 
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.USE_INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
@@ -66,7 +66,7 @@ import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR
  * Tab allowing to configure a PIT analyze. 
  */
 public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
-    private static final int NUMBER_OF_COLUMNS = 3;
+    private static final int NUMBER_OF_COLUMNS = MutatorGroups.values().length + 2;
     
     private Image icon;
 
@@ -81,6 +81,8 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private Text excludedClassesText;
     private Text excludedMethodsText;
     private Text avoidCallsTo;
+
+    private CheckboxTableViewer mutatorsTable;
 
     @Override
     public String getName() {
@@ -104,24 +106,24 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void initializeFrom(ILaunchConfiguration config) {
-        projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
-        String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME, "");
-        containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
-        testClassText.setText(testClass);
-        if (testClass.length() == 0 && containerId.length() > 0) {
-            testClassText.setText("");
-            IJavaElement containerElement = JavaCore.create(containerId);
-            testDirText.setText(new JavaElementLabelProvider().getText(containerElement));
-            testClassRadioButton.setSelection(false);
-            testDirectoryRadioButton.setSelection(true);
-        } else {
-            testClassText.setText(testClass);
-            testDirText.setText("");
-            testClassRadioButton.setSelection(true);
-            testDirectoryRadioButton.setSelection(false);
-        }
-        initialiseWithPreferenceDefaults(config);
-        testModeChanged();
+//        projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
+//        String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME, "");
+//        containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
+//        testClassText.setText(testClass);
+//        if (testClass.length() == 0 && containerId.length() > 0) {
+//            testClassText.setText("");
+//            IJavaElement containerElement = JavaCore.create(containerId);
+//            testDirText.setText(new JavaElementLabelProvider().getText(containerElement));
+//            testClassRadioButton.setSelection(false);
+//            testDirectoryRadioButton.setSelection(true);
+//        } else {
+//            testClassText.setText(testClass);
+//            testDirText.setText("");
+//            testClassRadioButton.setSelection(true);
+//            testDirectoryRadioButton.setSelection(false);
+//        }
+//        initialiseWithPreferenceDefaults(config);
+//        testModeChanged();
     }
 
     private void initialiseWithPreferenceDefaults(ILaunchConfiguration config) {
@@ -155,13 +157,73 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         comp.setFont(font);
 
         createSpacer(comp);
-        createProjectWidgets(font, comp);
+        createMutatorGroupsWidgets(font, comp);
         createSpacer(comp);
-        createMutationScopeWidgets(font, comp);
-        createSpacer(comp);
-        createFilters(font, comp);
-        createSpacer(comp);
-        createPreferences(font, comp);
+        createMutatorsWidgets(comp);
+    }
+    
+    private void createMutatorGroupsWidgets(Font font, Composite group) {
+//        Group group = new Group(comp, SWT.NONE);
+//        group.setFont(font);
+//        group.setText(" Mutator Groups ");
+//        GridDataFactory.fillDefaults().grab(true, false).span(NUMBER_OF_COLUMNS, 1).applyTo(group);
+//        GridLayoutFactory.fillDefaults().margins(8, 8).numColumns(MutatorGroups.values().length).applyTo(group);
+        
+        Label mutateWith = new Label(group, SWT.NONE);
+        mutateWith.setFont(font);
+        mutateWith.setText("Mutate with: ");
+        
+        boolean selected = false;
+        
+        for (MutatorGroups mutatorGroup : MutatorGroups.values()) {
+            Button mutatorGroupButton = new Button(group, SWT.RADIO);
+            mutatorGroupButton.setText(mutatorGroup.getLabel());
+            
+            if (mutatorGroup == MutatorGroups.DEFAULTS) {
+                mutatorGroupButton.setSelection(true);
+                selected = true;
+            }
+        }
+        Button customMutatorsButton = new Button(group, SWT.RADIO);
+        customMutatorsButton.setText("Mutators selected below");
+        if (!selected) {
+            customMutatorsButton.setSelection(true);
+        }
+    }
+    
+    /**
+     * Creates a group containing a table showing available Execution Hooks. Execution Hooks are found from extension points.
+     * Each execution hook provide a checkbox that can be used to activate / deactivate the hook.
+     */
+    private void createMutatorsWidgets(Composite parent) {
+        mutatorsTable = CheckboxTableViewer.newCheckList(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        mutatorsTable.getTable().setHeaderVisible(true);
+        mutatorsTable.setContentProvider(new ArrayContentProvider());
+        GridDataFactory.swtDefaults().grab(false, false).span(NUMBER_OF_COLUMNS, 1).applyTo(mutatorsTable.getTable());
+        
+        TableViewerColumn colName = new TableViewerColumn(mutatorsTable, SWT.FILL | SWT.H_SCROLL | SWT.V_SCROLL);
+        colName.getColumn().setText("Name");
+        colName.setLabelProvider(new LambdaLabelProvider<Mutators>(Mutators::getName));
+        
+        TableViewerColumn colDescription = new TableViewerColumn(mutatorsTable, SWT.FILL | SWT.H_SCROLL | SWT.V_SCROLL);
+        colDescription.getColumn().setText("Description");
+        colDescription.setLabelProvider(new LambdaLabelProvider<Mutators>(Mutators::getDescription));
+        
+        mutatorsTable.setInput(Mutators.values());
+        
+        // Init checked state based on whether the hook is activated by default
+        for (Mutators mutator : Mutators.values()) {
+            if (mutator.isActiveByDefault()) {
+                mutatorsTable.setChecked(mutator, true);
+            }
+        }
+        colName.getColumn().pack();
+        colDescription.getColumn().pack();
+        
+        mutatorsTable.getTable().setEnabled(true);
+        
+        // Dirty the tab when a hook is activated / deactivated
+        mutatorsTable.addCheckStateListener(event -> setDirty(true));
     }
     
     private void createMutationScopeWidgets(Font font, Composite comp) {
@@ -307,29 +369,29 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void performApply(ILaunchConfigurationWorkingCopy workingCopy) {
-        workingCopy.setAttribute(ATTR_PROJECT_NAME, projectText.getText()
-                .trim());
-        if (testClassRadioButton.getSelection()) {
-            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, testClassText.getText().trim());
-            workingCopy.setAttribute(ATTR_TEST_CONTAINER, "");
-        } else {
-            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
-            workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
-        }
-        workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
-                runInParallel.getSelection());
-        workingCopy.setAttribute(ATTR_TEST_INCREMENTALLY,
-                incrementalAnalysis.getSelection());
-        workingCopy.setAttribute(ATTR_EXCLUDE_CLASSES,
-                excludedClassesText.getText());
-        workingCopy.setAttribute(ATTR_EXCLUDE_METHODS,
-                excludedMethodsText.getText());
-        workingCopy.setAttribute(ATTR_AVOID_CALLS_TO, avoidCallsTo.getText());
-        try {
-            PitMigrationDelegate.mapResources(workingCopy);
-        } catch (CoreException ce) {
-            setErrorMessage(ce.getStatus().getMessage());
-        }
+//        workingCopy.setAttribute(ATTR_PROJECT_NAME, projectText.getText()
+//                .trim());
+//        if (testClassRadioButton.getSelection()) {
+//            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, testClassText.getText().trim());
+//            workingCopy.setAttribute(ATTR_TEST_CONTAINER, "");
+//        } else {
+//            workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
+//            workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
+//        }
+//        workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
+//                runInParallel.getSelection());
+//        workingCopy.setAttribute(ATTR_TEST_INCREMENTALLY,
+//                incrementalAnalysis.getSelection());
+//        workingCopy.setAttribute(ATTR_EXCLUDE_CLASSES,
+//                excludedClassesText.getText());
+//        workingCopy.setAttribute(ATTR_EXCLUDE_METHODS,
+//                excludedMethodsText.getText());
+//        workingCopy.setAttribute(ATTR_AVOID_CALLS_TO, avoidCallsTo.getText());
+//        try {
+//            PitMigrationDelegate.mapResources(workingCopy);
+//        } catch (CoreException ce) {
+//            setErrorMessage(ce.getStatus().getMessage());
+//        }
     }
 
     public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
@@ -366,7 +428,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private void createSpacer(Composite comp) {
         Label label = new Label(comp, SWT.NONE);
         GridData gd = new GridData();
-        gd.horizontalSpan = 3;
+        gd.horizontalSpan = NUMBER_OF_COLUMNS;
         label.setLayoutData(gd);
     }
 
