@@ -125,6 +125,8 @@ public class LaunchConfigurationWrapper {
         List<String> mutators = getMutators();
         int timeout = pitConfiguration.getTimeout();
         BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
+        
+        
 
         PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
                 .withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
