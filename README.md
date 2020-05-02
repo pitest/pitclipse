@@ -2,6 +2,9 @@
   <a name="logo" href="https://gemoc.org/ale-lang"><img src="https://pitest.org/images/pit-black-150x152.png" alt="ALE logo" width="25"/></a>
   Pitclipse
 </h1>
+<p align="center">
+	<i>Tests your tests right into your IDE!</i>
+</p>
 
 <div align="center">
 
@@ -9,7 +12,7 @@
 
 </div>
 
-Provides mutation coverage for your Java programs into the Eclipse IDE. Built on [PIT (Pitest)](http://pitest.org) for reliability.
+Provides mutation coverage for your Java programs within the Eclipse IDE. Built on [PIT (Pitest)](http://pitest.org) for reliability.
 
 ## What is mutation testing?
 
@@ -21,7 +24,7 @@ Provides mutation coverage for your Java programs into the Eclipse IDE. Built on
 
 ## Main Features
 
-- **Reliability**: uses [PIT (Pitest)](http://pitest.org) to compute 
+- **Reliability**: uses [PIT (Pitest)](http://pitest.org) to compute
 - **Customization**: provides numerous preferences to tailor analysis
 - **JUnit support**: works with both JUnit 4 and JUnit 5 tests
 
