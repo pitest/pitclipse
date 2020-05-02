@@ -19,9 +19,15 @@ Provides mutation coverage for your Java programs into the Eclipse IDE. Built on
 >
 > *Henry Coles, [pitest.org](https://pitest.org)*
 
-## How to use Pitclipse?
+## Main Features
 
-First of all, you need to install Pitclipse in your Eclipse IDE (see `Installation` below).
+- **Reliability**: uses [PIT (Pitest)](http://pitest.org) to compute 
+- **Customization**: provides numerous preferences to tailor analysis
+- **JUnit support**: works with both JUnit 4 and JUnit 5 tests
+
+## Usage
+
+First of all, you need to install Pitclipse in your Eclipse IDE (see [Installation](Installation) below).
 
 Once the plug-in is installed, you can run Pitest:
 - Right-click on a Java project defining unit tests
@@ -41,8 +47,6 @@ Preferences also allow to change mutation settings (`Window > Preferences > Pite
 
 ## Installation
 
-### From the Eclipse Marketplace
-
 The plug-in is available in the [Eclipse Marketplace](https://marketplace.eclipse.org/content/pitclipse).
 
 Drag the following button to your running Eclipse workspace to start the installation:
@@ -50,12 +54,17 @@ Drag the following button to your running Eclipse workspace to start the install
   <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1426461" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img typeof="foaf:Image" class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a>
 </div>
 
-### From the update site
-Alternatively, the plug-in can also be installed from the following (temporary) update site:
+<details>
+  <summary><b>Or show how to install it manually</b></summary>
 
-- [https://dl.bintray.com/kazejiyu/Pitclipse/updates/](https://dl.bintray.com/kazejiyu/Pitclipse/updates/)
-
-To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
+  1. Open Eclipse IDE
+  2. Go to *Help > Install New Software...*
+  3. Copy the update site’s URL in the *Work with* textbox:
+     	- https://dl.bintray.com/kazejiyu/Pitclipse/updates/
+  4. Hit *Enter* and wait for the list to load
+  5. Check *Action Language for EMF*
+  6. Click *Next* then *Finish*
+</details>
 
 ## How to contribute?
 
