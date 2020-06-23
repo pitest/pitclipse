@@ -52,7 +52,7 @@ The [Eclipse IDE for RCP developers](https://www.eclipse.org/downloads/packages/
 
 ### How do I open the projects in Eclipse IDE?
 
-The projects can be imported from Eclipse IDE:
+The easiest way is to import Pitclipse's project set as described in the [README](README.md#Contributing). The projects can although be imported manually:
 
 1. `File` > `Import...`
 2. `Existing Projects into Workspace`
