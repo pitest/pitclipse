@@ -16,7 +16,12 @@
 
 package org.pitest.pitclipse.launch;
 
-import com.google.common.collect.ImmutableList;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -24,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
@@ -42,9 +48,7 @@ import org.pitest.pitclipse.runner.PitRunner;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.io.SocketProvider;
 
-import java.util.List;
-
-import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import com.google.common.collect.ImmutableList;
 
 /**
  * <p>Abstract launch configuration used to execute PIT in a background VM.</p>
@@ -118,12 +122,58 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
     }
     
     private static boolean isJUnit5InClasspathOf(IJavaProject project) throws JavaModelException {
-        for (IClasspathEntry classpathEntry : project.getRawClasspath()) {
-            if (JUnitCore.JUNIT5_CONTAINER_PATH.equals(classpathEntry.getPath())) {
-                return true;
-            }
+    	// FIXME Naive implementation, won't handle every case (e.g. JUnit 5 provided through a junit5.jar archive)
+    	// 		 A better implementation may rely on JDT to scan the classpath / source files for definition / use
+    	//		 of JUnit 5 Test annotation
+    	//
+    	//		 See also https://github.com/redhat-developer/vscode-java/issues/204
+    	
+    	for (IClasspathEntry classpathEntry : project.getRawClasspath()) {
+    		if (JUnitCore.JUNIT5_CONTAINER_PATH.equals(classpathEntry.getPath())) {
+    			return true;
+    		}
+    	}
+        for (IClasspathEntry classpathEntry : project.getResolvedClasspath(true)) {
+        	Map<String, Object> attributes = Arrays.stream(classpathEntry.getExtraAttributes()).collect(Collectors.toMap(IClasspathAttribute::getName, IClasspathAttribute::getValue, (value1, value2) -> value1));
+        	if (isJUnit5FromMaven(attributes)) {
+        		return true;
+        	}
+        	if (isJUnit5FromGradle(classpathEntry, attributes)) {
+        		return true;
+        	}
+        	if (pointsToJunitJupiterEngineJar(classpathEntry)) {
+        		return true;
+        	}
         }
         return false;
+    }
+    
+    private static boolean isJUnit5FromMaven(Map<String, Object> attributes) {
+    	if (!attributes.containsKey("maven.pomderived") || !attributes.containsKey("maven.groupId") || !attributes.containsKey("maven.artifactId")) {
+    		return false;
+    	}
+		return "true".equals(attributes.get("maven.pomderived")) 
+			&& "org.junit.jupiter".equals(attributes.get("maven.groupId")) 
+			&& "junit-jupiter-engine".equals(attributes.get("maven.artifactId"));
+    }
+    
+    private static boolean isJUnit5FromGradle(IClasspathEntry classpathEntry, Map<String, Object> attributes) {
+    	if (!attributes.containsKey("gradle_use_by_scope")) {
+    		return false;
+    	}
+    	return pointsToJunitJupiterEngineJar(classpathEntry);
+    }
+    
+    private static boolean pointsToJunitJupiterEngineJar(IClasspathEntry classpathEntry) {
+    	try {
+    		String[] pathElements = classpathEntry.getPath().toString().split("/");
+        	String file = pathElements[pathElements.length - 1];
+        	return file.startsWith("junit-jupiter-engine") && file.endsWith(".jar");
+    	}
+    	catch (IndexOutOfBoundsException e) {
+    		// path doesn't have expected format, never mind
+    	}
+    	return false;
     }
 
     protected abstract ProjectFinder getProjectFinder();
