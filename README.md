@@ -1,14 +1,36 @@
-# Pitclipse
+<h1 align="center">
+  <a name="logo" href="https://gemoc.org/ale-lang"><img src="https://pitest.org/images/pit-black-150x152.png" alt="ALE logo" width="25"/></a>
+  Pitclipse
+</h1>
+<p align="center">
+	<i>Test your tests right into your IDE!</i>
+</p>
+
+<div align="center">
 
 [![Build Status](https://travis-ci.com/pitest/pitclipse.svg?branch=master)](https://travis-ci.com/pitest/pitclipse) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=coverage)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=ncloc)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [ ![Download](https://api.bintray.com/packages/kazejiyu/Pitclipse/releases/images/download.svg) ](https://bintray.com/kazejiyu/Pitclipse/releases/_latestVersion)
 
-Provides support for [PIT (Pitest)](http://pitest.org) within the Eclipse IDE. Allows to compute the mutation coverage of your code and shows the result within dedicated views.
+</div>
 
-## How to use Pitclipse?
+Provides mutation coverage for your Java programs within the Eclipse IDE. Built on [PIT (Pitest)](http://pitest.org) for reliability.
 
-First of all, you need to install Pitclipse in your Eclipse IDE (see `Installation` below).
+## What is mutation testing?
 
-Once the plug-in is installed, you can run Pitest:
+> Faults (or mutations) are automatically seeded into your code, then your tests are run. If your tests fail then the mutation is killed, if your tests pass then the mutation lived.
+>
+> The quality of your tests can be gauged from the percentage of mutations killed.
+>
+> *Henry Coles, [pitest.org](https://pitest.org)*
+
+## Main Features
+
+- **Reliability**: relies on [PIT (Pitest)](http://pitest.org)
+- **Customization**: provides numerous preferences to tailor analysis
+- **JUnit support**: works with both JUnit 4 and JUnit 5 tests
+
+## Usage
+
+Once the plug-in is installed (see [Installation](#Installation) below), you can run Pitest:
 - Right-click on a Java project defining unit tests
 - `Run As` > `PIT Mutation Test`
 
@@ -26,8 +48,6 @@ Preferences also allow to change mutation settings (`Window > Preferences > Pite
 
 ## Installation
 
-### From the Eclipse Marketplace
-
 The plug-in is available in the [Eclipse Marketplace](https://marketplace.eclipse.org/content/pitclipse).
 
 Drag the following button to your running Eclipse workspace to start the installation:
@@ -35,42 +55,54 @@ Drag the following button to your running Eclipse workspace to start the install
   <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1426461" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img typeof="foaf:Image" class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a>
 </div>
 
-### From the update site
-Alternatively, the plug-in can also be installed from the following (temporary) update site:
+<details>
+  <summary><b>Or show how to install it manually</b></summary>
 
-- [https://dl.bintray.com/kazejiyu/Pitclipse/updates/](https://dl.bintray.com/kazejiyu/Pitclipse/updates/)
+  1. Open Eclipse IDE
+  2. Go to *Help > Install New Software...*
+  3. Copy the update site’s URL in the *Work with* textbox:
+     	- https://dl.bintray.com/kazejiyu/Pitclipse/updates/
+  4. Hit *Enter* and wait for the list to load
+  5. Check everything
+  6. Click *Next* then *Finish*
+</details>
 
-To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
+## Contributing
 
-## How to contribute?
+<details>
+  <summary><b>Requirements</b></summary>
 
-### Requirements
+  - [Maven 3.x](https://maven.apache.org/download.cgi)
+  - [Java 8 JDK](https://adoptopenjdk.net/upstream.html)
+  - [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) (latest release)
+</details>
 
-You will need [Maven 3.x](https://maven.apache.org/download.cgi), [Java 8 JDK](https://adoptopenjdk.net/upstream.html) and the latest [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) release.
+<details>
+  <summary><b>Import the projects in the IDE</b></summary>
 
-### Setup the environment
+  1. *File > Import... > Team > Team Project Set*
+  2. Fill *URL* with "https://raw.githubusercontent.com/pitest/pitclipse/master/eclipse-project-set.psf"
+  3. Click on *Finish*
 
-First of all, clone the repository:
+  > Tip: use Working Sets for a better workspace organization:
+  > - Open *Project Explorer*'s menu >  *Top Level Elements* > *Working Sets*
+  > - Open *Project Explorer*'s menu >  *Select Working Sets* > Check "bundles", "features", "tests" and "releng"
+</details>
 
-```
-git clone https://github.com/pitest/pitclipse.git
-```
+<details>
+  <summary><b>Setup the environment</b></summary>
 
-Then:
+  1. Open the `org.pitest.pitclipse.target/org.pitest.pitclipse.target.target` file
+  2. Click on *Set as Target Platform*
+  3. Wait for the dependencies to be loaded (may take a while)
+</details>
 
-1. Import all the plug-ins within your Eclipse IDE workspace
-2. Open the `releng/org.pitest.pitclipse.target/org.pitest.pitclipse.target.target` file
-3. Click on "_Set as Active Target Platform_"
-4. Wait for the dependencies to be loaded (may take a while)
-5. Open the `pom.xml` in the project `org.pitest`, navigate to the `<execution>` element marked with error, use the menu "Edit" > "Quick Fix" and select "Discover new m2e connectors"; in the dialog select `maven-dependency-plugin` and press "Finish"; conclude the installation procedure and restart Eclipse when prompted
-6. Use the menu "Project" > "Clean" and clean all projects; you should now have an error free workspace.
+<details>
+  <summary><b>Commit your changes</b></summary>
 
-### Commit your changes
+  1. Make some changes
+  2. Make sure tests still pass: `mvn clean verify`
+  3. Submit a PR
+</details>
 
-Make your changes, then make sure the tests still pass:
-```
-mvn clean verify
-```
-Commit your changes, then submit a PR.
-
-> See [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for further details.
