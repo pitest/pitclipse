@@ -18,16 +18,18 @@ package org.pitest.pitclipse.core;
 
 public enum MutatorGroups {
     
-    DEFAULTS("defaultMutators", "&Default Mutators"), 
-    STRONGER("strongerMutators", "&Stronger Mutators"), 
-    ALL("allMutators", "&All Mutators");
+    DEFAULTS("defaultMutators", "&Default Mutators", ""), 
+    STRONGER("strongerMutators", "&Stronger Mutators", ""), 
+    ALL("allMutators", "&All Mutators", "");
 
     private final String label;
     private final String id;
+    private final String description;
 
-    private MutatorGroups(String id, String label) {
+    private MutatorGroups(String id, String label, String description) {
         this.id = id;
         this.label = label;
+        this.description = description;
     }
 
     public String getLabel() {
@@ -36,5 +38,9 @@ public enum MutatorGroups {
 
     public String getId() {
         return id;
+    }
+    
+    public String getDescription() {
+        return description;
     }
 }
