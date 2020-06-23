@@ -29,6 +29,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -37,6 +39,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -50,6 +53,7 @@ import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.net.URL;
 
+import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_FROM_PIT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_FROM_PIT;
@@ -84,6 +88,8 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     private CheckboxTableViewer mutatorsTable;
 
+    private Button customMutatorsButton;
+
     @Override
     public String getName() {
         return "Mutators";
@@ -106,6 +112,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void initializeFrom(ILaunchConfiguration config) {
+        System.out.println("PitMutatorsTab.initializeFrom()");
 //        projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
 //        String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME, "");
 //        containerId = getAttributeFromConfig(config, ATTR_TEST_CONTAINER, "");
@@ -156,10 +163,47 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         Font font = parent.getFont();
         comp.setFont(font);
 
+        createDescription(comp);
+        addSeparator(comp);
         createSpacer(comp);
         createMutatorGroupsWidgets(font, comp);
         createSpacer(comp);
         createMutatorsWidgets(comp);
+        
+        disableTableIfUnused();
+        setDirty(false);
+    }
+    
+    private void createDescription(Composite parent) {
+        String description = " Select the mutators used to alter the code. See the documentation on Pitest.org";
+        String link = "https://pitest.org/quickstart/mutators/";
+        int linkStartIndex = description.indexOf("See");
+        int linkLength = description.indexOf("Pitest") + "Pitest.org".length() - description.indexOf("See");
+                
+        StyledText styledText = new StyledText(parent, SWT.NONE);
+        styledText.setText(description);
+        styledText.setBackground(parent.getBackground());
+        styledText.setMarginColor(parent.getBackground());
+
+        GridDataFactory.fillDefaults().span(NUMBER_OF_COLUMNS, 1).applyTo(styledText);
+        styledText.setLeftMargin(0);
+        
+        StyleRange style = new StyleRange();
+        style.underline = true;
+        style.underlineStyle = SWT.UNDERLINE_LINK;
+        style.start = linkStartIndex;
+        style.length = linkLength;
+        styledText.setStyleRange(style);
+        
+        styledText.addListener(SWT.MouseDown, event -> {
+            int clickOffset = styledText.getCaretOffset();
+            if (linkStartIndex <= clickOffset && clickOffset < linkStartIndex + linkLength) {
+                // Open the documentation with external browser
+                Program.launch(link);
+            }
+        });
+        styledText.setBottomMargin(5);
+        styledText.setToolTipText(link);
     }
     
     private void createMutatorGroupsWidgets(Font font, Composite group) {
@@ -173,22 +217,35 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         mutateWith.setFont(font);
         mutateWith.setText("Mutate with: ");
         
-        boolean selected = false;
+        boolean aMutatorGroupIsSelected = false;
         
         for (MutatorGroups mutatorGroup : MutatorGroups.values()) {
             Button mutatorGroupButton = new Button(group, SWT.RADIO);
             mutatorGroupButton.setText(mutatorGroup.getLabel());
+            mutatorGroupButton.addSelectionListener(widgetSelectedAdapter(event -> {
+                disableTableIfUnused();
+                setDirty();
+            }));
             
             if (mutatorGroup == MutatorGroups.DEFAULTS) {
                 mutatorGroupButton.setSelection(true);
-                selected = true;
+                aMutatorGroupIsSelected = true;
             }
         }
-        Button customMutatorsButton = new Button(group, SWT.RADIO);
+        customMutatorsButton = new Button(group, SWT.RADIO);
         customMutatorsButton.setText("Mutators selected below");
-        if (!selected) {
+        customMutatorsButton.addSelectionListener(widgetSelectedAdapter(event -> {
+            disableTableIfUnused();
+            setDirty();
+        }));
+        if (!aMutatorGroupIsSelected) {
             customMutatorsButton.setSelection(true);
         }
+    }
+    
+    private void setDirty() {
+//        setDirty(true);
+        updateLaunchConfigurationDialog();
     }
     
     /**
@@ -223,7 +280,11 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         mutatorsTable.getTable().setEnabled(true);
         
         // Dirty the tab when a hook is activated / deactivated
-        mutatorsTable.addCheckStateListener(event -> setDirty(true));
+        mutatorsTable.addCheckStateListener(event -> setDirty());
+    }
+    
+    private void disableTableIfUnused() {
+        mutatorsTable.getTable().setEnabled(customMutatorsButton.getSelection());
     }
     
     private void createMutationScopeWidgets(Font font, Composite comp) {
@@ -367,8 +428,14 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         checkBox.setFont(font);
         return checkBox;
     }
+    
+    protected static void addSeparator(Composite parent) {
+        Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+        GridDataFactory.fillDefaults().span(NUMBER_OF_COLUMNS, 1).applyTo(separator);
+    }
 
     public void performApply(ILaunchConfigurationWorkingCopy workingCopy) {
+        System.out.println("PitMutatorsTab.performApply()");
 //        workingCopy.setAttribute(ATTR_PROJECT_NAME, projectText.getText()
 //                .trim());
 //        if (testClassRadioButton.getSelection()) {
