@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
         tags = "~@ignored", 
         plugin = { "pretty" }
 )
-@SuppressWarnings("squid:S2187") // Suppress 'add tests to this class' warning
-public class PitclipseFeaturesTest {
+public class PitclipseFeaturesTest { // NOSONAR Suppress 'add tests to this class' warning
 
 }

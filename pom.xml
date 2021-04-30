@@ -4,7 +4,7 @@
 
 	<groupId>org.pitest</groupId>
 	<artifactId>org.pitest.pitclipse</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Pitclipse</name>
@@ -27,6 +27,12 @@
 		<jacoco-version>0.8.1</jacoco-version>
 
 		<!-- SONARQUBE -->
+		<!-- On Travis CI, SonarQube doesn't support Java 8 anymore.
+		     I can't remove the SonarQube integration because I am
+			 not an administrator of the Pitest organization so let's
+			 just ask the CI to skip the analysis as a quickfix. -->
+		<sonar.skip>true</sonar.skip>
+
 		<sonar.projectName>Pitclipse</sonar.projectName>
 
 		<sonar.organization>echebbi-github</sonar.organization>
@@ -47,10 +53,10 @@
 	    	mvn clean verify
 
 		* Change project's version:
-			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug
+			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug -DskipTests
 
 		* Publish current version to Bintray (caution: version *must* be legacy, e.g. x.y.z, no snapshot):
-			mvn clean verify -P release-composite -D skipTests
+			mvn clean verify -Prelease-composite
 		  Also note that it requires my (@echebbi) Bintray credentials.
 	-->
 
@@ -79,7 +85,7 @@
 						<artifact>
 							<groupId>org.pitest</groupId>
 							<artifactId>org.pitest.pitclipse.target</artifactId>
-							<version>2.1.0</version>
+							<version>2.1.2-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>
