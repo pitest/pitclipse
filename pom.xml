@@ -53,10 +53,10 @@
 	    	mvn clean verify
 
 		* Change project's version:
-			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -D newVersion=major.minor.bug -D skipTests
+			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug -DskipTests
 
 		* Publish current version to Bintray (caution: version *must* be legacy, e.g. x.y.z, no snapshot):
-			mvn clean verify -P release-composite
+			mvn clean verify -Prelease-composite
 		  Also note that it requires my (@echebbi) Bintray credentials.
 	-->
 
