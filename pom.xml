@@ -27,6 +27,12 @@
 		<jacoco-version>0.8.1</jacoco-version>
 
 		<!-- SONARQUBE -->
+		<!-- On Travis CI, SonarQube doesn't support Java 8 anymore.
+		     I can't remove the SonarQube integration because I am
+			 not an administrator of the Pitest organization so let's
+			 just ask the CI to skip the analysis as a quickfix. -->
+		<sonar.skip>true</sonar.skip>
+
 		<sonar.projectName>Pitclipse</sonar.projectName>
 
 		<sonar.organization>echebbi-github</sonar.organization>
