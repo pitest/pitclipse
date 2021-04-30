@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.pitclipse.core.feature"
       label="Pitclipse Core"
-      version="2.1.0"
+      version="2.1.2.qualifier"
       provider-name="Pitest.org">
 
    <description url="https://github.com/pitest/pitclipse">
