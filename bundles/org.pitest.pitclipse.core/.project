@@ -31,4 +31,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>.github</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/.github</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
