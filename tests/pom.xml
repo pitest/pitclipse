@@ -21,7 +21,8 @@
 	<modules>
         <!-- Test fragments -->
         <module>org.pitest.pitclipse.runner.tests</module>
-        <module>org.pitest.pitclipse.ui.tests</module>
+        <!-- Hangs in GitHub Actions so it's temporarily disabled -->
+        <!-- <module>org.pitest.pitclipse.ui.tests</module> -->
 
         <!-- Test dependencies -->
         <module>io.cucumber</module>
