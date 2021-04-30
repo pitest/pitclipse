@@ -9,77 +9,81 @@
 	</parent>
 
 	<artifactId>org.pitest</artifactId>
-	<version>1.4.11</version>
+	<version>1.4.11-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<description>Wraps Pitest JAR as an Eclipse plug-in</description>
+
+	<properties>
+		<pitclipse-version>1.4.11</pitclipse-version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>sources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>javadoc</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-command-line</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-command-line</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>sources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-command-line</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>javadoc</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-entry</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-entry</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>sources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-entry</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>javadoc</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-html-report</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-html-report</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>sources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.pitest</groupId>
 			<artifactId>pitest-html-report</artifactId>
-			<version>${project.version}</version>
+			<version>${pitclipse-version}</version>
 			<classifier>javadoc</classifier>
 		</dependency>
 	</dependencies>
