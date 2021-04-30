@@ -2,7 +2,7 @@
 <feature
       id="org.pitest.feature"
       label="Pitest"
-      version="1.4.12.qualifier"
+      version="1.4.11.qualifier"
       provider-name="Henry Coles">
 
    <description url="http://pitest.org">
