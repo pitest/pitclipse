@@ -26,6 +26,22 @@
 		<tycho-version>1.6.0</tycho-version>
 		<jacoco-version>0.8.1</jacoco-version>
 
+		<!-- MISC -->
+		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- CI (GITHUB ACTIONS) -->
+
+		<!-- Required properties for releasing -->
+		<github-update-repo>git@github.com:pitest/pitclipse-snapshots.git</github-update-repo>
+		<github-local-clone>${project.build.directory}/checkout</github-local-clone>
+		<releases-directory>${github-local-clone}/releases</releases-directory>
+		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
+    	<eclipse-version>oxygen</eclipse-version>
+
+		<!-- The label for the Composite sites -->
+		<site.label>Pitclipse</site.label>
+
 		<!-- SONARQUBE -->
 		<sonar.projectName>Pitclipse</sonar.projectName>
 
@@ -58,7 +74,7 @@
 		<plugins>
 			<plugin>
 				<!-- Activate Tycho, along as its extension Tycho's pomless extension
-					is activated in .mvn folder -->
+						is activated in .mvn folder -->
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
@@ -68,6 +84,28 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-versions-plugin</artifactId>
 				<version>${tycho-version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<id>attach-p2-metadata</id>
+						<phase>package</phase>
+						<goals>
+							<goal>p2-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<format>'v'yyyyMMdd'-'HHmm</format>
+				</configuration>
 			</plugin>
 			<plugin>
 				<!-- Activate Pitclipse's target platform -->
@@ -134,14 +172,6 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-compiler-plugin</artifactId>
-					<version>${tycho-version}</version>
-					<configuration>
-						<encoding>UTF-8</encoding>
-					</configuration>
-				</plugin>
 				<!-- Ask Tycho to auto-generate <plugin-name>.source plugins -->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
@@ -158,14 +188,163 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.4.1</version>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho-version}</version>
 					<configuration>
 						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.11.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho.extras</groupId>
+					<artifactId>tycho-eclipserun-plugin</artifactId>
+					<version>${tycho-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+									org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+									maven-clean-plugin
+										</artifactId>
+										<versionRange>
+									[2.5,)
+										</versionRange>
+										<goals>
+											<goal>clean</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+									org.codehaus.mojo
+										</groupId>
+										<artifactId>
+									build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+									[1.9.1,)
+										</versionRange>
+										<goals>
+											<goal>add-resource</goal>
+											<goal>add-source</goal>
+											<goal>add-test-resource</goal>
+											<goal>add-test-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+									org.eclipse.tycho
+										</groupId>
+										<artifactId>
+									tycho-compiler-plugin
+										</artifactId>
+										<versionRange>
+									[0.23.1,)
+										</versionRange>
+										<goals>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+									org.eclipse.tycho
+										</groupId>
+										<artifactId>
+									tycho-packaging-plugin
+										</artifactId>
+										<versionRange>
+									[0.23.1,)
+										</versionRange>
+										<goals>
+											<goal>build-qualifier</goal>
+											<goal>build-qualifier-aggregator</goal>
+											<goal>validate-id</goal>
+											<goal>validate-version</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<profiles>
+		<profile>
+			<!-- Activate this profile to perform the release to GitHub Pages -->
+			<id>release-composite</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-install-plugin</artifactId>
+							<executions>
+								<execution>
+									<id>default-install</id>
+									<phase>none</phase>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<artifactId>maven-deploy-plugin</artifactId>
+							<configuration>
+								<skip>true</skip>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>
