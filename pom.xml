@@ -316,6 +316,9 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
 			<build>
 				<pluginManagement>
 					<plugins>
