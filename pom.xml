@@ -25,7 +25,7 @@
 		<!-- DEPENDENCIES -->
 		<!-- last version of Tycho before requiring Java 11 -->
 		<tycho-version>1.7.0</tycho-version>
-		<jacoco-version>0.8.1</jacoco-version>
+		<jacoco-version>0.8.6</jacoco-version>
 
 		<!-- MISC -->
 		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
