@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -31,3 +31,9 @@ jobs:
         restore-keys: ${{ runner.os }}-m2-
     - name: Maven Build
       run: xvfb-run mvn verify -Pjacoco
+    - name: Archive Test Results
+      uses: actions/upload-artifact@v2
+      if: ${{ failure() }}
+      with:
+        name: test-results-${{ runner.os }}
+        path: '**/*.tests/target'
