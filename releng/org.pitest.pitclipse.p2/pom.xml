@@ -13,27 +13,24 @@
 	<artifactId>org.pitest.pitclipse.p2</artifactId>
 	<packaging>eclipse-repository</packaging>
 
-	<properties>
-		<bintray.repo>Pitclipse</bintray.repo>
-		<!-- The name of Bintray repository's package for releases -->
-		<bintray.package>releases</bintray.package>
-		<!-- The label for the Composite sites -->
-		<site.label>Pitclipse</site.label>
+	<build>
+		<plugins>
+			<!-- make sure that zipped p2 repositories have the fully qualified
+				version -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<finalName>${project.artifactId}-${qualifiedVersion}</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-		<bintray.owner>${bintray.user}</bintray.owner>
-
-		<!-- Default values for remote directories -->
-		<bintray.releases.path>releases</bintray.releases.path>
-		<bintray.composite.path>updates</bintray.composite.path>
-		<bintray.zip.path>zipped</bintray.zip.path>
-		<!-- note that the following must be consistent with the path schema
-			used to publish child composite repositories and actual released p2 repositories -->
-		<child.repository.path.prefix>../../releases/</child.repository.path.prefix>
-	</properties>
-
-    <profiles>
+	<profiles>
 		<profile>
-			<!-- Activate this profile to release a legacy version (x.y.z) to Bintray -->
+			<!-- Activate this profile to perform the release to GitHub Pages -->
 			<id>release-composite</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -42,54 +39,124 @@
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
 						<executions>
+							<!-- sets the following properties that we use in our Ant scripts
+						parsedVersion.majorVersion
+						parsedVersion.minorVersion
+						bound by default to the validate phase
+					-->
 							<execution>
-								<!-- Retrieve possibly existing remote composite metadata -->
-								<id>update-local-repository</id>
-								<phase>prepare-package</phase>
-								<configuration>
-									<target>
-										<ant antfile="${basedir}/bintray.ant" target="get-composite-metadata">
-										</ant>
-									</target>
-								</configuration>
+								<id>parse-version</id>
 								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-
-							<execution>
-								<!-- Deploy p2 repository, p2 composite updated metadata and zipped p2 repository -->
-								<id>deploy-repository</id>
-								<phase>verify</phase>
-								<configuration>
-									<target>
-										<ant antfile="${basedir}/bintray.ant" target="push-to-bintray">
-										</ant>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
+									<goal>parse-version</goal>
 								</goals>
 							</execution>
 						</executions>
 					</plugin>
-
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<executable>git</executable>
+						</configuration>
+						<executions>
+							<execution>
+								<id>git-clone</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>clone</argument>
+										<argument>--depth=1</argument>
+										<argument>-b</argument>
+										<argument>master</argument>
+										<argument>${github-update-repo}</argument>
+										<argument>${github-local-clone}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>git-add</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>-C</argument>
+										<argument>${github-local-clone}</argument>
+										<argument>add</argument>
+										<argument>-A</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>git-commit</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>-C</argument>
+										<argument>${github-local-clone}</argument>
+										<argument>commit</argument>
+										<argument>-m</argument>
+										<argument>Release ${qualifiedVersion}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>git-push</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>-C</argument>
+										<argument>${github-local-clone}</argument>
+										<argument>push</argument>
+										<argument>origin</argument>
+										<argument>master</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-repository</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${current-release-directory}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}/repository</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.eclipse.tycho.extras</groupId>
 						<artifactId>tycho-eclipserun-plugin</artifactId>
-						<version>${tycho-version}</version>
 						<configuration>
-							<!-- Update p2 composite metadata or create it -->
-							<!-- IMPORTANT: DO NOT split the arg line -->
-							<appArgLine>-application org.eclipse.ant.core.antRunner -buildfile packaging-p2composite.ant p2.composite.add -Dsite.label="${site.label}" -Dproject.build.directory=${project.build.directory} -DunqualifiedVersion=${unqualifiedVersion} -Dchild.repository.path.prefix="${child.repository.path.prefix}"</appArgLine>
 							<repositories>
 								<repository>
-									<id>mars</id>
+									<id>${eclipse-version}</id>
 									<layout>p2</layout>
-									<url>http://download.eclipse.org/releases/mars</url>
+									<url>https://download.eclipse.org/releases/${eclipse-version}</url>
 								</repository>
 							</repositories>
 							<dependencies>
@@ -120,12 +187,28 @@
 							</dependencies>
 						</configuration>
 						<executions>
+							<!-- add our new child repository -->
 							<execution>
 								<id>add-p2-composite-repository</id>
 								<phase>package</phase>
 								<goals>
 									<goal>eclipse-run</goal>
 								</goals>
+								<configuration>
+									<applicationsArgs>
+										<args>-application</args>
+										<args>org.eclipse.ant.core.antRunner</args>
+										<args>-buildfile</args>
+										<args>packaging-p2composite.ant</args>
+										<args>p2.composite.add</args>
+										<args>-Dsite.label="${site.label}"</args>
+										<args>-Dcomposite.base.dir=${github-local-clone}</args>
+										<args>-DunqualifiedVersion=${unqualifiedVersion}</args>
+										<args>-DbuildQualifier=${buildQualifier}</args>
+										<args>-DparsedVersion.majorVersion=${parsedVersion.majorVersion}</args>
+										<args>-DparsedVersion.minorVersion=${parsedVersion.minorVersion}</args>
+									</applicationsArgs>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
