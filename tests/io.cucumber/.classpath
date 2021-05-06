@@ -2,7 +2,13 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="lib/cucumber-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cucumber-core-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cucumber-core-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/cucumber-core.jar" sourcepath="lib/cucumber-core-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/io.cucumber/lib/cucumber-core-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/cucumber-expressions.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cucumber-java-javadoc.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cucumber-java-sources.jar"/>
