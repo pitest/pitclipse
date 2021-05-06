@@ -1,0 +1,41 @@
+# This workflow will build a Java project with Maven
+# This runs only on PR and on master
+
+name: Java CI with Maven on Windows and Mac
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: ['macos-latest', 'windows-latest']
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml', '**/*.target') }}
+        restore-keys: ${{ runner.os }}-m2-
+    - name: Build with Maven
+      run: mvn '-Dtycho.disableP2Mirrors=true' verify
+    - name: Archive Test Results
+      uses: actions/upload-artifact@v2
+      if: ${{ failure() }}
+      with:
+        name: test-results-${{ runner.os }}
+        path: '**/*.tests/target'
