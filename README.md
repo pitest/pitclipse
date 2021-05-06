@@ -8,7 +8,7 @@
 
 <div align="center">
 
-[![Java CI with Maven](https://github.com/pitest/pitclipse/actions/workflows/maven.yml/badge.svg)](https://github.com/pitest/pitclipse/actions/workflows/maven.yml) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=coverage)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=ncloc)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [ ![Download](https://api.bintray.com/packages/kazejiyu/Pitclipse/releases/images/download.svg) ](https://bintray.com/kazejiyu/Pitclipse/releases/_latestVersion)
+[![Java CI with Maven](https://github.com/pitest/pitclipse/actions/workflows/maven.yml/badge.svg)](https://github.com/pitest/pitclipse/actions/workflows/maven.yml) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=coverage)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.pitest%3Aorg.pitest.pitclipse&metric=ncloc)](https://sonarcloud.io/dashboard?id=org.pitest%3Aorg.pitest.pitclipse)
 
 </div>
 
@@ -60,8 +60,8 @@ Drag the following button to your running Eclipse workspace to start the install
 
   1. Open Eclipse IDE
   2. Go to *Help > Install New Software...*
-  3. Copy the update site’s URL in the *Work with* textbox:
-     	- https://dl.bintray.com/kazejiyu/Pitclipse/updates/
+  3. Copy the update site’s URL in the *Work with* textbox (ATTENTION: the update site has changed on 5 May 2021, make sure you remove the previous one hosted on bintray):
+     	- https://pitest.github.io/pitclipse-releases/
   4. Hit *Enter* and wait for the list to load
   5. Check everything
   6. Click *Next* then *Finish*
