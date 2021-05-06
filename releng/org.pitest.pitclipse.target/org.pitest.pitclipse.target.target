@@ -54,7 +54,7 @@
 			<unit id="org.hamcrest.library.source" version="0.0.0"/>
 			<unit id="org.hamcrest.text" version="0.0.0"/>
 			<unit id="org.hamcrest.text.source" version="0.0.0"/>
-			<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository"/>
+			<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository"/>
 		</location>
 	</locations>
 </target>
