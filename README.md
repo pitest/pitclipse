@@ -60,8 +60,8 @@ Drag the following button to your running Eclipse workspace to start the install
 
   1. Open Eclipse IDE
   2. Go to *Help > Install New Software...*
-  3. Copy the update site’s URL in the *Work with* textbox:
-     	- https://dl.bintray.com/kazejiyu/Pitclipse/updates/
+  3. Copy the update site’s URL in the *Work with* textbox (ATTENTION: the update site has changed on 5 May 2021, make sure you remove the previous one hosted on bintray):
+     	- https://pitest.github.io/pitclipse-releases/
   4. Hit *Enter* and wait for the list to load
   5. Check everything
   6. Click *Next* then *Finish*
