@@ -37,5 +37,10 @@
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/.github</locationURI>
 		</link>
+		<link>
+			<name>parent-pom/pom.xml</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/pom.xml</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>
