@@ -16,16 +16,15 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.collect.ImmutableList;
+import java.io.File;
+import java.io.Serializable;
+import java.util.List;
 
 import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
-import org.pitest.pitclipse.runner.results.summary.SummaryResult;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Results produced by PIT during an analyze.
@@ -39,13 +38,10 @@ public final class PitResults implements Serializable {
 
     private final ImmutableList<String> projects;
 
-    private final SummaryResult summaryResult;
-
-    private PitResults(File htmlResultFile, File xmlResultFile, Mutations mutations, SummaryResult summaryResult,
+    private PitResults(File htmlResultFile, Mutations mutations,
             ImmutableList<String> projects) {
         this.htmlResultFile = htmlResultFile;
         this.mutations = mutations;
-        this.summaryResult = summaryResult;
         this.projects = projects;
     }
 
@@ -56,16 +52,14 @@ public final class PitResults implements Serializable {
     public static final class Builder {
 
         private File htmlResultFile = null;
-        private final File xmlResultFile = null;
         private ImmutableList<String> projects = ImmutableList.of();
         private Mutations mutations = new ObjectFactory().createMutations();
-        private SummaryResult summaryResult = SummaryResult.EMPTY;
 
         private Builder() {
         }
 
         public PitResults build() {
-            return new PitResults(htmlResultFile, xmlResultFile, mutations, summaryResult, projects);
+            return new PitResults(htmlResultFile, mutations, projects);
         }
 
         public Builder withHtmlResults(File htmlResultFile) {
@@ -87,11 +81,6 @@ public final class PitResults implements Serializable {
 
         public Builder withMutations(Mutations mutations) {
             this.mutations = mutations;
-            return this;
-        }
-
-        public Builder withSummaryResult(SummaryResult summaryResult) {
-            this.summaryResult = summaryResult;
             return this;
         }
     }
