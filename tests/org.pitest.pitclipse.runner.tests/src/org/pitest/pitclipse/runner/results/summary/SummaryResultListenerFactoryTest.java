@@ -18,7 +18,7 @@ package org.pitest.pitclipse.runner.results.summary;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ListenerArguments;
 
