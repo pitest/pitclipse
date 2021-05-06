@@ -33,11 +33,11 @@
 		<!-- CI (GITHUB ACTIONS) -->
 
 		<!-- Required properties for releasing -->
-		<github-update-repo>git@github.com:pitest/pitclipse-snapshots.git</github-update-repo>
+		<github-update-repo>git@github.com:pitest/pitclipse-releases.git</github-update-repo>
 		<github-local-clone>${project.build.directory}/checkout</github-local-clone>
 		<releases-directory>${github-local-clone}/releases</releases-directory>
 		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
-    	<eclipse-version>oxygen</eclipse-version>
+		<eclipse-version>oxygen</eclipse-version>
 
 		<!-- The label for the Composite sites -->
 		<site.label>Pitclipse</site.label>
@@ -351,6 +351,17 @@
 					</plugins>
 				</pluginManagement>
 			</build>
+		</profile>
+		<profile>
+			<!-- This assumes that release-composite is enabled as well -->
+			<id>release-snapshots</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<github-update-repo>git@github.com:pitest/pitclipse-snapshots.git</github-update-repo>
+				<site.label>Pitclipse Snapshots</site.label>
+			</properties>
 		</profile>
 	</profiles>
 </project>
