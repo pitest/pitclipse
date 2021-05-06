@@ -23,7 +23,8 @@
 
 	<properties>
 		<!-- DEPENDENCIES -->
-		<tycho-version>1.6.0</tycho-version>
+		<!-- last version of Tycho before requiring Java 11 -->
+		<tycho-version>1.7.0</tycho-version>
 		<jacoco-version>0.8.1</jacoco-version>
 
 		<!-- MISC -->
