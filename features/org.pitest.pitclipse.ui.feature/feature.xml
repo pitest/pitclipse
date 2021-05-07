@@ -233,7 +233,7 @@ Provides views and contextual actions to search the code for mutations and show 
       <import plugin="org.eclipse.ui.workbench.texteditor" version="3.9.100" match="compatible"/>
       <import plugin="org.eclipse.jface.text" version="3.10.0" match="compatible"/>
       <import plugin="org.pitest.pitclipse.runner"/>
-      <import plugin="com.google.guava" version="21.0.0" match="compatible"/>
+      <import plugin="com.google.guava" version="21.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.debug.ui" version="3.11.101" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.8.0" match="compatible"/>
       <import plugin="org.pitest.pitclipse.launch"/>
