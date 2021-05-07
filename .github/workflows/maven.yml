@@ -32,7 +32,7 @@ jobs:
     - name: Set Maven Additional Goals
       run: |
         echo "SONARGOAL=sonar:sonar" >> $GITHUB_ENV
-      if: github.repository == 'pitest/pitclipse'
+      if: ${{ secrets.SONAR_TOKEN }} != ''
     - name: Maven Build
       run: >
          xvfb-run mvn verify -Pjacoco $SONARGOAL
