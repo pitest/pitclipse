@@ -31,6 +31,11 @@ jobs:
         restore-keys: ${{ runner.os }}-m2-
     - name: Maven Build
       run: xvfb-run mvn verify -Pjacoco
+    - name: SonarCloud Analysis
+      run: mvn sonar:sonar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Archive Test Results
       uses: actions/upload-artifact@v2
       if: ${{ failure() }}
