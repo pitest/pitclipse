@@ -57,7 +57,7 @@
 				- untestable activators -->
 		<sonar.exclusions>
 			**/*Exception.java,
-			**/Activator.java
+			**/*Activator.java
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
