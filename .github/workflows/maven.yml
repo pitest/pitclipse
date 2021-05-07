@@ -30,9 +30,9 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml', '**/*.target') }}
         restore-keys: ${{ runner.os }}-m2-
     - name: Maven Build
-      run: xvfb-run mvn verify -Pjacoco
-    - name: SonarCloud Analysis
-      run: mvn sonar:sonar
+      run: >
+         xvfb-run mvn verify -Pjacoco
+         sonar:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
