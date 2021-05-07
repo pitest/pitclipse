@@ -10,6 +10,8 @@ on:
 
 jobs:
   build:
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     runs-on: ubuntu-latest
 
     steps:
@@ -32,13 +34,12 @@ jobs:
     - name: Set Maven Additional Goals
       run: |
         echo "SONARGOAL=sonar:sonar" >> $GITHUB_ENV
-      if: ${{ secrets.SONAR_TOKEN }} != ''
+      if: ${{ env.SONAR_TOKEN }}
     - name: Maven Build
       run: >
          xvfb-run mvn verify -Pjacoco $SONARGOAL
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Archive Test Results
       uses: actions/upload-artifact@v2
       if: ${{ failure() }}
