@@ -60,7 +60,7 @@
 			**/Activator.java
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
-			../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
+			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
