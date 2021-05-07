@@ -92,7 +92,7 @@ public class SocketProvider {
     private Optional<ObjectStreamSocket> doConnect(int portNumber) {
         try {
             InetAddress localhost = InetAddress.getByName(null);
-            Socket socket = new Socket();
+            Socket socket = new Socket(); // NOSONAR the socket is used in a returned object
             SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
             socket.connect(endpoint, DEFAULT_TIMEOUT);
             return Optional.of(ObjectStreamSocket.make(socket));
