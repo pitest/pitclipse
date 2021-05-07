@@ -44,12 +44,6 @@
 		<site.label>Pitclipse</site.label>
 
 		<!-- SONARQUBE -->
-		<!-- On Travis CI, SonarQube doesn't support Java 8 anymore.
-		     I can't remove the SonarQube integration because I am
-			 not an administrator of the Pitest organization so let's
-			 just ask the CI to skip the analysis as a quickfix. -->
-		<sonar.skip>true</sonar.skip>
-
 		<sonar.projectName>Pitclipse</sonar.projectName>
 
 		<sonar.organization>echebbi-github</sonar.organization>
@@ -61,8 +55,13 @@
 		<!-- Ignore :
 				- Exceptions,
 				- untestable activators -->
-		<sonar.exclusions>**/*Exception.java,**/Activator.java</sonar.exclusions>
-		<sonar.jacoco.reportPaths>../../tests/${project.artifactId}.tests/target/jacoco.exec</sonar.jacoco.reportPaths>
+		<sonar.exclusions>
+			**/*Exception.java,
+			**/Activator.java
+		</sonar.exclusions>
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${basedir}/tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<!-- COMMANDS:
@@ -212,6 +211,11 @@
 					<groupId>org.eclipse.tycho.extras</groupId>
 					<artifactId>tycho-eclipserun-plugin</artifactId>
 					<version>${tycho-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.9.0.2155</version>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
