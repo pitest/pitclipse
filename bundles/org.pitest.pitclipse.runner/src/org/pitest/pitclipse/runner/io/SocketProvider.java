@@ -44,15 +44,11 @@ public class SocketProvider {
      * @return an object allowing to write and read objects from the given port
      */
     public ObjectStreamSocket listen(int portNumber) {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(portNumber);
+        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             Socket connection = serverSocket.accept();
             return ObjectStreamSocket.make(connection);
         } catch (IOException e) {
             throw new SocketCreationException(e);
-        } finally {
-            ensureClosed(serverSocket);
         }
     }
 
@@ -121,16 +117,6 @@ public class SocketProvider {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    private void ensureClosed(ServerSocket serverSocket) {
-        try {
-            if (null != serverSocket) {
-                serverSocket.close();
-            }
-        } catch (IOException e) {
-            throw new SocketCreationException(e);
         }
     }
 
