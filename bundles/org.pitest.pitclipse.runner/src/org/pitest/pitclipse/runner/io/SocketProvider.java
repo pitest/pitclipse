@@ -102,21 +102,10 @@ public class SocketProvider {
      * @return the number of a port that can be used
      */
     public int getFreePort() {
-        ServerSocket socket = null;
-        try {
-            socket = new ServerSocket(0);
+        try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
         } catch (IOException e) {
             throw new SocketCreationException(e);
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    System.out.println("Warning, did not close socket");
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
