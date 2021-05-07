@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitRequest;
 import org.pitest.pitclipse.runner.PitResults;
