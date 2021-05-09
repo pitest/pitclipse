@@ -16,10 +16,13 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
+import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
-import junit.framework.AssertionFailedError;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -33,13 +36,10 @@ import org.pitest.pitclipse.ui.behaviours.steps.FilePosition;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.view.mutations.OpenMutationDoubleClick;
 
-import java.util.List;
-import java.util.concurrent.TimeoutException;
-import java.util.regex.Pattern;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
-import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
+import junit.framework.AssertionFailedError;
 
 public class PitMutationsView {
 
@@ -51,7 +51,7 @@ public class PitMutationsView {
 
     public List<PitMutation> getMutations() {
         safeSleep(1000);
-        PAGES.views().closeConsole();
+//         PAGES.views().closeConsole();
         SWTBotTree mutationTree = mutationTreeRoot();
         return mutationsFrom(mutationTree);
     }

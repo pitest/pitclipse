@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.tests;
 
+import java.util.Collections;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.BeforeClass;
@@ -27,6 +29,7 @@ public class SimpleTest extends AbstractPitclipseSWTBotTest {
         createClass("FooTest", "foo.bar", TEST_PROJECT);
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(0, 0);
+        mutationsAre(Collections.emptyList());
     }
 
 }

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.tests;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +24,7 @@ import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
@@ -36,6 +39,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 
 /**
@@ -144,4 +148,10 @@ public abstract class AbstractPitclipseSWTBotTest {
             )
         );
     }
+
+    protected static void mutationsAre(List<PitMutation> expectedMutations) {
+        List<PitMutation> actualMutations = PAGES.getPitMutationsView().getMutations();
+        assertThat(actualMutations, is(equalTo(expectedMutations)));
+    }
+
 }
