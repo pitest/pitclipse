@@ -21,6 +21,7 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
@@ -32,6 +33,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 
 /**
  * @author Lorenzo Bettini
@@ -109,5 +111,18 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void addToBuildPath(String dependentProject, String projectName) {
         PAGES.getPackageExplorer().selectProject(projectName);
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
+    }
+
+    protected static void createClass(String className, String packageName, String projectName) {
+        PAGES.getBuildProgress().listenForBuild();
+        PAGES.getPackageExplorer().selectPackageRoot(projectName, "src");
+        // Cannot use the Package explorer right click context menu
+        // to create a class due to SWTBot bug 261360
+        PAGES.getFileMenu().createClass(packageName, className);
+        PAGES.getBuildProgress().waitForBuild();
+    }
+
+    protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
+        new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }
 }

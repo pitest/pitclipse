@@ -1,6 +1,8 @@
 package org.pitest.pitclipse.ui.tests;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -11,10 +13,19 @@ import org.junit.runner.RunWith;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class SimpleTest extends AbstractPitclipseSWTBotTest {
 
+    private static final String TEST_PROJECT = "project1";
+
+    @BeforeClass
+    public static void setupJavaProject() {
+        createJavaProject(TEST_PROJECT);
+        verifyProjectExists(TEST_PROJECT);
+    }
+
     @Test
-    public void aTest() {
-        createJavaProject("aProject");
-        verifyProjectExists("aProject");
+    public void aTest() throws CoreException {
+        createClass("Foo", "foo.bar", TEST_PROJECT);
+        createClass("FooTest", "foo.bar", TEST_PROJECT);
+        runTest("FooTest", "foo.bar", TEST_PROJECT);
     }
 
 }
