@@ -118,9 +118,11 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void deleteSrcContents(String projectName) throws CoreException {
+        PAGES.getBuildProgress().listenForBuild();
         IJavaProject javaProject = PAGES.getAbstractSyntaxTree().getJavaProject(projectName);
         javaProject.getProject().getFolder("src").delete(true, null);
         javaProject.getProject().getFolder("src").create(true, true, null);
+        PAGES.getBuildProgress().waitForBuild();
     }
 
     protected static void addToBuildPath(String dependentProject, String projectName) {
