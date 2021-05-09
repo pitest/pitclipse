@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.tests;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
@@ -24,6 +26,7 @@ import java.io.File;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -124,5 +127,21 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
+    }
+
+    protected static void consoleContains(int generatedMutants, int testsRun) {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        String consoleText = consoleView.bot()
+                .styledText().getText()
+                .replace("\r", "");
+        assertThat(consoleText,
+            containsString(
+                String.format(
+                    ">> Generated %d mutations Killed 0 (100%%)\n"
+                  + ">> Ran %d tests (0 tests per mutation)",
+                  generatedMutants, testsRun)
+            )
+        );
     }
 }

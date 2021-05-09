@@ -26,6 +26,7 @@ public class SimpleTest extends AbstractPitclipseSWTBotTest {
         createClass("Foo", "foo.bar", TEST_PROJECT);
         createClass("FooTest", "foo.bar", TEST_PROJECT);
         runTest("FooTest", "foo.bar", TEST_PROJECT);
+        consoleContains(0, 0);
     }
 
 }
