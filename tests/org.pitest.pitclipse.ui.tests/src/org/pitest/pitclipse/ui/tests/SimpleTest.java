@@ -34,7 +34,7 @@ public class SimpleTest extends AbstractPitclipseSWTBotTest {
         createClass("Foo", "foo.bar", TEST_PROJECT);
         createClass("FooTest", "foo.bar", TEST_PROJECT);
         runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(0, 0);
+        consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
     }
 
@@ -45,8 +45,21 @@ public class SimpleTest extends AbstractPitclipseSWTBotTest {
         createMethod("FooTest", "foo.bar", TEST_PROJECT,
             "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(0, 0);
+        consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+    }
+
+    @Test
+    public void classWithMethodAndBadTestMethod() throws CoreException {
+        createClass("Foo", "foo.bar", TEST_PROJECT);
+        createMethod("Foo", "foo.bar", TEST_PROJECT,
+                "public int doFoo(int i) {return i + 1;}");
+        createClass("FooTest", "foo.bar", TEST_PROJECT);
+        createMethod("FooTest", "foo.bar", TEST_PROJECT,
+                "@Test public void fooTest1() {Foo foo = new Foo();}");
+        runTest("FooTest", "foo.bar", TEST_PROJECT);
+        consoleContains(2, 0, 0, 0, 0);
+//        mutationsAre(Collections.emptyList());
     }
 
 }

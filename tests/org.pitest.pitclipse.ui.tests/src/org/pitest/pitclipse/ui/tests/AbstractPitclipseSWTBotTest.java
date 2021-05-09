@@ -31,7 +31,9 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
@@ -150,18 +152,41 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }
 
-    protected static void consoleContains(int generatedMutants, int testsRun) {
+    protected static void consoleContains(int generatedMutants, int killedMutants,
+            int killedPercentage,
+            int testsRun,
+            int testsPerMutations) {
         SWTBotView consoleView = bot.viewByPartName("Console");
         consoleView.show();
+        bot.waitUntil(new ICondition() {
+            @Override
+            public boolean test() {
+                return consoleView.bot()
+                        .styledText().getText()
+                        .trim()
+                        .endsWith("tests per mutation)");
+            }
+
+            @Override
+            public void init(SWTBot bot) {
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "Console View is empty";
+            }
+        });
         String consoleText = consoleView.bot()
                 .styledText().getText()
                 .replace("\r", "");
+        System.out.println(consoleText);
         assertThat(consoleText,
             containsString(
                 String.format(
-                    ">> Generated %d mutations Killed 0 (100%%)\n"
-                  + ">> Ran %d tests (0 tests per mutation)",
-                  generatedMutants, testsRun)
+                    ">> Generated %d mutations Killed %d (%d%%)\n"
+                  + ">> Ran %d tests (%d tests per mutation)",
+                  generatedMutants, killedMutants,
+                  killedPercentage, testsRun, testsPerMutations)
             )
         );
     }
