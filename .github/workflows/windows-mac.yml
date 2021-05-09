@@ -42,4 +42,6 @@ jobs:
       if: ${{ failure() }}
       with:
         name: test-results-${{ runner.os }}
-        path: '**/*.tests/target'
+        path: |
+           '**/*.tests/target'
+           '**/screenshots'
