@@ -42,6 +42,10 @@ jobs:
       if: ${{ failure() }}
       with:
         name: test-results-${{ runner.os }}
-        path: |
-           '**/*.tests/target'
-           '**/*.tests/screenshots'
+        path: '**/*.tests/target'
+    - name: Archive UI Tests Screenshots
+      uses: actions/upload-artifact@v2
+      if: ${{ failure() }}
+      with:
+        name: screenshots-${{ runner.os }}
+        path: '**/*.tests/screenshots'
