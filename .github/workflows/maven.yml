@@ -47,4 +47,4 @@ jobs:
         name: test-results-${{ runner.os }}
         path: |
            '**/*.tests/target'
-           '**/screenshots'
+           '**/*.tests/screenshots'
