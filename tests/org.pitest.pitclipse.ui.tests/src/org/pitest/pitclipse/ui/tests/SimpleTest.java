@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +24,26 @@ public class SimpleTest extends AbstractPitclipseSWTBotTest {
         verifyProjectExists(TEST_PROJECT);
     }
 
+    @Before
+    public void cleanProject() throws CoreException {
+        deleteSrcContents(TEST_PROJECT);
+    }
+
     @Test
-    public void aTest() throws CoreException {
+    public void emptyClassAndEmptyTest() throws CoreException {
         createClass("Foo", "foo.bar", TEST_PROJECT);
         createClass("FooTest", "foo.bar", TEST_PROJECT);
+        runTest("FooTest", "foo.bar", TEST_PROJECT);
+        consoleContains(0, 0);
+        mutationsAre(Collections.emptyList());
+    }
+
+    @Test
+    public void emptyClassAndEmptyTestMethod() throws CoreException {
+        createClass("Foo", "foo.bar", TEST_PROJECT);
+        createClass("FooTest", "foo.bar", TEST_PROJECT);
+        createMethod("FooTest", "foo.bar", TEST_PROJECT,
+            "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(0, 0);
         mutationsAre(Collections.emptyList());

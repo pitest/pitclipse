@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
@@ -39,6 +40,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.ui.behaviours.steps.ClassSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 
@@ -115,6 +117,12 @@ public abstract class AbstractPitclipseSWTBotTest {
         }
     }
 
+    protected static void deleteSrcContents(String projectName) throws CoreException {
+        IJavaProject javaProject = PAGES.getAbstractSyntaxTree().getJavaProject(projectName);
+        javaProject.getProject().getFolder("src").delete(true, null);
+        javaProject.getProject().getFolder("src").create(true, true, null);
+    }
+
     protected static void addToBuildPath(String dependentProject, String projectName) {
         PAGES.getPackageExplorer().selectProject(projectName);
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
@@ -127,6 +135,13 @@ public abstract class AbstractPitclipseSWTBotTest {
         // to create a class due to SWTBot bug 261360
         PAGES.getFileMenu().createClass(packageName, className);
         PAGES.getBuildProgress().waitForBuild();
+    }
+
+    protected static void createMethod(String className, String packageName, String projectName,
+            String method) {
+        ClassSteps classSteps = new ClassSteps();
+        classSteps.selectClass(className, packageName, projectName);
+        classSteps.createMethod(method);
     }
 
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {

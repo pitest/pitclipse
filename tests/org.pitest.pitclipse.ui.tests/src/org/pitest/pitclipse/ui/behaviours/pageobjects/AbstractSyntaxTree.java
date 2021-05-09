@@ -53,7 +53,7 @@ public class AbstractSyntaxTree {
         return getJavaProject(context.getProjectName());
     }
 
-    private IJavaProject getJavaProject(String projectName) {
+    public IJavaProject getJavaProject(String projectName) {
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         return JavaCore.create(project);
     }
