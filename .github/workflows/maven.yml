@@ -23,7 +23,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Install WebKit
+    - name: Install WebKit # required for SWT Browser
       run: |
         sudo apt update
         sudo apt install -y libwebkit2gtk-4.0-37
