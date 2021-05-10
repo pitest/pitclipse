@@ -16,8 +16,8 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
-import static org.pitest.pitclipse.ui.util.StepUtil.safeSleep;
 
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -50,8 +50,7 @@ public class PitMutationsView {
     }
 
     public List<PitMutation> getMutations() {
-        safeSleep(1000);
-//         PAGES.views().closeConsole();
+        PAGES.views().waitForTestsAreRunOnConsole();
         SWTBotTree mutationTree = mutationTreeRoot();
         return mutationsFrom(mutationTree);
     }

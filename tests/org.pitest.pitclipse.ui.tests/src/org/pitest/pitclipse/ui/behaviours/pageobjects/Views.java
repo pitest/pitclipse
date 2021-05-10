@@ -18,6 +18,8 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
 import java.util.List;
 
@@ -36,6 +38,29 @@ public class Views {
                 view.close();
             }
         }
+    }
+
+    public void waitForTestsAreRunOnConsole() {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        bot.waitUntil(new ICondition() {
+            @Override
+            public boolean test() {
+                return consoleView.bot()
+                        .styledText().getText()
+                        .trim()
+                        .endsWith("tests per mutation)");
+            }
+
+            @Override
+            public void init(SWTBot bot) {
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "Console View is empty";
+            }
+        });
     }
 
 }

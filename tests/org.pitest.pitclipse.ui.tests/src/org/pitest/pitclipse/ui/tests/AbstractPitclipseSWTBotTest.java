@@ -32,10 +32,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
@@ -185,26 +183,9 @@ public abstract class AbstractPitclipseSWTBotTest {
             int killedPercentage,
             int testsRun,
             int testsPerMutations) {
+        PAGES.views().waitForTestsAreRunOnConsole();
         SWTBotView consoleView = bot.viewByPartName("Console");
         consoleView.show();
-        bot.waitUntil(new ICondition() {
-            @Override
-            public boolean test() {
-                return consoleView.bot()
-                        .styledText().getText()
-                        .trim()
-                        .endsWith("tests per mutation)");
-            }
-
-            @Override
-            public void init(SWTBot bot) {
-            }
-
-            @Override
-            public String getFailureMessage() {
-                return "Console View is empty";
-            }
-        });
         String consoleText = consoleView.bot()
                 .styledText().getText()
                 .replace("\r", "");
