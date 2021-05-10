@@ -16,7 +16,6 @@
 package org.pitest.pitclipse.ui.tests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
@@ -158,6 +157,15 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }
 
+    /**
+     * To make sure we don't get output from previous test runs
+     */
+    protected static void clearConsole() {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        consoleView.bot().styledText().setText("");
+    }
+
     protected static void consoleContains(int generatedMutants, int killedMutants,
             int killedPercentage,
             int testsRun,
@@ -199,7 +207,7 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void mutationsAre(List<PitMutation> expectedMutations) {
         List<PitMutation> actualMutations = PAGES.getPitMutationsView().getMutations();
-        assertThat(actualMutations, is(equalTo(expectedMutations)));
+        assertThat(actualMutations, equalTo(expectedMutations));
     }
 
 }

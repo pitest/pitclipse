@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,6 +28,11 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     @Before
     public void cleanProject() throws CoreException {
         deleteSrcContents(TEST_PROJECT);
+    }
+
+    @After
+    public void cleanConsole() {
+        clearConsole();
     }
 
     @Test
