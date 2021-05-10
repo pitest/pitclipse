@@ -163,7 +163,9 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void clearConsole() {
         SWTBotView consoleView = bot.viewByPartName("Console");
         consoleView.show();
-        consoleView.bot().styledText().setText("");
+        // use the toolbar button instead of .bot().styledText().setText("")
+        // which does not seem to work synchronously
+        consoleView.toolbarButton("Clear Console").click();
     }
 
     protected static void consoleContains(int generatedMutants, int killedMutants,
