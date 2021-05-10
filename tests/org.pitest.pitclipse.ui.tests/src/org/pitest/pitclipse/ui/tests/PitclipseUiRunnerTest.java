@@ -55,8 +55,9 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
-    public void classWithMethodAndBadTestMethod() throws CoreException {
-        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT, "public int doFoo(int i) {return i + 1;}");
+    public void classWithMethodAndNoCoverageTestMethod() throws CoreException {
+        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
+                "public int doFoo(int i) {return i + 1;}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
                 "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
@@ -64,6 +65,32 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         mutationsAre(
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+    }
+
+    @Test
+    public void classWithMethodAndBadTestMethod() throws CoreException {
+        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
+                "public int doFoo(int i) {return i + 1;}");
+        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
+                "@Test public void fooTest2() {new Foo().doFoo(1);}");
+        runTest("FooTest", "foo.bar", TEST_PROJECT);
+        consoleContains(2, 0, 0, 2, 1);
+        mutationsAre(
+        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+    }
+
+    @Test
+    public void classWithMethodAndBetterTestMethod() throws CoreException {
+        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
+                "public int doFoo(int i) {return i + 1;}");
+        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
+                "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
+        runTest("FooTest", "foo.bar", TEST_PROJECT);
+        consoleContains(2, 2, 100, 2, 1);
+        mutationsAre(
+        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
     }
 
 }
