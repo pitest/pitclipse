@@ -93,4 +93,20 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
     }
 
+    @Test
+    public void runPitAtPackageAndPackageRootAndProjectLevel() throws CoreException {
+        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
+                "public int doFoo(int i) {return i + 1;}");
+        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
+                "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
+        runPackageTest("foo.bar", TEST_PROJECT);
+        consoleContains(2, 2, 100, 2, 1);
+        clearConsole();
+        runPackageRootTest("src", TEST_PROJECT);
+        consoleContains(2, 2, 100, 2, 1);
+        clearConsole();
+        runProjectTest(TEST_PROJECT);
+        consoleContains(2, 2, 100, 2, 1);
+    }
+
 }

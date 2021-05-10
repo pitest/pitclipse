@@ -161,6 +161,18 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }
 
+    protected static void runPackageTest(final String packageName, final String projectName) throws CoreException {
+        new PitclipseSteps().runPackageTest(packageName, projectName);
+    }
+
+    protected static void runPackageRootTest(final String packageRoot, final String projectName) throws CoreException {
+        new PitclipseSteps().runPackageRootTest(packageRoot, projectName);
+    }
+
+    protected static void runProjectTest(final String projectName) throws CoreException {
+        new PitclipseSteps().runProjectTest(projectName);
+    }
+
     /**
      * If the Console view can be found then clear it, to make sure we don't get
      * output from previous test runs
@@ -174,6 +186,8 @@ public abstract class AbstractPitclipseSWTBotTest {
             e.printStackTrace();
             return;
         }
+        if (consoleView.bot().styledText().getText().isEmpty())
+            return;
         // use the toolbar button instead of .bot().styledText().setText("")
         // which does not seem to work synchronously
         consoleView.toolbarButton("Clear Console").click();
