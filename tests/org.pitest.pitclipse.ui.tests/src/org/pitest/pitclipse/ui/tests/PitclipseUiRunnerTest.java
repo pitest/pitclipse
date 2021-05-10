@@ -41,8 +41,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void emptyClassAndEmptyTestMethod() throws CoreException {
         createClass("Foo", "foo.bar", TEST_PROJECT);
-        createClass("FooTest", "foo.bar", TEST_PROJECT);
-        createMethod("FooTest", "foo.bar", TEST_PROJECT,
+        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
             "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(0, 0, 100, 0, 0);
@@ -51,11 +50,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
 
     @Test
     public void classWithMethodAndBadTestMethod() throws CoreException {
-        createClass("Foo", "foo.bar", TEST_PROJECT);
-        createMethod("Foo", "foo.bar", TEST_PROJECT,
-                "public int doFoo(int i) {return i + 1;}");
-        createClass("FooTest", "foo.bar", TEST_PROJECT);
-        createMethod("FooTest", "foo.bar", TEST_PROJECT,
+        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT, "public int doFoo(int i) {return i + 1;}");
+        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
                 "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(2, 0, 0, 0, 0);

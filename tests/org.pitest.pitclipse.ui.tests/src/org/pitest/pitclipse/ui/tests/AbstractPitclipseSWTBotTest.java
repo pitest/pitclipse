@@ -132,6 +132,12 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
     }
 
+    protected static void createClassWithMethod(String className, String packageName, String projectName,
+            String method) {
+        createClass(className, packageName, projectName);
+        createMethod(className, packageName, projectName, method);
+    }
+
     protected static void createClass(String className, String packageName, String projectName) {
         PAGES.getBuildProgress().listenForBuild();
         PAGES.getPackageExplorer().selectPackageRoot(projectName, "src");
