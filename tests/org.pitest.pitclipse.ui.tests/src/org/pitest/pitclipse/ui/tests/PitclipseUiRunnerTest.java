@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class SimpleTest extends AbstractPitclipseSWTBotTest {
+public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
 
     private static final String TEST_PROJECT = "project1";
 
