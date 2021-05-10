@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.ui.IWorkbench;
@@ -161,11 +162,18 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     /**
-     * To make sure we don't get output from previous test runs
+     * If the Console view can be found then clear it, to make sure we don't get
+     * output from previous test runs
      */
     protected static void clearConsole() {
-        SWTBotView consoleView = bot.viewByPartName("Console");
-        consoleView.show();
+        SWTBotView consoleView;
+        try {
+            consoleView = bot.viewByPartName("Console");
+            consoleView.show();
+        } catch (WidgetNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
         // use the toolbar button instead of .bot().styledText().setText("")
         // which does not seem to work synchronously
         consoleView.toolbarButton("Clear Console").click();
