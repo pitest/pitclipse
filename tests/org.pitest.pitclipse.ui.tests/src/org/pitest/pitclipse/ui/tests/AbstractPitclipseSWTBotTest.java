@@ -98,8 +98,10 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void createJavaProject(String projectName) {
+        PAGES.getBuildProgress().listenForBuild();
         PAGES.getFileMenu().newJavaProject(projectName);
         PAGES.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
+        PAGES.getBuildProgress().waitForBuild();
     }
 
     protected static void verifyProjectExists(String projectName) {
