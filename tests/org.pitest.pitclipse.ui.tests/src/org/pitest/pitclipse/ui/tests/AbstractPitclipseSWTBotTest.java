@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.tests;
 
+import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -23,6 +24,7 @@ import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -41,6 +43,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.ui.behaviours.steps.ClassSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
@@ -205,6 +208,45 @@ public abstract class AbstractPitclipseSWTBotTest {
                   killedPercentage, testsRun, testsPerMutations)
             )
         );
+    }
+
+    /**
+     * The expectedMutationsTable String argument represents the expected
+     * mutations table, this is an example of String:
+     * (the headers of the table are the following ones:)
+     * <pre>
+     *  status      | project  | package | class       | line | mutation
+     * </pre>
+     * 
+     * <pre>
+     * "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo | 6 | Replaced integer addition with subtraction       \n" +
+     * "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo | 6 | replaced int return with 0 for foo/bar/Foo::doFoo "
+     * </pre>
+     * 
+     * @param expectedMutationsTable
+     */
+    protected static void mutationsAre(String expectedMutationsTable) {
+        List<PitMutation> expectedMutations = new ArrayList<>();
+        String[] lines = expectedMutationsTable.split("\n");
+        final int statusIndex = 0;
+        final int projectIndex = 1;
+        final int packageIndex = 2;
+        final int classIndex = 3;
+        final int lineIndex = 4;
+        final int mutationIndex = 5;
+        for (String string : lines) {
+            String[] mutationRow = string.split("\\|");
+            DetectionStatus status = DetectionStatus.valueOf(mutationRow[statusIndex].trim());
+            String project = mutationRow[projectIndex].trim();
+            String pkg = mutationRow[packageIndex].trim();
+            String className = mutationRow[classIndex].trim();
+            int line = parseInt(mutationRow[lineIndex].trim());
+            String mutation = mutationRow[mutationIndex].trim();
+            PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
+                    .withClassName(className).withLineNumber(line).withMutation(mutation).build();
+            expectedMutations.add(pitMutation);
+        }
+        mutationsAre(expectedMutations);
     }
 
     protected static void mutationsAre(List<PitMutation> expectedMutations) {

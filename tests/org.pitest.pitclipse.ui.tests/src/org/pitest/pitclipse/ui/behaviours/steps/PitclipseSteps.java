@@ -219,8 +219,9 @@ public class PitclipseSteps {
     }
     
     private List<PitMutation> mutationsFromExampleTable(DataTable tableOfMutations) {
+        List<Map<String, String>> asMaps = tableOfMutations.asMaps();
         ImmutableList.Builder<PitMutation> projectsBuilder = ImmutableList.builder();
-        for (Map<String, String> mutationRow : tableOfMutations.asMaps()) {
+        for (Map<String, String> mutationRow : asMaps) {
             DetectionStatus status = DetectionStatus.valueOf(mutationRow.get("status"));
             String project = mutationRow.get("project");
             String pkg = mutationRow.get("package");
@@ -232,7 +233,6 @@ public class PitclipseSteps {
             projectsBuilder.add(pitMutation);
         }
         return projectsBuilder.build();
-        
     }
 
     private Matcher<PitOptions> match(final Map<String, String> optionRow) {

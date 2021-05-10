@@ -61,7 +61,9 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
                 "@Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(2, 0, 0, 0, 0);
-//        mutationsAre(Collections.emptyList());
+        mutationsAre(
+        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
     }
 
 }
