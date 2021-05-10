@@ -66,7 +66,13 @@ public abstract class AbstractPitclipseSWTBotTest {
     @AfterClass
     public static void afterClass() {
         deleteAllProjects();
-        bot.resetWorkbench();
+        // DON'T CALL bot.resetWorkbench();
+        // otherwise the PIT views will be closed and will not
+        // be opened again on the next test
+        // (maybe because it saves the state of the closed views?)
+        bot.closeAllShells();
+        bot.saveAllEditors();
+        bot.closeAllEditors();
     }
 
     protected static void closeWelcomePage() throws InterruptedException {
@@ -95,10 +101,17 @@ public abstract class AbstractPitclipseSWTBotTest {
         });
     }
 
-    protected static void createJavaProject(String projectName) {
+    protected static void createJavaProjectWithJUnit4(String projectName) {
         PAGES.getBuildProgress().listenForBuild();
         PAGES.getFileMenu().newJavaProject(projectName);
         PAGES.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
+        PAGES.getBuildProgress().waitForBuild();
+    }
+
+    protected static void createJavaProjectWithJUnit5(String projectName) {
+        PAGES.getBuildProgress().listenForBuild();
+        PAGES.getFileMenu().newJavaProject(projectName);
+        PAGES.getAbstractSyntaxTree().addJUnit5ToClassPath(projectName);
         PAGES.getBuildProgress().waitForBuild();
     }
 

@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.ui.tests;
 
-import java.util.Collections;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.After;
@@ -11,17 +9,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
+ * Similar to {@link PitclipseUiRunnerTest} but using JUnit 5 and only executing
+ * a smaller number of tests.
+ * 
  * @author Lorenzo Bettini
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
+public class PitclipseUiRunnerJUnit5Test extends AbstractPitclipseSWTBotTest {
 
     private static final String TEST_PROJECT = "project1";
 
     @BeforeClass
     public static void setupJavaProject() {
-        createJavaProjectWithJUnit4(TEST_PROJECT);
+        createJavaProjectWithJUnit5(TEST_PROJECT);
         verifyProjectExists(TEST_PROJECT);
     }
 
@@ -36,30 +37,11 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
-    public void emptyClassAndEmptyTest() throws CoreException {
-        createClass("Foo", "foo.bar", TEST_PROJECT);
-        createClass("FooTest", "foo.bar", TEST_PROJECT);
-        runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(0, 0, 100, 0, 0);
-        mutationsAre(Collections.emptyList());
-    }
-
-    @Test
-    public void emptyClassAndEmptyTestMethod() throws CoreException {
-        createClass("Foo", "foo.bar", TEST_PROJECT);
-        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-            "@Test public void fooTest1() {Foo foo = new Foo();}");
-        runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(0, 0, 100, 0, 0);
-        mutationsAre(Collections.emptyList());
-    }
-
-    @Test
     public void classWithMethodAndNoCoverageTestMethod() throws CoreException {
         createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
                 "public int doFoo(int i) {return i + 1;}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@Test public void fooTest1() {Foo foo = new Foo();}");
+                "@org.junit.jupiter.api.Test public void fooTest1() {Foo foo = new Foo();}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(2, 0, 0, 0, 0);
         mutationsAre(
@@ -72,7 +54,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
                 "public int doFoo(int i) {return i + 1;}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@Test public void fooTest2() {new Foo().doFoo(1);}");
+                "@org.junit.jupiter.api.Test public void fooTest2() {new Foo().doFoo(1);}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(2, 0, 0, 2, 1);
         mutationsAre(
@@ -85,7 +67,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
                 "public int doFoo(int i) {return i + 1;}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
+                "@org.junit.jupiter.api.Test public void fooTest3() {org.junit.jupiter.api.Assertions.assertEquals(2, new Foo().doFoo(1));}");
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
         mutationsAre(
@@ -98,7 +80,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
                 "public int doFoo(int i) {return i + 1;}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
+                "@org.junit.jupiter.api.Test public void fooTest3() {org.junit.jupiter.api.Assertions.assertEquals(2, new Foo().doFoo(1));}");
         runPackageTest("foo.bar", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
         clearConsole();
