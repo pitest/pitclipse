@@ -16,6 +16,8 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
@@ -23,8 +25,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.ui.swtbot.PitOptionsNotifier;
 import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
-
-import java.util.List;
 
 public class RunMenu {
 

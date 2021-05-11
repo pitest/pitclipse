@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,11 +27,6 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     @Before
     public void cleanProject() throws CoreException {
         deleteSrcContents(TEST_PROJECT);
-    }
-
-    @After
-    public void cleanConsole() {
-        clearConsole();
     }
 
     @Test
@@ -101,10 +95,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
                 "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
         runPackageTest("foo.bar", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
-        clearConsole();
         runPackageRootTest("src", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
-        clearConsole();
         runProjectTest(TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
     }

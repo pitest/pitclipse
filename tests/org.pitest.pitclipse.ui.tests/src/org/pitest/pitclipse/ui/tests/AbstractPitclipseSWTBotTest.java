@@ -32,7 +32,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -190,26 +189,6 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void runProjectTest(final String projectName) throws CoreException {
         new PitclipseSteps().runProjectTest(projectName);
-    }
-
-    /**
-     * If the Console view can be found then clear it, to make sure we don't get
-     * output from previous test runs
-     */
-    protected static void clearConsole() {
-        SWTBotView consoleView;
-        try {
-            consoleView = bot.viewByPartName("Console");
-            consoleView.show();
-        } catch (WidgetNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        if (consoleView.bot().styledText().getText().isEmpty())
-            return;
-        // use the toolbar button instead of .bot().styledText().setText("")
-        // which does not seem to work synchronously
-        consoleView.toolbarButton("Clear Console").click();
     }
 
     protected static void consoleContains(int generatedMutants, int killedMutants,

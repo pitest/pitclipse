@@ -16,12 +16,12 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
-
-import java.util.List;
 
 public class Views {
 
@@ -36,6 +36,25 @@ public class Views {
         for (SWTBotView view : allViews) {
             if ("Console".equals(view.getTitle())) {
                 view.close();
+            }
+        }
+    }
+
+    /**
+     * If the Console view can be found then clear it, to make sure we don't get
+     * output from previous test runs
+     */
+    public void clearConsole() {
+        List<SWTBotView> allViews = bot.views();
+        for (SWTBotView view : allViews) {
+            if ("Console".equals(view.getTitle())) {
+                view.show();
+                if (!view.bot().styledText().getText().isEmpty()) {
+                    // use the toolbar button instead of .bot().styledText().setText("")
+                    // which does not seem to work synchronously
+                    view.toolbarButton("Clear Console").click();
+                }
+                return;
             }
         }
     }

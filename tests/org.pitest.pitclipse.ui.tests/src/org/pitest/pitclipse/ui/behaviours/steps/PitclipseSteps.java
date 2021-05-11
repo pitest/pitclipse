@@ -140,7 +140,9 @@ public class PitclipseSteps {
     
     private void runPit(Runnable runnable) {
         assertPitCanRun();
-        
+        // make sure to clear the console to avoid interferences
+        // with the output of previous runs
+        PAGES.views().clearConsole();
         int retryCount = 20;
         int counter = 0;
         while (counter < retryCount) {
