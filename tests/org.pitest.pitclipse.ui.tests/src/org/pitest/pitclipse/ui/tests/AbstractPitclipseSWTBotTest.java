@@ -222,7 +222,7 @@ public abstract class AbstractPitclipseSWTBotTest {
         String consoleText = consoleView.bot()
                 .styledText().getText()
                 .replace("\r", "");
-        System.out.println(consoleText);
+        // System.out.println(consoleText);
         assertThat(consoleText,
             containsString(
                 String.format(
