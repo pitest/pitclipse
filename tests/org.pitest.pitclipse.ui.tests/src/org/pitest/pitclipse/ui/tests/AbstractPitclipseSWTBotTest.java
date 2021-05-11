@@ -106,6 +106,7 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getFileMenu().newJavaProject(projectName);
         PAGES.getAbstractSyntaxTree().addJUnitToClassPath(projectName);
         PAGES.getBuildProgress().waitForBuild();
+        assertNoErrorsInWorkspace();
     }
 
     protected static void createJavaProjectWithJUnit5(String projectName) {
@@ -113,6 +114,11 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getFileMenu().newJavaProject(projectName);
         PAGES.getAbstractSyntaxTree().addJUnit5ToClassPath(projectName);
         PAGES.getBuildProgress().waitForBuild();
+        assertNoErrorsInWorkspace();
+    }
+
+    protected static void assertNoErrorsInWorkspace() {
+        new PitclipseSteps().assertNoErrorsInWorkspace();
     }
 
     protected static void verifyProjectExists(String projectName) {
