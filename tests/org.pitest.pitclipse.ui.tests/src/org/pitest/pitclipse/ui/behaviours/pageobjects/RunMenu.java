@@ -19,6 +19,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.ui.swtbot.PitOptionsNotifier;
 import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
@@ -51,15 +52,28 @@ public class RunMenu {
                                   .menu(RUN_AS);
         menuHelper.findMenu(runAsMenu, PIT_MUTATION_TEST)
                   .click();
-        try {
-            bot.shell("Select a Test Configuration")
-               .bot()
-               .button("OK")
-               .click();
-        } catch (WidgetNotFoundException e) {
-            // The 'Select a Test Configuration' dialog only appears when Pit has been launched
-            // at least once. If it is not found then PIT has been launched directly during the 
-            // click on 'Run As > PIT Mutation Test' so everything's alright.
+        
+        ensureSelectTestConfigurationDialogIsClosed();
+    }
+
+    /**
+     * The 'Select a Test Configuration' dialog only appears when Pit has been
+     * launched at least once. If it is not found then PIT has been launched
+     * directly during the click on 'Run As > PIT Mutation Test' so everything's
+     * alright.
+     * 
+     * This is a fast way for closing the dialog by iterating over the shells, instead
+     * of searching for such a shell swallowing {@link WidgetNotFoundException}.
+     */
+    private void ensureSelectTestConfigurationDialogIsClosed() {
+        SWTBotShell[] shells = bot.shells();
+        for (SWTBotShell shell : shells) {
+            if ("Select a Test Configuration".equals(shell.getText())) {
+                shell.bot()
+                    .button("OK")
+                    .click();
+                return;
+            }
         }
     }
 
