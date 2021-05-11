@@ -50,6 +50,7 @@ import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
+import org.pitest.pitclipse.ui.swtbot.PitNotifier;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -141,6 +142,8 @@ public class PitclipseSteps {
         // make sure to clear the console to avoid interferences
         // with the output of previous runs
         PAGES.views().clearConsole();
+        // make sure notifications not read are cleared
+        PitNotifier.INSTANCE.reset();
         int retryCount = 20;
         int counter = 0;
         while (counter < retryCount) {

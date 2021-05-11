@@ -263,4 +263,7 @@ public abstract class AbstractPitclipseSWTBotTest {
         assertThat(actualMutations, equalTo(expectedMutations));
     }
 
+    protected static void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
+        new PitclipseSteps().coverageReportGenerated(classes, totalCoverage, mutationCoverage);
+    }
 }
