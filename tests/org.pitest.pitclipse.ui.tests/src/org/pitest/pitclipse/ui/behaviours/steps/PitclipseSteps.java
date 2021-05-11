@@ -16,19 +16,34 @@
 
 package org.pitest.pitclipse.ui.behaviours.steps;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static com.google.common.collect.ImmutableSet.copyOf;
+import static java.lang.Integer.parseInt;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
+import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -38,26 +53,12 @@ import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PackageContext;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
-
-import static com.google.common.collect.ImmutableSet.copyOf;
-import static java.lang.Integer.parseInt;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
 public class PitclipseSteps {
 
@@ -155,6 +156,11 @@ public class PitclipseSteps {
         }
     }
     
+    public void assertNoErrorsInWorkspace() {
+        Set<String> errors = errorsInWorkspace();
+        assertThat(errors, empty());
+    }
+    
     /**
      * This method is an attempt to "fix" a flaky test, or at least
      * to reduce its effects by:
@@ -168,11 +174,12 @@ public class PitclipseSteps {
      * See https://github.com/pitest/pitclipse/issues/81
      */
     private final void assertPitCanRun() {
-        Set<String> errors = errorsInProblemsView();
+        Set<String> errors = errorsInWorkspace();
         if (errors.isEmpty()) {
             // So far, so good. Let's run PIT.
             return;
         }
+        PAGES.getBuildProgress().listenForBuild();
         for (SWTBotEditor editor : new SWTWorkbenchBot().editors()) {
             editor.setFocus();
             try {
@@ -182,7 +189,8 @@ public class PitclipseSteps {
                 System.err.println("Errors have been found, but attempt to fix them failed on editor " + editor.getTitle() + " => " + e.getMessage());
             }
         }
-        Set<String> errorsAfterCleaning = errorsInProblemsView();
+        PAGES.getBuildProgress().waitForBuild();
+        Set<String> errorsAfterCleaning = errorsInWorkspace();
         if (! errorsAfterCleaning.isEmpty()) {
             throw new IllegalStateException("Unexpected errors may prevent PIT from running. This is likely due to a flaky test; please relaunch the build." +
                                             "\n    Errors are: " + errorsAfterCleaning);
@@ -193,29 +201,41 @@ public class PitclipseSteps {
         }
     }
     
-    /** @return all the Errors shown in the 'Problems' view */
-    private final Set<String> errorsInProblemsView() {
-        Set<String> errors = new HashSet<>();
-        String category = "Errors";
-        
-        SWTBotView view = new SWTWorkbenchBot().viewByPartName("Problems");
-        view.show();
-        SWTBotTree tree = view.bot().tree();
-        
-        for (SWTBotTreeItem item : tree.getAllItems()) {
-            String text = item.getText();
-            if (text != null && text.startsWith(category)) {
-                item.expand();
-                for (String problem : item.getNodes()) {
-                    // Sometimes "Unknown" errors are reported but do not seem to be relevant
-                    if (! "Unknown".equals(problem)) {
-                        errors.add(problem);
+    /**
+     * Makes sure there are no errors in the Workspace, by accessing the error
+     * markers directly.
+     * 
+     * IMPORTANT: do not retrieve errors from the "Problems" view because that view
+     * might be updates asynchronously: we might lose errors and when running the
+     * tests an error Dialog will popup, making the tests flaky.
+     * 
+     * @return
+     */
+    private final Set<String> errorsInWorkspace() {
+        try {
+            return getErrorMarkers().stream()
+                .map(it -> {
+                    try {
+                        return it.getAttribute(IMarker.MESSAGE).toString();
+                    } catch (CoreException e) {
+                        return "";
                     }
-                }
-                break;
-            }
+                })
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toSet());
+        } catch (CoreException e) {
+            throw new IllegalStateException(e);
         }
-        return errors;
+    }
+    
+    public List<IMarker> getErrorMarkers() throws CoreException {
+        return Stream.of(getMarkers())
+            .filter(it -> it.getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO) == IMarker.SEVERITY_ERROR)
+            .collect(Collectors.toList());
+    }
+    
+    private IMarker[] getMarkers() throws CoreException {
+        return ResourcesPlugin.getWorkspace().getRoot().findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
     }
     
     private List<PitMutation> mutationsFromExampleTable(DataTable tableOfMutations) {
