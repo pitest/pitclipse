@@ -36,6 +36,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        coverageReportGenerated(0, 100, 100);
     }
 
     @Test
@@ -46,6 +47,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest("FooTest", "foo.bar", TEST_PROJECT);
         consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        coverageReportGenerated(0, 100, 100);
     }
 
     @Test
@@ -59,6 +61,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         mutationsAre(
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        coverageReportGenerated(1, 50, 0);
     }
 
     @Test
@@ -72,6 +75,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         mutationsAre(
         "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        coverageReportGenerated(1, 100, 0);
     }
 
     @Test
@@ -85,6 +89,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         mutationsAre(
         "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        coverageReportGenerated(1, 100, 100);
     }
 
     @Test
@@ -95,10 +100,13 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
                 "@Test public void fooTest3() {org.junit.Assert.assertEquals(2, new Foo().doFoo(1));}");
         runPackageTest("foo.bar", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(1, 100, 100);
         runPackageRootTest("src", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(1, 100, 100);
         runProjectTest(TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(1, 100, 100);
     }
 
 }
