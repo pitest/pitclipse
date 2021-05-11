@@ -175,6 +175,12 @@ public abstract class AbstractPitclipseSWTBotTest {
         classSteps.createMethod(method);
     }
 
+    protected static void removeMethods(String className, String packageName, String projectName) {
+        ClassSteps classSteps = new ClassSteps();
+        classSteps.selectClass(className, packageName, projectName);
+        classSteps.removeMethods();
+    }
+
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }

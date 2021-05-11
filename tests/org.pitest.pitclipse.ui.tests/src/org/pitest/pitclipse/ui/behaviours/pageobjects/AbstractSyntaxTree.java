@@ -69,6 +69,31 @@ public class AbstractSyntaxTree {
         }
     }
 
+    public boolean hasMethods(ConcreteClassContext context) {
+        IJavaProject javaProject = getJavaProject(context);
+        try {
+            IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
+            IMethod[] methods = type.getMethods();
+            return methods.length > 0;
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
+
+    public void removeMethods(ConcreteClassContext context) {
+        IJavaProject javaProject = getJavaProject(context);
+        try {
+            IType type = javaProject.findType(context.getFullyQualifiedTestClassName());
+            NullProgressMonitor progressMonitor = new NullProgressMonitor();
+            IMethod[] methods = type.getMethods();
+            for (IMethod method : methods) {
+                method.delete(true, progressMonitor);
+            }
+        } catch (JavaModelException e) {
+            throw new StepException(e);
+        }
+    }
+
     public void deleteProject(String projectName) {
         NullProgressMonitor progressMonitor = new NullProgressMonitor();
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);

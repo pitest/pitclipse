@@ -87,6 +87,18 @@ public final class ClassSteps {
         PAGES.getBuildProgress().waitForBuild();
     }
 
+    public void removeMethods() {
+        if (!PAGES.getAbstractSyntaxTree().hasMethods(concreteClassContext))
+            return;
+        PAGES.getBuildProgress().listenForBuild();
+        PAGES.getPackageExplorer().openClass(concreteClassContext);
+        PAGES.getAbstractSyntaxTree().removeMethods(concreteClassContext);
+        PAGES.getSourceMenu().organizeImports();
+        PAGES.getSourceMenu().format();
+        PAGES.getFileMenu().saveAll();
+        PAGES.getBuildProgress().waitForBuild();
+    }
+
     @When("the class is renamed to {word}")
     public void renameClass(String newClassName) {
         PAGES.getBuildProgress().listenForBuild();
