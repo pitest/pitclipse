@@ -103,6 +103,20 @@
 								<id>org.pitest.pitclipse.listeners</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
+							<!-- This is required since our SWTBot tests do not
+								depend directly on JUnit 5 and we need JUnit 5 to verify
+								Pitclipse integration with JUnit 5 -->
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.eclipse.jdt.junit5.runtime</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<!-- This is required to verify Pitclipse integration with JUnit 5 -->
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.pitest.pitest-junit5-plugin</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
 				</configuration>
