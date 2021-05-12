@@ -91,6 +91,10 @@ public class PitclipseSteps {
     @When("the following mutation is selected")
     public void mutationIsSelected(DataTable tableOfMutations) {
         PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
+        mutationIsSelected(mutation);
+    }
+
+    public void mutationIsSelected(PitMutation mutation) {
         PAGES.getPitMutationsView()
              .select(mutation);
     }

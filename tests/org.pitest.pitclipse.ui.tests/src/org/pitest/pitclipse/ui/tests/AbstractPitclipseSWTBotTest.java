@@ -55,6 +55,12 @@ import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public abstract class AbstractPitclipseSWTBotTest {
     protected static SWTWorkbenchBot bot;
+    private static int statusIndex = 0;
+    private static int projectIndex = 1;
+    private static int packageIndex = 2;
+    private static int classIndex = 3;
+    private static int lineIndex = 4;
+    private static int mutationIndex = 5;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -292,25 +298,24 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void mutationsAre(String expectedMutationsTable) {
         List<PitMutation> expectedMutations = new ArrayList<>();
         String[] lines = expectedMutationsTable.split("\n");
-        final int statusIndex = 0;
-        final int projectIndex = 1;
-        final int packageIndex = 2;
-        final int classIndex = 3;
-        final int lineIndex = 4;
-        final int mutationIndex = 5;
-        for (String string : lines) {
-            String[] mutationRow = string.split("\\|");
-            DetectionStatus status = DetectionStatus.valueOf(mutationRow[statusIndex].trim());
-            String project = mutationRow[projectIndex].trim();
-            String pkg = mutationRow[packageIndex].trim();
-            String className = mutationRow[classIndex].trim();
-            int line = parseInt(mutationRow[lineIndex].trim());
-            String mutation = mutationRow[mutationIndex].trim();
-            PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
-                    .withClassName(className).withLineNumber(line).withMutation(mutation).build();
+        for (String line : lines) {
+            PitMutation pitMutation = fromMutationLine(line);
             expectedMutations.add(pitMutation);
         }
         mutationsAre(expectedMutations);
+    }
+
+    protected static PitMutation fromMutationLine(String line) {
+        String[] mutationRow = line.split("\\|");
+        DetectionStatus status = DetectionStatus.valueOf(mutationRow[statusIndex].trim());
+        String project = mutationRow[projectIndex].trim();
+        String pkg = mutationRow[packageIndex].trim();
+        String className = mutationRow[classIndex].trim();
+        int lineNum = parseInt(mutationRow[lineIndex].trim());
+        String mutation = mutationRow[mutationIndex].trim();
+        PitMutation pitMutation = PitMutation.builder().withStatus(status).withProject(project).withPackage(pkg)
+                .withClassName(className).withLineNumber(lineNum).withMutation(mutation).build();
+        return pitMutation;
     }
 
     protected static void mutationsAre(List<PitMutation> expectedMutations) {

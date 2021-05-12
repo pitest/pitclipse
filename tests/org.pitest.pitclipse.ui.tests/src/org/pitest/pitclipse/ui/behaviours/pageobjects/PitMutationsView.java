@@ -50,12 +50,12 @@ public class PitMutationsView {
     }
 
     public List<PitMutation> getMutations() {
-        PAGES.views().waitForTestsAreRunOnConsole();
         SWTBotTree mutationTree = mutationTreeRoot();
         return mutationsFrom(mutationTree);
     }
 
     private SWTBotTree mutationTreeRoot() {
+        PAGES.views().waitForTestsAreRunOnConsole();
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         // Make sure the 'PIT Mutations' view is opened
