@@ -16,19 +16,17 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import org.eclipse.jface.bindings.keys.IKeyLookup;
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.bindings.keys.ParseException;
+import java.math.BigDecimal;
+
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
-
-import static org.junit.Assert.fail;
-
-import java.math.BigDecimal;
 
 public class WindowsMenu {
 
@@ -111,13 +109,14 @@ public class WindowsMenu {
 
     public PreferenceDsl openPreferences() {
         if (SWTUtils.isMac()) {
-            // On Mac, we use the keyboard shortcut.
-            try {
-                bot.activeShell().pressShortcut(KeyStroke.getInstance
-                    (IKeyLookup.COMMAND_NAME + "+"), KeyStroke.getInstance(","));
-            } catch (ParseException e) {
-                fail(e.getMessage());
-            }
+            // on macOS we cannot open the Preferences dialog
+            // (it's under the application name and we cannot access it,
+            // using the keyboard shortcut does not seem to work either)
+            UIThreadRunnable.asyncExec(() -> {
+                PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
+                    bot.activeShell().widget, null, null, null);
+                dialog.open();
+            });
         } else {
             bot.menu(WINDOWS).menu(PREFERENCES).click();
         }
