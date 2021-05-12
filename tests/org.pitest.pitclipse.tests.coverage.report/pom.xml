@@ -42,6 +42,36 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.pitest</groupId>
+			<artifactId>org.pitest.pitclipse.core</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>org.pitest.pitclipse.launch</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>org.pitest.pitclipse.launch.ui</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>org.pitest.pitclipse.listeners</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>org.pitest.pitclipse.preferences.ui</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
 			<artifactId>org.pitest.pitclipse.runner</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
