@@ -39,8 +39,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
@@ -138,7 +136,7 @@ public class PitclipseSteps {
     }
     
     private void runPit(Runnable runnable) {
-        assertPitCanRun();
+        assertNoErrorsInWorkspace();
         // make sure to clear the console to avoid interferences
         // with the output of previous runs
         PAGES.views().clearConsole();
@@ -162,46 +160,6 @@ public class PitclipseSteps {
     public void assertNoErrorsInWorkspace() {
         Set<String> errors = errorsInWorkspace();
         assertThat(errors, empty());
-    }
-    
-    /**
-     * This method is an attempt to "fix" a flaky test, or at least
-     * to reduce its effects by:
-     *      1) failing fast (instead of freezing the whole build)
-     *      2) giving details about the failure
-     * 
-     * The test seems to be flaky because of compilation errors produced
-     * by missing imports and that's why this method uses 'auto import'
-     * on all open editors as an attempt to work around the issue.
-     * 
-     * See https://github.com/pitest/pitclipse/issues/81
-     */
-    private final void assertPitCanRun() {
-        Set<String> errors = errorsInWorkspace();
-        if (errors.isEmpty()) {
-            // So far, so good. Let's run PIT.
-            return;
-        }
-        PAGES.getBuildProgress().listenForBuild();
-        for (SWTBotEditor editor : new SWTWorkbenchBot().editors()) {
-            editor.setFocus();
-            try {
-                PAGES.getSourceMenu().organizeImports();
-                PAGES.getSourceMenu().format();
-            } catch (TimeoutException e) {
-                System.err.println("Errors have been found, but attempt to fix them failed on editor " + editor.getTitle() + " => " + e.getMessage());
-            }
-        }
-        PAGES.getBuildProgress().waitForBuild();
-        Set<String> errorsAfterCleaning = errorsInWorkspace();
-        if (! errorsAfterCleaning.isEmpty()) {
-            throw new IllegalStateException("Unexpected errors may prevent PIT from running. This is likely due to a flaky test; please relaunch the build." +
-                                            "\n    Errors are: " + errorsAfterCleaning);
-        }
-        else {
-            System.err.println("Unexpected errors have been detected before running PIT but have been succesfully fixed." +
-                               "\n      Errors were: " + errors);
-        }
     }
     
     /**
