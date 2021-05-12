@@ -21,6 +21,7 @@ import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
@@ -120,6 +121,7 @@ public class WindowsMenu {
         } else {
             bot.menu(WINDOWS).menu(PREFERENCES).click();
         }
+        bot.waitUntil(Conditions.shellIsActive(PREFERENCES));
         bot.shell(PREFERENCES).activate();
         return new PreferenceDsl();
     }
