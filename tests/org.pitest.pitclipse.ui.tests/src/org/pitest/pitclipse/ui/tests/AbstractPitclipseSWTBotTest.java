@@ -26,11 +26,14 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
@@ -42,7 +45,6 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
-import org.pitest.pitclipse.ui.behaviours.steps.ClassSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 
@@ -153,6 +155,15 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
     }
 
+    /**
+     * See {@link #setClassContents(String, String, String, String)} for the
+     * method specification.
+     * 
+     * @param className
+     * @param packageName
+     * @param projectName
+     * @param method
+     */
     protected static void createClassWithMethod(String className, String packageName, String projectName,
             String method) {
         createClass(className, packageName, projectName);
@@ -168,11 +179,61 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getBuildProgress().waitForBuild();
     }
 
+    /**
+     * See {@link #setClassContents(String, String, String, String)} for the
+     * method specification.
+     * 
+     * @param className
+     * @param packageName
+     * @param projectName
+     * @param method
+     */
     protected static void createMethod(String className, String packageName, String projectName,
             String method) {
-        ClassSteps classSteps = new ClassSteps();
-        classSteps.selectClass(className, packageName, projectName);
-        classSteps.createMethod(method);
+        setClassContents(className, packageName, projectName, method);
+    }
+
+    /**
+     * Sets the class contents: the package declaration and the class declaration
+     * are generated automatically, and only the contents to be inserted inside the class
+     * must be specified (thus, all types must be fully qualified since there's no way
+     * of specifying the imports).
+     * 
+     * Example:
+     * 
+     * <pre>
+     * setClassContents("FooTest", "foo.bar", TEST_PROJECT,
+     *          "@org.junit.Test\n"
+     *        + "public void fooTest3() {\n"
+     *        + "    org.junit.Assert.assertEquals(2,\n"
+     *        + "            new Foo().doFoo(1));\n"
+     *        + "}");
+     * </pre>
+     * 
+     * @param className
+     * @param packageName
+     * @param project
+     * @param contents
+     */
+    protected static void setClassContents(String className, String packageName, String project,
+            String contents) {
+        PAGES.getBuildProgress().listenForBuild();
+        SWTBotEditor editor = bot.editorByTitle(className + ".java");
+        editor.setFocus();
+        editor.toTextEditor().setText(
+        "package " + packageName + ";\n\n" +
+        "public class " + className + " {\n\n" +
+            indent(contents) + "\n\n" +
+        "}\n"
+        );
+        editor.save();
+        PAGES.getBuildProgress().waitForBuild();
+    }
+
+    private static String indent(String contents) {
+        return Stream.of(contents.split("\n"))
+            .map(s -> "    " + s)
+            .collect(Collectors.joining("\n"));
     }
 
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {

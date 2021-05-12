@@ -31,50 +31,18 @@ public class PitclipseUiRunnerJUnit5Test extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
-    public void classWithMethodAndNoCoverageTestMethod() throws CoreException {
-        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
-                "public int doFoo(int i) {return i + 1;}");
-        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@org.junit.jupiter.api.Test public void fooTest1() {Foo foo = new Foo();}");
-        runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(2, 0, 0, 0, 0);
-        mutationsAre(
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-    }
-
-    @Test
-    public void classWithMethodAndBadTestMethod() throws CoreException {
-        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
-                "public int doFoo(int i) {return i + 1;}");
-        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@org.junit.jupiter.api.Test public void fooTest2() {new Foo().doFoo(1);}");
-        runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(2, 0, 0, 2, 1);
-        mutationsAre(
-        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-    }
-
-    @Test
-    public void classWithMethodAndBetterTestMethod() throws CoreException {
-        createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
-                "public int doFoo(int i) {return i + 1;}");
-        createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@org.junit.jupiter.api.Test public void fooTest3() {org.junit.jupiter.api.Assertions.assertEquals(2, new Foo().doFoo(1));}");
-        runTest("FooTest", "foo.bar", TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
-        mutationsAre(
-        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-    }
-
-    @Test
     public void runPitAtPackageAndPackageRootAndProjectLevel() throws CoreException {
         createClassWithMethod("Foo", "foo.bar", TEST_PROJECT,
-                "public int doFoo(int i) {return i + 1;}");
+                "public int doFoo(int i) {\n"
+              + "    return i + 1;\n"
+              + "}");
         createClassWithMethod("FooTest", "foo.bar", TEST_PROJECT,
-                "@org.junit.jupiter.api.Test public void fooTest3() {org.junit.jupiter.api.Assertions.assertEquals(2, new Foo().doFoo(1));}");
+                "@org.junit.jupiter.api.Test\n"
+              + "public void fooTest3() {\n"
+              + "    org.junit.jupiter.api.Assertions\n"
+              + "        .assertEquals(2,\n"
+              + "            new Foo().doFoo(1));\n"
+              + "}");
         runPackageTest("foo.bar", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
         runPackageRootTest("src", TEST_PROJECT);
