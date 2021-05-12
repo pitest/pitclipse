@@ -16,10 +16,16 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import org.eclipse.jface.bindings.keys.IKeyLookup;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
+
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
@@ -102,8 +108,19 @@ public class WindowsMenu {
         return preferenceSelector.getExcludedClasses();
     }
 
-    private PreferenceDsl openPreferences() {
-        bot.menu(WINDOWS).menu(PREFERENCES).click();
+    public PreferenceDsl openPreferences() {
+        if (SWTUtils.isMac()) {
+            // On Mac, we use the keyboard shortcut.
+            try {
+                bot.activeShell().pressShortcut(KeyStroke.getInstance
+                    (IKeyLookup.COMMAND_NAME + "+"), KeyStroke.getInstance(","));
+            } catch (ParseException e) {
+                fail(e.getMessage());
+            }
+        } else {
+            bot.menu(WINDOWS).menu(PREFERENCES).click();
+        }
+        bot.shell(PREFERENCES).activate();
         return new PreferenceDsl();
     }
 
@@ -161,7 +178,7 @@ public class WindowsMenu {
         return openPreferences().andThen().getPitTimeoutFactor();
     }
 
-    private class PreferenceDsl {
+    public class PreferenceDsl {
         public PitPreferenceSelector andThen() {
             return preferenceSelector;
         }
