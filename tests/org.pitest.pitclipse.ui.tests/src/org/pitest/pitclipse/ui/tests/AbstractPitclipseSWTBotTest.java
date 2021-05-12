@@ -54,6 +54,9 @@ import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
 public abstract class AbstractPitclipseSWTBotTest {
+    private static final String WINDOWS = "Window";
+    private static final String PREFERENCES = "Preferences";
+
     protected static SWTWorkbenchBot bot;
 
     @BeforeClass
@@ -320,5 +323,9 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
         new PitclipseSteps().coverageReportGenerated(classes, totalCoverage, mutationCoverage);
+    }
+
+    protected static void openPreferences() {
+        bot.menu(WINDOWS).menu(PREFERENCES).click();
     }
 }
