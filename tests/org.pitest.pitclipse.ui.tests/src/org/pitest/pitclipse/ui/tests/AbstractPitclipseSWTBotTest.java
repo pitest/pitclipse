@@ -31,11 +31,15 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.bindings.keys.IKeyLookup;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
@@ -326,6 +330,16 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void openPreferences() {
-        bot.menu(WINDOWS).menu(PREFERENCES).click();
+        if (SWTUtils.isMac()) {
+            // On Mac, we use the keyboard shortcut.
+            try {
+                bot.activeShell().pressShortcut(KeyStroke.getInstance
+                    (IKeyLookup.COMMAND_NAME + "+"), KeyStroke.getInstance(","));
+            } catch (ParseException e) {
+                fail(e.getMessage());
+            }
+        } else {
+            bot.menu(WINDOWS).menu(PREFERENCES).click();
+        }
     }
 }
