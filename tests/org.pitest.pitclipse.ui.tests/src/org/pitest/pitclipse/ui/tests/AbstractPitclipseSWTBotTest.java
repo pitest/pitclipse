@@ -236,6 +236,10 @@ public abstract class AbstractPitclipseSWTBotTest {
         PAGES.getBuildProgress().waitForBuild();
     }
 
+    protected static void removeMethods(String className, String packageName, String project) {
+        setClassContents(className, packageName, project, "\n\n");
+    }
+
     private static String indent(String contents) {
         return Stream.of(contents.split("\n"))
             .map(s -> "    " + s)
