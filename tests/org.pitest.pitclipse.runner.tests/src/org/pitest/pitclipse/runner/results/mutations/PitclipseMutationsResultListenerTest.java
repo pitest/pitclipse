@@ -43,14 +43,14 @@ public class PitclipseMutationsResultListenerTest {
     }
 
     @Test
-    public void noMutations() {
+    public void noMutations() { // NOSONAR: assertions made by called methods
         givenNoMutations();
         whenPitIsExecuted();
         thenTheResultsWere(empty());
     }
 
     @Test
-    public void aClassMutationResultFromPitIsConvertedAndDispatched() {
+    public void aClassMutationResultFromPitIsConvertedAndDispatched() { // NOSONAR: assertions made by called methods
         given(aClassMutationResult());
         whenPitIsExecuted();
         thenTheResultsWere(aMutationResult());

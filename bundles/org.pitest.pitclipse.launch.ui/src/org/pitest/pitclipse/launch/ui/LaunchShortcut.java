@@ -45,13 +45,11 @@ final class LaunchShortcut {
     }
 
     static Function<ITypeRoot, Optional<IResource>> getCorrespondingResource() {
-        return new Function<ITypeRoot, Optional<IResource>>() {
-            public Optional<IResource> apply(ITypeRoot t) {
-                try {
-                    return Optional.ofNullable(t.getCorrespondingResource());
-                } catch (JavaModelException e) {
-                    return Optional.empty();
-                }
+        return t -> {
+            try {
+                return Optional.ofNullable(t.getCorrespondingResource());
+            } catch (JavaModelException e) {
+                return Optional.empty();
             }
         };
     }
