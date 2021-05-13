@@ -16,14 +16,17 @@
 package org.pitest.pitclipse.ui.util;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.ui.dialogs.IOverwriteQuery;
+import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
+import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.pitest.pitclipse.ui.PitclipseTestActivator;
 
 /**
@@ -49,11 +52,24 @@ public class ProjectImportUtil {
     }
 
     private static IProject importProject(final File baseDirectory, final String projectName) throws CoreException {
-        IProjectDescription description = ResourcesPlugin.getWorkspace()
-                .loadProjectDescription(new Path(baseDirectory.getAbsolutePath() + "/.project"));
-        IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
-        project.create(description, null);
-        project.open(null);
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IProject project = workspace.getRoot().getProject(projectName);
+        IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
+            public String queryOverwrite(String file) { return ALL; }
+        };
+        ImportOperation importOperation = new ImportOperation(
+                project.getFullPath(),
+                baseDirectory,
+                FileSystemStructureProvider.INSTANCE,
+                overwriteQuery);
+        importOperation.setCreateContainerStructure(false);
+        try {
+            importOperation.run(new NullProgressMonitor());
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return project;
     }
 }
