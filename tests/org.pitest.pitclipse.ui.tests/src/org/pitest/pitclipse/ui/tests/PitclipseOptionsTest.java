@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitMutators;
@@ -34,24 +35,8 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     private static final String BAR_CLASS = "Bar";
     private static final String BAR_TEST_CLASS = "BarTest";
 
-    @Test
-    public void defaultOptions() {
-        PitPreferenceSelector selector = PAGES.getWindowsMenu().openPreferences().andThen();
-        assertEquals(PROJECT_ISOLATION, selector.getPitExecutionMode());
-        assertTrue(selector.isPitRunInParallel());
-        assertFalse(selector.isIncrementalAnalysisEnabled());
-        assertEquals("The 'Excluded Classes' preference has not the expected value", 
-                "*Test", selector.getExcludedClasses());
-        assertTrue(selector.getExcludedMethods().isEmpty());
-        assertThat(selector.getAvoidCallsTo(), equalTo(DEFAULT_AVOID_CALLS_TO_LIST));
-        assertThat(selector.getTimeout(), equalTo(3000));
-        assertEquals(selector.getPitTimeoutFactor(), new BigDecimal(1.25));
-        assertThat(selector.getMutators().toString(), equalTo(DEFAULT_MUTATORS));
-        selector.close();
-    }
-
-    @Test
-    public void useStrongerMutators() throws CoreException {
+    @BeforeClass
+    public static void setupJavaProject() {
         createJavaProjectWithJUnit4(TEST_PROJECT);
         verifyProjectExists(TEST_PROJECT);
         createClassWithMethod(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
@@ -80,6 +65,26 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
           + "    " + BAR_CLASS + " x = new " + BAR_CLASS + "();\n"
           + "    x.f(1);\n"
           + "}");
+    }
+
+    @Test
+    public void defaultOptions() {
+        PitPreferenceSelector selector = PAGES.getWindowsMenu().openPreferences().andThen();
+        assertEquals(PROJECT_ISOLATION, selector.getPitExecutionMode());
+        assertTrue(selector.isPitRunInParallel());
+        assertFalse(selector.isIncrementalAnalysisEnabled());
+        assertEquals("The 'Excluded Classes' preference has not the expected value", 
+                "*Test", selector.getExcludedClasses());
+        assertTrue(selector.getExcludedMethods().isEmpty());
+        assertThat(selector.getAvoidCallsTo(), equalTo(DEFAULT_AVOID_CALLS_TO_LIST));
+        assertThat(selector.getTimeout(), equalTo(3000));
+        assertEquals(selector.getPitTimeoutFactor(), new BigDecimal(1.25));
+        assertThat(selector.getMutators().toString(), equalTo(DEFAULT_MUTATORS));
+        selector.close();
+    }
+
+    @Test
+    public void useDefaultMutators() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0);
         mutationsAre(
@@ -89,7 +94,10 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
         "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
+    }
 
+    @Test
+    public void useStrongerMutators() throws CoreException {
         // now set STRONGER mutators
         PAGES.getWindowsMenu().setMutators(STRONGER);
         try {
