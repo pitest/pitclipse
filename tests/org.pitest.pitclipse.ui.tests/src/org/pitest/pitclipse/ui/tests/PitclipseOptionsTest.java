@@ -156,16 +156,18 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             selector.setPitRunInParallel(false);
             selector.setPitIncrementalAnalysisEnabled(true);
             selector.setExcludedClasses("org.foo.*IntTest, *DbTest");
+            selector.setAvoidCallsTo("org.slf4j, org.apache");
+            selector.setExcludedMethods("*toString*, doNotMutateMe*");
             selector.close();
             runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 40, 0);
             runtimeOptionsMatch(
-            "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis | excludedClasses \n" +
-            "foo.bar.FooTest | 2000         | 2             | false         | true                | org.foo.*IntTest, *DbTest"
+            "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis | excludedClasses           | avoidCallsTo          | excludedMethods \n" +
+            "foo.bar.FooTest | 2000         | 2             | false         | true                | org.foo.*IntTest, *DbTest | org.slf4j, org.apache | *toString*, doNotMutateMe*"
             );
             launchConfigurationsMatch(
-            "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
-          + "FooTest | false         | true                  | org.foo.*IntTest, *DbTest           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+            "name    | runInParallel | useIncrementalAnalysis | excludedClasses          | excludedMethods            | avoidCallsTo \n"
+          + "FooTest | false         | true                  | org.foo.*IntTest, *DbTest | *toString*, doNotMutateMe* | org.slf4j, org.apache"
             );
         } finally {
             // reset default values
@@ -175,6 +177,8 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             preferenceStore.setValue(PitPreferences.RUN_IN_PARALLEL, true);
             preferenceStore.setValue(PitPreferences.INCREMENTAL_ANALYSIS, false);
             preferenceStore.setValue(PitPreferences.EXCLUDED_CLASSES, PitConfiguration.DEFAULT_EXCLUDED_CLASSES);
+            preferenceStore.setValue(PitPreferences.AVOID_CALLS_TO, PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST);
+            preferenceStore.setValue(PitPreferences.EXCLUDED_METHODS, "");
         }
     }
 

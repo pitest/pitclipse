@@ -37,7 +37,7 @@ public class PitConfiguration {
     private final int timeout;
     private final BigDecimal timeoutFactor;
 
-    private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis,
+    private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis, // NOSONAR this is used by our builder
             String excludedClasses, String excludedMethods, String avoidCallsTo, String mutators, int timeout,
             BigDecimal timeoutFactor) {
         this.executionMode = executionMode;
