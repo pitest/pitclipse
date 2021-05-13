@@ -12,12 +12,15 @@ import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLAT
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
 
@@ -142,6 +145,31 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
       + "BarTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |\n"
       + "FooTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
         );
+    }
+
+    @Test
+    public void launchConfigurationsWithChangedValues() throws CoreException {
+        try {
+            PitPreferenceSelector selector = PAGES.getWindowsMenu().openPreferences().andThen();
+            selector.setPitTimeoutConst(2000);
+            selector.setPitTimeoutFactor(2);
+            selector.setPitRunInParallel(false);
+            selector.setPitIncrementalAnalysisEnabled(true);
+            selector.close();
+            runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+            coverageReportGenerated(2, 40, 0);
+            runtimeOptionsMatch(
+            "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis \n" +
+            "foo.bar.FooTest | 2000         | 2             | false         | true "
+            );
+        } finally {
+            // reset default values
+            IPreferenceStore preferenceStore = PitCoreActivator.getDefault().getPreferenceStore();
+            preferenceStore.setValue(PitPreferences.TIMEOUT, PitConfiguration.DEFAULT_TIMEOUT);
+            preferenceStore.setValue(PitPreferences.TIMEOUT_FACTOR, PitConfiguration.DEFAULT_TIMEOUT_FACTOR.toString());
+            preferenceStore.setValue(PitPreferences.RUN_IN_PARALLEL, true);
+            preferenceStore.setValue(PitPreferences.INCREMENTAL_ANALYSIS, false);
+        }
     }
 
 }
