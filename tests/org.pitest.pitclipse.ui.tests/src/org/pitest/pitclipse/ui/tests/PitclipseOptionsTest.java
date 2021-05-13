@@ -163,6 +163,10 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis | excludedClasses \n" +
             "foo.bar.FooTest | 2000         | 2             | false         | true                | org.foo.*IntTest, *DbTest"
             );
+            launchConfigurationsMatch(
+            "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
+          + "FooTest | false         | true                  | org.foo.*IntTest, *DbTest           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+            );
         } finally {
             // reset default values
             IPreferenceStore preferenceStore = PitCoreActivator.getDefault().getPreferenceStore();
