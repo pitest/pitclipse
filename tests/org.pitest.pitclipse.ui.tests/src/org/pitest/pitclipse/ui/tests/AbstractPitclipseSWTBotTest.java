@@ -341,6 +341,19 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().coverageReportGenerated(classes, totalCoverage, mutationCoverage);
     }
 
+    /**
+     * The configTable String argument represents the expected
+     * runtime options, a two row table is expected with the same number
+     * of columns; the first row contains the keys and the second row contains the values.
+     * Example (the alignment is optional and spaces are trimmed):
+     * 
+     * <pre>
+     * "classUnderTest  | classesToMutate              | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               \n" +
+     * "foo.bar.FooTest | foo.bar.BarTest, foo.bar.Foo | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+     * </pre>
+     * 
+     * @param configTable
+     */
     protected static void runtimeOptionsMatch(String configTable) {
         new PitclipseSteps().runtimeOptionsMatch(fromTwoRowTableToMap(configTable));
     }
@@ -360,6 +373,20 @@ public abstract class AbstractPitclipseSWTBotTest {
         return map;
     }
 
+    /**
+     * The configTable String argument represents the expected
+     * launch configurations elements, a table with at least two rows is expected with the same number
+     * of columns; the first row contains the keys and other ones contain the values.
+     * Example (the alignment is optional and spaces are trimmed):
+     * 
+     * <pre>
+     *   "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
+     * + "BarTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j \n"
+     * + "FooTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+     * </pre>
+     * 
+     * @param configTable
+     */
     protected static void launchConfigurationsMatch(String configTable) {
         List<PitRunConfiguration> launchConfigurations = PAGES.getRunMenu().runConfigurations();
         new LaunchConfigurationSteps().configurationsMatch
