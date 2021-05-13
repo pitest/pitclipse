@@ -53,6 +53,7 @@ import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.launch.ui.PitLaunchShortcut;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.ConcreteClassContext;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 import org.pitest.pitclipse.ui.behaviours.steps.LaunchConfigurationSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
@@ -169,6 +170,16 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void addToBuildPath(String dependentProject, String projectName) {
         PAGES.getPackageExplorer().selectProject(projectName);
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
+    }
+
+    protected static void openEditor(String className, String packageName, String projectName) {
+        PAGES.getPackageExplorer()
+            .openClass(
+                new ConcreteClassContext.Builder()
+                    .withProjectName(projectName)
+                    .withPackageName(packageName)
+                    .withClassName(className)
+                    .build());
     }
 
     /**

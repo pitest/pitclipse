@@ -40,7 +40,7 @@ import static org.eclipse.core.runtime.FileLocator.toFileURL;
 public class PitclipseTestActivator extends AbstractUIPlugin {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.pitest.pitclipse-ui.tests"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "org.pitest.pitclipse.ui.tests"; //$NON-NLS-1$
 
     // The shared instance
     private static final PitclipseTestActivator plugin = new PitclipseTestActivator();

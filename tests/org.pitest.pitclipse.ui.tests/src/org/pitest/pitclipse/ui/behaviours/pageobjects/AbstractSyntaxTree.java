@@ -19,6 +19,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import com.google.common.collect.ImmutableList;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -73,7 +74,8 @@ public class AbstractSyntaxTree {
         NullProgressMonitor progressMonitor = new NullProgressMonitor();
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         try {
-            project.delete(true, progressMonitor);
+            project.delete
+                (IResource.NEVER_DELETE_PROJECT_CONTENT, progressMonitor);
         } catch (CoreException e) {
             throw new StepException(e);
         }
