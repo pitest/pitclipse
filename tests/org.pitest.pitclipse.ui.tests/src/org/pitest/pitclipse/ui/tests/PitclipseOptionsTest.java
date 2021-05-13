@@ -155,12 +155,13 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             selector.setPitTimeoutFactor(2);
             selector.setPitRunInParallel(false);
             selector.setPitIncrementalAnalysisEnabled(true);
+            selector.setExcludedClasses("org.foo.*IntTest, *DbTest");
             selector.close();
             runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 40, 0);
             runtimeOptionsMatch(
-            "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis \n" +
-            "foo.bar.FooTest | 2000         | 2             | false         | true "
+            "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis | excludedClasses \n" +
+            "foo.bar.FooTest | 2000         | 2             | false         | true                | org.foo.*IntTest, *DbTest"
             );
         } finally {
             // reset default values
@@ -169,6 +170,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             preferenceStore.setValue(PitPreferences.TIMEOUT_FACTOR, PitConfiguration.DEFAULT_TIMEOUT_FACTOR.toString());
             preferenceStore.setValue(PitPreferences.RUN_IN_PARALLEL, true);
             preferenceStore.setValue(PitPreferences.INCREMENTAL_ANALYSIS, false);
+            preferenceStore.setValue(PitPreferences.EXCLUDED_CLASSES, PitConfiguration.DEFAULT_EXCLUDED_CLASSES);
         }
     }
 
