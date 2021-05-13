@@ -122,13 +122,9 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     public void launchConfigurationsWithDefaultOptions() throws CoreException {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 40, 0);
-//        runtimeOptionsMatch(
-//        "classUnderTest           | classesToMutate  | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               \n" +
-//        "foo.bar.FooTest | [foo.bar.BarTest, foo.bar.Foo, foo.bar.Bar, foo.bar.FooTest]       | [*Test]           |                 | true          | false               | [java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j]"
-//        );
         runtimeOptionsMatch(
-        "classUnderTest   \n" +
-        "foo.bar.FooTest "
+        "classUnderTest           | classesToMutate  | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               \n" +
+        "foo.bar.FooTest | foo.bar.BarTest, foo.bar.Foo, foo.bar.Bar, foo.bar.FooTest       | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
         );
     }
 
