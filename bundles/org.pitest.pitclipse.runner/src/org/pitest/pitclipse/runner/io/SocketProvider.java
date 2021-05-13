@@ -44,15 +44,11 @@ public class SocketProvider {
      * @return an object allowing to write and read objects from the given port
      */
     public ObjectStreamSocket listen(int portNumber) {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(portNumber);
+        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             Socket connection = serverSocket.accept();
             return ObjectStreamSocket.make(connection);
         } catch (IOException e) {
             throw new SocketCreationException(e);
-        } finally {
-            ensureClosed(serverSocket);
         }
     }
 
@@ -92,7 +88,7 @@ public class SocketProvider {
     private Optional<ObjectStreamSocket> doConnect(int portNumber) {
         try {
             InetAddress localhost = InetAddress.getByName(null);
-            Socket socket = new Socket();
+            Socket socket = new Socket(); // NOSONAR the socket is used in a returned object
             SocketAddress endpoint = new InetSocketAddress(localhost, portNumber);
             socket.connect(endpoint, DEFAULT_TIMEOUT);
             return Optional.of(ObjectStreamSocket.make(socket));
@@ -106,29 +102,8 @@ public class SocketProvider {
      * @return the number of a port that can be used
      */
     public int getFreePort() {
-        ServerSocket socket = null;
-        try {
-            socket = new ServerSocket(0);
+        try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
-        } catch (IOException e) {
-            throw new SocketCreationException(e);
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    System.out.println("Warning, did not close socket");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void ensureClosed(ServerSocket serverSocket) {
-        try {
-            if (null != serverSocket) {
-                serverSocket.close();
-            }
         } catch (IOException e) {
             throw new SocketCreationException(e);
         }

@@ -30,7 +30,7 @@ import static org.pitest.pitclipse.runner.results.summary.SummaryResultListenerT
 
 public class SummaryResultListenerTest {
     @Test
-    public void noResultsReturnsAnEmptyResult() {
+    public void noResultsReturnsAnEmptyResult() { // NOSONAR: assertions made by called methods
         given(anEmptyCoverageDatabase())
             .andNoMutations()
             .whenPitIsExecuted()
@@ -38,7 +38,7 @@ public class SummaryResultListenerTest {
     }
 
     @Test
-    public void anUncoveredMutationResultReturnsZeroLineCoverage() {
+    public void anUncoveredMutationResultReturnsZeroLineCoverage() { // NOSONAR: assertions made by called methods
         given(fooHasNoLineCoverage())
                 .and(anUncoveredMutationOnFoo())
                 .whenPitIsExecuted()
@@ -48,7 +48,7 @@ public class SummaryResultListenerTest {
     }
 
     @Test
-    public void aCoveredMutationResultReturnsLineCoverage() {
+    public void aCoveredMutationResultReturnsLineCoverage() { // NOSONAR: assertions made by called methods
         given(fooHasFullLineCoverage())
                 .and(aCoveredMutationOnFoo())
                 .whenPitIsExecuted()
