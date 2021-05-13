@@ -11,8 +11,6 @@ import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATO
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
-import java.math.BigDecimal;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.Before;
@@ -20,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
 
 /**
@@ -83,8 +82,8 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
                 "*Test", selector.getExcludedClasses());
         assertTrue(selector.getExcludedMethods().isEmpty());
         assertThat(selector.getAvoidCallsTo(), equalTo(DEFAULT_AVOID_CALLS_TO_LIST));
-        assertThat(selector.getTimeout(), equalTo(3000));
-        assertEquals(selector.getPitTimeoutFactor(), new BigDecimal(1.25));
+        assertThat(selector.getTimeout(), equalTo(PitConfiguration.DEFAULT_TIMEOUT));
+        assertThat(selector.getPitTimeoutFactor(), equalTo(PitConfiguration.DEFAULT_TIMEOUT_FACTOR));
         assertThat(selector.getMutators().toString(), equalTo(DEFAULT_MUTATORS));
         selector.close();
     }
