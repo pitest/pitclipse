@@ -19,6 +19,7 @@ import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
@@ -32,6 +33,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -46,7 +51,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.launch.ui.PitLaunchShortcut;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
+import org.pitest.pitclipse.ui.behaviours.steps.LaunchConfigurationSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
 
@@ -334,10 +342,10 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void runtimeOptionsMatch(String configTable) {
-        new PitclipseSteps().runtimeOptionsMatch(fromTableToMap(configTable));
+        new PitclipseSteps().runtimeOptionsMatch(fromTwoRowTableToMap(configTable));
     }
 
-    protected static Map<String, String> fromTableToMap(String table) {
+    protected static Map<String, String> fromTwoRowTableToMap(String table) {
         Map<String, String> map = new HashMap<>();
         String[] lines = table.split("\n");
         assertThat("You must specify a row with keys and a row with values",
@@ -350,6 +358,41 @@ public abstract class AbstractPitclipseSWTBotTest {
             map.put(keyRow[i].trim(), valueRow[i].trim());
         }
         return map;
+    }
+
+    protected static void launchConfigurationsMatch(String configTable) {
+        List<PitRunConfiguration> launchConfigurations = PAGES.getRunMenu().runConfigurations();
+        new LaunchConfigurationSteps().configurationsMatch
+            (fromTableToMap(configTable), launchConfigurations);
+    }
+
+    protected static List<Map<String, String>> fromTableToMap(String table) {
+        List<Map<String, String>> maps = new ArrayList<>();
+        String[] lines = table.split("\n");
+        assertThat("You must specify at least a row with keys and rows with values",
+            lines.length, greaterThanOrEqualTo(2));
+        String[] keyRow = lines[0].split("\\|");
+        for (int i = 1; i < lines.length; ++i) {
+            Map<String, String> map = new HashMap<>();
+            maps.add(map);
+            String[] valueRow = lines[i].split("\\|");
+            assertThat("Keys and values do not match in number",
+                keyRow.length, equalTo(valueRow.length));
+            for (int j = 0; j < keyRow.length; ++j) {
+                map.put(keyRow[j].trim(), valueRow[j].trim());
+            }
+        }
+        return maps;
+    }
+
+    protected static void removePitLaunchConfigurations() throws CoreException {
+        ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+        ILaunchConfigurationType type =
+            manager.getLaunchConfigurationType(PitLaunchShortcut.PIT_CONFIGURATION_TYPE);
+        ILaunchConfiguration[] lcs = manager.getLaunchConfigurations(type);
+        for (ILaunchConfiguration launchConfiguration : lcs) {
+            launchConfiguration.delete();
+        }
     }
 
 }

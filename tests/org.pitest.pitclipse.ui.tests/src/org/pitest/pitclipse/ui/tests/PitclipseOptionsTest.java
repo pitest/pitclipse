@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,6 +66,11 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
           + "    " + BAR_CLASS + " x = new " + BAR_CLASS + "();\n"
           + "    x.f(1);\n"
           + "}");
+    }
+
+    @Before
+    public void removeLaunchConfigurations() throws CoreException {
+        removePitLaunchConfigurations();
     }
 
     @Test
@@ -125,6 +131,17 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         runtimeOptionsMatch(
         "classUnderTest           | classesToMutate  | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               \n" +
         "foo.bar.FooTest | foo.bar.BarTest, foo.bar.Foo, foo.bar.Bar, foo.bar.FooTest       | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+        );
+        launchConfigurationsMatch(
+        "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
+      + "FooTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
+        );
+        runTest(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        coverageReportGenerated(2, 40, 0);
+        launchConfigurationsMatch(
+        "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
+      + "BarTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |\n"
+      + "FooTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
         );
     }
 
