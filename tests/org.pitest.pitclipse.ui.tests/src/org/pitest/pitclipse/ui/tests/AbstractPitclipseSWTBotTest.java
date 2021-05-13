@@ -25,7 +25,9 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -329,6 +331,25 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
         new PitclipseSteps().coverageReportGenerated(classes, totalCoverage, mutationCoverage);
+    }
+
+    protected static void runtimeOptionsMatch(String configTable) {
+        new PitclipseSteps().runtimeOptionsMatch(fromTableToMap(configTable));
+    }
+
+    protected static Map<String, String> fromTableToMap(String table) {
+        Map<String, String> map = new HashMap<>();
+        String[] lines = table.split("\n");
+        assertThat("You must specify a row with keys and a row with values",
+            lines.length, equalTo(2));
+        String[] keyRow = lines[0].split("\\|");
+        String[] valueRow = lines[1].split("\\|");
+        assertThat("Keys and values do not match in number",
+            keyRow.length, equalTo(valueRow.length));
+        for (int i = 0; i < keyRow.length; ++i) {
+            map.put(keyRow[i].trim(), valueRow[i].trim());
+        }
+        return map;
     }
 
 }

@@ -138,7 +138,12 @@ public class PitclipseSteps {
         assertThat(configTable.height(), is(greaterThan(0)));
         assertThat(options, match(configTable.asMaps().get(0)));
     }
-    
+
+    public void runtimeOptionsMatch(Map<String, String> configMap) {
+        PitOptions options = PAGES.getRunMenu().getLastUsedPitOptions();
+        assertThat(options, match(configMap));
+    }
+
     private void runPit(Runnable runnable) {
         assertNoErrorsInWorkspace();
         // make sure to clear the console to avoid interferences
