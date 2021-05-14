@@ -30,14 +30,12 @@ import java.io.File;
  */
 public class PitView extends ViewPart implements SummaryView {
     private Browser browser = null;
-    private PitUiUpdatePublisher publisher = null;
 
     @Override
     public synchronized void createPartControl(Composite parent) {
         try {
             browser = new Browser(parent, SWT.NONE);
-            publisher = new PitUiUpdatePublisher(browser);
-            browser.addProgressListener(publisher);
+            browser.addProgressListener(new PitUiUpdatePublisher(browser));
         } catch (SWTError e) {
             MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
             messageBox.setMessage("Browser cannot be initialized.");
