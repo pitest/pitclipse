@@ -134,7 +134,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 
     private void performLaunch(IJavaElement element, String mode) throws InterruptedException, CoreException {
         ILaunchConfigurationWorkingCopy tmp = createLaunchConfiguration(element);
-        Optional<ILaunchConfiguration> existingConfig = findExistingLaunchConfiguration(tmp, mode);
+        Optional<ILaunchConfiguration> existingConfig = findExistingLaunchConfiguration(tmp);
         ILaunchConfiguration config = existingConfig.orElse(tmp.doSave());
         DebugUITools.launch(config, mode);
     }
@@ -154,13 +154,11 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      * 
      * @param configList
      *            list of {@link ILaunchConfiguration}s
-     * @param mode
-     *            launch mode
      * @return ILaunchConfiguration
      * @throws InterruptedException
      *             if cancelled by the user
      */
-    private ILaunchConfiguration chooseConfiguration(List<ILaunchConfiguration> configList, String mode) throws InterruptedException {
+    private ILaunchConfiguration chooseConfiguration(List<ILaunchConfiguration> configList) throws InterruptedException {
         IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
         ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), labelProvider);
         dialog.setElements(configList.toArray());
@@ -269,7 +267,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         return false;
     }
 
-    private Optional<ILaunchConfiguration> findExistingLaunchConfiguration(ILaunchConfigurationWorkingCopy temporary, String mode) throws InterruptedException,
+    private Optional<ILaunchConfiguration> findExistingLaunchConfiguration(ILaunchConfigurationWorkingCopy temporary) throws InterruptedException,
             CoreException {
         List<ILaunchConfiguration> candidateConfigs = findExistingLaunchConfigurations(temporary);
 
@@ -287,7 +285,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             // cancelled the dialog, in which case this method returns null,
             // since cancelling the dialog should also cancel launching
             // anything.
-            ILaunchConfiguration config = chooseConfiguration(candidateConfigs, mode);
+            ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
             if (config != null) {
                 return Optional.ofNullable(config);
             }
