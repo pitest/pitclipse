@@ -121,9 +121,9 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             else {
                 showNoTestsFoundDialog();
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e) { // NOSONAR
             // OK, silently move on
-        } catch (CoreException e) {
+        } catch (CoreException e) { // NOSONAR
             // OK, silently move on
         }
     }
