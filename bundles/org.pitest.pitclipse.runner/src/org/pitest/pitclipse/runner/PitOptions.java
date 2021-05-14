@@ -56,7 +56,7 @@ public final class PitOptions implements Serializable {
     private final BigDecimal timeoutFactor;
     private final boolean useJUnit5;
 
-    private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
+    private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs, // NOSONAR this is used by our builder
             File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
             ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
             ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor, boolean useJUnit5) {
