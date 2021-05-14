@@ -17,7 +17,6 @@
 package org.pitest.pitclipse.ui.view.mutations;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.pitest.pitclipse.runner.model.ClassMutations;
 import org.pitest.pitclipse.runner.model.Mutation;
 import org.pitest.pitclipse.runner.model.MutationsModel;
@@ -28,14 +27,6 @@ import org.pitest.pitclipse.runner.model.Status;
 import org.pitest.pitclipse.runner.model.Visitable;
 
 public class ViewContentProvider implements ITreeContentProvider {
-
-    @Override
-    public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-    }
-
-    @Override
-    public void dispose() {
-    }
 
     @Override
     public Object[] getElements(Object element) {
