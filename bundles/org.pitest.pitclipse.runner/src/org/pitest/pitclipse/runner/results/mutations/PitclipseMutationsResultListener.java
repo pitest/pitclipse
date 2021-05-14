@@ -98,8 +98,8 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 
     @Override
     public void runEnd() {
-        Mutations mutations = OBJECT_FACTORY.createMutations();
-        mutations.getMutation().addAll(this.mutations);
-        dispatcher.dispatch(mutations);
+        Mutations createdMutations = OBJECT_FACTORY.createMutations();
+        createdMutations.getMutation().addAll(this.mutations);
+        dispatcher.dispatch(createdMutations);
     }
 }
