@@ -327,7 +327,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 return toArrayOfILaunchConfiguration(configs);
             }
         }
-        return null;
+        return null; // NOSONAR Eclipse code relies on returned null array
     }
 
     /**
