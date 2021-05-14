@@ -39,12 +39,12 @@ class Coverage implements Serializable {
 
     private final int covered;
     private final int total;
-    private final BigDecimal coverage;
+    private final BigDecimal percentage;
 
-    private Coverage(int covered, int total, BigDecimal coverage) {
+    private Coverage(int covered, int total, BigDecimal percentage) {
         this.covered = covered;
         this.total = total;
-        this.coverage = coverage;
+        this.percentage = percentage;
     }
 
     public static Coverage from(int covered, int total) {
@@ -83,7 +83,7 @@ class Coverage implements Serializable {
         return MoreObjects.toStringHelper(this)
             .add("covered", covered)
             .add("total", total)
-            .add("coverage", coverage)
+            .add("coverage", percentage)
             .toString();
     }
 }
