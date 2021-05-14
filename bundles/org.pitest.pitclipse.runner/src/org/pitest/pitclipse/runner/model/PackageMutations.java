@@ -33,12 +33,8 @@ public class PackageMutations implements Visitable, Countable {
             ImmutableList<ClassMutations> mutations) {
         this.projectMutations = projectMutations;
         this.packageName = packageName;
-        this.classMutations = ImmutableList.copyOf(transform(mutations, new Function<ClassMutations, ClassMutations>() {
-            @Override
-            public ClassMutations apply(ClassMutations input) {
-                return input.copyOf().withPackageMutations(PackageMutations.this).build();
-            }
-        }));
+        this.classMutations = ImmutableList.copyOf(transform(mutations,
+                input -> input.copyOf().withPackageMutations(PackageMutations.this).build()));
     }
 
     public String getPackageName() {
