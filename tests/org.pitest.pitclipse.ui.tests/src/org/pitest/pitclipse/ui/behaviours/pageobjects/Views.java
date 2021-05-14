@@ -63,12 +63,15 @@ public class Views {
         SWTBotView consoleView = bot.viewByPartName("Console");
         consoleView.show();
         bot.waitUntil(new ICondition() {
+            static final String EXPECTED_END_STRING = "tests per mutation)";
+            String currentText = "";
+
             @Override
             public boolean test() {
-                return consoleView.bot()
-                        .styledText().getText()
-                        .trim()
-                        .endsWith("tests per mutation)");
+                currentText = consoleView.bot()
+                    .styledText().getText()
+                    .trim();
+                return currentText.endsWith(EXPECTED_END_STRING);
             }
 
             @Override
@@ -77,7 +80,9 @@ public class Views {
 
             @Override
             public String getFailureMessage() {
-                return "Console View is empty";
+                return "Console View does not end with '" + EXPECTED_END_STRING + "'\n:"
+                        + "CURRENT CONSOLE TEXT:\n"
+                        + currentText;
             }
         });
     }
