@@ -6,7 +6,6 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,11 +32,6 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         assertNoErrorsInWorkspace();
         openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        deleteAllProjects();
     }
 
     @Test
