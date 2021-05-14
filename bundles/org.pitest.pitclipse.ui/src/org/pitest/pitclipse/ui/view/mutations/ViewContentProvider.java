@@ -30,15 +30,15 @@ public class ViewContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(Object element) {
-        if (element instanceof Visitable) {
-            Visitable visitable = (Visitable) element;
-            return visitable.accept(Structure.VISITOR);
-        }
-        return nothing();
+        return handleElementsOrChildren(element);
     }
 
     @Override
     public Object[] getChildren(Object element) {
+        return handleElementsOrChildren(element);
+    }
+
+    private Object[] handleElementsOrChildren(Object element) {
         if (element instanceof Visitable) {
             Visitable visitable = (Visitable) element;
             return visitable.accept(Structure.VISITOR);
