@@ -23,6 +23,7 @@ import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
+import org.pitest.pitclipse.ui.util.ProjectImportUtil;
 
 /**
  * @author Lorenzo Bettini
@@ -31,7 +32,7 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
 
-    private static final String TEST_PROJECT = "project1";
+    private static final String TEST_PROJECT = "org.pitest.pitclipse.testprojects.twoclasses";
     private static final String FOO_BAR_PACKAGE = "foo.bar";
     private static final String FOO_CLASS = "Foo";
     private static final String FOO_TEST_CLASS = "FooTest";
@@ -39,35 +40,16 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     private static final String BAR_TEST_CLASS = "BarTest";
 
     @BeforeClass
-    public static void setupJavaProject() {
-        createJavaProjectWithJUnit4(TEST_PROJECT);
+    public static void setupJavaProject() throws CoreException {
+        PAGES.getBuildProgress().listenForBuild();
+        ProjectImportUtil.importProject(TEST_PROJECT);
+        PAGES.getBuildProgress().waitForBuild();
         verifyProjectExists(TEST_PROJECT);
-        createClassWithMethod(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
-             "public int f(int i) {\n"
-           + "    java.util.ArrayList<Object> pointless = new java.util.ArrayList<>();\n"
-           + "    if (pointless.size() == 1)\n"
-           + "        return i + 1;\n"
-           + "    else\n"
-           + "        return 0;\n"
-           + "}");
-        createClassWithMethod(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
-            "@org.junit.Test public void badTest() {\n"
-          + "    " + FOO_CLASS + " x = new " + FOO_CLASS + "();\n"
-          + "    x.f(1);\n"
-          + "}");
-        createClassWithMethod(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
-            "public int f(int i) {\n"
-          + "    java.util.ArrayList<Object> pointless = new java.util.ArrayList<>();\n"
-          + "    if (pointless.size() == 1)\n"
-          + "        return i + 1;\n"
-          + "    else\n"
-          + "        return 0;\n"
-          + "}");
-        createClassWithMethod(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
-           "@org.junit.Test public void badTest() {\n"
-          + "    " + BAR_CLASS + " x = new " + BAR_CLASS + "();\n"
-          + "    x.f(1);\n"
-          + "}");
+        assertNoErrorsInWorkspace();
+        openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }
 
     @Before
@@ -96,12 +78,12 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0);
         mutationsAre(
-        "SURVIVED    | project1 | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
-        "SURVIVED    | project1 | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
     }
 
     @Test
@@ -112,14 +94,14 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0);
             mutationsAre(
-            "SURVIVED    | project1 | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
-            "SURVIVED    | project1 | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false\n" +
-            "SURVIVED    | project1 | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
-            "SURVIVED    | project1 | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
-            "NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
-            "NO_COVERAGE | project1 | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
-            "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
-            "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
+            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false\n" +
+            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
+            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
+            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
+            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
+            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
         } finally {
             // it's crucial to reset it to the default or we break other tests
             PAGES.getWindowsMenu().setMutators(PitMutators.DEFAULTS);
