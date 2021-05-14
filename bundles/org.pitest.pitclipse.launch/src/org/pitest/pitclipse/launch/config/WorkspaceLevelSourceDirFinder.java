@@ -62,7 +62,7 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
                 boolean pathIsRelativeToWorkspace = ! (packagePath.isAbsolute() && packageRoot.isExternal());
                 if (pathIsRelativeToWorkspace) {
-                    packagePath = removeProjectFromPackagePath(project, packageRoot.getPath());
+                    packagePath = removeProjectFromPackagePath(packageRoot.getPath());
                     sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
                 }
                 else {
@@ -87,7 +87,7 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
         return projLocation.toURI();
     }
 
-    private IPath removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
+    private IPath removeProjectFromPackagePath(IPath packagePath) {
         return packagePath.removeFirstSegments(1);
     }
 }
