@@ -58,6 +58,7 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 import org.pitest.pitclipse.ui.behaviours.steps.LaunchConfigurationSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
+import org.pitest.pitclipse.ui.util.ProjectImportUtil;
 
 /**
  * @author Lorenzo Bettini
@@ -117,6 +118,14 @@ public abstract class AbstractPitclipseSWTBotTest {
                 }
             }
         });
+    }
+
+    protected static void importTestProject(String projectName) throws CoreException {
+        PAGES.getBuildProgress().listenForBuild();
+        ProjectImportUtil.importProject(projectName);
+        PAGES.getBuildProgress().waitForBuild();
+        verifyProjectExists(projectName);
+        assertNoErrorsInWorkspace();
     }
 
     protected static void createJavaProjectWithJUnit4(String projectName) {

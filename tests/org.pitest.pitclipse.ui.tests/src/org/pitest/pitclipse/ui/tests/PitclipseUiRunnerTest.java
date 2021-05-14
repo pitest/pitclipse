@@ -1,7 +1,5 @@
 package org.pitest.pitclipse.ui.tests;
 
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
-
 import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
@@ -9,7 +7,6 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.pitest.pitclipse.ui.util.ProjectImportUtil;
 
 /**
  * @author Lorenzo Bettini
@@ -25,11 +22,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
-        PAGES.getBuildProgress().listenForBuild();
-        ProjectImportUtil.importProject(TEST_PROJECT);
-        PAGES.getBuildProgress().waitForBuild();
-        verifyProjectExists(TEST_PROJECT);
-        assertNoErrorsInWorkspace();
+        importTestProject(TEST_PROJECT);
         openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }

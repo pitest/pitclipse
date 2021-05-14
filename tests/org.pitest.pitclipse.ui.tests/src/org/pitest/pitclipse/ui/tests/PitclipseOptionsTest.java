@@ -23,7 +23,6 @@ import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
-import org.pitest.pitclipse.ui.util.ProjectImportUtil;
 
 /**
  * @author Lorenzo Bettini
@@ -41,11 +40,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
-        PAGES.getBuildProgress().listenForBuild();
-        ProjectImportUtil.importProject(TEST_PROJECT);
-        PAGES.getBuildProgress().waitForBuild();
-        verifyProjectExists(TEST_PROJECT);
-        assertNoErrorsInWorkspace();
+        importTestProject(TEST_PROJECT);
         openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
