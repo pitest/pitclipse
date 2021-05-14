@@ -17,7 +17,7 @@
 package org.pitest.pitclipse.runner;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
@@ -43,10 +43,9 @@ public class PitRunner {
         try (PitClient client = new PitClient(port)) {
             client.connect();
             Optional<PitRequest> request = client.readRequest();
-            Optional<PitResults> results = request.transform(executePit());
+            Optional<PitResults> results = request.map(executePit());
 
-            results.toJavaUtil().ifPresent(client::sendResults);
-            
+            results.ifPresent(client::sendResults);
         } catch (IOException e) {
             // An error occurred while closing the client
             e.printStackTrace();
@@ -60,12 +59,11 @@ public class PitRunner {
             File reportDir = request.getReportDirectory();
             File htmlResultFile = findResultFile(reportDir, "index.html");
             Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
-            PitResults results = PitResults.builder()
-                                           .withHtmlResults(htmlResultFile)
-                                           .withProjects(request.getProjects())
-                                           .withMutations(mutations)
-                                           .build();
-            return results;
+            return PitResults.builder()
+                   .withHtmlResults(htmlResultFile)
+                   .withProjects(request.getProjects())
+                   .withMutations(mutations)
+                   .build();
         };
     }
 

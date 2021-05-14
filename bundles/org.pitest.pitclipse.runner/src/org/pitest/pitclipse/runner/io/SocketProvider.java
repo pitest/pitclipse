@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.io;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -93,7 +93,7 @@ public class SocketProvider {
             socket.connect(endpoint, DEFAULT_TIMEOUT);
             return Optional.of(ObjectStreamSocket.make(socket));
         } catch (Exception e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

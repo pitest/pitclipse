@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.io;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;

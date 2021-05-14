@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

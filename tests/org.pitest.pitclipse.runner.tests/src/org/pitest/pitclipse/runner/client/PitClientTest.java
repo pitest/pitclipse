@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.client;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;

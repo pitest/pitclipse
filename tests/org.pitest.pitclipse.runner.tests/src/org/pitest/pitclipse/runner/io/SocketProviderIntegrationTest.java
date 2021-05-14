@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.io;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.ReturnStatus;
@@ -43,7 +43,7 @@ public class SocketProviderIntegrationTest {
 
     @Test
     public void cannotConnectToAPortThatIsNotBeingListenedOn() {
-        assertThat(connectTo(aFreePort()), is(equalTo(Optional.<ObjectStreamSocket>absent()))) ;
+        assertThat(connectTo(aFreePort()), is(equalTo(Optional.<ObjectStreamSocket>empty()))) ;
     }
 
     @Test
