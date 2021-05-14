@@ -15,12 +15,13 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.util;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -38,37 +39,50 @@ import org.pitest.pitclipse.ui.PitclipseTestActivator;
  */
 public class ProjectImportUtil {
 
+    private static final String TESTPROJECTS = "testprojects";
+
+    /**
+     * Imports an existing project into the running workspace for
+     * SWTBot tests.
+     * 
+     * IMPORTANT: projects to be imported are expected to be located in the
+     * "testprojects" folder, which is expected to be found in the parent folder
+     * of this project.
+     * 
+     * @param projectName
+     * @return
+     * @throws CoreException
+     */
     public static IProject importProject(String projectName) throws CoreException {
         File currDir = new File(".");
         String path = currDir.getAbsolutePath();
-        String parentProject = PitclipseTestActivator.PLUGIN_ID;
-        int pos = path.lastIndexOf(parentProject);
+        String thisProject = PitclipseTestActivator.PLUGIN_ID;
+        int pos = path.lastIndexOf(thisProject);
         String baseDirectory = path.substring(0, pos - 1);
-        String projectDirectory =
-            baseDirectory + "/testprojects/" + projectName;
-        IProject project = importProject(new File(projectDirectory), projectName);
+        String projectToImportPath =
+            baseDirectory + "/" + TESTPROJECTS + "/" + projectName;
+        IProject project = importProject(new File(projectToImportPath), projectName);
         project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
         return project;
     }
 
-    private static IProject importProject(final File baseDirectory, final String projectName) throws CoreException {
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        IProject project = workspace.getRoot().getProject(projectName);
-        IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
-            public String queryOverwrite(String file) { return ALL; }
-        };
+    private static IProject importProject(final File projectPath, final String projectName) throws CoreException {
+        IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         ImportOperation importOperation = new ImportOperation(
-                project.getFullPath(),
-                baseDirectory,
+                project.getFullPath(), // relative to the workspace
+                projectPath, // absolute path
                 FileSystemStructureProvider.INSTANCE,
-                overwriteQuery);
+                s -> IOverwriteQuery.ALL);
+        // this means: copy the imported project into workspace
         importOperation.setCreateContainerStructure(false);
         try {
             importOperation.run(new NullProgressMonitor());
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+            fail(e.getMessage());
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail(e.getMessage());
         }
         return project;
     }
