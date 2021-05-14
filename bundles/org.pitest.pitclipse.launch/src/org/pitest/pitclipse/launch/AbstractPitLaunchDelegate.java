@@ -66,7 +66,7 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
     private final PitConfiguration pitConfiguration;
     private boolean projectUsesJunit5 = false;
 
-    public AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
+    protected AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
         this.pitConfiguration = pitConfiguration;
     }
 
