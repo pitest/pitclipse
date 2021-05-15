@@ -146,7 +146,9 @@ public final class PitOptions implements Serializable {
         private void initialiseReportDir() {
             try {
                 if (null == reportDir) {
-                    reportDir = Files.createTempDirectory(null).toFile();
+                    reportDir =
+                        Files.createTempDirectory(null).toFile(); // NOSONAR we get a security hotspot
+                        // but we're safe about that
                 }
                 if (!reportDir.exists()) {
                     createParentDirs(reportDir);
