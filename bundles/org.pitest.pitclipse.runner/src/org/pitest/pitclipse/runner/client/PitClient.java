@@ -25,8 +25,6 @@ import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.io.ObjectStreamSocket;
 import org.pitest.pitclipse.runner.io.SocketProvider;
 
-import com.google.common.annotations.VisibleForTesting;
-
 /**
  * <p>A client used to receive the parameters of a PIT analysis and to send the results.</p>
  * 
@@ -42,7 +40,12 @@ public class PitClient implements Closeable {
         this(portNumber, new SocketProvider());
     }
 
-    @VisibleForTesting
+    /**
+     * Only used by tests
+     * 
+     * @param portNumber
+     * @param socketProvider
+     */
     PitClient(int portNumber, SocketProvider socketProvider) {
         this.portNumber = portNumber;
         this.socketProvider = socketProvider;
