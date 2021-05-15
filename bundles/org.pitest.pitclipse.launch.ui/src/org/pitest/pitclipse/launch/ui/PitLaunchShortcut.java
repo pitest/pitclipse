@@ -193,31 +193,23 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         switch (element.getElementType()) {
             case JAVA_PROJECT:
             case PACKAGE_FRAGMENT_ROOT:
-            case PACKAGE_FRAGMENT: {
+            case PACKAGE_FRAGMENT:
                 String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
                 containerHandleId = element.getHandleIdentifier();
                 mainTypeQualifiedName = EMPTY_STRING;
                 testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
-            }
                 break;
-            case TYPE: {
+            case TYPE:
                 containerHandleId = EMPTY_STRING;
-                mainTypeQualifiedName = ((IType) element).getFullyQualifiedName('.'); // don't
-                                                                                      // replace,
-                                                                                      // fix
-                                                                                      // for
-                                                                                      // binary
-                                                                                      // inner
-                                                                                      // types
+                // don't replace, fix for binary inner types
+                mainTypeQualifiedName = ((IType) element).getFullyQualifiedName('.');
                 testName = element.getElementName();
-            }
                 break;
-            case METHOD: {
+            case METHOD:
                 IMethod method = (IMethod) element;
                 containerHandleId = EMPTY_STRING;
                 mainTypeQualifiedName = method.getDeclaringType().getFullyQualifiedName('.');
                 testName = method.getDeclaringType().getElementName() + '.' + method.getElementName();
-            }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid element type to create a launch configuration: " + element.getClass().getName()); //$NON-NLS-1$
