@@ -60,18 +60,28 @@ public class Views {
     }
 
     public void waitForTestsAreRunOnConsole() {
-        SWTBotView consoleView = bot.viewByPartName("Console");
-        consoleView.show();
+        System.out.println("Waiting for PIT to finish on Console...");
         bot.waitUntil(new ICondition() {
             static final String EXPECTED_END_STRING = "tests per mutation)";
             String currentText = "";
+            long start = System.currentTimeMillis();
 
             @Override
             public boolean test() {
-                currentText = consoleView.bot()
+                currentText = showConsole().bot()
                     .styledText().getText()
                     .trim();
-                return currentText.endsWith(EXPECTED_END_STRING);
+                final String end = currentText
+                    .substring(
+                        currentText.length() - EXPECTED_END_STRING.length(),
+                        currentText.length());
+                System.out.print("Console ends with: " + end);
+                boolean matched = EXPECTED_END_STRING.equals(end);
+                System.out.println
+                    ("... " +
+                     (System.currentTimeMillis() - start) + "ms" +
+                     (matched ? " OK!" : ""));
+                return matched;
             }
 
             @Override
@@ -85,6 +95,12 @@ public class Views {
                         + currentText;
             }
         });
+    }
+
+    public SWTBotView showConsole() {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        return consoleView;
     }
 
 }
