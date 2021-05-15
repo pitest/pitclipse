@@ -61,9 +61,12 @@ public class PitclipseSteps {
 
     @When("test {word} in package {word} is run for project {word}")
     public void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
+        // No need to do a full build: we should be now synchronized with building
         // Build the whole workspace to prevent random compilation failures
-//        ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-        
+        // ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        System.out.println
+            (String.format("Run PIT on: %s %s.%s",
+                projectName, packageName, testClassName));
         runPit(new SelectTestClass(testClassName, packageName, projectName));
     }
 
@@ -119,16 +122,25 @@ public class PitclipseSteps {
 
     @When("tests in package {word} are run for project {word}")
     public void runPackageTest(final String packageName, final String projectName) {
+        System.out.println
+            (String.format("Run PIT on: %s %s",
+                projectName, packageName));
         runPit(new SelectPackage(packageName, projectName));
     }
 
     @When("tests in source root {word} are run for project {word}")
     public void runPackageRootTest(final String packageRoot, final String projectName) {
+        System.out.println
+            (String.format("Run PIT on: %s %s",
+                projectName, packageRoot));
         runPit(new SelectPackageRoot(packageRoot, projectName));
     }
 
     @When("tests are run for project {word}")
     public void runProjectTest(String projectName) {
+        System.out.println
+            (String.format("Run PIT on: %s",
+                projectName));
         runPit(new SelectProject(projectName));
     }
 
