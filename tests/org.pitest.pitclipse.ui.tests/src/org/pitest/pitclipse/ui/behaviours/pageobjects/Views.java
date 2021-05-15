@@ -64,6 +64,7 @@ public class Views {
         bot.waitUntil(new ICondition() {
             static final String EXPECTED_END_STRING = "tests per mutation)";
             String currentText = "";
+            long start = System.currentTimeMillis();
 
             @Override
             public boolean test() {
@@ -76,7 +77,10 @@ public class Views {
                         currentText.length());
                 System.out.print("Console ends with: " + end);
                 boolean matched = EXPECTED_END_STRING.equals(end);
-                System.out.println(matched ? "... OK!" : "...");
+                System.out.println
+                    ("... " +
+                     (System.currentTimeMillis() - start) + "ms" +
+                     (matched ? " OK!" : ""));
                 return matched;
             }
 
