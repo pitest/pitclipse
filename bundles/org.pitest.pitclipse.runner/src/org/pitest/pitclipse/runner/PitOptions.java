@@ -16,20 +16,20 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.List;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.io.Files.createParentDirs;
-import static com.google.common.io.Files.createTempDir;
-import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 /**
  * <p>Options used to parameterize a PIT analysis.</p>
@@ -144,18 +144,18 @@ public final class PitOptions implements Serializable {
         }
 
         private void initialiseReportDir() {
-            if (null == reportDir) {
-                reportDir = createTempDir();
-            }
-            if (!reportDir.exists()) {
-                try {
+            try {
+                if (null == reportDir) {
+                    reportDir = Files.createTempDirectory(null).toFile();
+                }
+                if (!reportDir.exists()) {
                     createParentDirs(reportDir);
                     if (!reportDir.mkdir()) {
                         throw new PitLaunchException("Directory could not be created: " + reportDir);
                     }
-                } catch (IOException e) {
-                    rethrow(reportDir, e);
                 }
+            } catch (IOException e) {
+                rethrow(reportDir, e);
             }
         }
 

@@ -18,7 +18,6 @@ package org.pitest.pitclipse.core;
 
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableList.of;
-import static com.google.common.io.Files.createParentDirs;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
@@ -29,6 +28,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
+import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
 
 import java.io.File;
 import java.io.IOException;
