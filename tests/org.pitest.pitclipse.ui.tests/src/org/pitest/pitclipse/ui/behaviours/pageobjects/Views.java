@@ -60,6 +60,7 @@ public class Views {
     }
 
     public void waitForTestsAreRunOnConsole() {
+        System.out.println("Waiting for PIT to finish on Console...");
         bot.waitUntil(new ICondition() {
             static final String EXPECTED_END_STRING = "tests per mutation)";
             String currentText = "";
