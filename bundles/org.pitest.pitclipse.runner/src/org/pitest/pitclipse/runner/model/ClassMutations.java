@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -122,12 +121,11 @@ public class ClassMutations implements Visitable, Countable {
         return Objects.hash(className, mutations);
     }
 
+
+
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("className", className)
-            .add("mutations", mutations)
-            .toString();
+        return "ClassMutations [className=" + className + ", mutations=" + mutations + "]";
     }
 
     @Override

@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -94,9 +93,7 @@ public class MutationsModel implements Visitable, Countable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("statuses", statuses)
-            .toString();
+        return "MutationsModel [statuses=" + statuses + "]";
     }
 
     @Override

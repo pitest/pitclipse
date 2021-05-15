@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
 
 import org.pitest.classinfo.ClassInfo;
@@ -89,13 +88,11 @@ class ClassSummary implements Serializable {
         return Objects.hash(lineCoverage, className, mutationCoverage);
     }
 
+
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("className", className)
-            .add("lineCoverage", lineCoverage)
-            .add("mutationCoverage", mutationCoverage)
-            .toString();
+        return "ClassSummary [lineCoverage=" + lineCoverage + ", className=" + className + ", mutationCoverage="
+                + mutationCoverage + "]";
     }
 
     private enum DetectedMutations implements Predicate<MutationResult> {

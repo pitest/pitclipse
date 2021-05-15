@@ -17,7 +17,6 @@
 package org.pitest.pitclipse.runner.model;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -106,12 +105,10 @@ public class ProjectMutations implements Visitable, Countable {
         return Objects.hash(projectName, packageMutations);
     }
 
+
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("projectName", projectName)
-            .add("packageMutations", packageMutations)
-            .toString();
+        return "ProjectMutations [projectName=" + projectName + ", packageMutations=" + packageMutations + "]";
     }
 
     @Override

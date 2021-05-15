@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.MoreObjects;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -80,10 +78,7 @@ class Coverage implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("covered", covered)
-            .add("total", total)
-            .add("coverage", percentage)
-            .toString();
+        return "Coverage [covered=" + covered + ", total=" + total + ", percentage=" + percentage + "]";
     }
+
 }

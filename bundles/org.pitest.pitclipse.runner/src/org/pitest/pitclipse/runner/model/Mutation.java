@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 
 import org.pitest.pitclipse.runner.results.DetectionStatus;
@@ -161,13 +159,8 @@ public class Mutation implements Visitable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("killingTest", killingTest)
-            .add("lineNumber", lineNumber)
-            .add("mutatedMethod", mutatedMethod)
-            .add("mutator", mutator)
-            .add("status", status)
-            .add("description", description)
-            .toString();
+        return "Mutation [killingTest=" + killingTest + ", lineNumber=" + lineNumber + ", mutatedMethod="
+                + mutatedMethod + ", mutator=" + mutator + ", status=" + status + ", description=" + description + "]";
     }
+
 }
