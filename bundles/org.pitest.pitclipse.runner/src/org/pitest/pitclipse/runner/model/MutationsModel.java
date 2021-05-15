@@ -17,7 +17,6 @@
 package org.pitest.pitclipse.runner.model;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -25,6 +24,7 @@ import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.collect.Collections2.transform;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
@@ -84,12 +84,12 @@ public class MutationsModel implements Visitable, Countable {
             return false;
         }
         MutationsModel that = (MutationsModel) o;
-        return Objects.equal(statuses, that.statuses);
+        return Objects.equals(statuses, that.statuses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(statuses);
+        return Objects.hash(statuses);
     }
 
     @Override
