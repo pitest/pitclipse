@@ -188,7 +188,7 @@ public class PitclipseSteps {
      * markers directly.
      * 
      * IMPORTANT: do not retrieve errors from the "Problems" view because that view
-     * might be updates asynchronously: we might lose errors and when running the
+     * might be updated asynchronously: we might lose errors and when running the
      * tests an error Dialog will popup, making the tests flaky.
      * 
      * @return
