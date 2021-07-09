@@ -18,6 +18,9 @@ package org.pitest.pitclipse.ui.swtbot;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 public enum PitNotifier {
     INSTANCE;
@@ -26,12 +29,12 @@ public enum PitNotifier {
             1);
 
     public PitResultsView getResults() throws InterruptedException {
-        return resultQueue.take();
+        return resultQueue.poll(SWTBotPreferences.TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     public void notifyResults(PitResultsView resultsView)
             throws InterruptedException {
-        resultQueue.put(resultsView);
+        resultQueue.offer(resultsView, SWTBotPreferences.TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     public void reset() {

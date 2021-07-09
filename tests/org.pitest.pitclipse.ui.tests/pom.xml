@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-    <groupId>org.pitest</groupId>
-    <artifactId>org.pitest.pitclipse.ui.tests</artifactId>
-    <packaging>eclipse-test-plugin</packaging>
+	<groupId>org.pitest</groupId>
+	<artifactId>org.pitest.pitclipse.ui.tests</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
 	<parent>
 		<groupId>org.pitest</groupId>
@@ -11,37 +12,110 @@
 		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<!-- For tests for Java 9 and above -->
+		<moduleProperties></moduleProperties>
+		<!-- OS specific flags -->
+		<os-jvm-flags />
+		<!-- Additional Test arguments -->
+		<additionalTestArgLine>${moduleProperties}</additionalTestArgLine>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>jdk9-or-newer</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<moduleProperties>--add-modules=ALL-SYSTEM</moduleProperties>
+			</properties>
+		</profile>
+		<profile>
+			<id>macosx-jvm-flags</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<os-jvm-flags>-XstartOnFirstThread</os-jvm-flags>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>target-platform-configuration</artifactId>
+						<configuration>
+							<dependency-resolution>
+								<extraRequirements combine.children="append">
+									<!-- This allows us to take the fragment org.eclipse.jdt.launching.macosx 
+										See https://github.com/LorenzoBettini/jbase/issues/3 https://www.eclipse.org/forums/index.php/t/1073366/
+										Without this in macOS Java projects are not compiled since JRE is not bound. -->
+									<requirement>
+										<type>eclipse-feature</type>
+										<id>org.eclipse.jdt</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+								</extraRequirements>
+							</dependency-resolution>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>jacoco</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<additionalTestArgLine>${tycho.testArgLine} ${moduleProperties}</additionalTestArgLine>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
-        <plugins>
-			<!-- 
-				Required to run SWTBot 
-			 -->
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-surefire-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <configuration>
-                    <useUIHarness>true</useUIHarness>
-                    <useUIThread>false</useUIThread>
-                    <product>org.eclipse.platform.ide</product>
-                    <application>org.eclipse.ui.ide.workbench</application>
-                    <showEclipseLog>true</showEclipseLog>
-                </configuration>
-            </plugin>
-			<!-- 
-				Explicit dependency to the listeners fragment:
-				make Pitclipse's mutation listeners available during test runtime 
-			 -->
+		<plugins>
+			<!-- Required to run SWTBot -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>false</useUIThread>
+					<showEclipseLog>true</showEclipseLog>
+					<!-- Increase the timeout for SWTBot especially for the CI -->
+					<argLine>${additionalTestArgLine} ${os-jvm-flags} -Dorg.eclipse.swtbot.search.timeout=60000</argLine>
+				</configuration>
+			</plugin>
+			<!-- Explicit dependency to the listeners fragment: make Pitclipse's mutation 
+				listeners available during test runtime -->
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<dependency-resolution>
-						<extraRequirements>
+						<extraRequirements combine.children="append">
 							<requirement>
 								<type>eclipse-plugin</type>
 								<id>org.pitest.pitclipse.listeners</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<!-- This is required since our SWTBot tests do not
+								depend directly on JUnit 5 and we need JUnit 5 to verify
+								Pitclipse integration with JUnit 5 -->
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.eclipse.jdt.junit5.runtime</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<!-- This is required to verify Pitclipse integration with JUnit 5 -->
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.pitest.pitest-junit5-plugin</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
 						</extraRequirements>

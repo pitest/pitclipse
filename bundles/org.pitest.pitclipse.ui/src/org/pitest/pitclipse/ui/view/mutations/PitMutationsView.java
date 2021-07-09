@@ -39,7 +39,6 @@ public class PitMutationsView extends ViewPart implements MutationsView {
         viewer.setLabelProvider(new ViewLabelProvider());
         viewer.addDoubleClickListener(ExpandingDoubleClick.LISTENER);
         viewer.addDoubleClickListener(OpenMutationDoubleClick.LISTENER);
-        // viewer.addSelectionChangedListener(listener);
         viewer.setInput(MutationsModel.EMPTY_MODEL);
     }
 

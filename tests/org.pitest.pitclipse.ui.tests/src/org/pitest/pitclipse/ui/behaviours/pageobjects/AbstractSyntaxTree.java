@@ -53,7 +53,7 @@ public class AbstractSyntaxTree {
         return getJavaProject(context.getProjectName());
     }
 
-    private IJavaProject getJavaProject(String projectName) {
+    public IJavaProject getJavaProject(String projectName) {
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         return JavaCore.create(project);
     }
@@ -80,9 +80,18 @@ public class AbstractSyntaxTree {
     }
 
     public void addJUnitToClassPath(String projectName) {
+        addJUnitToClassPath(projectName, 4);
+    }
+
+    public void addJUnit5ToClassPath(String projectName) {
+        addJUnitToClassPath(projectName, 5);
+    }
+
+    public void addJUnitToClassPath(String projectName, int junitVersion) {
         IJavaProject project = getJavaProject(projectName);
         try {
-            Path junitPath = new Path("org.eclipse.jdt.junit.JUNIT_CONTAINER/4");
+            Path junitPath = new Path(
+                "org.eclipse.jdt.junit.JUNIT_CONTAINER/" + junitVersion);
             IClasspathEntry junitEntry = JavaCore.newContainerEntry(junitPath);
             IClasspathEntry junitClasspath = JavaCore.newContainerEntry(junitEntry.getPath());
 
