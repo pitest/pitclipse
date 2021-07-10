@@ -94,10 +94,10 @@ public class PitclipseSteps {
     @When("the following mutation is selected")
     public void mutationIsSelected(DataTable tableOfMutations) {
         PitMutation mutation = mutationsFromExampleTable(tableOfMutations).get(0);
-        mutationIsSelected(mutation);
+        doubleClickMutationInMutationsView(mutation);
     }
 
-    public void mutationIsSelected(PitMutation mutation) {
+    public void doubleClickMutationInMutationsView(PitMutation mutation) {
         PAGES.getPitMutationsView()
              .select(mutation);
     }
@@ -188,7 +188,7 @@ public class PitclipseSteps {
      * markers directly.
      * 
      * IMPORTANT: do not retrieve errors from the "Problems" view because that view
-     * might be updates asynchronously: we might lose errors and when running the
+     * might be updated asynchronously: we might lose errors and when running the
      * tests an error Dialog will popup, making the tests flaky.
      * 
      * @return
