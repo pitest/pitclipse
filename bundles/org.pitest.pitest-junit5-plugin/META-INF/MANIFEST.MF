@@ -31,4 +31,4 @@ Export-Package: org.junit.platform.commons,
  org.junit.platform.launcher.listeners.discovery,
  org.junit.platform.launcher.tagexpression,
  org.pitest.junit5
-Require-Bundle: org.pitest;bundle-version="1.4.11"
+Require-Bundle: org.pitest;bundle-version="1.6.7"
