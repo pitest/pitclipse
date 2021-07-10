@@ -59,11 +59,6 @@
 			**/*Exception.java,
 			**/*Activator.java
 		</sonar.exclusions>
-		<!-- TODO: reactivate coverage on UI classes, when
-			UI tests are back -->
-		<sonar.coverage.exclusions>
-			**/ui/**/*.java
-		</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
