@@ -87,7 +87,7 @@
 					<useUIThread>false</useUIThread>
 					<showEclipseLog>true</showEclipseLog>
 					<!-- Increase the timeout for SWTBot especially for the CI -->
-					<argLine>${additionalTestArgLine} ${os-jvm-flags} -Dorg.eclipse.swtbot.search.timeout=60000</argLine>
+					<argLine>${additionalTestArgLine} ${os-jvm-flags} -Dorg.eclipse.swtbot.search.timeout=90000</argLine>
 				</configuration>
 			</plugin>
 			<!-- Explicit dependency to the listeners fragment: make Pitclipse's mutation 
