@@ -76,9 +76,10 @@
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug -DskipTests
 
-		* Publish current version to Bintray (caution: version *must* be legacy, e.g. x.y.z, no snapshot):
-			mvn clean verify -Prelease-composite
-		  Also note that it requires my (@echebbi) Bintray credentials.
+		* Publish current version to GitHub Pages:
+			mvn clean deploy -Prelease-composite
+		Also note that it requires write access to GitHub Pages repositories,
+		e.g., https://github.com/pitest/pitclipse-releases
 	-->
 
 	<build>
