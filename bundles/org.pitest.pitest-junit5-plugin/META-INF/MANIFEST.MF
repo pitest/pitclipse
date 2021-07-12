@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: pitest-junit5-plugin
 Bundle-SymbolicName: org.pitest.pitest-junit5-plugin
-Bundle-Version: 0.12.0.qualifier
+Bundle-Version: 0.14.0.qualifier
 Bundle-ClassPath: lib/pitest-junit5-plugin-sources.jar,
  lib/pitest-junit5-plugin-javadoc.jar,
  lib/pitest-junit5-plugin.jar,
