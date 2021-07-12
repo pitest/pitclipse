@@ -16,11 +16,9 @@
 
 package org.pitest.pitclipse.core.extension.point;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 import org.pitest.pitclipse.runner.PitOptions;
-
-import java.util.List;
 
 /**
  * <p>Options used by a running PIT application.</p>
@@ -32,7 +30,7 @@ public class PitRuntimeOptions {
 
     private final int portNumber;
     private final PitOptions options;
-    private final ImmutableList<String> projects;
+    private final List<String> projects;
 
     /**
      * Creates a new object representing the options used by a running PIT application.
@@ -47,7 +45,7 @@ public class PitRuntimeOptions {
     public PitRuntimeOptions(int portNumber, PitOptions options, List<String> projects) {
         this.portNumber = portNumber;
         this.options = options;
-        this.projects = ImmutableList.copyOf(projects);
+        this.projects = projects;
     }
 
     /**
