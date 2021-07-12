@@ -55,6 +55,11 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTO
  */
 public class PitCoreActivator extends Plugin {
 
+    /**
+     * Where Eclipse and Maven will generate .class files
+     */
+    private static final String BUILD_OUTPUT_DIR = "target/classes";
+
     private static final String ORG_PITEST_JUNIT5_PLUGIN = "org.pitest.pitest-junit5-plugin";
     private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
     private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
@@ -119,7 +124,7 @@ public class PitCoreActivator extends Plugin {
         ImmutableList<String> pitestClasspath = ImmutableList.of(
             getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath(),
             getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath(),
-            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath() + File.separator + "bin",
+            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR,
             getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
                + File.separator + jarDir + File.separator + "pitest.jar",
             getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
@@ -134,7 +139,7 @@ public class PitCoreActivator extends Plugin {
         
         if (Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS) != null) {
             pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath());
-            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + "bin");
+            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR);
         }
         setPitClasspath(pitclipseClasspath.build());
         
@@ -149,7 +154,7 @@ public class PitCoreActivator extends Plugin {
         setupResultDir();
         setupHistoryFile();
     }
-    
+
     private void setupHistoryFile() {
         IPath pluginLocation = getStateLocation();
         File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE).toFile();
