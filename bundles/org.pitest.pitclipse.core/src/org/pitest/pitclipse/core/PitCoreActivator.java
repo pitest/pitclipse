@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,6 +56,11 @@ public class PitCoreActivator extends Plugin {
      * Where Eclipse and Maven will generate .class files
      */
     private static final String BUILD_OUTPUT_DIR = "target/classes";
+
+    /**
+     * Where Maven JAR are located in our projects
+     */
+    private static final String JAR_DIR = "lib";
 
     private static final String ORG_PITEST_JUNIT5_PLUGIN = "org.pitest.pitest-junit5-plugin";
     private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
@@ -118,32 +122,41 @@ public class PitCoreActivator extends Plugin {
         setActivator(this);
         setupStateDirectories();
 
-        final String jarDir = "lib";
         List<String> pitestClasspath = new ArrayList<>();
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath());
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath());
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR);
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest.jar");
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-entry.jar");
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-command-line.jar");
-        pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-html-report.jar");
-        pitestClasspath.add(getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath());
+        pitestClasspath.add(getBundleCanonicalPath(ORG_PITEST));
+        addOurBundleToClasspath(pitestClasspath, ORG_PITEST_PITCLIPSE_RUNNER);
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-entry.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-command-line.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-html-report.jar");
+        pitestClasspath.add(getBundleCanonicalPath("com.google.guava"));
 
         if (Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS) != null) {
-            pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath());
-            pitestClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR);
+            addOurBundleToClasspath(pitestClasspath, ORG_PITEST_PITCLIPSE_LISTENERS);
         }
         setPitClasspath(pitestClasspath);
-        
+
         if (Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN) != null) {
-            pitestJunit5PluginClasspath = Arrays.asList(
-                getBundleFile(Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN)).getCanonicalPath() + File.separator + jarDir + File.separator + "pitest-junit5-plugin.jar"
-            );
+            pitestJunit5PluginClasspath = new ArrayList<>();
+            addMavenJarToClasspath(pitestJunit5PluginClasspath, ORG_PITEST_JUNIT5_PLUGIN, "pitest-junit5-plugin.jar");
         }
+    }
+
+    private void addMavenJarToClasspath(List<String> classpath, String bundleName, String jarFile) throws IOException {
+        classpath.add(getBundleCanonicalPath(bundleName)
+               + File.separator + JAR_DIR + File.separator + jarFile);
+    }
+
+    private void addOurBundleToClasspath(List<String> classpath, String bundleName) throws IOException {
+        classpath.add(
+            getBundleCanonicalPath(bundleName));
+        classpath.add(
+            getBundleCanonicalPath(bundleName)
+                + File.separator + BUILD_OUTPUT_DIR);
+    }
+
+    private String getBundleCanonicalPath(String bundleName) throws IOException {
+        return getBundleFile(Platform.getBundle(bundleName)).getCanonicalPath();
     }
 
     private void setupStateDirectories() {
