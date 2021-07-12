@@ -103,7 +103,7 @@ public class LaunchConfigurationSteps {
         configurationsMatch(configTable.asMaps(), launchConfigurations);
     }
 
-    private void configurationsMatch(List<Map<String, String>> expectedRows, List<PitRunConfiguration> launchConfigurations) {
+    public void configurationsMatch(List<Map<String, String>> expectedRows, List<PitRunConfiguration> launchConfigurations) {
         launchConfigurations = new ArrayList<>(launchConfigurations);
         launchConfigurations.removeIf(conf -> conf.getName().contains("("));
         assertEquals("The number of existing configurations is not the expected one", expectedRows.size(), launchConfigurations.size());

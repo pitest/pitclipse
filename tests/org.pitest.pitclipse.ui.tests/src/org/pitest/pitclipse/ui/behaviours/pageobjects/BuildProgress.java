@@ -17,11 +17,12 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.pitest.pitclipse.ui.swtbot.WaitForBuildCondition;
 
 public class BuildProgress {
 
-    private static final long BUILD_TIMEOUT = 20000L;
+    private static final long BUILD_TIMEOUT = SWTBotPreferences.TIMEOUT;
     private final SWTWorkbenchBot bot;
     private WaitForBuildCondition buildCompleteCondition;
 

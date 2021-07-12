@@ -34,8 +34,11 @@ public class NewProjectWizard {
         bot.tree().expandNode("Java").select("Java Project");
         bot.button("Next >").click();
         bot.textWithLabel("Project name:").setText(projectName);
+        // make sure to set Java 8 otherwise we get another dialog for module-info.java
+        bot.radio("Use an execution environment JRE:").click();
+        bot.comboBox().setSelection("JavaSE-1.8");
         bot.button("Finish").click();
-        
+
         // Ensure the project is fully created before moving on
         bot.waitUntil(Conditions.shellCloses(shell));
     }

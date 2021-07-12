@@ -23,6 +23,7 @@ import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLAT
 public class PitConfiguration {
     public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j";
     public static final String DEFAULT_MUTATORS = "DEFAULTS";
+    public static final String DEFAULT_EXCLUDED_CLASSES = "*Test";
     public static final int DEFAULT_TIMEOUT = 3000;
     public static final BigDecimal DEFAULT_TIMEOUT_FACTOR = BigDecimal.valueOf(1.25);
 
@@ -36,7 +37,7 @@ public class PitConfiguration {
     private final int timeout;
     private final BigDecimal timeoutFactor;
 
-    private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis,
+    private PitConfiguration(PitExecutionMode executionMode, boolean parallelExecution, boolean incrementalAnalysis, // NOSONAR this is used by our builder
             String excludedClasses, String excludedMethods, String avoidCallsTo, String mutators, int timeout,
             BigDecimal timeoutFactor) {
         this.executionMode = executionMode;

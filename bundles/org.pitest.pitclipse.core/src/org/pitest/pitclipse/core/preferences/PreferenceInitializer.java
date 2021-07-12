@@ -19,6 +19,7 @@ package org.pitest.pitclipse.core.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
@@ -53,7 +54,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
         store.setDefault(TIMEOUT, DEFAULT_TIMEOUT);
         store.setDefault(TIMEOUT_FACTOR, DEFAULT_TIMEOUT_FACTOR.toString());
-        store.setDefault(EXCLUDED_CLASSES, "*Test");
+        store.setDefault(EXCLUDED_CLASSES, PitConfiguration.DEFAULT_EXCLUDED_CLASSES);
     }
 
 }

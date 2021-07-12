@@ -16,12 +16,17 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.math.BigDecimal;
+
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
-
-import java.math.BigDecimal;
 
 public class WindowsMenu {
 
@@ -102,8 +107,21 @@ public class WindowsMenu {
         return preferenceSelector.getExcludedClasses();
     }
 
-    private PreferenceDsl openPreferences() {
-        bot.menu(WINDOWS).menu(PREFERENCES).click();
+    public PreferenceDsl openPreferences() {
+        if (SWTUtils.isMac()) {
+            // on macOS we cannot open the Preferences dialog
+            // (it's under the application name and we cannot access it,
+            // using the keyboard shortcut does not seem to work either)
+            UIThreadRunnable.asyncExec(() -> {
+                PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
+                    bot.activeShell().widget, null, null, null);
+                dialog.open();
+            });
+        } else {
+            bot.menu(WINDOWS).menu(PREFERENCES).click();
+        }
+        bot.waitUntil(Conditions.shellIsActive(PREFERENCES));
+        bot.shell(PREFERENCES).activate();
         return new PreferenceDsl();
     }
 
@@ -161,7 +179,7 @@ public class WindowsMenu {
         return openPreferences().andThen().getPitTimeoutFactor();
     }
 
-    private class PreferenceDsl {
+    public class PreferenceDsl {
         public PitPreferenceSelector andThen() {
             return preferenceSelector;
         }

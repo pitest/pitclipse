@@ -17,16 +17,13 @@
 package org.pitest.pitclipse.ui.swtbot;
 
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
-import org.pitest.pitclipse.ui.PitclipseTestActivator;
 import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
 import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
 
 public class PitResultNotifier implements ResultNotifier<PitUiUpdate> {
     @Override
     public void handleResults(PitUiUpdate updateEvent) {
-        if (testsAreInProgress()) {
-            notifiyTestsOfHtmlResults(updateEvent);
-        }
+        notifiyTestsOfHtmlResults(updateEvent);
     }
 
     private void notifiyTestsOfHtmlResults(PitUiUpdate updateEvent) {
@@ -51,7 +48,4 @@ public class PitResultNotifier implements ResultNotifier<PitUiUpdate> {
         }
     }
 
-    private boolean testsAreInProgress() {
-        return PitclipseTestActivator.getDefault().areTestsInProgress();
-    }
 }

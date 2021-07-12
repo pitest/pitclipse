@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="org.pitest.pitclipse.target" sequenceNumber="1">
+<target name="org.pitest.pitclipse.target" sequenceNumber="3">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="org.eclipse.e4.core.tools.feature.source.feature.group" version="0.0.0"/>
@@ -10,7 +10,7 @@
 			<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
-			<repository location="https://download.eclipse.org/releases/oxygen"/>
+			<repository location="https://download.eclipse.org/releases/photon"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="com.google.guava" version="0.0.0"/>
@@ -18,7 +18,6 @@
 			<unit id="org.apache.commons.lang3" version="0.0.0"/>
 			<unit id="org.hamcrest.core" version="0.0.0"/>
 			<unit id="org.hamcrest.core.source" version="0.0.0"/>
-			<unit id="org.jmock" version="0.0.0"/>
 			<unit id="org.junit" version="0.0.0"/>
 			<unit id="org.junit.jupiter.api" version="0.0.0"/>
 			<unit id="org.junit.jupiter.api.source" version="0.0.0"/>
