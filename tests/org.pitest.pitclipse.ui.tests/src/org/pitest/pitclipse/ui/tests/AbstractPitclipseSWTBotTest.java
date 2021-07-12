@@ -303,15 +303,40 @@ public abstract class AbstractPitclipseSWTBotTest {
                 .styledText().getText()
                 .replace("\r", "");
         // System.out.println(consoleText);
-        assertThat(consoleText,
-            containsString(
-                String.format(
-                    ">> Generated %d mutations Killed %d (%d%%)\n"
-                  + ">> Ran %d tests (%d tests per mutation)",
-                  generatedMutants, killedMutants,
-                  killedPercentage, testsRun, testsPerMutations)
-            )
-        );
+
+        if (generatedMutants == 0) {
+            // in newer versions of PIT the Console will simply end with a warning
+            assertThat(consoleText,
+                containsString(
+                    "INFO : Created  0 mutation test units in pre scan"
+                )
+            );
+            assertThat(consoleText,
+                containsString(
+                    "WARNING : No mutations found."
+                )
+            );
+        } else {
+            // we are interested in two strings appearing in the Console
+            // newer versions of PIT generate other contents in between
+            // e.g., ">> Mutations with no coverage 0. Test strength 100%"
+            // so we must run the checks separately
+            assertThat(consoleText,
+                containsString(
+                    String.format(
+                      ">> Generated %d mutations Killed %d (%d%%)",
+                      generatedMutants, killedMutants,
+                      killedPercentage)
+                )
+            );
+            assertThat(consoleText,
+                containsString(
+                    String.format(
+                      ">> Ran %d tests (%d tests per mutation)",
+                      testsRun, testsPerMutations)
+                )
+            );
+        }
     }
 
     /**
