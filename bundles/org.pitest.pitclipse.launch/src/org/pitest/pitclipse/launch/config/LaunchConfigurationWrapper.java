@@ -16,9 +16,6 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -37,7 +34,9 @@ import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
@@ -196,39 +195,40 @@ public class LaunchConfigurationWrapper {
     }
 
     private List<String> getExcludedMethods() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String excludedMethods;
         if (launchConfig.hasAttribute(ATTR_EXCLUDE_METHODS)) {
             excludedMethods = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS, "");
         } else {
             excludedMethods = pitConfiguration.getExcludedMethods();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(excludedMethods));
-        return results.build();
+        return splitBasedOnComma(excludedMethods);
     }
 
     private List<String> getAvoidCallsTo() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String avoidCallsTo;
         if (launchConfig.hasAttribute(ATTR_AVOID_CALLS_TO)) {
             avoidCallsTo = launchConfig.getAttribute(ATTR_AVOID_CALLS_TO, "");
         } else {
             avoidCallsTo = pitConfiguration.getAvoidCallsTo();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(avoidCallsTo));
-        return results.build();
+        return splitBasedOnComma(avoidCallsTo);
     }
 
     private List<String> getExcludedClasses() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String excludedClasses;
         if (launchConfig.hasAttribute(ATTR_EXCLUDE_CLASSES)) {
             excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_CLASSES, "");
         } else {
             excludedClasses = pitConfiguration.getExcludedClasses();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(excludedClasses));
-        return results.build();
+        return splitBasedOnComma(excludedClasses);
+    }
+
+    private List<String> splitBasedOnComma(String elements) {
+        return Arrays.stream(elements.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
     }
 
     private boolean isIncrementalAnalysis() throws CoreException {
@@ -261,6 +261,6 @@ public class LaunchConfigurationWrapper {
     }
 
     private List<String> getMutators() {
-        return ImmutableList.of(pitConfiguration.getMutators());
+        return Arrays.asList(pitConfiguration.getMutators());
     }
 }
