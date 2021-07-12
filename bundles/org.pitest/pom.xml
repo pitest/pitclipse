@@ -110,7 +110,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-test-libs</id>
+						<id>copy-libs</id>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
