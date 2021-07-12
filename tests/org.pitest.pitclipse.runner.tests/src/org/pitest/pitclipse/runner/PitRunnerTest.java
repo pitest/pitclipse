@@ -41,8 +41,10 @@ import static java.util.stream.Collectors.toSet;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 /**
  * Tests the behavior of a {@link PitRunner}'s functions.
@@ -66,6 +68,7 @@ public class PitRunnerTest {
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
         assertThat(results.getMutations(), is(notNullValue()));
+        assertThat(results.getMutations().getMutation(), not(empty()));
         assertThat(results, is(serializable()));
     }
     
