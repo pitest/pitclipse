@@ -73,7 +73,7 @@ Drag the following button to your running Eclipse workspace to start the install
 <details>
   <summary><b>Requirements</b></summary>
 
-  - [Maven 3.x](https://maven.apache.org/download.cgi)
+  - [Maven 3.6.3 or higher](https://maven.apache.org/download.cgi)
   - [Java 8 JDK](https://adoptopenjdk.net/upstream.html)
   - [Eclipse IDE for RCP](https://www.eclipse.org/downloads/packages/) (latest release)
 </details>
