@@ -62,7 +62,9 @@ public class Views {
     public void waitForTestsAreRunOnConsole() {
         System.out.println("Waiting for PIT to finish on Console...");
         bot.waitUntil(new ICondition() {
-            static final String EXPECTED_END_STRING = "tests per mutation)";
+            // they must be of the same length
+            static final String EXPECTED_END_STRING_SUCCESS = "tests per mutation)";
+            static final String EXPECTED_END_STRING_SKIPPED = " no mutations found";
             String currentText = "";
             long start = System.currentTimeMillis();
 
@@ -73,10 +75,11 @@ public class Views {
                     .trim();
                 final String end = currentText
                     .substring(
-                        currentText.length() - EXPECTED_END_STRING.length(),
+                        currentText.length() - EXPECTED_END_STRING_SUCCESS.length(),
                         currentText.length());
                 System.out.print("Console ends with: " + end);
-                boolean matched = EXPECTED_END_STRING.equals(end);
+                boolean matched = EXPECTED_END_STRING_SUCCESS.equals(end) ||
+                        EXPECTED_END_STRING_SKIPPED.equals(end);
                 System.out.println
                     ("... " +
                      (System.currentTimeMillis() - start) + "ms" +
@@ -90,7 +93,7 @@ public class Views {
 
             @Override
             public String getFailureMessage() {
-                return "Console View does not end with '" + EXPECTED_END_STRING + "'\n:"
+                return "Console View does not end with '" + EXPECTED_END_STRING_SUCCESS + "'\n:"
                         + "CURRENT CONSOLE TEXT:\n"
                         + currentText;
             }

@@ -59,11 +59,6 @@
 			**/*Exception.java,
 			**/*Activator.java
 		</sonar.exclusions>
-		<!-- TODO: reactivate coverage on UI classes, when
-			UI tests are back -->
-		<sonar.coverage.exclusions>
-			**/ui/**/*.java
-		</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
@@ -76,9 +71,10 @@
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug -DskipTests
 
-		* Publish current version to Bintray (caution: version *must* be legacy, e.g. x.y.z, no snapshot):
-			mvn clean verify -Prelease-composite
-		  Also note that it requires my (@echebbi) Bintray credentials.
+		* Publish current version to GitHub Pages:
+			mvn clean deploy -Prelease-composite
+		Also note that it requires write access to GitHub Pages repositories,
+		e.g., https://github.com/pitest/pitclipse-releases
 	-->
 
 	<build>
@@ -146,26 +142,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<configuration>
-							<configLocation>checkstyle.xml</configLocation>
-							<encoding>UTF-8</encoding>
-							<consoleOutput>true</consoleOutput>
-							<failsOnError>true</failsOnError>
-						</configuration>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -221,6 +197,28 @@
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>3.9.0.2155</version>
+				</plugin>
+				<!-- We don't use checkstyle anymore since we use Sonar.
+					We leave the configuration here just in case -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>3.0.0</version>
+					<executions>
+						<execution>
+							<id>validate</id>
+							<phase>validate</phase>
+							<configuration>
+								<configLocation>checkstyle.xml</configLocation>
+								<encoding>UTF-8</encoding>
+								<consoleOutput>true</consoleOutput>
+								<failsOnError>true</failsOnError>
+							</configuration>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>

@@ -9,12 +9,12 @@
 	</parent>
 
 	<artifactId>org.pitest</artifactId>
-	<version>1.4.11-SNAPSHOT</version>
+	<version>1.6.7-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<description>Wraps Pitest JAR as an Eclipse plug-in</description>
 
 	<properties>
-		<pitclipse-version>1.4.11</pitclipse-version>
+		<pitclipse-version>1.6.7</pitclipse-version>
 	</properties>
 
 	<dependencies>
@@ -110,7 +110,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-test-libs</id>
+						<id>copy-libs</id>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>

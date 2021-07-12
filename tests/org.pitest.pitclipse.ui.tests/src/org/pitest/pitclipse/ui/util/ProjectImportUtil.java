@@ -68,6 +68,7 @@ public class ProjectImportUtil {
 
     private static IProject importProject(final File projectPath, final String projectName) throws CoreException {
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        System.out.println("*** IMPORTING PROJECT: " + projectName);
         ImportOperation importOperation = new ImportOperation(
                 project.getFullPath(), // relative to the workspace
                 projectPath, // absolute path
