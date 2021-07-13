@@ -6,6 +6,7 @@ import static org.pitest.pitclipse.runner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.Before;
@@ -26,12 +27,18 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
     private static final String FOO_PROJECT = "org.pitest.pitclipse.testprojects.foo";
     private static final String BAR_PROJECT = "org.pitest.pitclipse.testprojects.bar";
     private static final String FOO_BAR_PROJECT = "org.pitest.pitclipse.testprojects.foobar";
+    private static final String UNRELATED_PROJECT = "org.pitest.pitclipse.testprojects.emptyclasses";
+    private static final String CLOSED_PROJECT = "org.pitest.pitclipse.testprojects.twoclasses";
+    private static final String NON_JAVA_PROJECT = "org.pitest.pitclipse.testprojects.nonjava";
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
         importTestProject(FOO_PROJECT);
         importTestProject(BAR_PROJECT);
         importTestProject(FOO_BAR_PROJECT);
+        importTestProject(UNRELATED_PROJECT);
+        importTestProject(NON_JAVA_PROJECT);
+        importTestProject(CLOSED_PROJECT).close(new NullProgressMonitor());
     }
 
     @Before

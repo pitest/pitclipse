@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -120,12 +121,13 @@ public abstract class AbstractPitclipseSWTBotTest {
         });
     }
 
-    protected static void importTestProject(String projectName) throws CoreException {
+    protected static IProject importTestProject(String projectName) throws CoreException {
         PAGES.getBuildProgress().listenForBuild();
-        ProjectImportUtil.importProject(projectName);
+        IProject importProject = ProjectImportUtil.importProject(projectName);
         PAGES.getBuildProgress().waitForBuild();
         verifyProjectExists(projectName);
         assertNoErrorsInWorkspace();
+        return importProject;
     }
 
     protected static void createJavaProjectWithJUnit4(String projectName) {
