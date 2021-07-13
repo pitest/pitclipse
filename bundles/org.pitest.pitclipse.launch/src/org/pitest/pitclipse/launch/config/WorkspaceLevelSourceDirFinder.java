@@ -59,8 +59,11 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
                 // and it's meant to contain only .class files
                 // so it's useless to add it anyway
                 if (resource != null) {
-                    String localtionString = resource.getLocation().toOSString();
-                    sourceDirBuilder.add(new File(localtionString));
+                    String locationString = resource.getLocation().toOSString();
+                    File sourceDirectory = new File(locationString);
+                    // a project can link to a non-existent directory
+                    if (sourceDirectory.exists())
+                        sourceDirBuilder.add(sourceDirectory);
                 }
             }
         }

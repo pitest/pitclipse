@@ -38,16 +38,18 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException, IOException {
-        // must create a directory "externalsource" in the workspace location
+        // must create a directory "externalclassfolder" in the workspace location
         // since it's referred by FOO_PROJECT as an external class folder
         final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         File workspacePath = root.getLocation().toFile();
-        new File(workspacePath, "externalsource").mkdir();
+        new File(workspacePath, "externalclassfolder").mkdir();
+        // NON_JAVA_PROJECT contains "folder" linked as "externalsource"
+        // from FOO_PROJECT
+        importTestProject(NON_JAVA_PROJECT);
         importTestProject(FOO_PROJECT);
         importTestProject(BAR_PROJECT);
         importTestProject(FOO_BAR_PROJECT);
         importTestProject(UNRELATED_PROJECT);
-        importTestProject(NON_JAVA_PROJECT);
         importTestProject(CLOSED_PROJECT).close(new NullProgressMonitor());
     }
 
@@ -70,7 +72,8 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
             selector.close();
             runProjectTest(FOO_BAR_PROJECT);
             // also the classes of the used projects are mutated
-            coverageReportGenerated(3, 100, 100);
+            // including the external linked source directory in FOO_PROJECT
+            coverageReportGenerated(4, 100, 100);
         } finally {
             // reset default values
             IPreferenceStore preferenceStore = PitCoreActivator.getDefault().getPreferenceStore();

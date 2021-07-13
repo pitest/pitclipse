@@ -1,9 +1,11 @@
 package foo;
 
+import external.External;
+
 public class Foo {
 
     public int f(int i) {
-        return i + 1;
+        return i + new External().increment();
     }
 
 }
