@@ -18,6 +18,7 @@ package org.pitest.pitclipse.launch;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -47,8 +48,6 @@ import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.PitRunner;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.io.SocketProvider;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * <p>
@@ -87,13 +86,12 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     @Override
     public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
-        ImmutableList.Builder<String> builder = ImmutableList.<String>builder().addAll(getDefault().getPitClasspath());
-        builder.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)));
+        List<String> newClasspath = new ArrayList<>(getDefault().getPitClasspath());
+        newClasspath.addAll(Arrays.asList(super.getClasspath(launchConfig)));
         if (projectUsesJunit5) {
             // Allow Pitest to detect Junit5 tests
-            builder.addAll(getDefault().getPitestJunit5PluginClasspath());
+            newClasspath.addAll(getDefault().getPitestJunit5PluginClasspath());
         }
-        List<String> newClasspath = builder.build();
 
         return newClasspath.toArray(new String[newClasspath.size()]);
     }
