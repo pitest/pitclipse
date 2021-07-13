@@ -16,12 +16,13 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.getOpenJavaProjects;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.onClassPathOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.sameProject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,26 +31,23 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
-
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
     @Override
     public List<File> getSourceDirs(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Builder<File> sourceDirBuilder = ImmutableSet.builder();
+        List<File> sourceDirs = new ArrayList<>();
         IJavaProject testProject = configurationWrapper.getProject();
         List<IJavaProject> projects = getOpenJavaProjects();
         for (IJavaProject project : projects) {
             if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
-                sourceDirBuilder.addAll(getSourceDirsFromProject(project));
+                sourceDirs.addAll(getSourceDirsFromProject(project));
             }
         }
-        return copyOf(sourceDirBuilder.build());
+        return sourceDirs;
     }
 
     private Set<File> getSourceDirsFromProject(IJavaProject project) throws CoreException {
-        Builder<File> sourceDirBuilder = ImmutableSet.builder();
+        Set<File> sourceDirs = new HashSet<>();
         IPackageFragmentRoot[] packageRoots = project.getPackageFragmentRoots();
 
         for (IPackageFragmentRoot packageRoot : packageRoots) {
@@ -63,11 +61,11 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
                     File sourceDirectory = new File(locationString);
                     // a project can link to a non-existent directory
                     if (sourceDirectory.exists())
-                        sourceDirBuilder.add(sourceDirectory);
+                        sourceDirs.add(sourceDirectory);
                 }
             }
         }
-        return sourceDirBuilder.build();
+        return sourceDirs;
     }
 
 }
