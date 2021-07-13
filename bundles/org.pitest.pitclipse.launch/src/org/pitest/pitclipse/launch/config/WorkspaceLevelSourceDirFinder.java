@@ -16,24 +16,22 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-import java.util.Set;
-
 import static com.google.common.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.getOpenJavaProjects;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.onClassPathOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.sameProject;
+
+import java.io.File;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
@@ -52,33 +50,21 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
     private Set<File> getSourceDirsFromProject(IJavaProject project) throws CoreException {
         Builder<File> sourceDirBuilder = ImmutableSet.builder();
-        URI location = getProjectLocation(project.getProject());
         IPackageFragmentRoot[] packageRoots = project.getPackageFragmentRoots();
 
-        File projectRoot = new File(location);
         for (IPackageFragmentRoot packageRoot : packageRoots) {
             if (!packageRoot.isArchive()) {
-                IPath packagePath = packageRoot.getPath();
-
-                boolean pathIsRelativeToWorkspace = ! (packagePath.isAbsolute() && packageRoot.isExternal());
-                if (pathIsRelativeToWorkspace) {
-                    packagePath = removeProjectFromPackagePath(packageRoot.getPath());
-                    sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
-                }
-                // If it's external, then it's a ExternalPackageFragmentRoot
+                IResource resource = packageRoot.getResource();
+                // the resource could be null for ExternalPackageFragmentRoot
                 // and it's meant to contain only .class files
-                // so it's useless to add packagePath.toFile anyway
+                // so it's useless to add it anyway
+                if (resource != null) {
+                    String localtionString = resource.getLocation().toOSString();
+                    sourceDirBuilder.add(new File(localtionString));
+                }
             }
         }
         return sourceDirBuilder.build();
     }
 
-    private URI getProjectLocation(IProject project) {
-        File projLocation = new File(project.getLocation().toOSString());
-        return projLocation.toURI();
-    }
-
-    private IPath removeProjectFromPackagePath(IPath packagePath) {
-        return packagePath.removeFirstSegments(1);
-    }
 }
