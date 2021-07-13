@@ -16,10 +16,12 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-
-import java.util.List;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
 public class Views {
 
@@ -36,6 +38,69 @@ public class Views {
                 view.close();
             }
         }
+    }
+
+    /**
+     * If the Console view can be found then clear it, to make sure we don't get
+     * output from previous test runs
+     */
+    public void clearConsole() {
+        List<SWTBotView> allViews = bot.views();
+        for (SWTBotView view : allViews) {
+            if ("Console".equals(view.getTitle())) {
+                view.show();
+                if (!view.bot().styledText().getText().isEmpty()) {
+                    // use the toolbar button instead of .bot().styledText().setText("")
+                    // which does not seem to work synchronously
+                    view.toolbarButton("Clear Console").click();
+                }
+                return;
+            }
+        }
+    }
+
+    public void waitForTestsAreRunOnConsole() {
+        System.out.println("Waiting for PIT to finish on Console...");
+        bot.waitUntil(new ICondition() {
+            static final String EXPECTED_END_STRING = "tests per mutation)";
+            String currentText = "";
+            long start = System.currentTimeMillis();
+
+            @Override
+            public boolean test() {
+                currentText = showConsole().bot()
+                    .styledText().getText()
+                    .trim();
+                final String end = currentText
+                    .substring(
+                        currentText.length() - EXPECTED_END_STRING.length(),
+                        currentText.length());
+                System.out.print("Console ends with: " + end);
+                boolean matched = EXPECTED_END_STRING.equals(end);
+                System.out.println
+                    ("... " +
+                     (System.currentTimeMillis() - start) + "ms" +
+                     (matched ? " OK!" : ""));
+                return matched;
+            }
+
+            @Override
+            public void init(SWTBot bot) {
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "Console View does not end with '" + EXPECTED_END_STRING + "'\n:"
+                        + "CURRENT CONSOLE TEXT:\n"
+                        + currentText;
+            }
+        });
+    }
+
+    public SWTBotView showConsole() {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        return consoleView;
     }
 
 }

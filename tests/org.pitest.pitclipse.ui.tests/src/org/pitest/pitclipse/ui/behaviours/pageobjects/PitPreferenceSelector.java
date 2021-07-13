@@ -52,7 +52,6 @@ public class PitPreferenceSelector implements Closeable {
         activatePreferenceShell();
         expandPitPreferences();
         selectExecutionMode(mode);
-        close();
     }
 
     private void selectExecutionMode(PitExecutionMode mode) {
@@ -164,12 +163,8 @@ public class PitPreferenceSelector implements Closeable {
 
         public T from(String label) {
             activatePreferenceShell();
-            try {
-                expandPitPreferences();
-                return getter.getPreference(label);
-            } finally {
-                close();
-            }
+            expandPitPreferences();
+            return getter.getPreference(label);
         }
     }
 
@@ -209,12 +204,8 @@ public class PitPreferenceSelector implements Closeable {
 
         private <T> void updatePreference(PreferenceSetter<T> s) {
             activatePreferenceShell();
-            try {
-                expandPitPreferences();
-                s.setPreference();
-            } finally {
-                close();
-            }
+            expandPitPreferences();
+            s.setPreference();
         }
     }
 

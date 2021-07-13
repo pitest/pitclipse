@@ -16,9 +16,6 @@
 
 package org.pitest.pitclipse.core;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
@@ -33,10 +30,10 @@ import org.pitest.pitclipse.runner.config.PitExecutionMode;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableList.of;
 import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
@@ -55,6 +52,16 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTO
  */
 public class PitCoreActivator extends Plugin {
 
+    /**
+     * Where Eclipse and Maven will generate .class files
+     */
+    private static final String BUILD_OUTPUT_DIR = "target/classes";
+
+    /**
+     * Where Maven JAR are located in our projects
+     */
+    private static final String JAR_DIR = "lib";
+
     private static final String ORG_PITEST_JUNIT5_PLUGIN = "org.pitest.pitest-junit5-plugin";
     private static final String ORG_PITEST_PITCLIPSE_LISTENERS = "org.pitest.pitclipse.listeners";
     private static final String ORG_PITEST_PITCLIPSE_RUNNER = "org.pitest.pitclipse.runner";
@@ -72,9 +79,9 @@ public class PitCoreActivator extends Plugin {
     
     private IPreferenceStore preferences;
 
-    private ImmutableList<String> pitClasspath = of();
+    private List<String> pitClasspath = new ArrayList<>();
     
-    private ImmutableList<String> pitestJunit5PluginClasspath = of();
+    private List<String> pitestJunit5PluginClasspath = new ArrayList<>();
 
     private File resultDir;
 
@@ -85,13 +92,13 @@ public class PitCoreActivator extends Plugin {
     }
 
     private void setPitClasspath(List<String> classpath) {
-        pitClasspath = copyOf(classpath);
+        pitClasspath = classpath;
     }
-    
+
     public List<String> getPitestJunit5PluginClasspath() {
         return pitestJunit5PluginClasspath;
     }
-    
+
     public IPreferenceStore getPreferenceStore() {
         if (preferences == null) {
             preferences = new ScopedPreferenceStore(InstanceScope.INSTANCE, PLUGIN_ID);
@@ -115,41 +122,48 @@ public class PitCoreActivator extends Plugin {
         setActivator(this);
         setupStateDirectories();
 
-        final String jarDir = "lib";
-        ImmutableList<String> pitestClasspath = ImmutableList.of(
-            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath(),
-            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath(),
-            getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_RUNNER)).getCanonicalPath() + File.separator + "bin",
-            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest.jar",
-            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-entry.jar",
-            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-command-line.jar",
-            getBundleFile(Platform.getBundle(ORG_PITEST)).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-html-report.jar",
-            getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath()
-        );
-        Builder<String> pitclipseClasspath = ImmutableList.<String>builder().addAll(pitestClasspath);
-        
+        List<String> pitestClasspath = new ArrayList<>();
+        pitestClasspath.add(getBundleCanonicalPath(ORG_PITEST));
+        addOurBundleToClasspath(pitestClasspath, ORG_PITEST_PITCLIPSE_RUNNER);
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-entry.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-command-line.jar");
+        addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-html-report.jar");
+        pitestClasspath.add(getBundleCanonicalPath("com.google.guava"));
+
         if (Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS) != null) {
-            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath());
-            pitclipseClasspath.add(getBundleFile(Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS)).getCanonicalPath() + File.separator + "bin");
+            addOurBundleToClasspath(pitestClasspath, ORG_PITEST_PITCLIPSE_LISTENERS);
         }
-        setPitClasspath(pitclipseClasspath.build());
-        
+        setPitClasspath(pitestClasspath);
+
         if (Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN) != null) {
-            pitestJunit5PluginClasspath = ImmutableList.of(
-                getBundleFile(Platform.getBundle(ORG_PITEST_JUNIT5_PLUGIN)).getCanonicalPath() + File.separator + jarDir + File.separator + "pitest-junit5-plugin.jar"
-            );
+            pitestJunit5PluginClasspath = new ArrayList<>();
+            addMavenJarToClasspath(pitestJunit5PluginClasspath, ORG_PITEST_JUNIT5_PLUGIN, "pitest-junit5-plugin.jar");
         }
+    }
+
+    private void addMavenJarToClasspath(List<String> classpath, String bundleName, String jarFile) throws IOException {
+        classpath.add(getBundleCanonicalPath(bundleName)
+               + File.separator + JAR_DIR + File.separator + jarFile);
+    }
+
+    private void addOurBundleToClasspath(List<String> classpath, String bundleName) throws IOException {
+        classpath.add(
+            getBundleCanonicalPath(bundleName));
+        classpath.add(
+            getBundleCanonicalPath(bundleName)
+                + File.separator + BUILD_OUTPUT_DIR);
+    }
+
+    private String getBundleCanonicalPath(String bundleName) throws IOException {
+        return getBundleFile(Platform.getBundle(bundleName)).getCanonicalPath();
     }
 
     private void setupStateDirectories() {
         setupResultDir();
         setupHistoryFile();
     }
-    
+
     private void setupHistoryFile() {
         IPath pluginLocation = getStateLocation();
         File stateFile = pluginLocation.append(HISTORY_DIR).append(STATE_FILE).toFile();
@@ -192,7 +206,7 @@ public class PitCoreActivator extends Plugin {
     public void stop(BundleContext context) throws Exception { // NOPMD - Base
                                                                 // class defines
                                                                 // signature
-        List<String> emptyPath = of();
+        List<String> emptyPath = Collections.emptyList();
         setPitClasspath(emptyPath);
         setActivator(null);
         super.stop(context);

@@ -111,7 +111,8 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         try {
             if (elements.length == 1) {
                 Optional<IJavaElement> selected = asJavaElement(elements[0]);
-                Optional<IJavaElement> launchElement = selected.map(this::getLaunchElementFor).get();
+                Optional<IJavaElement> launchElement =
+                        selected.flatMap(this::getLaunchElementFor);
 
                 if (launchElement.isPresent()) {
                     performLaunch(launchElement.get(), mode);
