@@ -33,15 +33,15 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
 
     @Override
     public List<String> getClasses(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Set<String> classPathBuilder = new HashSet<>();
+        Set<String> classes = new HashSet<>();
         IJavaProject testProject = configurationWrapper.getProject();
         List<IJavaProject> projects = getOpenJavaProjects();
         for (IJavaProject project : projects) {
             if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
-                classPathBuilder.addAll(getClassesFromProject(project));
+                classes.addAll(getClassesFromProject(project));
             }
         }
-        return new ArrayList<>(classPathBuilder);
+        return new ArrayList<>(classes);
     }
 
 }
