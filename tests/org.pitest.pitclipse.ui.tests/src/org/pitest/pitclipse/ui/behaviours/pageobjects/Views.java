@@ -73,13 +73,18 @@ public class Views {
                 currentText = showConsole().bot()
                     .styledText().getText()
                     .trim();
+                final int shownContentLenght = 120;
                 final String end = currentText
                     .substring(
-                        currentText.length() - EXPECTED_END_STRING_SUCCESS.length(),
+                        currentText.length() - shownContentLenght,
                         currentText.length());
-                System.out.print("Console ends with: " + end);
-                boolean matched = EXPECTED_END_STRING_SUCCESS.equals(end) ||
-                        EXPECTED_END_STRING_SKIPPED.equals(end);
+                System.out.println("... Console ends with:\n" + end);
+                // IMPORTANT: do not check with endsWith, since stdout and stderr
+                // might interleave in the Console.
+                // the expected string is on stdout, while on stderr things like
+                // "Completed in 2 seconds" are printed, possible at the end
+                boolean matched = currentText.contains(EXPECTED_END_STRING_SUCCESS) ||
+                        currentText.contains(EXPECTED_END_STRING_SKIPPED);
                 System.out.println
                     ("... " +
                      (System.currentTimeMillis() - start) + "ms" +
@@ -93,7 +98,11 @@ public class Views {
 
             @Override
             public String getFailureMessage() {
-                return "Console View does not end with '" + EXPECTED_END_STRING_SUCCESS + "'\n:"
+                return "Console View does not contain '"
+                        + EXPECTED_END_STRING_SUCCESS
+                        + "' nor '"
+                        + EXPECTED_END_STRING_SKIPPED + "'"+
+                        "\n:"
                         + "CURRENT CONSOLE TEXT:\n"
                         + currentText;
             }

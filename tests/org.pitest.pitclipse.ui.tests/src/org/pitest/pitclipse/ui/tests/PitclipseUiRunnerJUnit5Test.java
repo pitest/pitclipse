@@ -29,11 +29,19 @@ public class PitclipseUiRunnerJUnit5Test extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
-    public void runPitAtPackageAndPackageRootAndProjectLevel() throws CoreException {
+    public void runPitJunit5AtPackageLevel() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
+    }
+
+    @Test
+    public void runPitJunit5AtPackageRootLevel() throws CoreException {
         runPackageRootTest("src", TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
+    }
+
+    @Test
+    public void runPitJunit5AtProjectLevel() throws CoreException {
         runProjectTest(TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
     }
