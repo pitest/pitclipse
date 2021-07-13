@@ -16,8 +16,7 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +35,7 @@ public class ProjectLevelClassFinder implements ClassFinder {
     @Override
     public List<String> getClasses(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
         IJavaProject project = configurationWrapper.getProject();
-        return copyOf(getClassesFromProject(project));
+        return new ArrayList<>(getClassesFromProject(project));
     }
 
     public static Set<String> getClassesFromProject(IJavaProject project) throws JavaModelException {
