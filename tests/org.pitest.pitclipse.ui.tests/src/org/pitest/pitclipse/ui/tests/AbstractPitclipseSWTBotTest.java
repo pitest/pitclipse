@@ -161,9 +161,11 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void deleteAllProjects() {
+        PAGES.getBuildProgress().listenForBuild();
         for (String project : PAGES.getPackageExplorer().getProjectsInWorkspace()) {
             PAGES.getAbstractSyntaxTree().deleteProject(project);
         }
+        PAGES.getBuildProgress().waitForBuild();
         File historyFile = PitCoreActivator.getDefault().getHistoryFile();
         if (historyFile.exists()) {
             assertTrue(historyFile.delete());
