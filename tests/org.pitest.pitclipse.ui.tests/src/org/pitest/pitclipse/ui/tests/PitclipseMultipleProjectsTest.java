@@ -5,6 +5,11 @@ import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLAT
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.WORKSPACE;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -32,7 +37,12 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
     private static final String NON_JAVA_PROJECT = "org.pitest.pitclipse.testprojects.nonjava";
 
     @BeforeClass
-    public static void setupJavaProject() throws CoreException {
+    public static void setupJavaProject() throws CoreException, IOException {
+        // must create a directory "externalsource" in the workspace location
+        // since it's referred by FOO_PROJECT as an external class folder
+        final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        File workspacePath = root.getLocation().toFile();
+        new File(workspacePath, "externalsource").mkdir();
         importTestProject(FOO_PROJECT);
         importTestProject(BAR_PROJECT);
         importTestProject(FOO_BAR_PROJECT);
