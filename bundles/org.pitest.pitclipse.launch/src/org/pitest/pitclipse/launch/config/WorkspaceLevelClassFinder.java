@@ -16,8 +16,12 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet.Builder;
+import static org.pitest.pitclipse.launch.config.ProjectLevelClassFinder.getClassesFromProject;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -26,17 +30,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import java.util.List;
-
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableSet.builder;
-import static org.pitest.pitclipse.launch.config.ProjectLevelClassFinder.getClassesFromProject;
-
 public class WorkspaceLevelClassFinder implements ClassFinder {
 
     @Override
     public List<String> getClasses(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Builder<String> classPathBuilder = builder();
+        Set<String> classPathBuilder = new HashSet<>();
         List<IJavaProject> projects = getOpenJavaProjects();
         IJavaProject testProject = configurationWrapper.getProject();
         for (IJavaProject project : projects) {
@@ -44,7 +42,7 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
                 classPathBuilder.addAll(getClassesFromProject(project));
             }
         }
-        return copyOf(classPathBuilder.build());
+        return new ArrayList<>(classPathBuilder);
     }
 
     private boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
@@ -56,14 +54,14 @@ public class WorkspaceLevelClassFinder implements ClassFinder {
     }
 
     private List<IJavaProject> getOpenJavaProjects() throws CoreException {
-        ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
+        List<IJavaProject> resultBuilder = new ArrayList<>();
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         for (IProject project : root.getProjects()) {
             if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
                 resultBuilder.add(JavaCore.create(project));
             }
         }
-        return resultBuilder.build();
+        return resultBuilder;
     }
 
 }
