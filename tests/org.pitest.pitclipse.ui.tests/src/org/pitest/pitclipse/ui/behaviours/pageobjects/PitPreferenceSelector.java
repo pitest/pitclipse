@@ -21,7 +21,6 @@ import com.google.common.base.Optional;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
@@ -55,10 +54,7 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     private void selectExecutionMode(PitExecutionMode mode) {
-        // The workaround for Eclipse bug 344484.didn't seem to work here
-        // so for now we'll set the property directly. We have assertions
-        // on reading back the property which should suffice
-        PitCoreActivator.getDefault().setExecutionMode(mode);
+        bot.radio(mode.getLabel()).click();
     }
 
     @Override
