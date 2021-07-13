@@ -58,6 +58,9 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
             // reset default values
             IPreferenceStore preferenceStore = PitCoreActivator.getDefault().getPreferenceStore();
             preferenceStore.setValue(PitPreferences.PIT_EXECUTION_MODE, PROJECT_ISOLATION.toString());
+            PitPreferenceSelector selector = PAGES.getWindowsMenu().openPreferences().andThen();
+            assertEquals(PROJECT_ISOLATION, selector.getPitExecutionMode());
+            selector.close();
         }
     }
 
