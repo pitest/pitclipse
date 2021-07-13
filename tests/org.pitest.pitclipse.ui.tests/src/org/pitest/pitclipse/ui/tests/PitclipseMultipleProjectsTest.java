@@ -8,6 +8,7 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -50,7 +51,10 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
         importTestProject(BAR_PROJECT);
         importTestProject(FOO_BAR_PROJECT);
         importTestProject(UNRELATED_PROJECT);
-        importTestProject(CLOSED_PROJECT).close(new NullProgressMonitor());
+        final IProject projectToClose = importTestProject(CLOSED_PROJECT);
+        PAGES.getBuildProgress().listenForBuild();
+        projectToClose.close(new NullProgressMonitor());
+        PAGES.getBuildProgress().waitForBuild();
     }
 
     @Before
