@@ -16,8 +16,11 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import static com.google.common.collect.ImmutableList.copyOf;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -28,12 +31,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableSet.builder;
-
 public class ProjectLevelClassFinder implements ClassFinder {
 
     @Override
@@ -43,25 +40,25 @@ public class ProjectLevelClassFinder implements ClassFinder {
     }
 
     public static Set<String> getClassesFromProject(IJavaProject project) throws JavaModelException {
-        Builder<String> classPathBuilder = builder();
+        Set<String> classPathBuilder = new HashSet<>();
         IPackageFragmentRoot[] packageRoots = project.getPackageFragmentRoots();
         for (IPackageFragmentRoot packageRoot : packageRoots) {
             classPathBuilder.addAll(getNonTestClassesFromPackageRoot(packageRoot));
         }
-        return classPathBuilder.build();
+        return classPathBuilder;
     }
 
     private static Set<String> getNonTestClassesFromPackageRoot(IPackageFragmentRoot packageRoot)
             throws JavaModelException {
-        Builder<String> classPathBuilder = ImmutableSet.builder();
+        Set<String> classPathBuilder = new HashSet<>();
         if (!isMavenTestDir(packageRoot)) {
             classPathBuilder.addAll(getAllClassesFromPackageRoot(packageRoot));
         }
-        return classPathBuilder.build();
+        return classPathBuilder;
     }
 
     public static Set<String> getAllClassesFromPackageRoot(IPackageFragmentRoot packageRoot) throws JavaModelException {
-        Builder<String> classPathBuilder = ImmutableSet.builder();
+        Set<String> classPathBuilder = new HashSet<>();
         if (!packageRoot.isArchive()) {
             for (IJavaElement element : packageRoot.getChildren()) {
                 if (element instanceof IPackageFragment) {
@@ -72,7 +69,7 @@ public class ProjectLevelClassFinder implements ClassFinder {
                 }
             }
         }
-        return classPathBuilder.build();
+        return classPathBuilder;
     }
 
     private static boolean isMavenTestDir(IPackageFragmentRoot packageRoot) {
@@ -80,18 +77,18 @@ public class ProjectLevelClassFinder implements ClassFinder {
     }
 
     public static Set<String> getClassesFromPackage(IPackageFragment packge) throws JavaModelException {
-        Builder<String> classPathBuilder = ImmutableSet.builder();
+        Set<String> classPathBuilder = new HashSet<>();
         for (ICompilationUnit javaFile : packge.getCompilationUnits()) {
             classPathBuilder.addAll(getClassesFromSourceFile(javaFile));
         }
-        return classPathBuilder.build();
+        return classPathBuilder;
     }
 
     private static Set<String> getClassesFromSourceFile(ICompilationUnit javaFile) throws JavaModelException {
-        Builder<String> classPathBuilder = ImmutableSet.builder();
+        Set<String> classPathBuilder = new HashSet<>();
         for (IType type : javaFile.getAllTypes()) {
             classPathBuilder.add(type.getFullyQualifiedName());
         }
-        return classPathBuilder.build();
+        return classPathBuilder;
     }
 }
