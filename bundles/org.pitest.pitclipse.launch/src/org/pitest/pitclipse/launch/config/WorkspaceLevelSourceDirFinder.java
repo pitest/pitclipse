@@ -73,12 +73,7 @@ public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
         return sourceDirBuilder.build();
     }
 
-    private URI getProjectLocation(IProject project) throws CoreException {
-        URI locationUri = project.getDescription().getLocationURI();
-        if (null != locationUri) {
-            return locationUri;
-        }
-        // We're using the default location under workspace
+    private URI getProjectLocation(IProject project) {
         File projLocation = new File(project.getLocation().toOSString());
         return projLocation.toURI();
     }
