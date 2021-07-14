@@ -16,41 +16,19 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.base.Function;
-import java.util.Optional;
-import com.google.common.collect.ImmutableList;
+import java.io.File;
 
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
-import org.pitest.pitclipse.runner.client.PitClient;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
 
-import java.io.File;
-import java.io.IOException;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.Integer.parseInt;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Executes PIT.
  */
 public class PitRunner {
-
-    public static void main(String[] args) {
-        validateArgs(args);
-        int port = parseInt(args[0]);
-        
-        try (PitClient client = new PitClient(port)) {
-            client.connect();
-            Optional<PitRequest> request = client.readRequest();
-            Optional<PitResults> results = request.map(executePit());
-
-            results.ifPresent(client::sendResults);
-        } catch (IOException e) {
-            // An error occurred while closing the client
-            e.printStackTrace();
-        }
-    }
 
     public static Function<PitRequest, PitResults> executePit() {
         return request -> {
@@ -65,10 +43,6 @@ public class PitRunner {
                    .withMutations(mutations)
                    .build();
         };
-    }
-
-    private static void validateArgs(String[] args) {
-        checkArgument(args.length == 1);
     }
 
     private static ImmutableList<File> safeListFiles(File dir) {
