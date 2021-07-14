@@ -27,6 +27,7 @@ import org.junit.Test;
 
 public class PitFileUtilsTest {
 
+    private static final File BAD_PATH = new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
     private static final File TMP_DIR = new File(System.getProperty("java.io.tmpdir"));
     private static final Random RANDOM = new Random();
 
@@ -34,7 +35,7 @@ public class PitFileUtilsTest {
         if (IS_OS_WINDOWS) {
             return new File("BAD_DRIVE:\\");
         }
-        return new File("/HOPEFULLY/DOES/NOT/EXIST/SO/IS/BAD/");
+        return BAD_PATH;
     }
 
     @Test(expected = IOException.class)
@@ -52,7 +53,7 @@ public class PitFileUtilsTest {
 
     @Test
     public void testBadPathForFindFile() {
-        assertNull(PitFileUtils.findFile(getBadPath(), "foo"));
+        assertNull(PitFileUtils.findFile(BAD_PATH, "foo"));
     }
 
     @Test
