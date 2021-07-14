@@ -17,9 +17,6 @@ package org.pitest.pitclipse.runner.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
 
 /**
  * @author Lorenzo Bettini
@@ -44,22 +41,29 @@ public class PitFileUtils {
      * Searches for a file with the given name in the given directory,
      * recursively.
      * 
-     * @param reportDir
+     * @param dir
      * @param fileName
      * @return null if no such a file exists
      */
-    public static File findFile(File reportDir, String fileName) {
-        try (Stream<Path> stream = Files.find(
-                reportDir.toPath(),
-                Integer.MAX_VALUE,
-                (path, attributes) -> fileName.equals(path.toFile().getName()))) {
-            return stream
-                    .findFirst()
-                        .map(Path::toFile)
-                        .orElse(null);
-        } catch (IOException e) {
+    public static File findFile(File dir, String fileName) {
+        File[] files = dir.listFiles();
+        if (files == null) {
             return null;
         }
+        for (File file : files) {
+            if (fileName.equals(file.getName())) {
+                return file;
+            }
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                File result = findFile(file, fileName);
+                if (null != result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
 }
