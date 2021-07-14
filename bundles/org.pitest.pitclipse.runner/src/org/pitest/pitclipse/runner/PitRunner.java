@@ -30,6 +30,10 @@ import com.google.common.collect.ImmutableList;
  */
 public class PitRunner {
 
+    private PitRunner() {
+        // Only static methods
+    }
+
     public static Function<PitRequest, PitResults> executePit() {
         return request -> {
             String[] cliArgs = PitCliArguments.from(request.getOptions());
