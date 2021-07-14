@@ -17,6 +17,9 @@ package org.pitest.pitclipse.runner.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /**
  * @author Lorenzo Bettini
@@ -34,6 +37,28 @@ public class PitFileUtils {
         // make sure the parent directory has been effectively created
         if (!parent.isDirectory()) {
             throw new IOException("Cannot create parent directories of " + file);
+        }
+    }
+
+    /**
+     * Searches for a file with the given name in the given directory,
+     * recursively.
+     * 
+     * @param reportDir
+     * @param fileName
+     * @return null if no such a file exists
+     */
+    public static File findFile(File reportDir, String fileName) {
+        try (Stream<Path> stream = Files.find(
+                reportDir.toPath(),
+                Integer.MAX_VALUE,
+                (path, attributes) -> fileName.equals(path.toFile().getName()))) {
+            return stream
+                    .findFirst()
+                        .map(Path::toFile)
+                        .orElse(null);
+        } catch (IOException e) {
+            return null;
         }
     }
 

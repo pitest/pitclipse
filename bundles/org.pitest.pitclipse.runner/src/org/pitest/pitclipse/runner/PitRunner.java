@@ -21,9 +21,9 @@ import java.io.File;
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
+import org.pitest.pitclipse.runner.util.PitFileUtils;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Executes PIT.
@@ -39,7 +39,7 @@ public class PitRunner {
             String[] cliArgs = PitCliArguments.from(request.getOptions());
             MutationCoverageReport.main(cliArgs);
             File reportDir = request.getReportDirectory();
-            File htmlResultFile = findResultFile(reportDir, "index.html");
+            File htmlResultFile = PitFileUtils.findFile(reportDir, "index.html");
             Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
             return PitResults.builder()
                    .withHtmlResults(htmlResultFile)
@@ -47,33 +47,6 @@ public class PitRunner {
                    .withMutations(mutations)
                    .build();
         };
-    }
-
-    private static ImmutableList<File> safeListFiles(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null) {
-            return ImmutableList.copyOf(files);
-        } else {
-            return ImmutableList.of();
-        }
-    }
-
-    private static File findResultFile(File reportDir, String fileName) {
-        ImmutableList<File> files = safeListFiles(reportDir);
-        for (File file : files) {
-            if (fileName.equals(file.getName())) {
-                return file;
-            }
-        }
-        for (File file : files) {
-            if (file.isDirectory()) {
-                File result = findResultFile(file, fileName);
-                if (null != result) {
-                    return result;
-                }
-            }
-        }
-        return null;
     }
 
 }

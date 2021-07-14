@@ -50,6 +50,16 @@ public class PitFileUtilsTest {
         assertTrue(f.getParentFile().exists());
     }
 
+    @Test
+    public void testBadPathForFindFile() {
+        assertNull(PitFileUtils.findFile(getBadPath(), "foo"));
+    }
+
+    @Test
+    public void testGoodForFindFile() {
+        assertNotNull(PitFileUtils.findFile(new File("resources"), "toFind.txt"));
+    }
+
     private String randomString() {
         return toHexString(RANDOM.nextInt());
     }
