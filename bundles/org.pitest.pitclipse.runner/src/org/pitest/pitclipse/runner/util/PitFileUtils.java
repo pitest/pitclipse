@@ -30,9 +30,6 @@ public class PitFileUtils {
 
     public static void createParentDirs(File file) throws IOException {
         File parent = file.getCanonicalFile().getParentFile();
-        if (parent == null) {
-            return;
-        }
         parent.mkdirs();
         // make sure the parent directory has been effectively created
         if (!parent.isDirectory()) {
