@@ -30,6 +30,8 @@ import java.util.Random;
 
 import static java.lang.Integer.toHexString;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -86,6 +88,14 @@ public class PitOptionsTest {
         assertTrue(reportDir.exists());
         assertEquals(TMP_DIR, reportDir.getParentFile());
         assertEquals(TEST_CLASS1, options.getClassUnderTest());
+    }
+
+    @Test
+    public void stringRepresentation() throws IOException {
+        PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
+                .build();
+        assertThat(options.toString(),
+            containsString("classUnderTest=org.pitest.pitclipse.runner.PitOptionsTest"));
     }
 
     @Test(expected = PitLaunchException.class)
