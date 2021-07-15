@@ -51,7 +51,6 @@ public class PitClient implements Closeable {
         this.socketProvider = socketProvider;
     }
 
-    // TODO [Refactor] Consider returning a Connection object instead of mutating this
     public void connect() {
         socket = socketProvider.connectTo(portNumber);
     }

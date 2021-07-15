@@ -91,7 +91,8 @@ public class SocketProvider {
      * </p>
      * 
      * <p>
-     * This method blocks until a server accepts the connection.
+     * This method blocks until a server accepts the connection
+     * within a timeout (5 seconds).
      * </p>
      * 
      * @param portNumber The number of port to connect to a server.
