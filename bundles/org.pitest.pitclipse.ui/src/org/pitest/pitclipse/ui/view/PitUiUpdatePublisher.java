@@ -36,7 +36,7 @@ import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
  * Summary</i> view is fully loaded.
  */
 public class PitUiUpdatePublisher implements ProgressListener {
-
+    static final boolean WINDOWS = System.getProperty("os.name").startsWith("Windows");
     private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.ui.results";
     private final Browser browser;
     private final ExtensionPointHandler<PitUiUpdate> handler;
@@ -63,8 +63,13 @@ public class PitUiUpdatePublisher implements ProgressListener {
     private String getHtml() {
         // assume url is path to index.html and top folder should represent date and
         // time
-        Pattern pattern = Pattern.compile(
-                "(file:" + File.separatorChar + "+)(.*" + File.separatorChar + "[0-9]+" + File.separatorChar + ")(.+)");
+        // remove os differences in path
+        final Pattern pattern;
+        if (WINDOWS) {
+            pattern = Pattern.compile("(file:\\\\)(.*\\[0-9]+\\)(.+)");
+        } else {
+            pattern = Pattern.compile("(file://)(.*/[0-9]+/)(.+)");
+        }
         Matcher matcher = pattern.matcher(browser.getUrl());
         if (matcher.find() && matcher.groupCount() == 3) {
             try {

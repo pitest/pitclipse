@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.not;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
+import java.io.File;
 
 /**
  * @author Jonas Kutscha
@@ -34,7 +35,7 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
         importTestProject(TEST_PROJECT);
         importTestProject(TEST_PROJECT_WITH_DIFFERENT_SRC);
     }
-    
+
     @After
     public void resetView() {
         summaryView.resetView();
@@ -46,13 +47,15 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0);
         assertThat(summaryView.getCurrentBrowserUrl(), endsWith("index.html"));
-        assertThat(summaryView.getCurrentBrowserUrl(), not(endsWith("/foo/index.html")));
-        assertThat(summaryView.getCurrentBrowserUrl(), not(endsWith("/foo/bar/index.html")));
+        assertThat(summaryView.getCurrentBrowserUrl(),
+                not(endsWith(File.separatorChar + "foo" + File.separatorChar + "index.html")));
+        assertThat(summaryView.getCurrentBrowserUrl(), not(
+                endsWith(File.separatorChar + "foo" + File.separatorChar + "bar" + File.separatorChar + "index.html")));
 
         openEditor(FOO_CLASS, FOO_PACKAGE, TEST_PROJECT_WITH_DIFFERENT_SRC);
         runPackageTest(FOO_PACKAGE, TEST_PROJECT_WITH_DIFFERENT_SRC);
         coverageReportGenerated(1, 80, 0);
-        assertThat(summaryView.getCurrentBrowserUrl(), endsWith("foo/Foo.java.html"));
+        assertThat(summaryView.getCurrentBrowserUrl(), endsWith("foo" + File.separatorChar + "Foo.java.html"));
     }
 
     @Test
@@ -65,14 +68,16 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
         // timeout
         SWTBotPreferences.TIMEOUT = 5;
         // should not change url, because no other page was opened
-        assertThat(summaryView.clickBack(), endsWith("foo/Foo.java.html"));
-        assertThat(summaryView.clickForward(), endsWith("foo/Foo.java.html"));
+        assertThat(summaryView.clickBack(), endsWith("foo" + File.separatorChar + "Foo.java.html"));
+        assertThat(summaryView.clickForward(), endsWith("foo" + File.separatorChar + "Foo.java.html"));
 
-        assertThat(summaryView.clickHome(), endsWith("/index.html"));
-        assertThat(summaryView.clickHome(), not(endsWith("/foo/index.html")));
+        assertThat(summaryView.clickHome(), endsWith(File.separatorChar + "index.html"));
+        assertThat(summaryView.clickHome(),
+                not(endsWith(File.separatorChar + "foo" + File.separatorChar + "index.html")));
 
-        assertThat(summaryView.clickBack(), endsWith("/foo/Foo.java.html"));
-        assertThat(summaryView.clickForward(), endsWith("/index.html"));
+        assertThat(summaryView.clickBack(),
+                endsWith(File.separatorChar + "foo" + File.separatorChar + "Foo.java.html"));
+        assertThat(summaryView.clickForward(), endsWith(File.separatorChar + "index.html"));
         // set timeout back to previous value
         SWTBotPreferences.TIMEOUT = timeout;
     }
