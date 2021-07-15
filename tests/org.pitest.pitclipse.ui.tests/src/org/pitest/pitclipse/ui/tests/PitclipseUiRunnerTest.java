@@ -15,17 +15,16 @@ import org.junit.runner.RunWith;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
 
-    private static final String TEST_PROJECT = "project1";
+    private static final String TEST_PROJECT = "org.pitest.pitclipse.testprojects.emptyclasses";
     private static final String FOO_BAR_PACKAGE = "foo.bar";
     private static final String FOO_CLASS = "Foo";
     private static final String FOO_TEST_CLASS = "FooTest";
 
     @BeforeClass
-    public static void setupJavaProject() {
-        createJavaProjectWithJUnit4(TEST_PROJECT);
-        verifyProjectExists(TEST_PROJECT);
-        createClass(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        createClass(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+    public static void setupJavaProject() throws CoreException {
+        importTestProject(TEST_PROJECT);
+        openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }
 
     @Test
@@ -66,8 +65,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(2, 0, 0, 0, 0);
         mutationsAre(
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "NO_COVERAGE | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
         coverageReportGenerated(1, 50, 0);
     }
 
@@ -85,8 +84,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(2, 0, 0, 2, 1);
         mutationsAre(
-        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "SURVIVED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        "SURVIVED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "SURVIVED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
         coverageReportGenerated(1, 100, 0);
     }
 
@@ -105,8 +104,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(2, 2, 100, 2, 1);
         mutationsAre(
-        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
-        "KILLED | project1 | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
         coverageReportGenerated(1, 100, 100);
     }
 

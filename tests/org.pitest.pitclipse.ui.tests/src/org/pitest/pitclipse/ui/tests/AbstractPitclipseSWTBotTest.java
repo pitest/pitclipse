@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -53,10 +54,12 @@ import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.launch.ui.PitLaunchShortcut;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.ConcreteClassContext;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration;
 import org.pitest.pitclipse.ui.behaviours.steps.LaunchConfigurationSteps;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
+import org.pitest.pitclipse.ui.util.ProjectImportUtil;
 
 /**
  * @author Lorenzo Bettini
@@ -118,6 +121,15 @@ public abstract class AbstractPitclipseSWTBotTest {
         });
     }
 
+    protected static IProject importTestProject(String projectName) throws CoreException {
+        PAGES.getBuildProgress().listenForBuild();
+        IProject importProject = ProjectImportUtil.importProject(projectName);
+        PAGES.getBuildProgress().waitForBuild();
+        verifyProjectExists(projectName);
+        assertNoErrorsInWorkspace();
+        return importProject;
+    }
+
     protected static void createJavaProjectWithJUnit4(String projectName) {
         PAGES.getBuildProgress().listenForBuild();
         PAGES.getFileMenu().newJavaProject(projectName);
@@ -149,9 +161,11 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void deleteAllProjects() {
+        PAGES.getBuildProgress().listenForBuild();
         for (String project : PAGES.getPackageExplorer().getProjectsInWorkspace()) {
             PAGES.getAbstractSyntaxTree().deleteProject(project);
         }
+        PAGES.getBuildProgress().waitForBuild();
         File historyFile = PitCoreActivator.getDefault().getHistoryFile();
         if (historyFile.exists()) {
             assertTrue(historyFile.delete());
@@ -169,6 +183,16 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void addToBuildPath(String dependentProject, String projectName) {
         PAGES.getPackageExplorer().selectProject(projectName);
         PAGES.getAbstractSyntaxTree().addProjectToClassPathOfProject(projectName, dependentProject);
+    }
+
+    protected static void openEditor(String className, String packageName, String projectName) {
+        PAGES.getPackageExplorer()
+            .openClass(
+                new ConcreteClassContext.Builder()
+                    .withProjectName(projectName)
+                    .withPackageName(packageName)
+                    .withClassName(className)
+                    .build());
     }
 
     /**

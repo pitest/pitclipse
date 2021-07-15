@@ -16,54 +16,32 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet.Builder;
+import static org.pitest.pitclipse.launch.config.ProjectLevelClassFinder.getClassesFromProject;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.getOpenJavaProjects;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.onClassPathOf;
+import static org.pitest.pitclipse.launch.config.ProjectUtils.sameProject;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-
-import java.util.List;
-
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.ImmutableSet.builder;
-import static org.pitest.pitclipse.launch.config.ProjectLevelClassFinder.getClassesFromProject;
 
 public class WorkspaceLevelClassFinder implements ClassFinder {
 
     @Override
     public List<String> getClasses(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Builder<String> classPathBuilder = builder();
-        List<IJavaProject> projects = getOpenJavaProjects();
+        Set<String> classPathBuilder = new HashSet<>();
         IJavaProject testProject = configurationWrapper.getProject();
+        List<IJavaProject> projects = getOpenJavaProjects();
         for (IJavaProject project : projects) {
             if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
                 classPathBuilder.addAll(getClassesFromProject(project));
             }
         }
-        return copyOf(classPathBuilder.build());
-    }
-
-    private boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
-        return testProject.isOnClasspath(project);
-    }
-
-    private boolean sameProject(IJavaProject testProject, IJavaProject project) {
-        return testProject.getElementName().equals(project.getElementName());
-    }
-
-    private List<IJavaProject> getOpenJavaProjects() throws CoreException {
-        ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        for (IProject project : root.getProjects()) {
-            if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
-                resultBuilder.add(JavaCore.create(project));
-            }
-        }
-        return resultBuilder.build();
+        return new ArrayList<>(classPathBuilder);
     }
 
 }
