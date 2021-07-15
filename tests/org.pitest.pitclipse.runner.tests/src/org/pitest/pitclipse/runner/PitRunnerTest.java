@@ -16,14 +16,16 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.collect.ImmutableList;
-
 import org.eclipse.core.runtime.Platform;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.pitest.mutationtest.MutationResultListenerFactory;
+import org.pitest.pitclipse.example.empty.EmptyClass;
+import org.pitest.pitclipse.runner.results.ObjectFactory;
+import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
 import org.pitest.util.ServiceLoader;
 
 import java.io.ByteArrayInputStream;
@@ -44,6 +46,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 /**
@@ -57,13 +60,22 @@ public class PitRunnerTest {
      */
     private static final String BUILD_OUTPUT_DIR = "target/classes";
 
-    private static final String TEST_CLASS = PitOptionsTest.class.getCanonicalName();
-    private static final List<String> CLASS_PATH = ImmutableList.of("org.pitest.pitclipse.runner.*");
-    private static final List<String> PROJECTS = ImmutableList.of("project1", "project2");
+    private static final List<String> PROJECTS = asList("project1", "project2");
+
+    @Before
+    public void clearMutations() {
+        RecordingMutationsDispatcher.INSTANCE
+            .dispatch(new ObjectFactory().createMutations());
+    }
 
     @Test
     public void shouldRunPitest() throws IOException {
-        PitRequest request = PitRequest.builder().withPitOptions(options()).withProjects(PROJECTS).build();
+        PitRequest request = PitRequest.builder()
+            .withPitOptions(
+                options(
+                    PitOptionsTest.class.getCanonicalName(),
+                    asList("org.pitest.pitclipse.runner.*")))
+            .withProjects(PROJECTS).build();
         PitResults results = PitRunner.executePit().apply(request);
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
@@ -71,7 +83,23 @@ public class PitRunnerTest {
         assertThat(results.getMutations().getMutation(), not(empty()));
         assertThat(results, is(serializable()));
     }
-    
+
+    @Test
+    public void shouldRunPitestEvenWhenNoMutant() throws IOException {
+        PitRequest request = PitRequest.builder()
+            .withPitOptions(
+                options(
+                    EmptyClass.class.getCanonicalName(),
+                    asList("org.pitest.pitclipse.example.empty.*")))
+            .withProjects(PROJECTS).build();
+        PitResults results = PitRunner.executePit().apply(request);
+        assertThat(results, is(notNullValue()));
+        assertThat(results.getHtmlResultFile(), is(nullValue()));
+        assertThat(results.getMutations(), is(notNullValue()));
+        assertThat(results.getMutations().getMutation(), empty());
+        assertThat(results, is(serializable()));
+    }
+
     @Test 
     public void shouldFindAllAvailableMutationResultListeners() {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -117,13 +145,14 @@ public class PitRunnerTest {
         };
     }
 
-    private static PitOptions options() throws IOException {
+    private static PitOptions options(String classUnderTest, List<String> classesToMutate) throws IOException {
         File srcDir = new File(System.getProperty("user.dir") + File.separator + "src");
-        return PitOptions.builder().withSourceDirectory(srcDir)
-                                   .withClassUnderTest(TEST_CLASS)
-                                   .withClassesToMutate(CLASS_PATH)
-                                   .withClassPath(classPathWithPitestAndJUnit())
-                                   .build();
+        return PitOptions.builder()
+            .withSourceDirectory(srcDir)
+            .withClassUnderTest(classUnderTest)
+            .withClassesToMutate(classesToMutate)
+            .withClassPath(classPathWithPitestAndJUnit())
+                       .build();
     }
     
     private static List<String> classPathWithPitestAndJUnit() throws IOException {
