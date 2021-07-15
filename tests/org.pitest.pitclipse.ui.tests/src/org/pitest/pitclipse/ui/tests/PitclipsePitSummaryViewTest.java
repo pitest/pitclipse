@@ -1,13 +1,9 @@
 package org.pitest.pitclipse.ui.tests;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,11 +76,4 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
         // set timeout back to previous value
         SWTBotPreferences.TIMEOUT = timeout;
     }
-
-//    @Test
-//    public void runTestWithoutOpenEditor() throws CoreException {
-//        runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-//        coverageReportGenerated(2, 80, 0);
-//        assertThat(summaryView.getCurrentBrowserUrl(), endsWith("index.html"));
-//    }
 }
