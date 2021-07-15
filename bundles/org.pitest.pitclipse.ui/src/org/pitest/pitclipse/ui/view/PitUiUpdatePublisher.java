@@ -16,6 +16,13 @@
 
 package org.pitest.pitclipse.ui.view;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressEvent;
@@ -25,8 +32,8 @@ import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
 
 /**
  * A progress listener that notifies contributions to the
- * {@code org.pitest.pitclipse.ui.results} extension point
- * when the <i>PIT Summary</i> view is fully loaded.
+ * {@code org.pitest.pitclipse.ui.results} extension point when the <i>PIT
+ * Summary</i> view is fully loaded.
  */
 public class PitUiUpdatePublisher implements ProgressListener {
 
@@ -44,9 +51,28 @@ public class PitUiUpdatePublisher implements ProgressListener {
     }
 
     public void completed(ProgressEvent event) {
-        PitUiUpdate update = new PitUiUpdate.Builder().withHtml(
-                browser.getText()).build();
+        PitUiUpdate update = new PitUiUpdate.Builder().withHtml(getHtml()).build();
         handler.execute(Platform.getExtensionRegistry(), update);
     }
 
+    /**
+     * Get the index.html of the results, even if the browser shows a different file
+     * of the results
+     * @return html text of the index.html as a String
+     */
+    private String getHtml() {
+        // assume url is path to index.html and top folder should represent date and
+        // time
+        Pattern pattern = Pattern.compile(
+                "(file:" + File.separatorChar + "+)(.*" + File.separatorChar + "[0-9]+" + File.separatorChar + ")(.+)");
+        Matcher matcher = pattern.matcher(browser.getUrl());
+        if (matcher.find() && matcher.groupCount() == 3) {
+            try {
+                return new String(Files.readAllBytes(Paths.get(File.separatorChar + matcher.group(2) + "index.html")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "No HTML found!";
+    }
 }
