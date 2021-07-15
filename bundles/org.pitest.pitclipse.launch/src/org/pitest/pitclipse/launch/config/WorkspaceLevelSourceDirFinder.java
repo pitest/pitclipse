@@ -16,78 +16,56 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.getOpenJavaProjects;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.onClassPathOf;
 import static org.pitest.pitclipse.launch.config.ProjectUtils.sameProject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 
 public class WorkspaceLevelSourceDirFinder implements SourceDirFinder {
 
     @Override
     public List<File> getSourceDirs(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Builder<File> sourceDirBuilder = ImmutableSet.builder();
+        List<File> sourceDirs = new ArrayList<>();
         IJavaProject testProject = configurationWrapper.getProject();
         List<IJavaProject> projects = getOpenJavaProjects();
         for (IJavaProject project : projects) {
             if (sameProject(testProject, project) || onClassPathOf(testProject, project)) {
-                sourceDirBuilder.addAll(getSourceDirsFromProject(project));
+                sourceDirs.addAll(getSourceDirsFromProject(project));
             }
         }
-        return copyOf(sourceDirBuilder.build());
+        return sourceDirs;
     }
 
     private Set<File> getSourceDirsFromProject(IJavaProject project) throws CoreException {
-        Builder<File> sourceDirBuilder = ImmutableSet.builder();
-        URI location = getProjectLocation(project.getProject());
+        Set<File> sourceDirs = new HashSet<>();
         IPackageFragmentRoot[] packageRoots = project.getPackageFragmentRoots();
 
-        File projectRoot = new File(location);
         for (IPackageFragmentRoot packageRoot : packageRoots) {
             if (!packageRoot.isArchive()) {
-                IPath packagePath = packageRoot.getPath();
-
-                boolean pathIsRelativeToWorkspace = ! (packagePath.isAbsolute() && packageRoot.isExternal());
-                if (pathIsRelativeToWorkspace) {
-                    packagePath = removeProjectFromPackagePath(project, packageRoot.getPath());
-                    sourceDirBuilder.add(new File(projectRoot, packagePath.toString()));
-                }
-                else {
-                    // FIXME Commenting out this line leads UI tests to fail during Maven build
-                    // because projects seem to have an additional source directory (which they
-                    // do not have when tests are run by Eclipse IDE).
-                    // It seems however that ignoring this case may cause issues in the future.
-//                    sourceDirBuilder.add(packagePath.toFile());
+                IResource resource = packageRoot.getResource();
+                // the resource could be null for ExternalPackageFragmentRoot
+                // and it's meant to contain only .class files
+                // so it's useless to add it anyway
+                if (resource != null) {
+                    String locationString = resource.getLocation().toOSString();
+                    File sourceDirectory = new File(locationString);
+                    // a project can link to a non-existent directory
+                    if (sourceDirectory.exists())
+                        sourceDirs.add(sourceDirectory);
                 }
             }
         }
-        return sourceDirBuilder.build();
+        return sourceDirs;
     }
 
-    private URI getProjectLocation(IProject project) throws CoreException {
-        URI locationUri = project.getDescription().getLocationURI();
-        if (null != locationUri) {
-            return locationUri;
-        }
-        // We're using the default location under workspace
-        File projLocation = new File(project.getLocation().toOSString());
-        return projLocation.toURI();
-    }
-
-    private IPath removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
-        return packagePath.removeFirstSegments(1);
-    }
 }
