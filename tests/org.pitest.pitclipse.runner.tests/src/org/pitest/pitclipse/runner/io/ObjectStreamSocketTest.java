@@ -40,7 +40,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -107,6 +110,45 @@ public class ObjectStreamSocketTest {
         } finally {
             thenTheStreamsWereClosed();
             thenTheSocketWasClosed();
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void makeThrowsException() throws IOException {
+        doThrow(new IOException()).when(underlyingSocket).getOutputStream();
+        ObjectStreamSocket.make(underlyingSocket);
+    }
+
+    @Test
+    public void readThrowsException() throws IOException, ClassNotFoundException {
+        InputStream inputStream = spy(new ByteArrayInputStream(asBytes(expectedObject)));
+        OutputStream outputStream = new ByteArrayOutputStream();
+        when(underlyingSocket.getInputStream()).thenReturn(inputStream);
+        when(underlyingSocket.getOutputStream()).thenReturn(outputStream);
+        objectSocket = ObjectStreamSocket.make(underlyingSocket);
+        objectSocket.read(); // succeeds
+        try {
+            objectSocket.read(); // EOF
+            fail("should not get here");
+        } catch (Exception e) {
+            assertTrue(e.getClass().getCanonicalName(),
+                e instanceof RuntimeException);
+        }
+    }
+
+    @Test
+    public void writeThrowsException() throws IOException, ClassNotFoundException {
+        InputStream inputStream = spy(new ByteArrayInputStream(asBytes(expectedObject)));
+        OutputStream outputStream = new ByteArrayOutputStream();
+        when(underlyingSocket.getInputStream()).thenReturn(inputStream);
+        when(underlyingSocket.getOutputStream()).thenReturn(outputStream);
+        objectSocket = ObjectStreamSocket.make(underlyingSocket);
+        try {
+            objectSocket.write(new Object()); // not serializable
+            fail("should not get here");
+        } catch (Exception e) {
+            assertTrue(e.getClass().getCanonicalName(),
+                e instanceof RuntimeException);
         }
     }
 
