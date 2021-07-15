@@ -136,7 +136,7 @@ public class PackageExplorer {
     }
 
     public void selectPackage(PackageContext context) {
-        getPackage(context).select();
+        getPackage(context).select().expand();
     }
 
     private SWTBotTreeItem getPackage(PackageContext context) {
