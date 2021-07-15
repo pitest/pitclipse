@@ -62,9 +62,19 @@ public final class PitResults implements Serializable {
             return new PitResults(htmlResultFile, mutations, projects);
         }
 
+        /**
+         * In recent versions of PIT the HTML file is not created
+         * if no mutants are generated, so we must check whether
+         * the passed file itself is null or not.
+         * 
+         * @param htmlResultFile
+         * @return
+         */
         public Builder withHtmlResults(File htmlResultFile) {
-            checkFileExists(htmlResultFile);
-            this.htmlResultFile = new File(htmlResultFile.getPath());
+            if (htmlResultFile != null) {
+                checkFileExists(htmlResultFile);
+                this.htmlResultFile = new File(htmlResultFile.getPath());
+            }
             return this;
         }
 
