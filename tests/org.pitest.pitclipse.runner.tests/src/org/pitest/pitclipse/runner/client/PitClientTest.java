@@ -80,6 +80,12 @@ public class PitClientTest extends AbstractPitRunnerTest {
         thenTheSocketIsClosed();
     }
 
+    @Test
+    public void closeIsSafeEvenWithoutConnect() throws IOException { // NOSONAR
+        // we just verify that we don't get any exception
+        new PitClient(0).close();
+    }
+
     private void givenTheRequest(PitRequest request) {
         context.setRequest(request);
     }
