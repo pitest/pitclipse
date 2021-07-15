@@ -22,7 +22,7 @@ import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.mutationtest.engine.MutationDetails;
-import org.pitest.pitclipse.runner.results.DetectionStatus;
+import org.pitest.pitclipse.runner.results.DetectionStatusCoverter;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.Mutations.Mutation;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
@@ -63,37 +63,13 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
             mutation.setMutatedMethod(details.getMethod().name());
             mutation.setMutator(details.getMutator());
             mutation.setSourceFile(details.getFilename());
-            mutation.setStatus(convert(result.getStatus()));
+            mutation.setStatus(DetectionStatusCoverter.convert(result.getStatus()));
             mutation.setDetected(result.getStatus().isDetected());
             mutation.setDescription(details.getDescription());
 
             this.mutations = ImmutableList.<Mutation>builder().addAll(mutations).add(mutation).build();
         }
 
-    }
-
-    private DetectionStatus convert(org.pitest.mutationtest.DetectionStatus status) {
-        switch (status) {
-            case KILLED:
-                return DetectionStatus.KILLED;
-            case MEMORY_ERROR:
-                return DetectionStatus.MEMORY_ERROR;
-            case NON_VIABLE:
-                return DetectionStatus.NON_VIABLE;
-            case NOT_STARTED:
-                return DetectionStatus.NOT_STARTED;
-            case RUN_ERROR:
-                return DetectionStatus.RUN_ERROR;
-            case STARTED:
-                return DetectionStatus.STARTED;
-            case SURVIVED:
-                return DetectionStatus.SURVIVED;
-            case TIMED_OUT:
-                return DetectionStatus.TIMED_OUT;
-            case NO_COVERAGE:
-            default:
-                return DetectionStatus.NO_COVERAGE;
-        }
     }
 
     @Override
