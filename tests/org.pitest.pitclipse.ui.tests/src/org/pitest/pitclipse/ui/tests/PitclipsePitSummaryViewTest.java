@@ -19,9 +19,9 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
     private static final String TEST_PROJECT = "org.pitest.pitclipse.testprojects.twoclasses";
     private static final String FOO_BAR_PACKAGE = "foo.bar";
-    private static final String BLANK_URL = "about:blank";
-    private String FOO_BAR_PACKAGE_RESULT = "./foo.bar/";
+    private String FOO_BAR_PACKAGE_RESULT = "foo.bar";
     private String FOO_CLASS_RESULT = "Foo.java.html";
+    private String INDEX = "index.html";
 
     private static PitSummaryView summaryView;
 
@@ -54,13 +54,11 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
             coverageReportGenerated(2, 80, 0);
 
             SWTBotPreferences.TIMEOUT = 2;
-            assertThat(summaryView.getCurrentBrowserUrl(), endsWith("index.html"));
-            assertThat(summaryView.setLink(FOO_BAR_PACKAGE_RESULT + FOO_CLASS_RESULT), endsWith(FOO_CLASS_RESULT));
-            assertThat(summaryView.setLink(FOO_BAR_PACKAGE_RESULT), endsWith("foo.bar/"));
-            assertThat(summaryView.clickBack(), endsWith(FOO_CLASS_RESULT));
-            assertThat(summaryView.clickBack(), endsWith("index.html"));
+            assertThat(summaryView.getCurrentBrowserUrl(), endsWith(INDEX));
+            assertThat(summaryView.setLink("./"+ FOO_BAR_PACKAGE_RESULT+"/"+FOO_CLASS_RESULT), endsWith(FOO_CLASS_RESULT));
+            assertThat(summaryView.clickBack(), endsWith(INDEX));
             assertThat(summaryView.clickForward(), endsWith(FOO_CLASS_RESULT));
-            assertThat(summaryView.clickHome(), endsWith("index.html"));
+            assertThat(summaryView.clickHome(), endsWith(INDEX));
         } finally {
             // reset SWTBotPreferences.TIMEOUT
             SWTBotPreferences.TIMEOUT = timeout;
