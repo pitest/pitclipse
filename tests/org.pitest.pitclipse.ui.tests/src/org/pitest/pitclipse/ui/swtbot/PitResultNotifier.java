@@ -16,36 +16,75 @@
 
 package org.pitest.pitclipse.ui.swtbot;
 
+import java.io.IOException;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
-import org.pitest.pitclipse.ui.extension.point.PitUiUpdate;
+import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
 
-public class PitResultNotifier implements ResultNotifier<PitUiUpdate> {
-    @Override
-    public void handleResults(PitUiUpdate updateEvent) {
-        notifiyTestsOfHtmlResults(updateEvent);
-    }
+/**
+ * @author Jonas Kutscha
+ */
+public class PitResultNotifier implements ResultNotifier<PitResults> {
+    public enum PitSummary {
+        INSTANCE;
 
-    private void notifiyTestsOfHtmlResults(PitUiUpdate updateEvent) {
-        PitResultsView view = buildResultsView(updateEvent);
-        tryNotifyResults(view);
-    }
+        private Summary summary;
+        private SWTWorkbenchBot bot;
 
-    private PitResultsView buildResultsView(PitUiUpdate results) {
-        ResultsParser parser = new ResultsParser(results.getHtml());
-        Summary summary = parser.getSummary();
-        PitResultsView view = PitResultsView.builder().withClassesTested(summary.getClasses())
-                .withTotalCoverage(summary.getCodeCoverage()).withMutationCoverage(summary.getMutationCoverage())
-                .build();
-        return view;
-    }
+        public int getClasses() {
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
+            return summary.getClasses();
+        }
 
-    private void tryNotifyResults(PitResultsView view) {
-        try {
-            PitNotifier.INSTANCE.notifyResults(view);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        public double getCodeCoverage() {
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
+            return summary.getCodeCoverage();
+        }
+
+        public double getMutationCoverage() {
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
+            return summary.getMutationCoverage();
+        }
+
+        public void reset() {
+            bot = new SWTWorkbenchBot();
+            summary = null;
+        }
+
+        void setSummary(Summary summary) {
+            this.summary = summary;
+        }
+
+        Summary getSummary() {
+            return summary;
+        }
+
+        private class SummaryWaitCondition extends DefaultCondition {
+            @Override
+            public boolean test() throws Exception {
+                return PitSummary.INSTANCE.getSummary() != null;
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "No summary set.";
+            }
         }
     }
 
+    @Override
+    public void handleResults(PitResults results) {
+        try {
+            // file only exists, if mutations were done
+            if (results.getHtmlResultFile() != null) {
+                PitSummary.INSTANCE.setSummary(new ResultsParser(results.getHtmlResultFile()).getSummary());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
