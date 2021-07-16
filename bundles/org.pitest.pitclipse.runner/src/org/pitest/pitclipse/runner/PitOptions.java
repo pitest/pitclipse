@@ -153,9 +153,8 @@ public final class PitOptions implements Serializable {
                 }
                 if (!reportDir.exists()) {
                     createParentDirs(reportDir);
-                    if (!reportDir.mkdir()) {
-                        throw new PitLaunchException("Directory could not be created: " + reportDir);
-                    }
+                    // if we could create parent dirs we can create the reportDir
+                    reportDir.mkdir();
                 }
             } catch (IOException e) {
                 throw new PitLaunchException(UNABLE_TO_USE_PATH + reportDir, e);

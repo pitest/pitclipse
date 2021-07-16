@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
+import org.pitest.pitclipse.runner.util.PitFileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class PitOptionsTest {
 
@@ -117,6 +119,19 @@ public class PitOptionsTest {
                 .withClassUnderTest(TEST_CLASS1).build();
     }
 
+    @Test
+    public void specifyReportDirToCreate() {
+        PitOptions options = PitOptions.builder()
+                .withSourceDirectory(testSrcDir)
+                .withClassUnderTest(TEST_CLASS1)
+                .withReportDirectory(randomDir())
+                .build();
+        File reportDir = options.getReportDirectory();
+        assertTrue(reportDir.isDirectory());
+        assertTrue(reportDir.exists());
+        assertEquals(TMP_DIR, reportDir.getParentFile());
+    }
+
     @Test(expected = PitLaunchException.class)
     public void useInvalidSourceDirectory() {
         PitOptions.builder().withSourceDirectory(REALLY_BAD_PATH).withClassUnderTest(TEST_CLASS1).build();
@@ -147,14 +162,44 @@ public class PitOptionsTest {
 
     @Test(expected = PitLaunchException.class)
     public void invalidHistoryFileSupplied() {
-        PitOptions.builder().withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
-                .withClassesToMutate(CLASS_PATH).withHistoryLocation(getBadPath()).build();
+        PitOptions.builder()
+            .withSourceDirectory(testSrcDir)
+            .withPackagesToTest(PACKAGES)
+            .withClassesToMutate(CLASS_PATH)
+            .withHistoryLocation(getBadPath())
+            .build();
+    }
+
+    @Test(expected = PitLaunchException.class)
+    public void invalidHistoryFileSuppliedWithNullParent() {
+        // this happens in Windows with a bad path
+        File badPath = mock(File.class);
+        PitOptions.builder()
+            .withSourceDirectory(testSrcDir)
+            .withPackagesToTest(PACKAGES)
+            .withClassesToMutate(CLASS_PATH)
+            .withHistoryLocation(badPath)
+            .build();
     }
 
     @Test
     public void validHistoryLocationSupplied() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
                 .withClassesToMutate(CLASS_PATH).withHistoryLocation(historyLocation).build();
+        File location = options.getHistoryLocation();
+        assertFalse(location.isDirectory());
+        assertTrue(location.getParentFile().exists());
+    }
+
+    @Test
+    public void validHistoryLocationSuppliedWithExistingParentDir() throws IOException {
+        PitFileUtils.createParentDirs(historyLocation);
+        PitOptions options = PitOptions.builder()
+                .withSourceDirectory(testSrcDir)
+                .withPackagesToTest(PACKAGES)
+                .withClassesToMutate(CLASS_PATH)
+                .withHistoryLocation(historyLocation)
+                .build();
         File location = options.getHistoryLocation();
         assertFalse(location.isDirectory());
         assertTrue(location.getParentFile().exists());
