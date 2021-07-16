@@ -1,11 +1,12 @@
 package org.pitest.pitclipse.ui.tests;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitSummaryView;
 import org.pitest.pitclipse.ui.view.PitView;
 
@@ -14,11 +15,13 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
     private static final String TEST_PROJECT = "org.pitest.pitclipse.testprojects.twoclasses";
     private static final String FOO_BAR_PACKAGE = "foo.bar";
-    private static final String EXAMPLE_URL = "https://www.example.com/";
     private static final String BLANK_URL = "about:blank";
+    private String FOO_BAR_PACKAGE_RESULT = "./foo.bar/";
+    private String FOO_CLASS_RESULT = "Foo.java.html";
 
     private static PitSummaryView summaryView;
 
@@ -29,14 +32,9 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Before
-    public void openView() throws InterruptedException {
-        openViewById(PitView.VIEW_ID);
-    }
-
-    @After
-    public void resetView() {
+    public void resetView() throws InterruptedException {
         summaryView.closeView();
-        bot.closeAllEditors();
+        openViewById(PitView.VIEW_ID);
     }
 
     @Test
@@ -46,21 +44,22 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
             // set timeout to small time, because offline page loads should be quick and
             // some pages are expected to not change and need timeout
             SWTBotPreferences.TIMEOUT = 2;
-            // should not change page, because no page was opened before
-            assertThat(summaryView.clickHome(), equalTo(BLANK_URL));
-            assertThat(summaryView.clickBack(), equalTo(BLANK_URL));
-            assertThat(summaryView.clickForward(), equalTo(BLANK_URL));
+            // should not change page
+            String lastUrl = summaryView.getCurrentBrowserUrl();
+            assertThat(summaryView.clickHome(), equalTo(lastUrl));
 
             // coverageReportGenerated needs normal timeout
-            runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             SWTBotPreferences.TIMEOUT = timeout;
+            runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0);
 
             SWTBotPreferences.TIMEOUT = 2;
-            assertThat(summaryView.setLink(EXAMPLE_URL), equalTo(EXAMPLE_URL));
-            assertThat(summaryView.clickForward(), equalTo(EXAMPLE_URL));
+            assertThat(summaryView.getCurrentBrowserUrl(), endsWith("index.html"));
+            assertThat(summaryView.setLink(FOO_BAR_PACKAGE_RESULT + FOO_CLASS_RESULT), endsWith(FOO_CLASS_RESULT));
+            assertThat(summaryView.setLink(FOO_BAR_PACKAGE_RESULT), endsWith("foo.bar/"));
+            assertThat(summaryView.clickBack(), endsWith(FOO_CLASS_RESULT));
             assertThat(summaryView.clickBack(), endsWith("index.html"));
-            assertThat(summaryView.clickForward(), equalTo(EXAMPLE_URL));
+            assertThat(summaryView.clickForward(), endsWith(FOO_CLASS_RESULT));
             assertThat(summaryView.clickHome(), endsWith("index.html"));
         } finally {
             // reset SWTBotPreferences.TIMEOUT

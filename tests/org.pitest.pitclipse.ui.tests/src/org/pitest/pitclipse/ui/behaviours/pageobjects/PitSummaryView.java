@@ -18,41 +18,19 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.pitest.pitclipse.ui.behaviours.StepException;
-import org.pitest.pitclipse.ui.swtbot.PitNotifier;
-import org.pitest.pitclipse.ui.swtbot.PitResultsView;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import static org.pitest.pitclipse.ui.view.PitView.BACK_BUTTON_TEXT;
 import static org.pitest.pitclipse.ui.view.PitView.FORWARD_BUTTON_TEXT;
 import static org.pitest.pitclipse.ui.view.PitView.HOME_BUTTON_TEXT;
 
 public class PitSummaryView {
     private static String SUMMARY_VIEW_TITLE = "PIT Summary";
-    private PitResultsView lastResults = null;
     private SWTWorkbenchBot bot;
     private SWTBotView summaryView;
 
     public PitSummaryView(SWTWorkbenchBot bot) {
         this.bot = bot;
-    }
-
-    public void waitForUpdate() {
-        try {
-            lastResults = PitNotifier.INSTANCE.getResults();
-        } catch (InterruptedException e) {
-            throw new StepException(e);
-        }
-    }
-
-    public int getClassesTested() {
-        return lastResults.getClassesTested();
-    }
-
-    public double getOverallCoverage() {
-        return lastResults.getTotalCoverage();
-    }
-
-    public double getMutationCoverage() {
-        return lastResults.getMutationCoverage();
     }
 
     public void showViewIfNotOpen() {
@@ -73,7 +51,6 @@ public class PitSummaryView {
     }
 
     public String clickBack() {
-
         clickButtonWithText(BACK_BUTTON_TEXT);
         summaryView.bot().browser().waitForPageLoaded();
         return getCurrentBrowserUrl();
@@ -91,9 +68,23 @@ public class PitSummaryView {
         return getCurrentBrowserUrl();
     }
 
+    /**
+     * Sets the link in the browser via javaScript, because bot can't click links in
+     * browser
+     * @param hyperLinkText link which to set as url, can be relative
+     * @return new url of browser
+     */
     public String setLink(String hyperLinkText) {
         showViewIfNotOpen();
-        summaryView.bot().browser().setUrl(hyperLinkText);
+        // use this instead of the SWTBrowser.execute(), because we need syncExec
+        final String link = "window.location.href = '" + hyperLinkText + "'";
+        summaryView.bot().browser().waitForPageLoaded();
+        UIThreadRunnable.syncExec(new VoidResult() {
+            @Override
+            public void run() {
+                summaryView.bot().browser().widget.execute(link);
+            }
+        });
         summaryView.bot().browser().waitForPageLoaded();
         return getCurrentBrowserUrl();
     }
@@ -102,8 +93,8 @@ public class PitSummaryView {
      * Closes the view, if it is opened.
      */
     public void closeView() {
-        showViewIfNotOpen();
         if (summaryView != null) {
+            showViewIfNotOpen();
             summaryView.close();
         }
     }

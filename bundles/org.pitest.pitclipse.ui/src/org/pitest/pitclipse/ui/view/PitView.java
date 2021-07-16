@@ -102,4 +102,15 @@ public class PitView extends ViewPart implements SummaryView {
             browser.setUrl(homeUrlString);
         }
     }
+
+    @Override
+    public void dispose() {
+        // reset homeUrlString for tests in
+        // org.pitest.pitclipse.ui.tests.PitclipsePitSummaryViewTest
+        homeUrlString = null;
+        if (browser != null && !browser.isDisposed()) {
+            browser.dispose();
+        }
+        super.dispose();
+    }
 }

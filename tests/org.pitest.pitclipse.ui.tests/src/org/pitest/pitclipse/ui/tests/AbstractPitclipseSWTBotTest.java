@@ -298,8 +298,6 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     protected static void runPackageTest(final String packageName, final String projectName) throws CoreException {
-        // package explorer needs focus, otherwise will not run
-        bot.viewByTitle("Package Explorer").setFocus();
         new PitclipseSteps().runPackageTest(packageName, projectName);
     }
 
