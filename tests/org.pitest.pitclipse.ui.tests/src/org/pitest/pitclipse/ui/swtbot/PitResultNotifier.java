@@ -18,6 +18,10 @@ package org.pitest.pitclipse.ui.swtbot;
 
 import java.io.IOException;
 
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
@@ -27,43 +31,70 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         INSTANCE;
 
         private Summary summary;
+        private SWTWorkbenchBot bot;
 
-        /**
-         * @return covered classes or 0 if no summary is present
-         */
         public int getClasses() {
-            if (summary != null) {
-                return summary.getClasses();
-            }
-            return 0;
+            bot.waitUntil(new ICondition() {
+                public boolean test() throws Exception {
+                    return PitSummary.INSTANCE.getSummary() != null;
+                }
+
+                public void init(SWTBot bot) {
+                    // Intentional empty
+                }
+
+                public String getFailureMessage() {
+                    return "No summary set.";
+                }
+            }, SWTBotPreferences.TIMEOUT);
+            return summary.getClasses();
         }
 
-        /**
-         * @return code coverage or 100 if no summary is present
-         */
         public double getCodeCoverage() {
-            if (summary != null) {
-                return summary.getCodeCoverage();
-            }
-            return 100;
+            bot.waitUntil(new ICondition() {
+                public boolean test() throws Exception {
+                    return PitSummary.INSTANCE.getSummary() != null;
+                }
+
+                public void init(SWTBot bot) {
+                    // Intentional empty
+                }
+
+                public String getFailureMessage() {
+                    return "No summary set.";
+                }
+            }, SWTBotPreferences.TIMEOUT);
+            return summary.getCodeCoverage();
         }
 
-        /**
-         * @return mutation coverage or 100 if no summary is present
-         */
         public double getMutationCoverage() {
-            if (summary != null) {
-                return summary.getMutationCoverage();
-            }
-            return 100;
+            bot.waitUntil(new ICondition() {
+                public boolean test() throws Exception {
+                    return PitSummary.INSTANCE.getSummary() != null;
+                }
+
+                public void init(SWTBot bot) {
+                    // Intentional empty
+                }
+
+                public String getFailureMessage() {
+                    return "No summary set.";
+                }
+            }, SWTBotPreferences.TIMEOUT);
+            return summary.getMutationCoverage();
         }
 
         public void reset() {
+            bot = new SWTWorkbenchBot();
             summary = null;
         }
 
         void setSummary(Summary summary) {
             this.summary = summary;
+        }
+
+        Summary getSummary() {
+            return summary;
         }
     }
 
