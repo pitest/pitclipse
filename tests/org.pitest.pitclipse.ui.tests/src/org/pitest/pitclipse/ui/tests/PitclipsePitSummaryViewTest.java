@@ -43,7 +43,7 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
         try {
             // set timeout to small time, because offline page loads should be quick and
             // some pages are expected to not change and need timeout
-            SWTBotPreferences.TIMEOUT = 2;
+            SWTBotPreferences.TIMEOUT = 50;
             // should not change page
             String lastUrl = summaryView.getCurrentBrowserUrl();
             assertThat(summaryView.clickHome(), equalTo(lastUrl));
@@ -53,7 +53,6 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0);
 
-            SWTBotPreferences.TIMEOUT = 2;
             assertThat(summaryView.getCurrentBrowserUrl(), endsWith(INDEX));
             assertThat(summaryView.setLink("./"+ FOO_BAR_PACKAGE_RESULT+"/"+FOO_CLASS_RESULT), endsWith(FOO_CLASS_RESULT));
             assertThat(summaryView.clickBack(), endsWith(INDEX));
