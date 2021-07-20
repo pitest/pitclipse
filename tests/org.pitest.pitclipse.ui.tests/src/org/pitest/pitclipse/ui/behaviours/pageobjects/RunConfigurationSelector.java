@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.pitest.pitclipse.core.preferences.PitPreferences;
+import org.pitest.pitclipse.launch.ui.PitArgumentsTab;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration.Builder;
 
 import java.util.List;
@@ -59,12 +61,12 @@ public class RunConfigurationSelector {
 
     private PitRunConfiguration getPitConfiguration(SWTBotTreeItem treeItem) {
         String name = treeItem.getText();
-        String project = bot.textWithLabel("Project to mutate:").getText();
-        boolean runInParallel = bot.checkBox("Mutation tests run in parallel").isChecked();
-        boolean incrementalAnalysis = bot.checkBox("Use incremental analysis").isChecked();
-        String excludedClasses = bot.textWithLabel("Excluded classes (e.g.*IntTest)").getText();
-        String excludedMethods = bot.textWithLabel("Excluded methods (e.g.*toString*)").getText();
-        String avoidCallsTo = bot.textWithLabel("Avoid calls to").getText();
+        String project = bot.textWithLabel(PitArgumentsTab.PROJECT_TEXT).getText();
+        boolean runInParallel = bot.checkBox(PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL).isChecked();
+        boolean incrementalAnalysis = bot.checkBox(PitPreferences.USE_INCREMENTAL_ANALYSIS).isChecked();
+        String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDE_CLASSES_FROM_PIT).getText();
+        String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDE_METHODS_FROM_PIT).getText();
+        String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_FROM_PIT).getText();
         return new Builder().withName(name).withProjects(project).withRunInParallel(runInParallel)
                 .withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
                 .withExcludedMethods(excludedMethods).withAvoidCallsTo(avoidCallsTo).build();

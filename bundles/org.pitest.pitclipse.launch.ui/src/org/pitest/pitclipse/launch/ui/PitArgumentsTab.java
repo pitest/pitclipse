@@ -63,11 +63,18 @@ import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
 /**
- * Tab allowing to configure a PIT analyze. 
+ * Tab allowing to configure a PIT analyze.
  */
 public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private static final int NUMBER_OF_COLUMNS = 3;
-    
+    public static final String TEST_CLASS_RADIO_TEXT = "Run mutations from a unit test";
+    public static final String TEST_CLASS_TEXT = "Test Class:";
+    public static final String TEST_DIR_RADIO_TEXT = "Run mutations against a package or directory";
+    public static final String TEST_DIR_TEXT = "Directory:";
+    public static final String FILTERS_GROUP_TEXT = " Filters ";
+    public static final String SCOPE_GROUP_TEXT = " Mutation Scope ";
+    public static final String PROJECT_TEXT = "Project to mutate: ";
+
     private Image icon;
 
     private Text testClassText;
@@ -158,17 +165,17 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         createSpacer(comp);
         createPreferences(font, comp);
     }
-    
+
     private void createMutationScopeWidgets(Font font, Composite comp) {
         Group group = new Group(comp, SWT.NONE);
-        group.setText(" Mutation Scope ");
+        group.setText(SCOPE_GROUP_TEXT);
         group.setFont(font);
         GridData groupGrid = new GridData(FILL_HORIZONTAL);
         groupGrid.horizontalSpan = NUMBER_OF_COLUMNS;
         group.setLayoutData(groupGrid);
         GridLayout groupLayout = new GridLayout(2, false);
         group.setLayout(groupLayout);
-        
+
         createTestClassWidgets(font, group, groupLayout.numColumns);
         createSpacer(group);
         createTestDirWidgets(font, group, groupLayout.numColumns);
@@ -176,7 +183,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     private void createProjectWidgets(Font font, Composite comp) {
         Label projectLabel = new Label(comp, SWT.NONE);
-        projectLabel.setText("Project to mutate: ");
+        projectLabel.setText(PROJECT_TEXT);
         GridData gd = new GridData();
         gd.horizontalSpan = 1;
         projectLabel.setLayoutData(gd);
@@ -190,14 +197,13 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     }
 
     private void createTestClassWidgets(Font font, Composite comp, int columnsInParent) {
-        testClassRadioButton = createTestRadioButton(comp,
-                "Run mutations from a unit test");
+        testClassRadioButton = createTestRadioButton(comp, TEST_CLASS_RADIO_TEXT);
         GridData testClassGrid = new GridData(FILL_HORIZONTAL);
         testClassGrid.horizontalSpan = columnsInParent;
         testClassRadioButton.setLayoutData(testClassGrid);
 
         Label testClassLabel = new Label(comp, SWT.NONE);
-        testClassLabel.setText("Test Class:");
+        testClassLabel.setText(TEST_CLASS_TEXT);
         GridData labelGrid = new GridData();
         labelGrid.horizontalIndent = 25;
         labelGrid.horizontalSpan = 1;
@@ -220,17 +226,16 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     }
 
     private void createTestDirWidgets(Font font, Composite comp, int columnsInParent) {
-        testDirectoryRadioButton = createTestRadioButton(comp,
-                "Run mutations against a package or directory");
+        testDirectoryRadioButton = createTestRadioButton(comp, TEST_DIR_RADIO_TEXT);
         GridData testDirGrid = new GridData(FILL_HORIZONTAL);
         testDirGrid.horizontalSpan = columnsInParent;
         testDirectoryRadioButton.setLayoutData(testDirGrid);
-        
+
         GridData labelGrid = new GridData();
         labelGrid.horizontalIndent = 25;
         labelGrid.horizontalSpan = 1;
         Label testDirectoryLabel = new Label(comp, SWT.NONE);
-        testDirectoryLabel.setText("Directory:");
+        testDirectoryLabel.setText(TEST_DIR_TEXT);
         testDirectoryLabel.setLayoutData(labelGrid);
         testDirectoryLabel.setFont(font);
 
@@ -243,7 +248,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     private void createFilters(Font font, Composite comp) {
         Group group = new Group(comp, SWT.NONE);
-        group.setText(" Filters ");
+        group.setText(FILTERS_GROUP_TEXT);
         group.setFont(font);
         GridData groupGrid = new GridData(FILL_HORIZONTAL);
         groupGrid.horizontalSpan = NUMBER_OF_COLUMNS;

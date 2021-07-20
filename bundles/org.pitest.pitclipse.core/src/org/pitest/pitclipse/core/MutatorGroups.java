@@ -18,9 +18,9 @@ package org.pitest.pitclipse.core;
 
 public enum MutatorGroups {
     
-    DEFAULTS("defaultMutators", "&Default Mutators", ""), 
-    STRONGER("strongerMutators", "&Stronger Mutators", ""), 
-    ALL("allMutators", "&All Mutators", "");
+    DEFAULTS("DEFAULT", "&Default Mutators", ""),
+    STRONGER("STRONGER", "&Stronger Mutators", ""),
+    ALL("ALL", "&All Mutators", "");
 
     private final String label;
     private final String id;
