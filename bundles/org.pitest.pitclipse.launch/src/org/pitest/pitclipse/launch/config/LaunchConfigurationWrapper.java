@@ -41,6 +41,7 @@ import java.util.List;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 public class LaunchConfigurationWrapper {
@@ -262,7 +263,13 @@ public class LaunchConfigurationWrapper {
         return projectFinder.getProjects(this);
     }
 
-    private List<String> getMutators() {
-        return ImmutableList.of(pitConfiguration.getMutators());
+    private List<String> getMutators() throws CoreException {
+        final String mutators;
+        if (launchConfig.hasAttribute(PIT_MUTATORS)) {
+            mutators = launchConfig.getAttribute(PIT_MUTATORS, "");
+        } else {
+            mutators = pitConfiguration.getMutators();
+        }
+        return ImmutableList.of(mutators);
     }
 }

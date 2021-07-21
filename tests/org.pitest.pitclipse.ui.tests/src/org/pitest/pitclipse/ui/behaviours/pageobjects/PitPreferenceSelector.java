@@ -21,7 +21,6 @@ import com.google.common.base.Optional;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.MutatorGroups;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 

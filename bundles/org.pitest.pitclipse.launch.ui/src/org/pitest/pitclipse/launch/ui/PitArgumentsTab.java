@@ -345,7 +345,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
          */
     }
 
-    public String getAttributeFromConfig(ILaunchConfiguration config,
+    public static String getAttributeFromConfig(ILaunchConfiguration config,
             String attribute, String defaultValue) {
         String result = defaultValue;
         try {
@@ -356,7 +356,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         return result;
     }
 
-    public boolean getBooleanAttributeFromConfig(ILaunchConfiguration config,
+    public static boolean getBooleanAttributeFromConfig(ILaunchConfiguration config,
             String attribute, boolean defaultValue) {
         boolean result = defaultValue;
         try {

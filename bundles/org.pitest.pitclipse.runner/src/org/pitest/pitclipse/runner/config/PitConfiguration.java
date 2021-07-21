@@ -120,7 +120,6 @@ public class PitConfiguration {
             this.timeout = timeout;
             return this;
         }
-
         public PitConfiguration build() {
             return new PitConfiguration(executionMode, parallelExecution, incrementalAnalysis, excludedClasses,
                     excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);
