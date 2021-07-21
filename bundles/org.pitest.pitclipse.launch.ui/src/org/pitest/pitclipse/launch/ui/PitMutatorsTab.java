@@ -51,7 +51,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
 /**
@@ -97,7 +97,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     public void initializeFrom(ILaunchConfiguration config) {
         PitConfiguration preferences = PitCoreActivator.getDefault().getConfiguration();
-        mutators = PitArgumentsTab.getAttributeFromConfig(config, PIT_MUTATORS, preferences.getMutators());
+        mutators = PitArgumentsTab.getAttributeFromConfig(config, MUTATORS, preferences.getMutators());
         System.out.println(mutators);
         if (!updateSelectionOfGroup(mutators)) {
             // no selection was made, because no match of data
@@ -239,7 +239,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void performApply(ILaunchConfigurationWorkingCopy config) {
-        config.setAttribute(PIT_MUTATORS, getMutators());
+        config.setAttribute(MUTATORS, getMutators());
         try {
             PitMigrationDelegate.mapResources(config);
         } catch (CoreException ce) {

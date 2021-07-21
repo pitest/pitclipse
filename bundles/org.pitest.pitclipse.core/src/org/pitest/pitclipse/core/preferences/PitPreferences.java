@@ -20,25 +20,37 @@ package org.pitest.pitclipse.core.preferences;
  * Constants used to deal with Pitclipse's preferences.
  */
 public final class PitPreferences {
+    public static final String MUTATORS_LABEL = "Mutators";
+    public static final String MUTATORS = "pitMutators";
 
-    public static final String PIT_MUTATORS = "pitMutators";
-
-    public static final String USE_INCREMENTAL_ANALYSIS = "Use &incremental analysis";
-    public static final String EXCLUDE_CLASSES_FROM_PIT = "E&xcluded classes (e.g.*IntTest)";
-    public static final String MUTATION_TESTS_RUN_IN_PARALLEL = "Mutation tests run in para&llel";
-    public static final String EXCLUDE_METHODS_FROM_PIT = "Excluded &methods (e.g.*toString*)";
-    public static final String AVOID_CALLS_FROM_PIT = "&Avoid calls to";
-    public static final String PIT_TIMEOUT = "Pit Ti&meout";
-    public static final String PIT_TIMEOUT_FACTOR = "Timeout &Factor";
-    public static final String EXCLUDED_METHODS = "excludedMethods";
-    public static final String AVOID_CALLS_TO = "avoidCallsTo";
-    public static final String EXCLUDED_CLASSES = "excludedClasses";
+    public static final String INCREMENTAL_ANALYSIS_LABEL = "Use &incremental analysis";
     public static final String INCREMENTAL_ANALYSIS = "incrementalAnalysis";
-    public static final String PIT_EXECUTION_MODE = "pitExecutionMode";
+
+    public static final String EXCLUDE_CLASSES_LABEL = "E&xcluded classes (e.g.*IntTest)";
+    public static final String EXCLUDED_CLASSES = "excludedClasses";
+
+    public static final String RUN_IN_PARALLEL_LABEL = "Mutation tests run in para&llel";
     public static final String RUN_IN_PARALLEL = "runInParallel";
+
+    public static final String EXCLUDE_METHODS_LABEL = "Excluded &methods (e.g.*toString*)";
+    public static final String EXCLUDE_METHODS = "excludedMethods";
+
+    public static final String AVOID_CALLS_LABEL = "&Avoid calls to";
+    public static final String AVOID_CALLS = "avoidCallsTo";
+
+    public static final String TIMEOUT_LABEL = "Pit Ti&meout";
     public static final String TIMEOUT = "pitTimeout";
+
+    public static final String TIMEOUT_FACTOR_LABEL = "Timeout &Factor";
     public static final String TIMEOUT_FACTOR = "pitTimeoutFactor";
     
+
+    public static final String EXECUTION_SCOPE_LABEL = "Pit execution scope";
+    public static final String EXECUTION_SCOPE = "pitExecutionMode";
+
+    public static final String PREFERENCE_DESCRIPTION_LABEL = "Pitclipse Preferences";
+    public static final String MUTATORS_DESCRIPTION_LABEL = "Mutator Preferences";
+
     private PitPreferences() {
         // utility class should not be instantiated
     }

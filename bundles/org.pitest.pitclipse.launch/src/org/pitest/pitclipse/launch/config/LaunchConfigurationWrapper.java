@@ -41,7 +41,7 @@ import java.util.List;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
 public class LaunchConfigurationWrapper {
@@ -265,8 +265,8 @@ public class LaunchConfigurationWrapper {
 
     private List<String> getMutators() throws CoreException {
         final String mutators;
-        if (launchConfig.hasAttribute(PIT_MUTATORS)) {
-            mutators = launchConfig.getAttribute(PIT_MUTATORS, "");
+        if (launchConfig.hasAttribute(MUTATORS)) {
+            mutators = launchConfig.getAttribute(MUTATORS, "");
         } else {
             mutators = pitConfiguration.getMutators();
         }

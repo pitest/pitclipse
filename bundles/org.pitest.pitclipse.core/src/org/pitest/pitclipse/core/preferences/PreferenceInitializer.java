@@ -21,10 +21,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
@@ -47,10 +47,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     @Override
     public void initializeDefaultPreferences() {
         IPreferenceStore store = PitCoreActivator.getDefault().getPreferenceStore();
-        store.setDefault(PIT_EXECUTION_MODE, "containingProject");
+        store.setDefault(EXECUTION_SCOPE, "containingProject");
         store.setDefault(RUN_IN_PARALLEL, true);
         store.setDefault(INCREMENTAL_ANALYSIS, false);
-        store.setDefault(AVOID_CALLS_TO, DEFAULT_AVOID_CALLS_TO_LIST);
+        store.setDefault(AVOID_CALLS, DEFAULT_AVOID_CALLS_TO_LIST);
         store.setDefault(DEFAULT_MUTATORS, "defaultMutators");
         store.setDefault(TIMEOUT, DEFAULT_TIMEOUT);
         store.setDefault(TIMEOUT_FACTOR, DEFAULT_TIMEOUT_FACTOR.toString());

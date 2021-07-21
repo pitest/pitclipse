@@ -23,14 +23,16 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.MutatorGroups;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_DESCRIPTION_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 
 public class PitMutatorsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
     public PitMutatorsPreferencePage() {
         super(GRID);
         setPreferenceStore(PitCoreActivator.getDefault().getPreferenceStore());
-        setDescription("Mutator Preferences");
+        setDescription(MUTATORS_DESCRIPTION_LABEL);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
         for (int i = 0; i < values.length; i++) {
             mutatorValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
         }
-        addField(new RadioGroupFieldEditor(PIT_MUTATORS, "Mutators", 1, mutatorValues, getFieldEditorParent()));
+        addField(new RadioGroupFieldEditor(MUTATORS, MUTATORS_LABEL, 1, mutatorValues, getFieldEditorParent()));
     }
 
     @Override

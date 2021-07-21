@@ -28,19 +28,19 @@ import java.io.Closeable;
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ZERO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS_LABEL;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 public class PitPreferenceSelector implements Closeable {
 
-    private static final String USE_INCREMENTAL_ANALYSIS_LABEL = "Use incremental analysis";
-    private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
-    private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
-    private static final String EXCLUDED_METHODS_LABEL = "Excluded methods (e.g.*toString*)";
-    private static final String AVOID_CALLS_TO_LABEL = "Avoid calls to";
     private static final String MUTATORS_LABEL = "Mutators";
-    private static final String EXECUTION_MODE_LABEL = "Pit Execution Scope";
-    private static final String PIT_TIMEOUT_LABEL = "Pit Timeout";
-    private static final String PIT_TIMEOUT_FACTOR_LABEL = "Timeout Factor";
     private final SWTWorkbenchBot bot;
 
     public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -72,7 +72,7 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public PitExecutionMode getPitExecutionMode() {
-        return getSelectedExecutionMode().from(EXECUTION_MODE_LABEL);
+        return getSelectedExecutionMode().from(EXECUTION_SCOPE_LABEL);
     }
 
     private PitExecutionMode getActiveExecutionMode() {
@@ -85,43 +85,43 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public boolean isPitRunInParallel() {
-        return getBoolean().from(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL);
+        return getBoolean().from(RUN_IN_PARALLEL_LABEL);
     }
 
     public boolean isIncrementalAnalysisEnabled() {
-        return getBoolean().from(USE_INCREMENTAL_ANALYSIS_LABEL);
+        return getBoolean().from(INCREMENTAL_ANALYSIS_LABEL);
     }
 
     public void setPitRunInParallel(boolean inParallel) {
-        setSelectionFor(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).to(inParallel);
+        setSelectionFor(RUN_IN_PARALLEL_LABEL).to(inParallel);
     }
 
     public void setPitIncrementalAnalysisEnabled(boolean incremental) {
-        setSelectionFor(USE_INCREMENTAL_ANALYSIS_LABEL).to(incremental);
+        setSelectionFor(INCREMENTAL_ANALYSIS_LABEL).to(incremental);
     }
 
     public String getExcludedClasses() {
-        return getText().from(EXCLUDED_CLASSES_LABEL);
+        return getText().from(EXCLUDE_CLASSES_LABEL);
     }
 
     public void setExcludedClasses(String excludedClasses) {
-        setTextFor(EXCLUDED_CLASSES_LABEL).to(excludedClasses);
+        setTextFor(EXCLUDE_CLASSES_LABEL).to(excludedClasses);
     }
 
     public String getExcludedMethods() {
-        return getText().from(EXCLUDED_METHODS_LABEL);
+        return getText().from(EXCLUDE_METHODS_LABEL);
     }
 
     public void setExcludedMethods(String excludedMethods) {
-        setTextFor(EXCLUDED_METHODS_LABEL).to(excludedMethods);
+        setTextFor(EXCLUDE_METHODS_LABEL).to(excludedMethods);
     }
 
     public String getAvoidCallsTo() {
-        return getText().from(AVOID_CALLS_TO_LABEL);
+        return getText().from(AVOID_CALLS_LABEL);
     }
 
     public void setAvoidCallsTo(String avoidCallsTo) {
-        setTextFor(AVOID_CALLS_TO_LABEL).to(avoidCallsTo);
+        setTextFor(AVOID_CALLS_LABEL).to(avoidCallsTo);
     }
 
     public MutatorGroups getMutators() {
@@ -139,11 +139,11 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public void setPitTimeoutConst(int timeout) {
-        setTextFor(PIT_TIMEOUT_LABEL).to(timeout);
+        setTextFor(TIMEOUT_LABEL).to(timeout);
     }
 
     public void setPitTimeoutFactor(int factor) {
-        setTextFor(PIT_TIMEOUT_FACTOR_LABEL).to(factor);
+        setTextFor(TIMEOUT_FACTOR_LABEL).to(factor);
     }
 
     private static interface PreferenceGetter<T> {
@@ -288,10 +288,10 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public int getTimeout() {
-        return getInteger().from(PIT_TIMEOUT_LABEL);
+        return getInteger().from(TIMEOUT_LABEL);
     }
 
     public BigDecimal getPitTimeoutFactor() {
-        return getBigDecimal().from(PIT_TIMEOUT_FACTOR_LABEL);
+        return getBigDecimal().from(TIMEOUT_FACTOR_LABEL);
     }
 }

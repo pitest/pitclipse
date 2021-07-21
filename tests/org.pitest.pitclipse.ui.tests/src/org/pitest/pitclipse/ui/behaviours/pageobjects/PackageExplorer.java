@@ -57,6 +57,7 @@ public class PackageExplorer {
     }
 
     private SWTBotTreeItem getProject(String projectName) {
+        bot.viewByTitle(PACKAGE_EXPLORER).show();
         SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot().tree().getAllItems();
         for (SWTBotTreeItem treeItem : treeItems) {
             if (projectName.equals(treeItem.getText())) {

@@ -50,11 +50,11 @@ import java.net.URL;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS_LABEL;
 import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
@@ -257,9 +257,9 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         group.setLayout(groupLayout);
         
         runInParallel = createNewCheckBox(font, group, groupLayout.numColumns,
-                MUTATION_TESTS_RUN_IN_PARALLEL);
+                RUN_IN_PARALLEL_LABEL);
         incrementalAnalysis = createNewCheckBox(font, group, groupLayout.numColumns,
-                USE_INCREMENTAL_ANALYSIS);
+                INCREMENTAL_ANALYSIS_LABEL);
     }
        
         private void createPreferences(Font font, Composite comp) {
@@ -273,11 +273,11 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         misc.setLayout(miscLayout);
         
         excludedClassesText = createTextPreference(font, misc, miscLayout.numColumns,
-                EXCLUDE_CLASSES_FROM_PIT);
+                EXCLUDE_CLASSES_LABEL);
         excludedMethodsText = createTextPreference(font, misc, miscLayout.numColumns,
-                EXCLUDE_METHODS_FROM_PIT);
+                EXCLUDE_METHODS_LABEL);
         avoidCallsTo = createTextPreference(font, misc, miscLayout.numColumns,
-                AVOID_CALLS_FROM_PIT);
+                AVOID_CALLS_LABEL);
     }
 
     private Text createTextPreference(Font font, Composite comp, int columnsInParent, String label) {

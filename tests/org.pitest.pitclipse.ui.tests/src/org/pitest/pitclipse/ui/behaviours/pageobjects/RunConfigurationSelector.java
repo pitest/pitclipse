@@ -62,11 +62,11 @@ public class RunConfigurationSelector {
     private PitRunConfiguration getPitConfiguration(SWTBotTreeItem treeItem) {
         String name = treeItem.getText();
         String project = bot.textWithLabel(PitArgumentsTab.PROJECT_TEXT).getText();
-        boolean runInParallel = bot.checkBox(PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL).isChecked();
-        boolean incrementalAnalysis = bot.checkBox(PitPreferences.USE_INCREMENTAL_ANALYSIS).isChecked();
-        String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDE_CLASSES_FROM_PIT).getText();
-        String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDE_METHODS_FROM_PIT).getText();
-        String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_FROM_PIT).getText();
+        boolean runInParallel = bot.checkBox(PitPreferences.RUN_IN_PARALLEL_LABEL).isChecked();
+        boolean incrementalAnalysis = bot.checkBox(PitPreferences.INCREMENTAL_ANALYSIS_LABEL).isChecked();
+        String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDE_CLASSES_LABEL).getText();
+        String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDE_METHODS_LABEL).getText();
+        String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_LABEL).getText();
         return new Builder().withName(name).withProjects(project).withRunInParallel(runInParallel)
                 .withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
                 .withExcludedMethods(excludedMethods).withAvoidCallsTo(avoidCallsTo).build();

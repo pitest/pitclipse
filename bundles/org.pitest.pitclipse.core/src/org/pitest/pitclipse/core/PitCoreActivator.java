@@ -37,12 +37,12 @@ import java.util.List;
 import static com.google.common.io.Files.createParentDirs;
 import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
@@ -259,13 +259,13 @@ public class PitCoreActivator extends Plugin {
 
     public PitConfiguration getConfiguration() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        String executionMode = preferenceStore.getString(PIT_EXECUTION_MODE);
-        String mutators = preferenceStore.getString(PIT_MUTATORS);
+        String executionMode = preferenceStore.getString(EXECUTION_SCOPE);
+        String mutators = preferenceStore.getString(MUTATORS);
         boolean parallelRun = preferenceStore.getBoolean(RUN_IN_PARALLEL);
         boolean incrementalAnalysis = preferenceStore.getBoolean(INCREMENTAL_ANALYSIS);
         String excludedClasses = preferenceStore.getString(EXCLUDED_CLASSES);
-        String excludedMethods = preferenceStore.getString(EXCLUDED_METHODS);
-        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS_TO);
+        String excludedMethods = preferenceStore.getString(EXCLUDE_METHODS);
+        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS);
         String timeout = preferenceStore.getString(TIMEOUT);
         String timeoutFactor = preferenceStore.getString(TIMEOUT_FACTOR);
         PitConfiguration.Builder builder = PitConfiguration.builder().withParallelExecution(parallelRun)
@@ -294,14 +294,14 @@ public class PitCoreActivator extends Plugin {
     }
 
     public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-        getPreferenceStore().setValue(PIT_EXECUTION_MODE, pitExecutionMode.getId());
+        getPreferenceStore().setValue(EXECUTION_SCOPE, pitExecutionMode.getId());
     }
 
     public void setMutators(MutatorGroups mutators) {
-        getPreferenceStore().setValue(PIT_MUTATORS, mutators.getId());
+        getPreferenceStore().setValue(MUTATORS, mutators.getId());
     }
     
     public String getDefaultMutators() {
-        return getPreferenceStore().getString(PIT_MUTATORS);
+        return getPreferenceStore().getString(MUTATORS);
     }
 }
