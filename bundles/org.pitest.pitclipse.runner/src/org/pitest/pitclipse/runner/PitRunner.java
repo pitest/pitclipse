@@ -28,25 +28,20 @@ import com.google.common.base.Function;
 /**
  * Executes PIT.
  */
-public class PitRunner {
+public class PitRunner implements Function<PitRequest, PitResults> {
 
-    private PitRunner() {
-        // Only static methods
-    }
-
-    public static Function<PitRequest, PitResults> executePit() {
-        return request -> {
-            String[] cliArgs = PitCliArguments.from(request.getOptions());
-            MutationCoverageReport.main(cliArgs);
-            File reportDir = request.getReportDirectory();
-            File htmlResultFile = PitFileUtils.findFile(reportDir, "index.html");
-            Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
-            return PitResults.builder()
-                   .withHtmlResults(htmlResultFile)
-                   .withProjects(request.getProjects())
-                   .withMutations(mutations)
-                   .build();
-        };
+    @Override
+    public PitResults apply(PitRequest request) {
+        String[] cliArgs = PitCliArguments.from(request.getOptions());
+        MutationCoverageReport.main(cliArgs);
+        File reportDir = request.getReportDirectory();
+        File htmlResultFile = PitFileUtils.findFile(reportDir, "index.html");
+        Mutations mutations = RecordingMutationsDispatcher.INSTANCE.getDispatchedMutations();
+        return PitResults.builder()
+               .withHtmlResults(htmlResultFile)
+               .withProjects(request.getProjects())
+               .withMutations(mutations)
+               .build();
     }
 
 }

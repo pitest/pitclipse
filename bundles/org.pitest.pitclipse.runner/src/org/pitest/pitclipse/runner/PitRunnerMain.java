@@ -36,7 +36,7 @@ public class PitRunnerMain {
         try (PitClient client = new PitClient(port)) {
             client.connect();
             Optional<PitRequest> request = client.readRequest();
-            Optional<PitResults> results = request.map(PitRunner.executePit());
+            Optional<PitResults> results = request.map(new PitRunner());
 
             results.ifPresent(client::sendResults);
         } catch (IOException e) {
