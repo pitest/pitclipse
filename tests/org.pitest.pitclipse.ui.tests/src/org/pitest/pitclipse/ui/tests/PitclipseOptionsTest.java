@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.pitest.pitclipse.core.MutatorGroups;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
@@ -83,7 +83,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void useStrongerMutators() throws CoreException {
         // now set STRONGER mutators
-        PAGES.getWindowsMenu().setMutators(MutatorGroups.STRONGER);
+        PAGES.getWindowsMenu().setMutators(Mutators.STRONGER);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0);
@@ -98,7 +98,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
         } finally {
             // it's crucial to reset it to the default or we break other tests
-            PAGES.getWindowsMenu().setMutators(MutatorGroups.DEFAULTS);
+            PAGES.getWindowsMenu().setMutators(Mutators.DEFAULTS);
         }
     }
 
