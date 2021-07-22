@@ -16,11 +16,10 @@
 
 package org.pitest.pitclipse.runner.results.mutations;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -107,15 +106,18 @@ class ListenerTestFixture {
 
             @Override
             public void describeTo(Description description) {
-                ToStringHelper expectedResultAsString = MoreObjects.toStringHelper(expectedResult);
+                ToStringBuilder expectedResultAsString = new ToStringBuilder(expectedResult);
                 for (Mutation m : expectedResult.getMutation()) {
-                    expectedResultAsString.add(
+                    expectedResultAsString.append(
                             "Mutation",
-                            MoreObjects.toStringHelper(m).add("index", m.getIndex())
-                                    .add("killingTest", m.getKillingTest()).add("lineNumber", m.getLineNumber())
-                                    .add("mutatedClass", m.getMutatedClass())
-                                    .add("mutatedMethod", m.getMutatedMethod()).add("mutator", m.getMutator())
-                                    .add("sourceFile", m.getSourceFile()).add("status", m.getStatus()).toString());
+                            new ToStringBuilder(m).append("index", m.getIndex())
+                                    .append("killingTest", m.getKillingTest())
+                                    .append("lineNumber", m.getLineNumber())
+                                    .append("mutatedClass", m.getMutatedClass())
+                                    .append("mutatedMethod", m.getMutatedMethod())
+                                    .append("mutator", m.getMutator())
+                                    .append("sourceFile", m.getSourceFile())
+                                    .append("status", m.getStatus()).toString());
                 }
                 description.appendText("is equivalent to: ").appendValue(expectedResultAsString);
             }

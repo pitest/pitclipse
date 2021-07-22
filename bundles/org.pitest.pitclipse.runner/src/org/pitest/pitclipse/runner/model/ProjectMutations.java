@@ -17,12 +17,11 @@
 package org.pitest.pitclipse.runner.model;
 
 import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.collect.Collections2.transform;
 
@@ -35,12 +34,7 @@ public class ProjectMutations implements Visitable, Countable {
         this.status = status;
         this.projectName = projectName;
         this.packageMutations = ImmutableList.copyOf(transform(packageMutations,
-                new Function<PackageMutations, PackageMutations>() {
-                    @Override
-                    public PackageMutations apply(PackageMutations input) {
-                        return input.copyOf().withProjectMutations(ProjectMutations.this).build();
-                    }
-                }));
+                input -> input.copyOf().withProjectMutations(ProjectMutations.this).build()));
     }
 
     @Override
@@ -102,21 +96,19 @@ public class ProjectMutations implements Visitable, Countable {
             return false;
         }
         ProjectMutations that = (ProjectMutations) o;
-        return Objects.equal(projectName, that.projectName) &&
-            Objects.equal(packageMutations, that.packageMutations);
+        return Objects.equals(projectName, that.projectName) &&
+            Objects.equals(packageMutations, that.packageMutations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(projectName, packageMutations);
+        return Objects.hash(projectName, packageMutations);
     }
+
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("projectName", projectName)
-            .add("packageMutations", packageMutations)
-            .toString();
+        return "ProjectMutations [projectName=" + projectName + ", packageMutations=" + packageMutations + "]";
     }
 
     @Override

@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 
@@ -52,7 +51,7 @@ public class SummaryResult implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("summaries", summaries).toString();
+        return "SummaryResult [summaries=" + summaries + "]";
     }
 
     public List<ClassSummary> getSummaries() {

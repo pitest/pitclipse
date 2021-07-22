@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.results;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 
 import org.pitest.coverage.CoverageDatabase;
@@ -52,7 +52,7 @@ public class MutationResultListenerLifecycle<T, F extends ListenerFactory<T>> {
 
     private static class RecordingDispatcher<T> implements Dispatcher<T> {
 
-        private Optional<T> result = Optional.absent();
+        private Optional<T> result = Optional.empty();
 
         @Override
         public void dispatch(T result) {

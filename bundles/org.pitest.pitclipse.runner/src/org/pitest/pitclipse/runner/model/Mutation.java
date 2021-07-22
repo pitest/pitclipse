@@ -16,8 +16,7 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 
@@ -146,27 +145,22 @@ public class Mutation implements Visitable {
         }
         Mutation mutation = (Mutation) o;
         return lineNumber == mutation.lineNumber &&
-            Objects.equal(killingTest, mutation.killingTest) &&
-            Objects.equal(mutatedMethod, mutation.mutatedMethod) &&
-            Objects.equal(mutator, mutation.mutator) &&
+            Objects.equals(killingTest, mutation.killingTest) &&
+            Objects.equals(mutatedMethod, mutation.mutatedMethod) &&
+            Objects.equals(mutator, mutation.mutator) &&
             status == mutation.status &&
-            Objects.equal(description, mutation.description);
+            Objects.equals(description, mutation.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(killingTest, lineNumber, mutatedMethod, mutator, status, description);
+        return Objects.hash(killingTest, lineNumber, mutatedMethod, mutator, status, description);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("killingTest", killingTest)
-            .add("lineNumber", lineNumber)
-            .add("mutatedMethod", mutatedMethod)
-            .add("mutator", mutator)
-            .add("status", status)
-            .add("description", description)
-            .toString();
+        return "Mutation [killingTest=" + killingTest + ", lineNumber=" + lineNumber + ", mutatedMethod="
+                + mutatedMethod + ", mutator=" + mutator + ", status=" + status + ", description=" + description + "]";
     }
+
 }

@@ -16,26 +16,6 @@
 
 package org.pitest.pitclipse.core;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.osgi.framework.BundleContext;
-import org.pitest.pitclipse.runner.config.PitConfiguration;
-import org.pitest.pitclipse.runner.config.PitExecutionMode;
-
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.google.common.io.Files.createParentDirs;
-import static com.google.common.io.Files.createTempDir;
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
@@ -46,6 +26,27 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
+import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.osgi.framework.BundleContext;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -118,7 +119,7 @@ public class PitCoreActivator extends Plugin {
                                                                 // class defines
                                                                 // signature
         super.start(context);
-        plugin = this;
+        plugin = this; // NOSONAR typical in Eclipse
         setActivator(this);
         setupStateDirectories();
 
@@ -173,7 +174,7 @@ public class PitCoreActivator extends Plugin {
         } catch (IOException e) {
             // Cannot write to workspace.
             // Probably shouldn't happen but lets use a temp file instead
-            historyFile = new File(createTempDir(), STATE_FILE);
+            historyFile = new File(createTemporaryDirectory(), STATE_FILE);
         }
     }
 
@@ -186,10 +187,17 @@ public class PitCoreActivator extends Plugin {
         } catch (IOException e) {
             // Cannot write to workspace.
             // Probably shouldn't happen but lets use a temp dir instead
-            resultDir = createTempDir();
+            resultDir = createTemporaryDirectory();
         }
     }
 
+    private File createTemporaryDirectory() {
+        try {
+            return Files.createTempDirectory(null).toFile();
+        } catch (IOException e1) {
+            throw new IllegalStateException("Cannot create temporary directory", e1);
+        }
+    }
 
     private static void setActivator(PitCoreActivator pitActivator) {
         plugin = pitActivator;
@@ -222,11 +230,11 @@ public class PitCoreActivator extends Plugin {
     }
 
     public static void log(String msg) {
-        log(Status.INFO, msg, null);
+        log(IStatus.INFO, msg, null);
     }
 
     private static void log(int status, String msg, Throwable t) {
-        getDefault().getLog().log(new Status(status, PLUGIN_ID, Status.OK, msg, t));
+        getDefault().getLog().log(new Status(status, PLUGIN_ID, IStatus.OK, msg, t));
     }
     
     public static void warn(String msg) {
@@ -234,7 +242,7 @@ public class PitCoreActivator extends Plugin {
     }
 
     public static void warn(String msg, Throwable t) {
-        log(Status.WARNING, msg, t);
+        log(IStatus.WARNING, msg, t);
     }
 
     public File emptyResultDir() {

@@ -16,10 +16,19 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import static com.google.common.base.Predicates.notNull;
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.transform;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.pitest.mutationtest.DetectionStatus.KILLED;
+import static org.pitest.mutationtest.DetectionStatus.NO_COVERAGE;
+import static org.pitest.pitclipse.runner.TestFactory.TEST_FACTORY;
+
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
@@ -39,19 +48,9 @@ import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.pitclipse.example.Foo;
 import org.pitest.pitclipse.runner.results.summary.SummaryResultListenerTestSugar.SummaryResultWrapper;
 
-import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
-import static com.google.common.base.Predicates.notNull;
-import static com.google.common.collect.Collections2.filter;
-import static com.google.common.collect.Collections2.transform;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.pitest.mutationtest.DetectionStatus.KILLED;
-import static org.pitest.mutationtest.DetectionStatus.NO_COVERAGE;
-import static org.pitest.pitclipse.runner.TestFactory.TEST_FACTORY;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 class SummaryResultListenerTestData {
     public static ClassMutationResults anUncoveredMutationOnFoo() {
@@ -144,7 +143,7 @@ class SummaryResultListenerTestData {
         }
 
         private int coverageFor(ClassName className) {
-            return Optional.fromNullable(classCoverage.get(className)).or(0);
+            return classCoverage.getOrDefault(className, 0);
         }
 
         @Override

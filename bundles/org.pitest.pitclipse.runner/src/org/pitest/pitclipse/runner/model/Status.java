@@ -17,13 +17,13 @@
 package org.pitest.pitclipse.runner.model;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.collect.Collections2.transform;
 
@@ -98,12 +98,12 @@ public class Status implements Visitable, Countable {
         }
         Status status = (Status) o;
         return detectionStatus == status.detectionStatus &&
-            Objects.equal(projectMutations, status.projectMutations);
+            Objects.equals(projectMutations, status.projectMutations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(detectionStatus, projectMutations);
+        return Objects.hash(detectionStatus, projectMutations);
     }
 
     @Override

@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 
 import org.pitest.classinfo.ClassInfo;
@@ -26,6 +24,7 @@ import org.pitest.mutationtest.MutationResult;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 import static com.google.common.collect.Collections2.filter;
 
@@ -79,23 +78,21 @@ class ClassSummary implements Serializable {
 
         ClassSummary that = (ClassSummary) o;
 
-        return Objects.equal(className, that.className) &&
-            Objects.equal(lineCoverage, that.lineCoverage) &&
-            Objects.equal(mutationCoverage, that.mutationCoverage);
+        return Objects.equals(className, that.className) &&
+            Objects.equals(lineCoverage, that.lineCoverage) &&
+            Objects.equals(mutationCoverage, that.mutationCoverage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(lineCoverage, className, mutationCoverage);
+        return Objects.hash(lineCoverage, className, mutationCoverage);
     }
+
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("className", className)
-            .add("lineCoverage", lineCoverage)
-            .add("mutationCoverage", mutationCoverage)
-            .toString();
+        return "ClassSummary [lineCoverage=" + lineCoverage + ", className=" + className + ", mutationCoverage="
+                + mutationCoverage + "]";
     }
 
     private enum DetectedMutations implements Predicate<MutationResult> {

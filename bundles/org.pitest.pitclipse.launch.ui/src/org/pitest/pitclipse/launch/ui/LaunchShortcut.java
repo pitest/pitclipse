@@ -37,11 +37,7 @@ final class LaunchShortcut {
 
     static <T> Optional<T> forEditorInputDo(IEditorInput i, Function<ITypeRoot, Optional<T>> onFound, Supplier<Optional<T>> notFound) {
         Optional<ITypeRoot> element = Optional.ofNullable(getEditorInputTypeRoot(i));
-        if (element.isPresent()) {
-            return element.map(onFound).get();
-        } else {
-            return notFound.get();
-        }
+        return element.map(onFound).orElseGet(notFound);
     }
 
     static Function<ITypeRoot, Optional<IResource>> getCorrespondingResource() {
