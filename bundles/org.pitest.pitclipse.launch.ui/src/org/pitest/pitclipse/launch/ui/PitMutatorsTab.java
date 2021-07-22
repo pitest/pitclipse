@@ -107,19 +107,29 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     public void initializeFrom(ILaunchConfiguration config) {
         PitConfiguration preferences = PitCoreActivator.getDefault().getConfiguration();
         mutators = PitArgumentsTab.getAttributeFromConfig(config, MUTATORS, preferences.getMutators());
-        System.out.println(mutators);
         if (!updateSelectionOfGroup(mutators)) {
             // no selection was made, because no match of data
             // select custom mutators button
             customMutatorsButton.setSelection(true);
         }
         // restore checked mutators
-        final String individualMutatos = PitArgumentsTab.getAttributeFromConfig(config, INDIVIDUAL_MUTATORS, "");
-        for (String mutatorId : individualMutatos.split(",")) {
-            mutatorsTable.setChecked(mutatorId, true);
-        }
+        intializeMutatorsTable(config);
         disableTableIfUnused();
 
+    }
+
+    private void intializeMutatorsTable(ILaunchConfiguration config) {
+        final String individualMutatos = PitArgumentsTab.getAttributeFromConfig(config, INDIVIDUAL_MUTATORS, "");
+        if (individualMutatos.equals("")) {
+            // no mutators where set, use defaults
+            for (String mutator : Mutators.getDefaultMutators()) {
+                mutatorsTable.setChecked(mutator, true);
+            }
+        } else {
+            for (String mutator : individualMutatos.split(",")) {
+                mutatorsTable.setChecked(mutator, true);
+            }
+        }
     }
 
     public void createControl(Composite parent) {

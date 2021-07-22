@@ -16,6 +16,8 @@
 
 package org.pitest.pitclipse.core;
 
+import java.util.ArrayList;
+
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
 
 /**
@@ -34,16 +36,16 @@ public enum Mutators {
     INVERT_NEGS("Invert Negatives", "Inverts negation of integer and floating point numbers", true),
     MATH("Math", "Replaces binary arithmetic operations for either integer or floating-point arithmetic with another operation", true),
     NEGATE_CONDITIONALS("Negate Conditionals", "Mutates all conditionals found", true),
-    RETURN_VALS("Return Values", "Mutates the return values of method calls. Depending on the return type of the method another mutation is used", true),
+    RETURN_VALS("Return Values", "Mutates the return values of method calls. Depending on the return type of the method another mutation is used"),
     VOID_METHOD_CALLS("Void Method Call", "Removes method calls to void methods", true),
     CONSTRUCTOR_CALLS("Constructor Call", "Replaces constructor calls with null values"),
-    EMPTY_RETURNS("Empty Returns", "Replaces return values with an 'empty' value"),
-    FALSE_RETURNS("False Returns", "Replaces primitive and boxed boolean return values with false"),
-    TRUE_RETURNS("True Returns", "Replaces primitive and boxed boolean return values with true"),
+    EMPTY_RETURNS("Empty Returns", "Replaces return values with an 'empty' value",true),
+    FALSE_RETURNS("False Returns", "Replaces primitive and boxed boolean return values with false",true),
+    TRUE_RETURNS("True Returns", "Replaces primitive and boxed boolean return values with true",true),
     INLINE_CONSTS("Inline Constant", "Mutates inline constants. An inline constant is a literal value assigned to a non-final variable"),
-    NULL_RETURNS("Null Returns", "Replaces return values with null. Method that can be mutated by the EMPTY_RETURNS mutator or that are directly annotated with NotNull are not mutated"),
+    NULL_RETURNS("Null Returns", "Replaces return values with null. Method that can be mutated by the EMPTY_RETURNS mutator or that are directly annotated with NotNull are not mutated", true),
     NON_VOID_METHOD_CALLS("Non Void Method Call", "Removes method calls to non void methods. Their return value is replaced by the Java Default Value for that specific type"),
-    PRIMITIVE_RETURNS("Primite Returns", "Replaces int, short, long, char, float and double return values with 0"),
+    PRIMITIVE_RETURNS("Primite Returns", "Replaces int, short, long, char, float and double return values with 0", true),
     REMOVE_CONDITIONALS("Remove Conditionals", "Removes all conditionals statements such that the guarded statements always execute"),
     REMOVE_INCREMENTS("Remove Increments", "Removes local variable increments"),
     EXPERIMENTAL_ARGUMENT_PROPAGATION("Experimentation Argument Propagation", "Replaces method call with one of its parameters of matching type"),
@@ -97,5 +99,15 @@ public enum Mutators {
     
     public static Mutators[] getMainGroup() {
         return new Mutators[] {DEFAULTS,STRONGER,ALL};
+    }
+
+    public static ArrayList<String> getDefaultMutators() {
+        ArrayList<String> defaultMutators = new ArrayList<String>();
+        for (Mutators m : values()) {
+            if (m.isActiveByDefault()) {
+                defaultMutators.add(m.name());
+            }
+        }
+        return defaultMutators;
     }
 }
