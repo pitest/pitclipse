@@ -27,7 +27,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.ECHO;
 import static org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.ReturnStatus.SUCCESS;
 import static org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.aFreePort;
