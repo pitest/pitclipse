@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pitest.pitclipse.example.ExampleTest;
 import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
+import org.pitest.pitclipse.runner.util.PitFileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +31,13 @@ import java.util.Random;
 
 import static java.lang.Integer.toHexString;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class PitOptionsTest {
 
@@ -88,6 +92,14 @@ public class PitOptionsTest {
         assertEquals(TEST_CLASS1, options.getClassUnderTest());
     }
 
+    @Test
+    public void stringRepresentation() throws IOException {
+        PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
+                .build();
+        assertThat(options.toString(),
+            containsString("classUnderTest=org.pitest.pitclipse.runner.PitOptionsTest"));
+    }
+
     @Test(expected = PitLaunchException.class)
     public void sourceDirectoryDoesNotExist() throws IOException {
         PitOptions.builder().withSourceDirectory(randomDir()).withClassUnderTest(TEST_CLASS1).build();
@@ -105,6 +117,19 @@ public class PitOptionsTest {
     public void useInvalidReportDirectory() {
         PitOptions.builder().withReportDirectory(REALLY_BAD_PATH).withSourceDirectory(testSrcDir)
                 .withClassUnderTest(TEST_CLASS1).build();
+    }
+
+    @Test
+    public void specifyReportDirToCreate() {
+        PitOptions options = PitOptions.builder()
+                .withSourceDirectory(testSrcDir)
+                .withClassUnderTest(TEST_CLASS1)
+                .withReportDirectory(randomDir())
+                .build();
+        File reportDir = options.getReportDirectory();
+        assertTrue(reportDir.isDirectory());
+        assertTrue(reportDir.exists());
+        assertEquals(TMP_DIR, reportDir.getParentFile());
     }
 
     @Test(expected = PitLaunchException.class)
@@ -137,14 +162,44 @@ public class PitOptionsTest {
 
     @Test(expected = PitLaunchException.class)
     public void invalidHistoryFileSupplied() {
-        PitOptions.builder().withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
-                .withClassesToMutate(CLASS_PATH).withHistoryLocation(getBadPath()).build();
+        PitOptions.builder()
+            .withSourceDirectory(testSrcDir)
+            .withPackagesToTest(PACKAGES)
+            .withClassesToMutate(CLASS_PATH)
+            .withHistoryLocation(getBadPath())
+            .build();
+    }
+
+    @Test(expected = PitLaunchException.class)
+    public void invalidHistoryFileSuppliedWithNullParent() {
+        // this happens in Windows with a bad path
+        File badPath = mock(File.class);
+        PitOptions.builder()
+            .withSourceDirectory(testSrcDir)
+            .withPackagesToTest(PACKAGES)
+            .withClassesToMutate(CLASS_PATH)
+            .withHistoryLocation(badPath)
+            .build();
     }
 
     @Test
     public void validHistoryLocationSupplied() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withPackagesToTest(PACKAGES)
                 .withClassesToMutate(CLASS_PATH).withHistoryLocation(historyLocation).build();
+        File location = options.getHistoryLocation();
+        assertFalse(location.isDirectory());
+        assertTrue(location.getParentFile().exists());
+    }
+
+    @Test
+    public void validHistoryLocationSuppliedWithExistingParentDir() throws IOException {
+        PitFileUtils.createParentDirs(historyLocation);
+        PitOptions options = PitOptions.builder()
+                .withSourceDirectory(testSrcDir)
+                .withPackagesToTest(PACKAGES)
+                .withClassesToMutate(CLASS_PATH)
+                .withHistoryLocation(historyLocation)
+                .build();
         File location = options.getHistoryLocation();
         assertFalse(location.isDirectory());
         assertTrue(location.getParentFile().exists());

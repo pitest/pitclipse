@@ -30,14 +30,40 @@ public class PitFileUtils {
 
     public static void createParentDirs(File file) throws IOException {
         File parent = file.getCanonicalFile().getParentFile();
-        if (parent == null) {
-            return;
-        }
         parent.mkdirs();
         // make sure the parent directory has been effectively created
         if (!parent.isDirectory()) {
             throw new IOException("Cannot create parent directories of " + file);
         }
+    }
+
+    /**
+     * Searches for a file with the given name in the given directory,
+     * recursively.
+     * 
+     * @param dir
+     * @param fileName
+     * @return null if no such a file exists
+     */
+    public static File findFile(File dir, String fileName) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+        for (File file : files) {
+            if (fileName.equals(file.getName())) {
+                return file;
+            }
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                File result = findFile(file, fileName);
+                if (null != result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
 }

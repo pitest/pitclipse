@@ -90,6 +90,7 @@ public final class PitOptions implements Serializable {
     }
 
     public static final class PitOptionsBuilder {
+        private static final String UNABLE_TO_USE_PATH = "Unable to use path: ";
         private String classUnderTest = null;
         private ImmutableList<String> classesToMutate = ImmutableList.of();
         private File reportDir = null;
@@ -152,12 +153,11 @@ public final class PitOptions implements Serializable {
                 }
                 if (!reportDir.exists()) {
                     createParentDirs(reportDir);
-                    if (!reportDir.mkdir()) {
-                        throw new PitLaunchException("Directory could not be created: " + reportDir);
-                    }
+                    // if we could create parent dirs we can create the reportDir
+                    reportDir.mkdir();
                 }
             } catch (IOException e) {
-                rethrow(reportDir, e);
+                throw new PitLaunchException(UNABLE_TO_USE_PATH + reportDir, e);
             }
         }
 
@@ -165,13 +165,13 @@ public final class PitOptions implements Serializable {
             if (null != historyLocation) {
                 File parentDir = historyLocation.getParentFile();
                 if (parentDir == null) {
-                    throw new PitLaunchException("Unable to use path: " + historyLocation);
+                    throw new PitLaunchException(UNABLE_TO_USE_PATH + historyLocation);
                 }
                 if (!parentDir.exists()) {
                     try {
                         createParentDirs(historyLocation);
                     } catch (IOException e) {
-                        rethrow(historyLocation, e);
+                        throw new PitLaunchException(UNABLE_TO_USE_PATH + historyLocation, e);
                     }
                 }
             }
@@ -192,10 +192,6 @@ public final class PitOptions implements Serializable {
             if (null == classUnderTest && packages.isEmpty()) {
                 throw new PitLaunchException("Class under test not set.");
             }
-        }
-
-        private void rethrow(File reportDir, IOException e) {
-            throw new PitLaunchException("Unable to use path: " + reportDir, e);
         }
 
         public PitOptionsBuilder withClassUnderTest(String testClass) {

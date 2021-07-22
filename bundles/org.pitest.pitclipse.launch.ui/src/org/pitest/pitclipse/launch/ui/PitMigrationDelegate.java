@@ -68,7 +68,7 @@ public final class PitMigrationDelegate {
         if (projName != null && Path.ROOT.isValidSegment(projName)) {
             IJavaProject javaProject = getJavaModel().getJavaProject(projName);
             if (javaProject.exists()) {
-                element = getJavaProject(typeName, container, element, javaProject);
+                element = getJavaProject(typeName, container, javaProject);
             } else {
                 IProject project = javaProject.getProject();
                 if (project.exists() && !project.isOpen()) {
@@ -83,8 +83,9 @@ public final class PitMigrationDelegate {
         return resource;
     }
 
-    private static IJavaElement getJavaProject(String typeName, String container, IJavaElement element,
+    private static IJavaElement getJavaProject(String typeName, String container,
             IJavaProject javaProject) throws JavaModelException {
+        IJavaElement element = null;
         if (typeName != null && typeName.length() > 0) {
             element = javaProject.findType(typeName);
         } else if (container != null && container.length() > 0) {

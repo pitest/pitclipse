@@ -69,15 +69,17 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
             assertEquals(PROJECT_ISOLATION, selector.getPitExecutionMode());
             selector.close();
             runProjectTest(FOO_BAR_PROJECT);
-            // only the class in the project is mutated
-            coverageReportGenerated(1, 100, 100);
+            // only the classes in the project is mutated
+            consoleContains(3, 3, 100, 3, 1);
+            coverageReportGenerated(2, 100, 100);
             selector = PAGES.getWindowsMenu().openPreferences().andThen();
             selector.setPitExecutionMode(WORKSPACE);
             selector.close();
             runProjectTest(FOO_BAR_PROJECT);
             // also the classes of the used projects are mutated
             // including the external linked source directory in FOO_PROJECT
-            coverageReportGenerated(4, 100, 100);
+            consoleContains(8, 8, 100, 8, 1);
+            coverageReportGenerated(5, 100, 100);
         } finally {
             // reset default values
             IPreferenceStore preferenceStore = PitCoreActivator.getDefault().getPreferenceStore();

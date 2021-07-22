@@ -32,7 +32,7 @@ import org.pitest.pitclipse.runner.io.SocketProvider;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -78,6 +78,12 @@ public class PitClientTest extends AbstractPitRunnerTest {
         whenThePitClientIsStarted();
         whenTheClientIsClosed();
         thenTheSocketIsClosed();
+    }
+
+    @Test
+    public void closeIsSafeEvenWithoutConnect() throws IOException { // NOSONAR
+        // we just verify that we don't get any exception
+        new PitClient(0).close();
     }
 
     private void givenTheRequest(PitRequest request) {

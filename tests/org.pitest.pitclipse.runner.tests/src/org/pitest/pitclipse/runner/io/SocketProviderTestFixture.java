@@ -23,30 +23,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.ReturnStatus.KABOOM;
-import static org.pitest.pitclipse.runner.io.SocketProviderIntegrationTestFixture.ReturnStatus.SUCCESS;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ReturnStatus.KABOOM;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ReturnStatus.SUCCESS;
 
-class SocketProviderIntegrationTestFixture {
+class SocketProviderTestFixture {
 
     static final String ECHO = "echo";
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     enum ReturnStatus {
-        SUCCESS,
-        KABOOM
+        SUCCESS, KABOOM
     }
 
-    private SocketProviderIntegrationTestFixture() {}
-    
-    static int aFreePort() { 
-        return new SocketProvider().getFreePort(); 
+    private SocketProviderTestFixture() {
     }
-    
-    static Optional<ObjectStreamSocket> connectTo(int port) { 
-        return new SocketProvider().connectTo(port); 
+
+    static int aFreePort() {
+        return new SocketProvider().getFreePort();
     }
-    
+
+    static Optional<ObjectStreamSocket> connectTo(int port) {
+        return new SocketProvider().connectTo(port);
+    }
+
     static Future<ReturnStatus> listenOn(final int port) {
         Callable<ReturnStatus> socketTest = new Callable<ReturnStatus>() {
             public ReturnStatus call() throws Exception {

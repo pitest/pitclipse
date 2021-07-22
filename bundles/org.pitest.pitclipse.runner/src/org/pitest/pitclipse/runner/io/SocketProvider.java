@@ -26,25 +26,54 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 /**
- * Provides objects easing reading objects and writing objects to a given port. 
+ * Provides objects easing reading objects and writing objects to a given port.
  */
 public class SocketProvider {
 
     private static final int DEFAULT_TIMEOUT = 5000;
     private static final int RETRY_COUNT = 100;
+    private ServerSocketFactory serverSocketFactory;
 
     /**
-     * <p>Returns an object allowing to write objects to the given port.</p>
+     * For testing purposes.
      * 
-     * <p>This method blocks until a client accepts the connection.</p>
+     * @author Lorenzo Bettini
+     *
+     */
+    static class ServerSocketFactory {
+        public ServerSocket create(int port) throws IOException {
+            return new ServerSocket(port);
+        }
+    }
+
+    public SocketProvider() {
+        this(new ServerSocketFactory());
+    }
+
+    /**
+     * For testing
      * 
-     * @param portNumber
-     *          The number of port to listen for a client.
-     *          
+     * @param serverSocketFactory
+     */
+    SocketProvider(ServerSocketFactory serverSocketFactory) {
+        this.serverSocketFactory = serverSocketFactory;
+    }
+
+    /**
+     * <p>
+     * Returns an object allowing to write objects to the given port.
+     * </p>
+     * 
+     * <p>
+     * This method blocks until a client accepts the connection.
+     * </p>
+     * 
+     * @param portNumber The number of port to listen for a client.
+     * 
      * @return an object allowing to write and read objects from the given port
      */
     public ObjectStreamSocket listen(int portNumber) {
-        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+        try (ServerSocket serverSocket = serverSocketFactory.create(portNumber)) {
             Socket connection = serverSocket.accept();
             return ObjectStreamSocket.make(connection);
         } catch (IOException e) {
@@ -53,17 +82,21 @@ public class SocketProvider {
     }
 
     private long currentTime() {
-        return  System.currentTimeMillis();
+        return System.currentTimeMillis();
     }
 
     /**
-     * <p>Returns an object allowing to write objects to the given port.</p>
+     * <p>
+     * Returns an object allowing to write objects to the given port.
+     * </p>
      * 
-     * <p>This method blocks until a server accepts the connection.</p>
+     * <p>
+     * This method blocks until a server accepts the connection
+     * within a timeout (5 seconds).
+     * </p>
      * 
-     * @param portNumber
-     *          The number of port to connect to a server.
-     *          
+     * @param portNumber The number of port to connect to a server.
+     * 
      * @return an object allowing to write objects to the given port
      */
     public Optional<ObjectStreamSocket> connectTo(int portNumber) {
@@ -76,12 +109,12 @@ public class SocketProvider {
                     Thread.sleep(DEFAULT_TIMEOUT / RETRY_COUNT);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    e.printStackTrace();
+                    return socket;
                 }
             }
-        } 
-        while (!socket.isPresent() && (currentTime() - startInMillis < DEFAULT_TIMEOUT));
-        
+        } while (!socket.isPresent()
+                && (currentTime() - startInMillis < DEFAULT_TIMEOUT));
+
         return socket;
     }
 
@@ -99,10 +132,11 @@ public class SocketProvider {
 
     /**
      * Returns the number of a port that is not currently used
+     * 
      * @return the number of a port that can be used
      */
     public int getFreePort() {
-        try (ServerSocket socket = new ServerSocket(0)) {
+        try (ServerSocket socket = serverSocketFactory.create(0)) {
             return socket.getLocalPort();
         } catch (IOException e) {
             throw new SocketCreationException(e);

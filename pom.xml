@@ -57,7 +57,10 @@
 				- untestable activators -->
 		<sonar.exclusions>
 			**/*Exception.java,
-			**/*Activator.java
+			**/*Activator.java,
+			**/*RunnerMain.java,
+			**/runner/model/*.java,
+			**/runner/results/summary/*.java,
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
@@ -65,8 +68,8 @@
 	</properties>
 
 	<!-- COMMANDS:
-	    * Build project:
-	    	mvn clean verify
+		* Build project:
+			mvn clean verify
 
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug -DskipTests
@@ -117,17 +120,7 @@
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>win32</os>
