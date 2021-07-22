@@ -45,7 +45,7 @@ import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.SURVIVED;
