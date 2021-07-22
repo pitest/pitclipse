@@ -16,6 +16,17 @@
 
 package org.pitest.pitclipse.launch.ui;
 
+import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -30,7 +41,9 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -49,22 +62,11 @@ import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
-import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
-
 /**
  * Tab allowing to configure a PIT analyze.
  */
 public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
-    private static final int NUMBER_OF_COLUMNS = Mutators.getMainGroup().length + 2;
+    private static final int NUMBER_OF_COLUMNS = Mutators.getMainGroup().size() + 2;
     private static final String DESCRIPTION_TEXT = "Select the mutators used to alter the code.";
     private static final String MUTATOR_LINK_TEXT = "See the documentation on Pitest.org";
     private static final String MUTATOR_LINK = "https://pitest.org/quickstart/mutators/";
@@ -73,6 +75,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_NAME = "Name";
     private static final String MUTATORS_FIELD_NAME = "MUTATORS";
+    private static final String NO_DESCRIPTION_TEXT = "No description found yet.";
     private Image icon;
     private String mutators;
     private CheckboxTableViewer mutatorsTable;
@@ -135,8 +138,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     public void createControl(Composite parent) {
         mainComp = new Composite(parent, SWT.NONE);
         setControl(mainComp);
-        GridLayoutFactory.fillDefaults().numColumns(NUMBER_OF_COLUMNS).applyTo(mainComp);
-
+        GridLayoutFactory.swtDefaults().numColumns(2).applyTo(mainComp);
         Font font = parent.getFont();
         mainComp.setFont(font);
 
@@ -149,6 +151,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
         disableTableIfUnused();
         setDirty(false);
+        mainComp.pack();
     }
 
     /**
@@ -169,6 +172,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
             }
 
         });
+        GridDataFactory.swtDefaults().applyTo(link);
     }
 
     /**
@@ -187,7 +191,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         mutateWithLabel.setText("Mutate with: ");
         GridDataFactory.swtDefaults().applyTo(mutateWithLabel);
 
-        groupButtons = new Button[Mutators.getMainGroup().length];
+        groupButtons = new Button[Mutators.getMainGroup().size()];
         int i = 0;
         for (Mutators mutatorGroup : Mutators.getMainGroup()) {
             Button button = new Button(grouopComposite, SWT.RADIO);
@@ -223,15 +227,27 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     /**
      * Creates a group containing a table showing available Execution Hooks.
      * Execution Hooks are found from extension points. Each execution hook provide
-     * a checkbox that can be used to activate / deactivate the hook.
+     * a check box that can be used to activate / deactivate the hook.
      */
     private void createMutatorsTable(Composite parent) {
-        mutatorsTable = CheckboxTableViewer.newCheckList(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        mutatorsTable = CheckboxTableViewer.newCheckList(parent, SWT.MULTI | SWT.BORDER);
         mutatorsTable.getTable().setHeaderVisible(true);
         mutatorsTable.setContentProvider(new ArrayContentProvider());
-        GridDataFactory.swtDefaults().grab(true, true).span(NUMBER_OF_COLUMNS, 1).applyTo(mutatorsTable.getTable());
+        // filter out groups which are present in the main group
+        mutatorsTable.setFilters(new ViewerFilter() {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element) {
+                try {
+                    return !Mutators.getMainGroup().contains(Mutators.valueOf((String) element));
+                } catch (IllegalArgumentException e) {
+                    // not in predefined mutators, is okay
+                    return true;
+                }
+            }
+        });
+        GridDataFactory.swtDefaults().grab(false, false).span(NUMBER_OF_COLUMNS, 1).applyTo(mutatorsTable.getTable());
 
-        TableViewerColumn colName = new TableViewerColumn(mutatorsTable, SWT.FILL | SWT.H_SCROLL | SWT.V_SCROLL);
+        TableViewerColumn colName = new TableViewerColumn(mutatorsTable, SWT.FILL);
         colName.getColumn().setText(COLUMN_NAME);
         colName.setLabelProvider(new CellLabelProvider() {
             @Override
@@ -247,7 +263,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
             }
         });
 
-        TableViewerColumn colDescription = new TableViewerColumn(mutatorsTable, SWT.FILL | SWT.H_SCROLL | SWT.V_SCROLL);
+        TableViewerColumn colDescription = new TableViewerColumn(mutatorsTable, SWT.FILL);
         colDescription.getColumn().setText(COLUMN_DESCRIPTION);
         colDescription.setLabelProvider(new CellLabelProvider() {
             @Override
@@ -258,7 +274,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
                     cell.setText(info.getDescription());
                 } catch (IllegalArgumentException e) {
                     // if no info in our enum is present use default
-                    cell.setText("Nothing found. Could be NON-FUNCTIONING.");
+                    cell.setText(NO_DESCRIPTION_TEXT);
                 }
             }
         });
@@ -266,8 +282,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         try {
             mutatorsTable.setInput(getPitMutators());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Input for mutatorTable was not set correctly.", e);
         }
 
         colName.getColumn().pack();

@@ -22,8 +22,8 @@ import org.pitest.mutationtest.engine.gregor.config.Mutator;
 
 /**
  * Enum which holds information about the mutators of pit.<br>
- * The name of new values <b>must</b> be the exact String,
- * which is used by PIT in the class {@link Mutator}.
+ * The name of new values <b>must</b> be the exact String, which is used by PIT
+ * in the class {@link Mutator}.
  */
 @SuppressWarnings("checkstyle:LineLength")
 public enum Mutators {
@@ -39,9 +39,9 @@ public enum Mutators {
     RETURN_VALS("Return Values", "Mutates the return values of method calls. Depending on the return type of the method another mutation is used"),
     VOID_METHOD_CALLS("Void Method Call", "Removes method calls to void methods", true),
     CONSTRUCTOR_CALLS("Constructor Call", "Replaces constructor calls with null values"),
-    EMPTY_RETURNS("Empty Returns", "Replaces return values with an 'empty' value",true),
-    FALSE_RETURNS("False Returns", "Replaces primitive and boxed boolean return values with false",true),
-    TRUE_RETURNS("True Returns", "Replaces primitive and boxed boolean return values with true",true),
+    EMPTY_RETURNS("Empty Returns", "Replaces return values with an 'empty' value", true),
+    FALSE_RETURNS("False Returns", "Replaces primitive and boxed boolean return values with false", true),
+    TRUE_RETURNS("True Returns", "Replaces primitive and boxed boolean return values with true", true),
     INLINE_CONSTS("Inline Constant", "Mutates inline constants. An inline constant is a literal value assigned to a non-final variable"),
     NULL_RETURNS("Null Returns", "Replaces return values with null. Method that can be mutated by the EMPTY_RETURNS mutator or that are directly annotated with NotNull are not mutated", true),
     NON_VOID_METHOD_CALLS("Non Void Method Call", "Removes method calls to non void methods. Their return value is replaced by the Java Default Value for that specific type"),
@@ -52,7 +52,7 @@ public enum Mutators {
     EXPERIMENTAL_BIG_INTEGER("Experimental Big Integer", "Swaps big integer methods"),
     EXPERIMENTAL_NAKED_RECEIVER("Experimental Naked Receiver", "Replaces method call with a naked receiver"),
     EXPERIMENTAL_MEMBER_VARIABLE("Experimental Member Variable", "Removes assignments to member variables. Can even remove assignments to final members. The members will be initialized with their Java Default Value"),
-    EXPERIMENTAL_SWITCH("Experimental Switch", "Finds the first label within a switch statement that differs from the default label. Mutates the switch statement by replacing the default label (wherever it is used) with this label. ALl the other labels are replaced by the default one"),
+    EXPERIMENTAL_SWITCH("Experimental Switch", "Finds the first label within a switch statement that differs from the default label. Mutates the switch statement by replacing the default label (wherever it is used) with this label. All the other labels are replaced by the default one"),
     ABS("Negation", "Replaces any use of a numeric variable (local variable, field, array cell) with its negation"),
     AOR("Arithmetic Operator Replacement", "Like the Math mutator, replaces binary arithmetic operations for either integer or floating-point arithmetic with another operation"),
     AOD("Arithmetic Operator Deletion", "Replaces an arithmetic operation with one of its members"),
@@ -60,7 +60,7 @@ public enum Mutators {
     OBBN("Bitwise Operator", "Mutates bitwise and (&) and or (|)"),
     ROR("Relational Operator Replacement", "Replaces a relational operator with another one"),
     UOI("Unary Operator Insertion", "Inserts a unary operator (increment or decrement) to a variable call. Affects local variables, array variables, fields and parameters");
-    
+
     /**
      * Descriptor which is used to display the name of this mutator in a table
      */
@@ -73,11 +73,11 @@ public enum Mutators {
      * true, if this mutator is contained in the DEFAULTS group of PIT
      */
     private final boolean activeByDefault;
-    
+
     private Mutators(String descriptor, String description) {
         this(descriptor, description, false);
     }
-    
+
     private Mutators(String descriptor, String description, boolean activeByDefault) {
         this.descriptor = descriptor;
         this.description = description;
@@ -88,7 +88,6 @@ public enum Mutators {
         return descriptor;
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -96,9 +95,14 @@ public enum Mutators {
     public boolean isActiveByDefault() {
         return activeByDefault;
     }
-    
-    public static Mutators[] getMainGroup() {
-        return new Mutators[] {DEFAULTS,STRONGER,ALL};
+
+    public static ArrayList<Mutators> getMainGroup() {
+        final ArrayList<Mutators> mainGroup = new ArrayList<Mutators>();
+        mainGroup.add(DEFAULTS);
+        mainGroup.add(STRONGER);
+        mainGroup.add(ALL);
+        mainGroup.add(OLD_DEFAULTS);
+        return mainGroup;
     }
 
     public static ArrayList<String> getDefaultMutators() {

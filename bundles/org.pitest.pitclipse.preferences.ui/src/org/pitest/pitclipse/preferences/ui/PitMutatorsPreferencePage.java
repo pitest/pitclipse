@@ -16,16 +16,18 @@
 
 package org.pitest.pitclipse.preferences.ui;
 
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_DESCRIPTION_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_LABEL;
+
+import java.util.ArrayList;
+
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.Mutators;
-
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_DESCRIPTION_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import org.pitest.pitclipse.core.PitCoreActivator;
 
 public class PitMutatorsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -41,14 +43,17 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
     }
 
     private void createExecutionModeRadioButtons() {
-        Mutators[] values = Mutators.getMainGroup();
-        String[][] mutatorValues = new String[values.length][2];
-        for (int i = 0; i < values.length; i++) {
-            mutatorValues[i] = new String[] { values[i].getDescriptor(), values[i].name() };
+        ArrayList<Mutators> values = Mutators.getMainGroup();
+        String[][] mutatorValues = new String[values.size()][2];
+        int i = 0;
+        for (Mutators mutator : values) {
+            mutatorValues[i++] = new String[] { mutator.getDescriptor(), mutator.name() };
         }
         addField(new RadioGroupFieldEditor(MUTATORS, MUTATORS_LABEL, 1, mutatorValues, getFieldEditorParent()));
     }
 
     @Override
-    public void init(IWorkbench workbench) { /* Intentionally Empty */ }
+    public void init(IWorkbench workbench) {
+        // Intentionally Empty
+    }
 }
