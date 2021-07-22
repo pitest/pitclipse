@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.results.mutations;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.pitest.pitclipse.runner.results.Mutations;
 
@@ -26,7 +26,7 @@ import org.pitest.pitclipse.runner.results.Mutations;
 public enum RecordingMutationsDispatcher implements MutationsDispatcher {
     INSTANCE;
 
-    private volatile Optional<Mutations> dispatchedMutations = Optional.absent();
+    private volatile Optional<Mutations> dispatchedMutations = Optional.empty();
 
     @Override
     public void dispatch(Mutations result) {
@@ -34,6 +34,6 @@ public enum RecordingMutationsDispatcher implements MutationsDispatcher {
     }
 
     public Mutations getDispatchedMutations() {
-        return dispatchedMutations.or(new Mutations());
+        return dispatchedMutations.orElseGet(Mutations::new);
     }
 }

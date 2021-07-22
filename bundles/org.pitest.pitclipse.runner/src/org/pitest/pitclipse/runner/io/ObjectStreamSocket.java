@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.runner.io;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -57,7 +55,14 @@ public class ObjectStreamSocket implements Closeable {
         }
     }
 
-    @VisibleForTesting
+    /**
+     * Only used by tests
+     * 
+     * @param underlyingSocket
+     * @param inputStream
+     * @param outputStream
+     * @return
+     */
     static ObjectStreamSocket make(Socket underlyingSocket, ObjectInputStream inputStream,
             ObjectOutputStream outputStream) {
         return new ObjectStreamSocket(underlyingSocket, inputStream, outputStream);

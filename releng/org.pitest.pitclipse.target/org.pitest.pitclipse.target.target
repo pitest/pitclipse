@@ -16,6 +16,7 @@
 			<unit id="com.google.guava" version="0.0.0"/>
 			<unit id="com.google.guava.source" version="0.0.0"/>
 			<unit id="org.apache.commons.lang3" version="0.0.0"/>
+			<unit id="org.apache.commons.lang3.source" version="0.0.0"/>
 			<unit id="org.hamcrest.core" version="0.0.0"/>
 			<unit id="org.hamcrest.core.source" version="0.0.0"/>
 			<unit id="org.junit" version="0.0.0"/>

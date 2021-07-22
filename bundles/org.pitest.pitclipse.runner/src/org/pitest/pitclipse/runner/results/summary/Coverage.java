@@ -16,12 +16,10 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 /**
  * <p>The amount of code covered by tests.</p>
@@ -39,12 +37,12 @@ class Coverage implements Serializable {
 
     private final int covered;
     private final int total;
-    private final BigDecimal coverage;
+    private final BigDecimal percentage;
 
-    private Coverage(int covered, int total, BigDecimal coverage) {
+    private Coverage(int covered, int total, BigDecimal percentage) {
         this.covered = covered;
         this.total = total;
-        this.coverage = coverage;
+        this.percentage = percentage;
     }
 
     public static Coverage from(int covered, int total) {
@@ -69,21 +67,18 @@ class Coverage implements Serializable {
 
         Coverage rhs = (Coverage) o;
 
-        return Objects.equal(this.covered, rhs.covered) &&
-                Objects.equal(this.total, rhs.total);
+        return Objects.equals(this.covered, rhs.covered) &&
+                Objects.equals(this.total, rhs.total);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.covered, this.total);
+        return Objects.hash(this.covered, this.total);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("covered", covered)
-            .add("total", total)
-            .add("coverage", coverage)
-            .toString();
+        return "Coverage [covered=" + covered + ", total=" + total + ", percentage=" + percentage + "]";
     }
+
 }

@@ -53,8 +53,6 @@ public class PitCommunicator implements Runnable {
 
     @Override
     public void run() {
-        // TODO Enhance this to make objects immutable & use try-with-resource
-        // (exceptions may be swallowed her)
         try {
             server.listen();
             server.sendRequest(request);

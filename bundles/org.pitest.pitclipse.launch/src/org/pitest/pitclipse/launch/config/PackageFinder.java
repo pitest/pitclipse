@@ -75,49 +75,49 @@ public class PackageFinder {
         }
 
         private Set<String> getPackagesFromRoot(IJavaProject project, String handleId) throws CoreException {
-            Builder<String> builder = ImmutableSet.builder();
+            Builder<String> setBuilder = ImmutableSet.builder();
             IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
             for (IPackageFragmentRoot root : roots) {
                 if (handleId.equals(root.getHandleIdentifier())) {
-                    builder.addAll(packagesFrom(root));
+                    setBuilder.addAll(packagesFrom(root));
                 }
             }
-            return builder.build();
+            return setBuilder.build();
         }
 
         private Set<String> packagesFrom(IPackageFragmentRoot root) throws CoreException {
-            Builder<String> builder = ImmutableSet.builder();
+            Builder<String> setBuilder = ImmutableSet.builder();
             IJavaElement[] elements = root.getChildren();
             for (IJavaElement element : elements) {
                 if (element instanceof IPackageFragment) {
                     IPackageFragment packge = (IPackageFragment) element;
-                    builder.addAll(packagesFrom(packge));
+                    setBuilder.addAll(packagesFrom(packge));
                 }
 
             }
-            return builder.build();
+            return setBuilder.build();
         }
 
         private Set<String> packagesFrom(IPackageFragment packageFragment) throws CoreException {
-            Builder<String> builder = ImmutableSet.builder();
+            Builder<String> setBuilder = ImmutableSet.builder();
             if (packageFragment.getElementName().equals(DEFAULT_PACKAGE_NAME)) {
-                builder.addAll(classesFromDefaultPackage(packageFragment));
+                setBuilder.addAll(classesFromDefaultPackage(packageFragment));
             } else {
                 if (packageFragment.getCompilationUnits().length > 0) {
-                    builder.add(packageFragment.getElementName() + ".*");
+                    setBuilder.add(packageFragment.getElementName() + ".*");
                 }
             }
-            return builder.build();
+            return setBuilder.build();
         }
 
         private Set<String> classesFromDefaultPackage(IPackageFragment packageFragment) throws CoreException {
-            Builder<String> builder = ImmutableSet.builder();
+            Builder<String> setBuilder = ImmutableSet.builder();
             for (ICompilationUnit c : packageFragment.getCompilationUnits()) {
                 for (IType type : c.getAllTypes()) {
-                    builder.add(type.getFullyQualifiedName());
+                    setBuilder.add(type.getFullyQualifiedName());
                 }
             }
-            return builder.build();
+            return setBuilder.build();
         }
     }
 

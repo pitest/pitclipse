@@ -16,15 +16,14 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
+import static com.google.common.collect.Collections2.transform;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-import static com.google.common.collect.Collections2.transform;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
 
 public class ClassMutations implements Visitable, Countable {
     private final String className;
@@ -113,21 +112,20 @@ public class ClassMutations implements Visitable, Countable {
             return false;
         }
         ClassMutations that = (ClassMutations) o;
-        return Objects.equal(className, that.className) &&
-            Objects.equal(mutations, that.mutations);
+        return Objects.equals(className, that.className) &&
+            Objects.equals(mutations, that.mutations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(className, mutations);
+        return Objects.hash(className, mutations);
     }
+
+
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-            .add("className", className)
-            .add("mutations", mutations)
-            .toString();
+        return "ClassMutations [className=" + className + ", mutations=" + mutations + "]";
     }
 
     @Override

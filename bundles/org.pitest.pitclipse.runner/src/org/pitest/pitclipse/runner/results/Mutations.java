@@ -30,7 +30,7 @@ import java.util.List;
 public class Mutations implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected List<Mutations.Mutation> mutation;
+    private List<Mutations.Mutation> mutation;
 
     public List<Mutations.Mutation> getMutation() {
         if (mutation == null) {

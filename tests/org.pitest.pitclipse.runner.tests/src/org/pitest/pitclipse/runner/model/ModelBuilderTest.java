@@ -136,9 +136,11 @@ public class ModelBuilderTest {
             List<Mutations.Mutation> mutations = testClassContext.toExpectedMutation();
             builder.addAll(mutations);
         }
+        final ImmutableList<Mutations.Mutation> build = builder.build();
         mutations = new Mutations() {
-            {
-                mutation = builder.build();
+            @Override
+            public List<Mutation> getMutation() {
+                return build;
             }
         };
     }

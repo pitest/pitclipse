@@ -16,17 +16,16 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.Optional;
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Optional;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 class Verification {
     private final Optional<SummaryResult> actualResult;
@@ -49,12 +48,12 @@ class Verification {
 
             @Override
             public void describeTo(Description description) {
-                description.appendValue(reflectionToString(expected));
+                description.appendValue(expected.toString());
             }
 
             @Override
             protected boolean matchesSafely(SummaryResult actual, Description mismatchDescription) {
-                mismatchDescription.appendValue(reflectionToString(actual));
+                mismatchDescription.appendValue(actual.toString());
                 return reflectionEquals(expected, actual);
             }
         };
