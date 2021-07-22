@@ -76,7 +76,7 @@ public class PitRunnerTest {
                     PitOptionsTest.class.getCanonicalName(),
                     asList("org.pitest.pitclipse.runner.*")))
             .withProjects(PROJECTS).build();
-        PitResults results = PitRunner.executePit().apply(request);
+        PitResults results = new PitRunner().apply(request);
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(aFileThatExists()));
         assertThat(results.getMutations(), is(notNullValue()));
@@ -92,7 +92,7 @@ public class PitRunnerTest {
                     EmptyClass.class.getCanonicalName(),
                     asList("org.pitest.pitclipse.example.empty.*")))
             .withProjects(PROJECTS).build();
-        PitResults results = PitRunner.executePit().apply(request);
+        PitResults results = new PitRunner().apply(request);
         assertThat(results, is(notNullValue()));
         assertThat(results.getHtmlResultFile(), is(nullValue()));
         assertThat(results.getMutations(), is(notNullValue()));

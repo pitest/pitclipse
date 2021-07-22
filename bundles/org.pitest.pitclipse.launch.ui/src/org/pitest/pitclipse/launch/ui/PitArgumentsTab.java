@@ -71,6 +71,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private Text excludedMethodsText;
     private Text avoidCallsTo;
 
+    @Override
     public void initializeFrom(ILaunchConfiguration config) {
         projectText.setText(getAttributeFromConfig(config, ATTR_PROJECT_NAME, ""));
         String testClass = getAttributeFromConfig(config, ATTR_MAIN_TYPE_NAME, "");
@@ -95,14 +96,14 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private void initialiseWithPreferenceDefaults(ILaunchConfiguration config) {
         PitConfiguration preferences = PitCoreActivator.getDefault()
                 .getConfiguration();
-        runInParallel.setSelection(Boolean
-                .valueOf(getBooleanAttributeFromConfig(config,
+        runInParallel.setSelection(
+                getBooleanAttributeFromConfig(config,
                         ATTR_TEST_IN_PARALLEL,
-                        preferences.isParallelExecution())));
-        incrementalAnalysis.setSelection(Boolean
-                .valueOf(getBooleanAttributeFromConfig(config,
+                        preferences.isParallelExecution()));
+        incrementalAnalysis.setSelection(
+                getBooleanAttributeFromConfig(config,
                         ATTR_TEST_INCREMENTALLY,
-                        preferences.isIncrementalAnalysis())));
+                        preferences.isIncrementalAnalysis()));
         excludedClassesText.setText(getAttributeFromConfig(config,
                 ATTR_EXCLUDE_CLASSES, preferences.getExcludedClasses()));
         excludedMethodsText.setText(getAttributeFromConfig(config,
@@ -111,6 +112,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
                 ATTR_AVOID_CALLS_TO, preferences.getExcludedMethods()));
     }
 
+    @Override
     public void createControl(Composite parent) {
         Composite comp = new Composite(parent, SWT.NONE);
         setControl(comp);
@@ -234,10 +236,12 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         return checkBox;
     }
 
+    @Override
     public String getName() {
         return "PIT";
     }
 
+    @Override
     public void performApply(ILaunchConfigurationWorkingCopy workingCopy) {
         workingCopy.setAttribute(ATTR_PROJECT_NAME, projectText.getText()
                 .trim());
@@ -264,6 +268,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         }
     }
 
+    @Override
     public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
         /*
          * IJavaElement javaElement = getContext(); if (javaElement != null) {
@@ -325,6 +330,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     }
 
     private final class UpdateOnModifyListener implements ModifyListener {
+        @Override
         public void modifyText(ModifyEvent evt) {
             updateLaunchConfigurationDialog();
         }

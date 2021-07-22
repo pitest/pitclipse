@@ -44,7 +44,7 @@ import org.pitest.pitclipse.launch.config.ProjectFinder;
 import org.pitest.pitclipse.launch.config.SourceDirFinder;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
-import org.pitest.pitclipse.runner.PitRunner;
+import org.pitest.pitclipse.runner.PitRunnerMain;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.io.SocketProvider;
 
@@ -53,7 +53,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * <p>Abstract launch configuration used to execute PIT in a background VM.</p>
  * 
- * <p>Pitest is executed by calling {@link PitRunner#main(String[])}.</p>
+ * <p>Pitest is executed by calling {@link PitRunnerMain#main(String[])}.</p>
  * 
  * <p>Right after the VM has been launched, contributions to the {@code results}
  * extension points are notified thanks to {@link ExtensionPointHandler}.</p>
@@ -61,12 +61,12 @@ import com.google.common.collect.ImmutableList;
 public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     private static final String EXTENSION_POINT_ID = "org.pitest.pitclipse.core.executePit";
-    private static final String PIT_RUNNER = PitRunner.class.getCanonicalName();
+    private static final String PIT_RUNNER_MAIN = PitRunnerMain.class.getCanonicalName();
     private int portNumber;
     private final PitConfiguration pitConfiguration;
     private boolean projectUsesJunit5 = false;
 
-    public AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
+    protected AbstractPitLaunchDelegate(PitConfiguration pitConfiguration) {
         this.pitConfiguration = pitConfiguration;
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     @Override
     public String getMainTypeName(ILaunchConfiguration launchConfig) throws CoreException {
-        return PIT_RUNNER;
+        return PIT_RUNNER_MAIN;
     }
 
     @Override

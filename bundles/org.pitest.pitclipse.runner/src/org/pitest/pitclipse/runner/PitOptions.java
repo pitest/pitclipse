@@ -16,20 +16,20 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static com.google.common.collect.ImmutableList.copyOf;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
+import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.List;
 
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.io.Files.createParentDirs;
-import static com.google.common.io.Files.createTempDir;
-import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
-import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 /**
  * <p>Options used to parameterize a PIT analysis.</p>
@@ -56,7 +56,7 @@ public final class PitOptions implements Serializable {
     private final BigDecimal timeoutFactor;
     private final boolean useJUnit5;
 
-    private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs,
+    private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs, // NOSONAR this is used by our builder
             File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
             ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
             ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor, boolean useJUnit5) {
@@ -90,6 +90,7 @@ public final class PitOptions implements Serializable {
     }
 
     public static final class PitOptionsBuilder {
+        private static final String UNABLE_TO_USE_PATH = "Unable to use path: ";
         private String classUnderTest = null;
         private ImmutableList<String> classesToMutate = ImmutableList.of();
         private File reportDir = null;
@@ -144,18 +145,19 @@ public final class PitOptions implements Serializable {
         }
 
         private void initialiseReportDir() {
-            if (null == reportDir) {
-                reportDir = createTempDir();
-            }
-            if (!reportDir.exists()) {
-                try {
-                    createParentDirs(reportDir);
-                    if (!reportDir.mkdir()) {
-                        throw new PitLaunchException("Directory could not be created: " + reportDir);
-                    }
-                } catch (IOException e) {
-                    rethrow(reportDir, e);
+            try {
+                if (null == reportDir) {
+                    reportDir =
+                        Files.createTempDirectory(null).toFile(); // NOSONAR we get a security hotspot
+                        // but we're safe about that
                 }
+                if (!reportDir.exists()) {
+                    createParentDirs(reportDir);
+                    // if we could create parent dirs we can create the reportDir
+                    reportDir.mkdir();
+                }
+            } catch (IOException e) {
+                throw new PitLaunchException(UNABLE_TO_USE_PATH + reportDir, e);
             }
         }
 
@@ -163,13 +165,13 @@ public final class PitOptions implements Serializable {
             if (null != historyLocation) {
                 File parentDir = historyLocation.getParentFile();
                 if (parentDir == null) {
-                    throw new PitLaunchException("Unable to use path: " + historyLocation);
+                    throw new PitLaunchException(UNABLE_TO_USE_PATH + historyLocation);
                 }
                 if (!parentDir.exists()) {
                     try {
                         createParentDirs(historyLocation);
                     } catch (IOException e) {
-                        rethrow(historyLocation, e);
+                        throw new PitLaunchException(UNABLE_TO_USE_PATH + historyLocation, e);
                     }
                 }
             }
@@ -190,10 +192,6 @@ public final class PitOptions implements Serializable {
             if (null == classUnderTest && packages.isEmpty()) {
                 throw new PitLaunchException("Class under test not set.");
             }
-        }
-
-        private void rethrow(File reportDir, IOException e) {
-            throw new PitLaunchException("Unable to use path: " + reportDir, e);
         }
 
         public PitOptionsBuilder withClassUnderTest(String testClass) {

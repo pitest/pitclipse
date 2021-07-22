@@ -171,8 +171,10 @@ public class PitclipseSteps {
                 return;
             } catch (TimeoutException te) {
                 counter++;
+                te.printStackTrace();
             } catch (WidgetNotFoundException wfne) {
                 counter++;
+                wfne.printStackTrace();
             }
         }
     }

@@ -90,6 +90,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void setFocus() {
+        // Nothing to do
     }
 
     @Override
