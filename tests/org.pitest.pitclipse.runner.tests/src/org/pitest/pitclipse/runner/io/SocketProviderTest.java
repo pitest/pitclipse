@@ -16,31 +16,30 @@
 
 package org.pitest.pitclipse.runner.io;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ECHO;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.aFreePort;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.connectTo;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.listenOn;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.readMessageFrom;
+import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ReturnStatus.SUCCESS;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Future;
 
 import org.junit.Test;
 import org.pitest.pitclipse.runner.io.SocketProvider.ServerSocketFactory;
 import org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ReturnStatus;
-
-import java.util.concurrent.Future;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ECHO;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.ReturnStatus.SUCCESS;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.aFreePort;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.connectTo;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.listenOn;
-import static org.pitest.pitclipse.runner.io.SocketProviderTestFixture.readMessageFrom;
 
 public class SocketProviderTest {
 

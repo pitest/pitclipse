@@ -19,6 +19,7 @@ package org.pitest.pitclipse.launch.ui;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -49,7 +50,7 @@ public class PitLaunchUiActivator extends AbstractUIPlugin {
         if (plugin == null) {
             return null;
         }
-        IWorkbench workBench = plugin.getWorkbench();
+        IWorkbench workBench = PlatformUI.getWorkbench();
         if (workBench == null) {
             return null;
         }
