@@ -76,6 +76,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String COLUMN_NAME = "Name";
     private static final String MUTATORS_FIELD_NAME = "MUTATORS";
     private static final String NO_DESCRIPTION_TEXT = "No description found yet.";
+    private static final String ERROR_MESSAGE = "At least one mutator or mutator group needs to be selected!";
     private Image icon;
     private String mutators;
     private CheckboxTableViewer mutatorsTable;
@@ -345,12 +346,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
-        /*
-         * IJavaElement javaElement = getContext(); if (javaElement != null) {
-         * initializeJavaProject(javaElement, workingCopy); } else {
-         * workingCopy.setAttribute(
-         * IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); }
-         */
+        // Intentionally left empty
     }
 
     private void createSpacer(Composite comp) {
@@ -389,5 +385,29 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      */
     private boolean isBasicMutatorGroup() {
         return !customMutatorsButton.getSelection();
+    }
+
+    /**
+     * Only allow save, if one of the main mutator groups is selected or at least
+     * one mutator is selected inside the mutatorTable
+     */
+    @Override
+    public boolean canSave() {
+        return isBasicMutatorGroup() || mutatorsTable.getCheckedElements().length > 0;
+    }
+
+    @Override
+    public boolean isValid(ILaunchConfiguration launchConfig) {
+        return canSave();
+    }
+
+    @Override
+    protected void updateLaunchConfigurationDialog() {
+        if (canSave()) {
+            setErrorMessage(null);
+        } else {
+            setErrorMessage(ERROR_MESSAGE);
+        }
+        super.updateLaunchConfigurationDialog();
     }
 }
