@@ -68,6 +68,27 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
+    public void useOldDefaultsMutators() throws CoreException {
+        // set OLD_DEFAULTS mutators
+        PAGES.getWindowsMenu().setMutators(Mutators.OLD_DEFAULTS);
+        try {
+            runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
+            coverageReportGenerated(2, 80, 0);
+            mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)");
+        } finally {
+            // it's crucial to reset it to the default or we break other tests
+            PAGES.getWindowsMenu().setMutators(Mutators.DEFAULTS);
+        }
+    }
+
+    @Test
     public void useDefaultMutators() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0);
