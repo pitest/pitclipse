@@ -85,7 +85,6 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-					<showEclipseLog>true</showEclipseLog>
 					<!-- Increase the timeout for SWTBot especially for the CI -->
 					<argLine>${additionalTestArgLine} ${os-jvm-flags} -Dorg.eclipse.swtbot.search.timeout=90000</argLine>
 				</configuration>
