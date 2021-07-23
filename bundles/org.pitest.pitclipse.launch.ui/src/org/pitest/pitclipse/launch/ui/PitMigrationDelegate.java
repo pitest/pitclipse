@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
@@ -67,14 +68,7 @@ public final class PitMigrationDelegate {
         if (projName != null && Path.ROOT.isValidSegment(projName)) {
             IJavaProject javaProject = getJavaModel().getJavaProject(projName);
             if (javaProject.exists()) {
-                if (typeName != null && typeName.length() > 0) {
-                    element = javaProject.findType(typeName);
-                } else if (container != null && container.length() > 0) {
-                    element = JavaCore.create(container);
-                }
-                if (element == null) {
-                    element = javaProject;
-                }
+                element = getJavaProject(typeName, container, javaProject);
             } else {
                 IProject project = javaProject.getProject();
                 if (project.exists() && !project.isOpen()) {
@@ -87,6 +81,20 @@ public final class PitMigrationDelegate {
             resource = element.getResource();
         }
         return resource;
+    }
+
+    private static IJavaElement getJavaProject(String typeName, String container,
+            IJavaProject javaProject) throws JavaModelException {
+        IJavaElement element = null;
+        if (typeName != null && typeName.length() > 0) {
+            element = javaProject.findType(typeName);
+        } else if (container != null && container.length() > 0) {
+            element = JavaCore.create(container);
+        }
+        if (element == null) {
+            element = javaProject;
+        }
+        return element;
     }
 
     /*

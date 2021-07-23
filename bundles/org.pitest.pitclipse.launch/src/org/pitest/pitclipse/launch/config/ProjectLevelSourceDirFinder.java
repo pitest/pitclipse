@@ -42,7 +42,7 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
         File projectRoot = new File(location);
         for (IPackageFragmentRoot packageRoot : packageRoots) {
             if (isValid(packageRoot)) {
-                File packagePath = removeProjectFromPackagePath(javaProject, packageRoot.getPath());
+                File packagePath = removeProjectFromPackagePath(packageRoot.getPath());
                 File potentialSourceRoot = new File(projectRoot, packagePath.toString());
                 if (isValidSourceDir(potentialSourceRoot)) {
                     sourceDirBuilder.add(potentialSourceRoot);
@@ -70,7 +70,7 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
         return projLocation.toURI();
     }
 
-    private File removeProjectFromPackagePath(IJavaProject javaProject, IPath packagePath) {
+    private File removeProjectFromPackagePath(IPath packagePath) {
         IPath newPath = packagePath.removeFirstSegments(1);
         return newPath.toFile();
     }

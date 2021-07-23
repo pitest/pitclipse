@@ -15,7 +15,8 @@ Export-Package: org.pitest.pitclipse.runner,
  org.pitest.pitclipse.runner.results,
  org.pitest.pitclipse.runner.results.mutations,
  org.pitest.pitclipse.runner.results.summary,
- org.pitest.pitclipse.runner.server
+ org.pitest.pitclipse.runner.server,
+ org.pitest.pitclipse.runner.util
 Import-Package: com.google.common.annotations;version="21.0.0",
  com.google.common.base;version="21.0.0",
  com.google.common.collect;version="21.0.0",

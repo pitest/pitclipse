@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.runner.client;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,6 +78,12 @@ public class PitClientTest extends AbstractPitRunnerTest {
         whenThePitClientIsStarted();
         whenTheClientIsClosed();
         thenTheSocketIsClosed();
+    }
+
+    @Test
+    public void closeIsSafeEvenWithoutConnect() throws IOException { // NOSONAR
+        // we just verify that we don't get any exception
+        new PitClient(0).close();
     }
 
     private void givenTheRequest(PitRequest request) {

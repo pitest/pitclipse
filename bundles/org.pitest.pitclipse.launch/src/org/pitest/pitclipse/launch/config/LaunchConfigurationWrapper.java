@@ -77,7 +77,7 @@ public class LaunchConfigurationWrapper {
         return getProject(launchConfig.getAttribute(ATTR_PROJECT_NAME, ""));
     }
 
-    private IJavaProject getProject(String projectName) throws CoreException {
+    private IJavaProject getProject(String projectName) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         for (IProject project : root.getProjects()) {
             if (projectName.equals(project.getName())) {
