@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="older.target" sequenceNumber="1">
+	<locations>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.e4.core.tools.feature.source.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
+			<repository location="https://download.eclipse.org/releases/photon"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="com.google.guava" version="0.0.0"/>
+			<unit id="com.google.guava.source" version="0.0.0"/>
+			<unit id="org.apache.commons.lang3" version="0.0.0"/>
+			<unit id="org.apache.commons.lang3.source" version="0.0.0"/>
+			<unit id="org.hamcrest.core" version="0.0.0"/>
+			<unit id="org.hamcrest.core.source" version="0.0.0"/>
+			<unit id="org.junit" version="0.0.0"/>
+			<unit id="org.junit.jupiter.api" version="0.0.0"/>
+			<unit id="org.junit.jupiter.api.source" version="0.0.0"/>
+			<unit id="org.junit.jupiter.engine" version="0.0.0"/>
+			<unit id="org.junit.jupiter.engine.source" version="0.0.0"/>
+			<unit id="org.junit.jupiter.migrationsupport" version="0.0.0"/>
+			<unit id="org.junit.jupiter.migrationsupport.source" version="0.0.0"/>
+			<unit id="org.junit.jupiter.params" version="0.0.0"/>
+			<unit id="org.junit.jupiter.params.source" version="0.0.0"/>
+			<unit id="org.junit.platform.commons" version="0.0.0"/>
+			<unit id="org.junit.platform.commons.source" version="0.0.0"/>
+			<unit id="org.junit.platform.engine" version="0.0.0"/>
+			<unit id="org.junit.platform.engine.source" version="0.0.0"/>
+			<unit id="org.junit.platform.launcher" version="0.0.0"/>
+			<unit id="org.junit.platform.launcher.source" version="0.0.0"/>
+			<unit id="org.junit.platform.runner" version="0.0.0"/>
+			<unit id="org.junit.platform.runner.source" version="0.0.0"/>
+			<unit id="org.junit.platform.suite.api" version="0.0.0"/>
+			<unit id="org.junit.platform.suite.api.source" version="0.0.0"/>
+			<unit id="org.junit.source" version="0.0.0"/>
+			<unit id="org.junit.vintage.engine" version="0.0.0"/>
+			<unit id="org.junit.vintage.engine.source" version="0.0.0"/>
+			<unit id="org.mockito" version="0.0.0"/>
+			<unit id="org.mockito.source" version="0.0.0"/>
+			<unit id="org.objenesis" version="0.0.0"/>
+			<unit id="org.slf4j.apis.log4j" version="0.0.0"/>
+			<unit id="org.hamcrest" version="0.0.0"/>
+			<unit id="org.hamcrest.generator" version="0.0.0"/>
+			<unit id="org.hamcrest.generator.source" version="0.0.0"/>
+			<unit id="org.hamcrest.integration" version="0.0.0"/>
+			<unit id="org.hamcrest.integration.source" version="0.0.0"/>
+			<unit id="org.hamcrest.library" version="0.0.0"/>
+			<unit id="org.hamcrest.library.source" version="0.0.0"/>
+			<unit id="org.hamcrest.text" version="0.0.0"/>
+			<unit id="org.hamcrest.text.source" version="0.0.0"/>
+			<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository/"/>
+		</location>
+	</locations>
+</target>

@@ -40,6 +40,11 @@
 		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
 		<eclipse-version>oxygen</eclipse-version>
 
+		<!-- For target platform -->
+		<!-- This can be replaced on the command line, e.g.,
+			-Dtarget-file-name=older.target -->
+		<target-file-name>org.pitest.pitclipse.target.target</target-file-name>
+
 		<!-- The label for the Composite sites -->
 		<site.label>Pitclipse</site.label>
 
@@ -110,7 +115,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<target>
-						<file>../../releng/org.pitest.pitclipse.target/org.pitest.pitclipse.target.target</file>
+						<file>../../releng/org.pitest.pitclipse.target/${target-file-name}</file>
 					</target>
 					<environments>
 						<environment>
