@@ -17,11 +17,15 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
 
 public class Views {
 
@@ -71,13 +75,13 @@ public class Views {
             @Override
             public boolean test() {
                 currentText = showConsole().bot()
-                    .styledText().getText()
-                    .trim();
+                        .styledText().getText()
+                        .trim();
                 final int shownContentLenght = 120;
                 final String end = currentText
-                    .substring(
-                        currentText.length() - shownContentLenght,
-                        currentText.length());
+                        .substring(
+                                currentText.length() - shownContentLenght,
+                                currentText.length());
                 System.out.println("... Console ends with:\n" + end);
                 // IMPORTANT: do not check with endsWith, since stdout and stderr
                 // might interleave in the Console.
@@ -115,4 +119,18 @@ public class Views {
         return consoleView;
     }
 
+
+    /**
+     * Gets the view specified by the given id, if the view is open, otherwise returns null.
+     * @param viewId of view will get returned, if open
+     * @return view or null, if not found
+     */
+    public static IViewPart getViewById(String viewId) {
+        AtomicReference<IViewPart> view = new AtomicReference<>();
+        Display.getDefault().syncExec(() -> {
+            view.set(PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                    .getActivePage().findView(viewId));
+        });
+        return view.get();
+    }
 }

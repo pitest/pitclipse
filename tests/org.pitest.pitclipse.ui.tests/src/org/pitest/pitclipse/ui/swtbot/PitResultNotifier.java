@@ -19,9 +19,8 @@ package org.pitest.pitclipse.ui.swtbot;
 import java.io.IOException;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
@@ -34,13 +33,9 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         private SWTWorkbenchBot bot;
 
         public int getClasses() {
-            bot.waitUntil(new ICondition() {
+            bot.waitUntil(new DefaultCondition() {
                 public boolean test() throws Exception {
                     return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public void init(SWTBot bot) {
-                    // Intentional empty
                 }
 
                 public String getFailureMessage() {
@@ -51,13 +46,9 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         }
 
         public double getCodeCoverage() {
-            bot.waitUntil(new ICondition() {
+            bot.waitUntil(new DefaultCondition() {
                 public boolean test() throws Exception {
                     return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public void init(SWTBot bot) {
-                    // Intentional empty
                 }
 
                 public String getFailureMessage() {
@@ -68,13 +59,9 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         }
 
         public double getMutationCoverage() {
-            bot.waitUntil(new ICondition() {
+            bot.waitUntil(new DefaultCondition() {
                 public boolean test() throws Exception {
                     return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public void init(SWTBot bot) {
-                    // Intentional empty
                 }
 
                 public String getFailureMessage() {

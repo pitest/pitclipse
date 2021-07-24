@@ -16,76 +16,78 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
-import static org.pitest.pitclipse.ui.view.PitView.BACK_BUTTON_TEXT;
-import static org.pitest.pitclipse.ui.view.PitView.FORWARD_BUTTON_TEXT;
-import static org.pitest.pitclipse.ui.view.PitView.HOME_BUTTON_TEXT;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
+import org.pitest.pitclipse.ui.view.PitView;
 
 public class PitSummaryView {
-    private static String SUMMARY_VIEW_TITLE = "PIT Summary";
+    private PitView summaryView;
     private SWTWorkbenchBot bot;
-    private SWTBotView summaryView;
+    private SWTBotBrowser browser;
 
     public PitSummaryView(SWTWorkbenchBot bot) {
         this.bot = bot;
     }
 
-    public void showViewIfNotOpen() {
+    public void getViewIfNotSet() {
         if (summaryView == null) {
-            summaryView = bot.viewByTitle(SUMMARY_VIEW_TITLE);
+            summaryView = (PitView) Views.getViewById(PitView.VIEW_ID);
+            // get browser to wait for page loads
+            browser = bot.viewById(PitView.VIEW_ID).bot().browser();
         }
-        summaryView.show();
-    }
-
-    public void clickButtonWithText(String text) {
-        showViewIfNotOpen();
-        bot.toolbarButton(text).click();
     }
 
     public String getCurrentBrowserUrl() {
-        showViewIfNotOpen();
-        return summaryView.bot().browser().getUrl();
+        getViewIfNotSet();
+        // needs to run in UIThread
+        AtomicReference<String> url = new AtomicReference<>();
+        Display.getDefault().syncExec(() -> {
+            url.set(summaryView.getUrl());
+        });
+
+        return url.get();
     }
 
     public String clickBack() {
-        clickButtonWithText(BACK_BUTTON_TEXT);
-        summaryView.bot().browser().waitForPageLoaded();
+        getViewIfNotSet();
+        // needs to run in UIThread
+        Display.getDefault().syncExec(() -> {
+            summaryView.back();
+        });
+        browser.waitForPageLoaded();
         return getCurrentBrowserUrl();
     }
 
     public String clickHome() {
-        clickButtonWithText(HOME_BUTTON_TEXT);
-        summaryView.bot().browser().waitForPageLoaded();
+        getViewIfNotSet();
+        // needs to run in UIThread
+        Display.getDefault().syncExec(() -> {
+            summaryView.home();
+        });
+        browser.waitForPageLoaded();
         return getCurrentBrowserUrl();
     }
 
     public String clickForward() {
-        clickButtonWithText(FORWARD_BUTTON_TEXT);
-        summaryView.bot().browser().waitForPageLoaded();
+        getViewIfNotSet();
+        // needs to run in UIThread
+        Display.getDefault().syncExec(() -> {
+            summaryView.forward();
+        });
+        browser.waitForPageLoaded();
         return getCurrentBrowserUrl();
     }
 
-    /**
-     * Sets the link in the browser via javaScript, because bot can't click links in
-     * browser
-     * @param hyperLinkText link which to set as url, can be relative
-     * @return new url of browser
-     */
-    public String setLink(String hyperLinkText) {
-        showViewIfNotOpen();
-        // use this instead of the SWTBrowser.execute(), because we need syncExec
-        final String link = "window.location.href = '" + hyperLinkText + "'";
-        summaryView.bot().browser().waitForPageLoaded();
-        UIThreadRunnable.syncExec(new VoidResult() {
-            @Override
-            public void run() {
-                summaryView.bot().browser().widget.execute(link);
-            }
+    public String setUrl(String url) {
+        getViewIfNotSet();
+        // needs to run in UIThread
+        Display.getDefault().syncExec(() -> {
+            summaryView.setUrl(url);
         });
-        summaryView.bot().browser().waitForPageLoaded();
+        browser.waitForPageLoaded();
         return getCurrentBrowserUrl();
     }
 
@@ -94,8 +96,7 @@ public class PitSummaryView {
      */
     public void closeView() {
         if (summaryView != null) {
-            showViewIfNotOpen();
-            summaryView.close();
+            summaryView.dispose();
         }
     }
 }

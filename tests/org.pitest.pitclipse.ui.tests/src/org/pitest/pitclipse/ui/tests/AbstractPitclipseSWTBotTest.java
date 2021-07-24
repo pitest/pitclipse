@@ -134,15 +134,13 @@ public abstract class AbstractPitclipseSWTBotTest {
         });
     }
 
-    protected static void openViewById(String viewId) throws InterruptedException {
-        Display.getDefault().syncExec(new Runnable() {
-            public void run() {
-                IWorkbench workbench = PlatformUI.getWorkbench();
-                try {
-                    workbench.getActiveWorkbenchWindow().getActivePage().showView(viewId);
-                } catch (WorkbenchException e) {
-                    e.printStackTrace();
-                }
+    public static void openViewById(String viewId) throws InterruptedException {
+        Display.getDefault().syncExec(()-> {
+            IWorkbench workbench = PlatformUI.getWorkbench();
+            try {
+                workbench.getActiveWorkbenchWindow().getActivePage().showView(viewId);
+            } catch (WorkbenchException e) {
+                e.printStackTrace();
             }
         });
     }
