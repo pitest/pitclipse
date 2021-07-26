@@ -26,7 +26,9 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,6 +53,7 @@ import org.eclipse.ui.intro.IIntroManager;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.launch.ui.PitLaunchShortcut;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
@@ -301,11 +304,7 @@ public abstract class AbstractPitclipseSWTBotTest {
             int testsRun,
             int testsPerMutations) {
         PAGES.views().waitForTestsAreRunOnConsole();
-        SWTBotView consoleView = bot.viewByPartName("Console");
-        consoleView.show();
-        String consoleText = consoleView.bot()
-                .styledText().getText()
-                .replace("\r", "");
+        final String consoleText = getConsoleText();
         // System.out.println(consoleText);
 
         if (generatedMutants == 0) {
@@ -341,6 +340,41 @@ public abstract class AbstractPitclipseSWTBotTest {
                 )
             );
         }
+    }
+
+    private static String getConsoleText() {
+        SWTBotView consoleView = bot.viewByPartName("Console");
+        consoleView.show();
+        return consoleView.bot()
+                .styledText().getText()
+                .replace("\r", "");
+    }
+
+    /**
+     * Asserts that the only active mutator was the given mutator.
+     * @param mutators which should be the only active mutator
+     */
+    protected static void mutatorIs(Mutators mutators) {
+        final String consoleText = getConsoleText();
+        assertThat(consoleText, containsString(String.format("mutators=[%s]", mutators.name())));
+    }
+
+    /**
+     * Asserts that the only active mutators are the given mutators.
+     * @param mutators which should be the only active mutators
+     */
+    protected static void mutatorsAre(Collection<Mutators> mutators) {
+        final String consoleText = getConsoleText();
+        // build String to match against console text
+        Iterator<Mutators> iterator = mutators.iterator();
+        StringBuilder sb = new StringBuilder();
+        while (iterator.hasNext()) {
+            sb.append(iterator.next().name());
+            if (iterator.hasNext()) {
+                sb.append(',');
+            }
+        }
+        assertThat(consoleText, containsString(String.format("mutators=[%s]", sb.toString())));
     }
 
     /**

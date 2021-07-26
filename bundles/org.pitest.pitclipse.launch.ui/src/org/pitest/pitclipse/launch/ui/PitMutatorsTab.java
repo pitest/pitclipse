@@ -66,11 +66,13 @@ import org.pitest.pitclipse.runner.config.PitConfiguration;
  * Tab allowing to configure a PIT analyze.
  */
 public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
+    public static final String NAME = "Mutators";
+
     private static final int NUMBER_OF_COLUMNS = Mutators.getMainGroup().size() + 2;
     private static final String DESCRIPTION_TEXT = "Select the mutators used to alter the code.";
     private static final String MUTATOR_LINK_TEXT = "See the documentation on Pitest.org";
     private static final String MUTATOR_LINK = "https://pitest.org/quickstart/mutators/";
-    private static final String CUSTOM_MUTATOR_RADIO_TEXT = "Mutators selected below";
+    public static final String CUSTOM_MUTATOR_RADIO_TEXT = "Mutators selected below";
     private static final String CUSTOM_MUTATOR_RADIO_DATA = "CUSTOM";
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_NAME = "Name";
@@ -89,7 +91,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public String getName() {
-        return "Mutators";
+        return NAME;
     }
 
     @Override
@@ -393,7 +395,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      */
     @Override
     public boolean canSave() {
-        return isBasicMutatorGroup() || mutatorsTable.getCheckedElements().length > 0;
+        return isBasicMutatorGroup() || (!isBasicMutatorGroup() && mutatorsTable.getCheckedElements().length > 0);
     }
 
     @Override
