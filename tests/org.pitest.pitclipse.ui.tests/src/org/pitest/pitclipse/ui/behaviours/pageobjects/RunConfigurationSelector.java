@@ -17,6 +17,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static com.google.common.collect.ImmutableList.builder;
+import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellIsActive;
 
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +44,7 @@ public class RunConfigurationSelector {
     private static final String RUN = "Run";
     private static final String RUN_CONFIGURATIONS = "Run Configurations";
     private final SWTWorkbenchBot bot;
+    private final static String DELETE_SHELL_TITLE = "Confirm Launch Configuration Deletion";
 
     public RunConfigurationSelector(SWTWorkbenchBot bot) {
         this.bot = bot;
@@ -291,5 +293,21 @@ public class RunConfigurationSelector {
         shell.bot()
         .button(RUN)
         .click();
+    }
+
+    /**
+     * Deletes the pit run configuration, which matches the given name
+     * @param configurationName which should be deleted
+     */
+    public void removeConfig(String configurationName) {
+        for (SWTBotTreeItem i : getPitConfigurationItem().getItems()) {
+            if (i.getText().equals(configurationName)) {
+                i.contextMenu("Delete").click();
+                bot.waitUntil(shellIsActive(DELETE_SHELL_TITLE));
+                bot.shell(DELETE_SHELL_TITLE).bot().button("Delete").click();
+                return;
+            }
+        }
+        throw new RuntimeException("Could not find '" + configurationName + "' in the configurations of PIT.");
     }
 }

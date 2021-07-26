@@ -139,4 +139,12 @@ public class RunMenu {
         runConfigurationSelector.setOneCustomMutator(configurationName, mutator);
     }
 
+    /**
+     * Removes the pit run configuration, which matches the given name.
+     * @param configurationName which should be removed
+     */
+    public void removeConfig(String configurationName) {
+        runConfigurationSelector.removeConfig(configurationName);
+    }
+
 }
