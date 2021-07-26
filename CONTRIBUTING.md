@@ -67,7 +67,7 @@ Wait for all projects to be imported. Depending on the Eclipse package you are u
 3. Type to the path of the `releng` directory in the `Select root directory` field
 4. Check only the `org.pitest.pitclipse.target` project
 5. `Finish`
-6. Open the `org.pitest.pitclipse.target.target` file; Eclipse IDE starts downloading all the dependencies, which may take some time. The process can be followed thanks to the _Progress_ view
+6. Open the `org.pitest.pitclipse.target.target` file (the other `.target` file is used in the CI to make sure we can build against older versions of Eclipse); Eclipse IDE starts downloading all the dependencies, which may take some time. The process can be followed thanks to the _Progress_ view
 7. On the top-right corner of the editor, click on _Set as Active Target Platform_
 8. Open the `pom.xml` in the project `org.pitest`, navigate to the `<execution>` element marked with error, use the menu "Edit" > "Quick Fix" and select "Discover new m2e connectors"; in the dialog select `maven-dependency-plugin` and press "Finish"; conclude the installation procedure and restart Eclipse when prompted
 9. Use the menu "Project" > "Clean" and clean all projects; you should now have an error free workspace.

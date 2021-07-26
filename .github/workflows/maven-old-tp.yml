@@ -1,4 +1,6 @@
-name: Java CI with Maven
+# It builds using an old Eclipse TP
+
+name: Java CI with Maven Old TP
 
 on:
   push:
@@ -33,17 +35,11 @@ jobs:
         path: |
           ~/.m2
           ~/.sonar/cache
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml', '**/*.target') }}
-        restore-keys: ${{ runner.os }}-m2-
-    - name: Set Maven Additional Goals
-      run: |
-        echo "SONARGOAL=sonar:sonar" >> $GITHUB_ENV
-      if: ${{ env.SONAR_TOKEN }}
+        key: ${{ runner.os }}-oldtp-m2-${{ hashFiles('**/pom.xml', '**/*.yml', '**/*.target') }}
+        restore-keys: ${{ runner.os }}-oldtp-m2-
     - name: Maven Build
       run: >
-         xvfb-run mvn verify -Pjacoco $SONARGOAL
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         xvfb-run mvn verify -Dtarget-file-name=older.target
     - name: Archive Test Results
       uses: actions/upload-artifact@v2
       if: ${{ failure() || cancelled() }}
