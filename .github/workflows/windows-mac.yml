@@ -6,10 +6,10 @@ name: Java CI with Maven on Windows and Mac
 on:
   push:
     paths-ignore:
-      - 'README.md'
+      - '**.md'
   pull_request:
     paths-ignore:
-      - 'README.md'
+      - '**.md'
 
 jobs:
   build:
