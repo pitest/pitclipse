@@ -24,7 +24,7 @@
 	<properties>
 		<!-- DEPENDENCIES -->
 		<!-- last version of Tycho before requiring Java 11 -->
-		<tycho-version>1.7.0</tycho-version>
+		<tycho-version>2.4.0</tycho-version>
 		<jacoco-version>0.8.6</jacoco-version>
 
 		<!-- MISC -->
@@ -39,6 +39,11 @@
 		<releases-directory>${github-local-clone}/releases</releases-directory>
 		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
 		<eclipse-version>oxygen</eclipse-version>
+
+		<!-- For target platform -->
+		<!-- This can be replaced on the command line, e.g.,
+			-Dtarget-file-name=older.target -->
+		<target-file-name>org.pitest.pitclipse.target.target</target-file-name>
 
 		<!-- The label for the Composite sites -->
 		<site.label>Pitclipse</site.label>
@@ -110,11 +115,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<target>
-						<artifact>
-							<groupId>org.pitest</groupId>
-							<artifactId>org.pitest.pitclipse.target</artifactId>
-							<version>2.1.2-SNAPSHOT</version>
-						</artifact>
+						<file>../../releng/org.pitest.pitclipse.target/${target-file-name}</file>
 					</target>
 					<environments>
 						<environment>
