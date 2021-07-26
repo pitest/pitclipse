@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import com.google.common.collect.ImmutableList;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -26,6 +24,7 @@ import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorInput;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -62,8 +61,8 @@ final class LaunchShortcut {
         }
     }
 
-    static ImmutableList<ILaunchConfiguration> emptyLaunchConfiguration() {
-        return ImmutableList.<ILaunchConfiguration>of();
+    static List<ILaunchConfiguration> emptyLaunchConfiguration() {
+        return Collections.emptyList();
     }
 
     static ILaunchConfiguration[] emptyList() {

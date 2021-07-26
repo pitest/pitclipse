@@ -16,9 +16,6 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -47,6 +44,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -291,13 +289,13 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         ILaunchConfiguration[] configs = getLaunchManager().getLaunchConfigurations(configType);
         String[] attributeToCompare = getAttributeNamesToCompare();
 
-        Builder<ILaunchConfiguration> candidateConfigs = ImmutableList.builder();
+        List<ILaunchConfiguration> candidateConfigs = new ArrayList<>();
         for (ILaunchConfiguration config : configs) {
             if (hasSameAttributes(config, temporary, attributeToCompare)) {
                 candidateConfigs.add(config);
             }
         }
-        return candidateConfigs.build();
+        return candidateConfigs;
     }
 
     private List<ILaunchConfiguration> findExistingLaunchConfigurations(Object candidate) {
