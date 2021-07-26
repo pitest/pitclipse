@@ -52,6 +52,10 @@ import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.intro.IIntroManager;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
@@ -77,6 +81,15 @@ public abstract class AbstractPitclipseSWTBotTest {
     private static int classIndex = 3;
     private static int lineIndex = 4;
     private static int mutationIndex = 5;
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            System.out.println("#################");
+            System.out.println("### Starting test: " + description.getMethodName());
+            System.out.println("#################");
+        }
+    };
 
     @BeforeClass
     public static void beforeClass() throws Exception {
