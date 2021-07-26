@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2012-2021 Phil Glover and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -20,8 +20,8 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_M
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
 import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_CONTAINER;
@@ -89,7 +89,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     private Text excludedClassesText;
     private Text excludedMethodsText;
     private Text avoidCallsTo;
-    
+
     @Override
     public Image getImage() {
         Bundle bundle = Platform.getBundle(PitLaunchUiActivator.PLUGIN_ID);
@@ -98,7 +98,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         icon = ImageDescriptor.createFromURL(iconURL).createImage();
         return icon;
     }
-    
+
     @Override
     public void dispose() {
         if (icon != null) {
@@ -258,14 +258,14 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         group.setLayoutData(groupGrid);
         GridLayout groupLayout = new GridLayout(1, false);
         group.setLayout(groupLayout);
-        
+
         runInParallel = createNewCheckBox(font, group, groupLayout.numColumns,
                 RUN_IN_PARALLEL_LABEL);
         incrementalAnalysis = createNewCheckBox(font, group, groupLayout.numColumns,
                 INCREMENTAL_ANALYSIS_LABEL);
     }
-       
-        private void createPreferences(Font font, Composite comp) {
+
+    private void createPreferences(Font font, Composite comp) {
         Group misc = new Group(comp, SWT.NONE);
         misc.setText(" Preferences ");
         misc.setFont(font);
@@ -274,11 +274,11 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         misc.setLayoutData(miscGrid);
         GridLayout miscLayout = new GridLayout(2, false);
         misc.setLayout(miscLayout);
-        
+
         excludedClassesText = createTextPreference(font, misc, miscLayout.numColumns,
-                EXCLUDE_CLASSES_LABEL);
+                EXCLUDED_CLASSES_LABEL);
         excludedMethodsText = createTextPreference(font, misc, miscLayout.numColumns,
-                EXCLUDE_METHODS_LABEL);
+                EXCLUDED_METHODS_LABEL);
         avoidCallsTo = createTextPreference(font, misc, miscLayout.numColumns,
                 AVOID_CALLS_LABEL);
     }

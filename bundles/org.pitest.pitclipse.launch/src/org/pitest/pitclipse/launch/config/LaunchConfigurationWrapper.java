@@ -16,8 +16,14 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -35,14 +41,8 @@ import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
-import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 public class LaunchConfigurationWrapper {
 
@@ -127,8 +127,6 @@ public class LaunchConfigurationWrapper {
         int timeout = pitConfiguration.getTimeout();
         BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
         
-        
-
         PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
                 .withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
                 .withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)

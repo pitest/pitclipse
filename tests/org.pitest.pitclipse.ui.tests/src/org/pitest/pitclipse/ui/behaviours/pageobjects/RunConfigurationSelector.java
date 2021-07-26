@@ -80,8 +80,8 @@ public class RunConfigurationSelector {
         }
         boolean runInParallel = bot.checkBox(PitPreferences.RUN_IN_PARALLEL_LABEL).isChecked();
         boolean incrementalAnalysis = bot.checkBox(PitPreferences.INCREMENTAL_ANALYSIS_LABEL).isChecked();
-        String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDE_CLASSES_LABEL).getText();
-        String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDE_METHODS_LABEL).getText();
+        String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDED_CLASSES_LABEL).getText();
+        String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDED_METHODS_LABEL).getText();
         String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_LABEL).getText();
         return new Builder().withName(name).withProjects(project).withRunInParallel(runInParallel)
                 .withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
@@ -107,20 +107,23 @@ public class RunConfigurationSelector {
 
     private SWTBotTreeItem getPitConfigurationItem() {
         activateShell();
+        final String itemName = "PIT Mutation Test";
         for (SWTBotTreeItem treeItem : bot.tree().getAllItems()) {
-            if ("PIT Mutation Test".equals(treeItem.getText())) {
+            if (itemName.equals(treeItem.getText())) {
                 return treeItem.select().expand();
             }
         }
-        return null;
+        throw new RuntimeException("Could not find '" + itemName + "' in the configurations tab.");
     }
 
     private void activateConfiguration(String configurationName) {
         for (SWTBotTreeItem i : getPitConfigurationItem().getItems()) {
             if (i.getText().equals(configurationName)) {
                 i.click();
+                return;
             }
         }
+        throw new RuntimeException("Could not find '" + configurationName + "' in the configurations of PIT.");
     }
 
     public void activateMutatorsTab(String configurationName) {
@@ -179,8 +182,8 @@ public class RunConfigurationSelector {
         } else {
             bot.checkBox(PitPreferences.INCREMENTAL_ANALYSIS_LABEL).deselect();
         }
-        bot.textWithLabel(PitPreferences.EXCLUDE_CLASSES_LABEL).setText(config.getExcludedClasses());
-        bot.textWithLabel(PitPreferences.EXCLUDE_METHODS_LABEL).setText(config.getExcludedMethods());
+        bot.textWithLabel(PitPreferences.EXCLUDED_CLASSES_LABEL).setText(config.getExcludedClasses());
+        bot.textWithLabel(PitPreferences.EXCLUDED_METHODS_LABEL).setText(config.getExcludedMethods());
         bot.textWithLabel(PitPreferences.AVOID_CALLS_LABEL).setText(config.getAvoidCallsTo());
         // close shell and save
         closeConfigurationShell();
@@ -286,9 +289,7 @@ public class RunConfigurationSelector {
         activateConfiguration(configurationName);
         SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
         shell.bot()
-                .button(RUN)
-                .click();
-        shell.close();
+        .button(RUN)
+        .click();
     }
-
 }

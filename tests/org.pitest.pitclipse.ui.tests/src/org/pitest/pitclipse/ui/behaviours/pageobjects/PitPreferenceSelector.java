@@ -29,8 +29,8 @@ import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ZERO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_LABEL;
@@ -101,19 +101,19 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public String getExcludedClasses() {
-        return getText().from(EXCLUDE_CLASSES_LABEL);
+        return getText().from(EXCLUDED_CLASSES_LABEL);
     }
 
     public void setExcludedClasses(String excludedClasses) {
-        setTextFor(EXCLUDE_CLASSES_LABEL).to(excludedClasses);
+        setTextFor(EXCLUDED_CLASSES_LABEL).to(excludedClasses);
     }
 
     public String getExcludedMethods() {
-        return getText().from(EXCLUDE_METHODS_LABEL);
+        return getText().from(EXCLUDED_METHODS_LABEL);
     }
 
     public void setExcludedMethods(String excludedMethods) {
-        setTextFor(EXCLUDE_METHODS_LABEL).to(excludedMethods);
+        setTextFor(EXCLUDED_METHODS_LABEL).to(excludedMethods);
     }
 
     public String getAvoidCallsTo() {

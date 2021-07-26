@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2012-2021 Jonas Kutscha and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -64,6 +64,7 @@ import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 /**
  * Tab allowing to configure a PIT analyze.
+ * @author Jonas Kutscha
  */
 public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     public static final String NAME = "Mutators";
@@ -110,6 +111,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         }
     }
 
+    @Override
     public void initializeFrom(ILaunchConfiguration config) {
         PitConfiguration preferences = PitCoreActivator.getDefault().getConfiguration();
         mutators = PitArgumentsTab.getAttributeFromConfig(config, MUTATORS, preferences.getMutators());
@@ -138,6 +140,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         }
     }
 
+    @Override
     public void createControl(Composite parent) {
         mainComp = new Composite(parent, SWT.NONE);
         setControl(mainComp);
@@ -321,6 +324,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         GridDataFactory.fillDefaults().span(NUMBER_OF_COLUMNS, 1).applyTo(separator);
     }
 
+    @Override
     public void performApply(ILaunchConfigurationWorkingCopy config) {
         config.setAttribute(INDIVIDUAL_MUTATORS, getIndividualMutators());
         if (isBasicMutatorGroup()) {
@@ -347,6 +351,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         return sb.toString();
     }
 
+    @Override
     public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
         // Intentionally left empty
     }

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2012-2021 Phil Glover and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -22,20 +22,20 @@ package org.pitest.pitclipse.core.preferences;
 public final class PitPreferences {
     public static final String MUTATORS_LABEL = "Mutators";
     public static final String MUTATORS = "pitMutators";
-    
+
     public static final String INDIVIDUAL_MUTATORS = "pitIndividualMutators";
 
     public static final String INCREMENTAL_ANALYSIS_LABEL = "Use &incremental analysis";
     public static final String INCREMENTAL_ANALYSIS = "incrementalAnalysis";
 
-    public static final String EXCLUDE_CLASSES_LABEL = "E&xcluded classes (e.g.*IntTest)";
+    public static final String EXCLUDED_CLASSES_LABEL = "E&xcluded classes (e.g.*IntTest)";
     public static final String EXCLUDED_CLASSES = "excludedClasses";
 
     public static final String RUN_IN_PARALLEL_LABEL = "Mutation tests run in para&llel";
     public static final String RUN_IN_PARALLEL = "runInParallel";
 
-    public static final String EXCLUDE_METHODS_LABEL = "Excluded &methods (e.g.*toString*)";
-    public static final String EXCLUDE_METHODS = "excludedMethods";
+    public static final String EXCLUDED_METHODS_LABEL = "Excluded &methods (e.g.*toString*)";
+    public static final String EXCLUDED_METHODS = "excludedMethods";
 
     public static final String AVOID_CALLS_LABEL = "&Avoid calls to";
     public static final String AVOID_CALLS = "avoidCallsTo";
@@ -45,7 +45,7 @@ public final class PitPreferences {
 
     public static final String TIMEOUT_FACTOR_LABEL = "Timeout &Factor";
     public static final String TIMEOUT_FACTOR = "pitTimeoutFactor";
-    
+
 
     public static final String EXECUTION_SCOPE_LABEL = "Pit execution scope";
     public static final String EXECUTION_SCOPE = "pitExecutionMode";

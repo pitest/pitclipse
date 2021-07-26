@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2012-2021 Phil Glover and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -24,16 +24,46 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 public class PitRunConfiguration {
-
+    /**
+     * Name of the configuration
+     */
     private final String name;
+    /**
+     * List of the projects which are in the scope of mutation
+     */
     private final List<String> projects;
+    /**
+     * Name of the test object. Can be the name of a class or directory.
+     */
     private final String testObject;
-    private final boolean runInParallel;
-    private final boolean incrementalAnalysis;
-    private final String excludedClasses;
-    private final String excludedMethods;
-    private final String avoidCallsTo;
+    /**
+     * True, if the test object is a class
+     */
     private final boolean testClass;
+    /**
+     * True, if the tests should be run in pararllel
+     */
+    private final boolean runInParallel;
+    /**
+     * True, if incremental analysis should be used
+     */
+    private final boolean incrementalAnalysis;
+    /**
+     * List of globs to match against class names. Matching classes will be excluded
+     * from mutation.
+     */
+    private final String excludedClasses;
+    /**
+     * List of globs to match against method names. Methods matching the globs will
+     * be excluded from mutation.
+     */
+    private final String excludedMethods;
+    /**
+     * List of packages and classes which are to be considered outside the scope of
+     * mutation. Any lines of code containing calls to these classes will not be
+     * mutated.
+     */
+    private final String avoidCallsTo;
 
     private PitRunConfiguration(String name, List<String> projects, String testObject, boolean testClass,
             boolean runInParallel, boolean incrementalAnalysis, String excludedClasses, String excludedMethods,

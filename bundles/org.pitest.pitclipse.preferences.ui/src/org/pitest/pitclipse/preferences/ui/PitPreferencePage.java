@@ -69,11 +69,11 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
     }
 
     private void createExcludeClassesField() {
-        addField(new StringFieldEditor(EXCLUDED_CLASSES, EXCLUDE_CLASSES_LABEL, getFieldEditorParent()));
+        addField(new StringFieldEditor(EXCLUDED_CLASSES, EXCLUDED_CLASSES_LABEL, getFieldEditorParent()));
     }
 
     private void createExcludeMethodsField() {
-        addField(new StringFieldEditor(EXCLUDE_METHODS, EXCLUDE_METHODS_LABEL, getFieldEditorParent()));
+        addField(new StringFieldEditor(EXCLUDED_METHODS, EXCLUDED_METHODS_LABEL, getFieldEditorParent()));
     }
 
     private void createUseIncrementalAnalysisOption() {

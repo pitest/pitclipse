@@ -368,6 +368,7 @@ public abstract class AbstractPitclipseSWTBotTest {
      * @param mutators which should be the only active mutator
      */
     protected static void mutatorIs(Mutators mutators) {
+        PAGES.views().waitForTestsAreRunOnConsole();
         final String consoleText = getConsoleText();
         assertThat(consoleText, containsString(String.format("mutators=[%s]", mutators.name())));
     }
@@ -377,6 +378,7 @@ public abstract class AbstractPitclipseSWTBotTest {
      * @param mutators which should be the only active mutators
      */
     protected static void mutatorsAre(Collection<Mutators> mutators) {
+        PAGES.views().waitForTestsAreRunOnConsole();
         final String consoleText = getConsoleText();
         // build String to match against console text
         Iterator<Mutators> iterator = mutators.iterator();
