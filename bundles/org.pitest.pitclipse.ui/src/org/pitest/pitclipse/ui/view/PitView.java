@@ -34,9 +34,9 @@ import org.eclipse.ui.part.ViewPart;
 public class PitView extends ViewPart implements SummaryView {
     public static final String VIEW_ID = "org.pitest.pitclipse.ui.view.PitView";
     public static final String BLANK_PAGE = "about:blank";
-    private static final String BACK_BUTTON_TEXT = "<";
-    private static final String HOME_BUTTON_TEXT = "Home";
-    private static final String FORWARD_BUTTON_TEXT = ">";
+    public static final String BACK_BUTTON_TEXT = "<";
+    public static final String HOME_BUTTON_TEXT = "Home";
+    public static final String FORWARD_BUTTON_TEXT = ">";
     private Browser browser = null;
     private PitUiUpdatePublisher publisher = null;
     private String homeUrlString = null;

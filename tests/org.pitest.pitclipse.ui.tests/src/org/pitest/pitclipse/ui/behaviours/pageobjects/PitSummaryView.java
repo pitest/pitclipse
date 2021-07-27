@@ -18,16 +18,12 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static org.junit.Assert.fail;
 
-import java.util.concurrent.atomic.AtomicReference;
-
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.pitest.pitclipse.ui.view.PitView;
 
 public class PitSummaryView {
-    private PitView summaryView;
     private SWTWorkbenchBot bot;
     private SWTBotBrowser browser;
 
@@ -35,63 +31,51 @@ public class PitSummaryView {
         this.bot = bot;
     }
 
-    public void getViewIfNotSet() {
-        if (summaryView == null) {
-            summaryView = (PitView) Views.getViewById(PitView.VIEW_ID);
-            if (summaryView == null) {
-                fail("Could not find view: " + PitView.VIEW_ID);
-            }
-            // get browser to wait for page loads
-            browser = bot.viewById(PitView.VIEW_ID).bot().browser();
-        }
-    }
-
-    public String getCurrentBrowserUrl() {
-        getViewIfNotSet();
-        // needs to run in UIThread
-        AtomicReference<String> url = new AtomicReference<>();
-        Display.getDefault().syncExec(() -> {
-            url.set(summaryView.getUrl());
-        });
-        return url.get();
-    }
-
     public String clickBack(String expectedUrl) {
-        getViewIfNotSet();
-        // needs to run in UIThread
-        Display.getDefault().syncExec(() -> {
-            summaryView.back();
-        });
+        showSummaryView();
+        bot.toolbarButton(PitView.BACK_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
     public String clickHome(String expectedUrl) {
-        getViewIfNotSet();
-        // needs to run in UIThread
-        Display.getDefault().syncExec(() -> {
-            summaryView.home();
-        });
+        showSummaryView();
+        bot.toolbarButton(PitView.HOME_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
     public String clickForward(String expectedUrl) {
-        getViewIfNotSet();
-        // needs to run in UIThread
-        Display.getDefault().syncExec(() -> {
-            summaryView.forward();
-        });
+        showSummaryView();
+        bot.toolbarButton(PitView.FORWARD_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
-    public String setUrl(String url) {
-        getViewIfNotSet();
-        // needs to run in UIThread
-        Display.getDefault().syncExec(() -> {
-            summaryView.setUrl(url);
-        });
+    /**
+     * Shows the view, which allows the bot to find toolbar buttons
+     */
+    private void showSummaryView() {
+        bot.viewById(PitView.VIEW_ID).show();
+    }
+
+    public void getBrowserIfNotSet() {
+        if (browser == null) {
+            browser = bot.viewById(PitView.VIEW_ID).bot().browser();
+            if (browser == null) {
+                fail("Couldn't get browser of '" + PitView.VIEW_ID + "'");
+            }
+        }
+    }
+
+    public String getCurrentBrowserUrl() {
+        getBrowserIfNotSet();
+        return browser.getUrl();
+    }
+
+    public String setBrowserUrl(String url) {
+        getBrowserIfNotSet();
+        browser.setUrl(url);
         bot.waitUntil(new BrowserLoadCondition(url.replace(".html", "")));
         return getCurrentBrowserUrl();
     }
@@ -100,7 +84,8 @@ public class PitSummaryView {
         private final String titleOfPage;
         private String html;
         public BrowserLoadCondition(String titleOfPage) {
-            // give the browser to change.
+            getBrowserIfNotSet();
+            // give the browser time to change.
             // To avoid false positives, if the page should not change
             browser.waitForPageLoaded();
             final int lastSegment = titleOfPage.lastIndexOf('/') + 1;

@@ -59,7 +59,7 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
             coverageReportGenerated(2, 80, 0);
 
             assertThat(summaryView.getCurrentBrowserUrl(), endsWith(INDEX_URL_END));
-            assertThat(summaryView.setUrl(summaryView.getCurrentBrowserUrl().replace("/index.html",
+            assertThat(summaryView.setBrowserUrl(summaryView.getCurrentBrowserUrl().replace("/index.html",
                     "/" + FOO_BAR_PACKAGE_RESULT + "/" + FOO_CLASS_RESULT_URL_END)),
                     endsWith(FOO_CLASS_RESULT_URL_END));
             assertThat(summaryView.clickBack(INDEX_HEADER), endsWith(INDEX_URL_END));
