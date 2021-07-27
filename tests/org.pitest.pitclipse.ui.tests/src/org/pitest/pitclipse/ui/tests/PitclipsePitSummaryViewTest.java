@@ -64,8 +64,6 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
                     "/" + FOO_BAR_PACKAGE_RESULT + "/" + FOO_CLASS_RESULT_URL_END)),
                     endsWith(FOO_CLASS_RESULT_URL_END));
             assertThat(summaryView.clickBack(INDEX_HEADER), endsWith(INDEX_URL_END));
-            // back again should not change url
-            assertThat(summaryView.clickBack(INDEX_HEADER), endsWith(INDEX_URL_END));
             assertThat(summaryView.clickForward(FOO_CLASS_HEADER), endsWith(FOO_CLASS_RESULT_URL_END));
             // forward again should not change url
             assertThat(summaryView.clickForward(FOO_CLASS_HEADER), endsWith(FOO_CLASS_RESULT_URL_END));
