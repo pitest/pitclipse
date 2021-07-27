@@ -109,7 +109,7 @@ public class PitSummaryView {
         public boolean test() throws Exception {
             html = browser.getText();
             if (titleOfPage.equals(PitView.BLANK_PAGE)
-                    && html.equals("<html><head></head><body></body></html>")) {
+                    && (html.equals("<html><head></head><body></body></html>") || html.equals(""))) {
                 // if page should be blank and is, return true
                 return true;
             }
