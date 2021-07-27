@@ -6,7 +6,7 @@ Bundle-Version: 2.1.2.qualifier
 Bundle-Vendor: Pitest.org
 Automatic-Module-Name: org.pitest.pitclipse.runner
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.pitest;bundle-version="1.6.7"
+Require-Bundle: org.pitest;bundle-version="1.6.8"
 Export-Package: org.pitest.pitclipse.runner,
  org.pitest.pitclipse.runner.client,
  org.pitest.pitclipse.runner.config,
