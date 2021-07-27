@@ -25,8 +25,7 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
     private static final String FOO_CLASS_RESULT_URL_END = FOO_CLASS_HEADER + ".html";
     private static final String INDEX_URL_END = "index.html";
     private static final String INDEX_HEADER = "Pit Test Coverage Report";
-
-    private static PitSummaryView summaryView;
+    private PitSummaryView summaryView;
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {

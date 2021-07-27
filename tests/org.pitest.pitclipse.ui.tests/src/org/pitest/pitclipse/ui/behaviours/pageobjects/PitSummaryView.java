@@ -38,7 +38,7 @@ public class PitSummaryView {
     public void getViewIfNotSet() {
         if (summaryView == null) {
             summaryView = (PitView) Views.getViewById(PitView.VIEW_ID);
-            if (summaryView != null) {
+            if (summaryView == null) {
                 fail("Could not find view: " + PitView.VIEW_ID);
             }
             // get browser to wait for page loads
