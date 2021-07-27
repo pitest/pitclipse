@@ -19,6 +19,7 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,6 +53,10 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().removeConfig(TEST_CONFIG_NAME);
     }
 
+    @After
+    public void clearConsole() {
+        PAGES.views().clearConsole();
+    }
 
     @Test
     public void useOldDefaultsMutatorsGroup() {
