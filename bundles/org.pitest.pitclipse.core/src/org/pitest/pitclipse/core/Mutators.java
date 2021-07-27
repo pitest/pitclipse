@@ -17,6 +17,7 @@
 package org.pitest.pitclipse.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
 
@@ -25,7 +26,6 @@ import org.pitest.mutationtest.engine.gregor.config.Mutator;
  * The name of new values <b>must</b> be the exact String, which is used by PIT
  * in the class {@link Mutator}.
  */
-@SuppressWarnings("checkstyle:LineLength")
 public enum Mutators {
     OLD_DEFAULTS("Old defaults", "&Old default Mutators"),
     DEFAULTS("Defaults", "&Default Mutators"),
@@ -96,8 +96,8 @@ public enum Mutators {
         return activeByDefault;
     }
 
-    public static ArrayList<Mutators> getMainGroup() {
-        final ArrayList<Mutators> mainGroup = new ArrayList<Mutators>();
+    public static List<Mutators> getMainGroup() {
+        final ArrayList<Mutators> mainGroup = new ArrayList<>();
         mainGroup.add(DEFAULTS);
         mainGroup.add(STRONGER);
         mainGroup.add(ALL);
@@ -105,8 +105,8 @@ public enum Mutators {
         return mainGroup;
     }
 
-    public static ArrayList<String> getDefaultMutators() {
-        ArrayList<String> defaultMutators = new ArrayList<String>();
+    public static List<String> getDefaultMutators() {
+        ArrayList<String> defaultMutators = new ArrayList<>();
         for (Mutators m : values()) {
             if (m.isActiveByDefault()) {
                 defaultMutators.add(m.name());

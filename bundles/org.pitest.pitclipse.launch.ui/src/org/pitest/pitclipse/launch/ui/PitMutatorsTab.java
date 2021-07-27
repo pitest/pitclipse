@@ -20,12 +20,9 @@ import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -56,7 +53,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.osgi.framework.Bundle;
-import org.pitest.mutationtest.engine.gregor.MethodMutatorFactory;
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
@@ -77,7 +73,6 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String CUSTOM_MUTATOR_RADIO_DATA = "CUSTOM";
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_NAME = "Name";
-    private static final String MUTATORS_FIELD_NAME = "MUTATORS";
     private static final String NO_DESCRIPTION_TEXT = "No description found yet.";
     private static final String ERROR_MESSAGE = "At least one mutator or mutator group needs to be selected!";
     private Image icon;
@@ -284,35 +279,12 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
                 }
             }
         });
-
-        try {
-            mutatorsTable.setInput(getPitMutators());
-        } catch (Exception e) {
-            throw new RuntimeException("Input for mutatorTable was not set correctly.", e);
-        }
-
+        mutatorsTable.setInput(Mutator.allMutatorIds());
         colName.getColumn().pack();
         colDescription.getColumn().pack();
-
         mutatorsTable.getTable().setEnabled(true);
-
         // Update the tab when a hook is activated / deactivated
         mutatorsTable.addCheckStateListener(event -> updateLaunchConfigurationDialog());
-    }
-
-    /**
-     * Hack because the Mutator.java from pit does not allow to get the keys of the
-     * mutators yet.<br>
-     * <b>Should be replaced</b>, if
-     * <a href="https://github.com/hcoles/pitest/pull/917">Pit PR</a> gets merged.
-     * @return keys of all mutators as Strings
-     * @throws Exception if the reflection failed in any way
-     */
-    @SuppressWarnings("unchecked")
-    private Collection<String> getPitMutators() throws Exception {
-        Field field = Mutator.class.getDeclaredField(MUTATORS_FIELD_NAME);
-        field.setAccessible(true);
-        return ((Map<String, Iterable<MethodMutatorFactory>>) field.get(null)).keySet();
     }
 
     private void disableTableIfUnused() {

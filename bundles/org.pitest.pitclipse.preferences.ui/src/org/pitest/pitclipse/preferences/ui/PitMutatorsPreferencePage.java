@@ -20,7 +20,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_DESCRIPTION_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_LABEL;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -43,7 +43,7 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
     }
 
     private void createExecutionModeRadioButtons() {
-        ArrayList<Mutators> values = Mutators.getMainGroup();
+        List<Mutators> values = Mutators.getMainGroup();
         String[][] mutatorValues = new String[values.size()][2];
         int i = 0;
         for (Mutators mutator : values) {
