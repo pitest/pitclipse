@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class PitView extends ViewPart implements SummaryView {
     public static final String VIEW_ID = "org.pitest.pitclipse.ui.view.PitView";
+    public static final String BLANK_PAGE = "about:blank";
     private static final String BACK_BUTTON_TEXT = "<";
     private static final String HOME_BUTTON_TEXT = "Home";
     private static final String FORWARD_BUTTON_TEXT = ">";
@@ -47,6 +48,7 @@ public class PitView extends ViewPart implements SummaryView {
     public synchronized void createPartControl(Composite parent) {
         try {
             browser = new Browser(parent, SWT.NONE);
+            resetBrowser();
             publisher = new PitUiUpdatePublisher(browser);
             browser.addProgressListener(publisher);
             // create back button
@@ -88,6 +90,16 @@ public class PitView extends ViewPart implements SummaryView {
         }
     }
 
+    /**
+     * Set URL to blank and reset homeUrl, to have a clean browser after
+     * creation<br>
+     * <b>Needed</b> for testing purposes
+     */
+    private void resetBrowser() {
+        browser.setUrl(BLANK_PAGE);
+        homeUrlString = null;
+    }
+
     @Override
     public void setFocus() {
         if (browser != null && !browser.isDisposed()) {
@@ -98,8 +110,7 @@ public class PitView extends ViewPart implements SummaryView {
     @Override
     public synchronized void update(File result) {
         if (result == null) {
-            browser.setText("<html/>");
-            homeUrlString = null;
+            resetBrowser();
         } else {
             homeUrlString = result.toURI().toString();
             browser.setUrl(homeUrlString);
@@ -150,9 +161,6 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void dispose() {
-        // reset homeUrlString for tests in
-        // org.pitest.pitclipse.ui.tests.PitclipsePitSummaryViewTest
-        homeUrlString = null;
         if (browser != null && !browser.isDisposed()) {
             browser.dispose();
         }

@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 import org.pitest.pitclipse.ui.view.PitView;
 
@@ -47,37 +48,36 @@ public class PitSummaryView {
         Display.getDefault().syncExec(() -> {
             url.set(summaryView.getUrl());
         });
-
         return url.get();
     }
 
-    public String clickBack() {
+    public String clickBack(String expectedUrl) {
         getViewIfNotSet();
         // needs to run in UIThread
         Display.getDefault().syncExec(() -> {
             summaryView.back();
         });
-        browser.waitForPageLoaded();
+        bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
-    public String clickHome() {
+    public String clickHome(String expectedUrl) {
         getViewIfNotSet();
         // needs to run in UIThread
         Display.getDefault().syncExec(() -> {
             summaryView.home();
         });
-        browser.waitForPageLoaded();
+        bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
-    public String clickForward() {
+    public String clickForward(String expectedUrl) {
         getViewIfNotSet();
         // needs to run in UIThread
         Display.getDefault().syncExec(() -> {
             summaryView.forward();
         });
-        browser.waitForPageLoaded();
+        bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
@@ -87,16 +87,39 @@ public class PitSummaryView {
         Display.getDefault().syncExec(() -> {
             summaryView.setUrl(url);
         });
-        browser.waitForPageLoaded();
+        bot.waitUntil(new BrowserLoadCondition(url.replace(".html", "")));
         return getCurrentBrowserUrl();
     }
 
-    /**
-     * Closes the view, if it is opened.
-     */
-    public void closeView() {
-        if (summaryView != null) {
-            summaryView.dispose();
+    private class BrowserLoadCondition extends DefaultCondition {
+        private final String titleOfPage;
+        private String html;
+        public BrowserLoadCondition(String titleOfPage) {
+            // give the browser to change.
+            // To avoid false positives, if the page should not change
+            browser.waitForPageLoaded();
+            final int lastSegment = titleOfPage.lastIndexOf('/') + 1;
+            if (lastSegment > 0) {
+                this.titleOfPage = titleOfPage.substring(lastSegment);
+            } else {
+                this.titleOfPage = titleOfPage;
+            }
         }
+        @Override
+        public boolean test() throws Exception {
+            html = browser.getText();
+            if (titleOfPage.equals(PitView.BLANK_PAGE)
+                    && html.equals("<html><head></head><body></body></html>")) {
+                // if page should be blank and is, return true
+                return true;
+            }
+            return html.contains("<h1>" + titleOfPage + "</h1>");
+        }
+
+        @Override
+        public String getFailureMessage() {
+            return "The title of the page didn't match: '" + titleOfPage + "'\nHTML was:\n" + html;
+        }
+
     }
 }
