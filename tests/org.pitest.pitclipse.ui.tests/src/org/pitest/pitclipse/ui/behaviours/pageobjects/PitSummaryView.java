@@ -85,9 +85,6 @@ public class PitSummaryView {
         private String html;
         public BrowserLoadCondition(String titleOfPage) {
             getBrowserIfNotSet();
-            // give the browser time to change.
-            // To avoid false positives, if the page should not change
-            browser.waitForPageLoaded();
             final int lastSegment = titleOfPage.lastIndexOf('/') + 1;
             if (lastSegment > 0) {
                 this.titleOfPage = titleOfPage.substring(lastSegment);
@@ -97,6 +94,9 @@ public class PitSummaryView {
         }
         @Override
         public boolean test() throws Exception {
+            // give the browser time to change.
+            // To avoid false positives, if the page should not change
+            browser.waitForPageLoaded();
             html = browser.getText();
             if (titleOfPage.equals(PitView.BLANK_PAGE)
                     && (html.equals("<html><head></head><body></body></html>") || html.equals(""))) {
