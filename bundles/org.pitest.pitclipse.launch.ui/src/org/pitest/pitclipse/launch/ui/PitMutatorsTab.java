@@ -81,9 +81,6 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private Button customMutatorsButton;
     private Button[] groupButtons;
     private Composite mainComp;
-    private Label descriptionLabel;
-    private Composite grouopComposite;
-    private Label mutateWithLabel;
 
     @Override
     public String getName() {
@@ -101,9 +98,14 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void dispose() {
-        if (icon != null) {
+        if (icon != null && !icon.isDisposed()) {
             icon.dispose();
         }
+        if (mainComp != null && !mainComp.isDisposed()) {
+            mainComp.dispose();
+        }
+        // always call super.dispose() last, if dispose() is overridden.
+        super.dispose();
     }
 
     @Override
@@ -161,7 +163,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      * @param parent where to add the description
      */
     private void createDescription(Composite parent) {
-        descriptionLabel = new Label(parent, SWT.NONE);
+        final Label descriptionLabel = new Label(parent, SWT.NONE);
         descriptionLabel.setText(DESCRIPTION_TEXT);
         GridDataFactory.swtDefaults().indent(5, 0).applyTo(descriptionLabel);
         Link link = new Link(parent, SWT.NONE);
@@ -184,10 +186,10 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      */
     private void createMutatorGroupsWidgets(Font font, Composite parent) {
         // add own composite to group options closer together
-        grouopComposite = new Composite(parent, SWT.NONE);
+        final Composite grouopComposite = new Composite(parent, SWT.NONE);
         GridDataFactory.swtDefaults().span(NUMBER_OF_COLUMNS, 1).applyTo(grouopComposite);
         GridLayoutFactory.swtDefaults().numColumns(NUMBER_OF_COLUMNS).applyTo(grouopComposite);
-        mutateWithLabel = new Label(grouopComposite, SWT.NONE);
+        final Label mutateWithLabel = new Label(grouopComposite, SWT.NONE);
         mutateWithLabel.setFont(font);
         mutateWithLabel.setText("Mutate with: ");
         GridDataFactory.swtDefaults().applyTo(mutateWithLabel);
