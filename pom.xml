@@ -52,7 +52,7 @@
 		<sonar.projectName>Pitclipse</sonar.projectName>
 
 		<sonar.organization>echebbi-github</sonar.organization>
-		<sonar.links.ci>https://travis-ci.com/pitest/pitclipse</sonar.links.ci>
+		<sonar.links.ci>https://github.com/pitest/pitclipse/actions</sonar.links.ci>
 		<sonar.links.scm>https://github.com/pitest/pitclipse</sonar.links.scm>
 		<sonar.links.issue>https://github.com/pitest/pitclipse/issues</sonar.links.issue>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
