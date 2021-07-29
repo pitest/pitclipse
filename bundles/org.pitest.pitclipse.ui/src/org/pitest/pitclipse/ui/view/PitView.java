@@ -117,48 +117,6 @@ public class PitView extends ViewPart implements SummaryView {
         }
     }
 
-    /**
-     * Triggers the action tied to the back button
-     */
-    public void back() {
-        backButton.run();
-    }
-
-    /**
-     * Triggers the action tied to the home button
-     */
-    public void home() {
-        homeAction.run();
-    }
-
-    /**
-     * Triggers the action tied to the forward button
-     */
-    public void forward() {
-        forwardButton.run();
-    }
-
-    /**
-     * @return current browser url or null if no browser is present
-     */
-    public String getUrl() {
-        if (browser != null && !browser.isDisposed()) {
-            return browser.getUrl();
-        }
-        return null;
-    }
-
-    /**
-     * @param url which is set in the browser
-     * @return true, if the url was set
-     */
-    public boolean setUrl(String url) {
-        if (browser != null && !browser.isDisposed()) {
-            return browser.setUrl(url);
-        }
-        return false;
-    }
-
     @Override
     public void dispose() {
         if (browser != null && !browser.isDisposed()) {
