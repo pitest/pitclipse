@@ -16,8 +16,6 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.junit.Assert.fail;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
@@ -64,9 +62,6 @@ public class PitSummaryView {
         // should be present
         if (browser == null || browser.widget.isDisposed()) {
             browser = bot.viewById(PitView.VIEW_ID).bot().browser();
-            if (browser == null) {
-                fail("Couldn't get browser of '" + PitView.VIEW_ID + "'");
-            }
         }
     }
 
