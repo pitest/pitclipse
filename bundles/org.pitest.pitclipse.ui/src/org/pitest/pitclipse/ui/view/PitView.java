@@ -38,29 +38,23 @@ public class PitView extends ViewPart implements SummaryView {
     public static final String HOME_BUTTON_TEXT = "Home";
     public static final String FORWARD_BUTTON_TEXT = ">";
     private Browser browser = null;
-    private PitUiUpdatePublisher publisher = null;
     private String homeUrlString = null;
-    private Action homeAction;
-    private Action backButton;
-    private Action forwardButton;
 
     @Override
     public synchronized void createPartControl(Composite parent) {
         try {
             browser = new Browser(parent, SWT.NONE);
             resetBrowser();
-            publisher = new PitUiUpdatePublisher(browser);
-            browser.addProgressListener(publisher);
+            browser.addProgressListener(new PitUiUpdatePublisher(browser));
             // create back button
-            backButton = new Action(BACK_BUTTON_TEXT) {
+            final Action backButtonAction = new Action(BACK_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     browser.back();
                 }
             };
             // create home button for navigation
-            homeAction = new Action(HOME_BUTTON_TEXT) {
-
+            final Action homeButtonAction = new Action(HOME_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     if (homeUrlString != null) {
@@ -70,7 +64,7 @@ public class PitView extends ViewPart implements SummaryView {
                 }
             };
             // create forward button
-            forwardButton = new Action(FORWARD_BUTTON_TEXT) {
+            final Action forwardButtonAction = new Action(FORWARD_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     browser.forward();
@@ -78,9 +72,9 @@ public class PitView extends ViewPart implements SummaryView {
             };
             IActionBars actionBars = getViewSite().getActionBars();
             IToolBarManager toolBar = actionBars.getToolBarManager();
-            toolBar.add(backButton);
-            toolBar.add(homeAction);
-            toolBar.add(forwardButton);
+            toolBar.add(backButtonAction);
+            toolBar.add(homeButtonAction);
+            toolBar.add(forwardButtonAction);
             actionBars.updateActionBars();
         } catch (SWTError e) {
             MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);

@@ -33,41 +33,17 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         private SWTWorkbenchBot bot;
 
         public int getClasses() {
-            bot.waitUntil(new DefaultCondition() {
-                public boolean test() throws Exception {
-                    return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public String getFailureMessage() {
-                    return "No summary set.";
-                }
-            }, SWTBotPreferences.TIMEOUT);
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
             return summary.getClasses();
         }
 
         public double getCodeCoverage() {
-            bot.waitUntil(new DefaultCondition() {
-                public boolean test() throws Exception {
-                    return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public String getFailureMessage() {
-                    return "No summary set.";
-                }
-            }, SWTBotPreferences.TIMEOUT);
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
             return summary.getCodeCoverage();
         }
 
         public double getMutationCoverage() {
-            bot.waitUntil(new DefaultCondition() {
-                public boolean test() throws Exception {
-                    return PitSummary.INSTANCE.getSummary() != null;
-                }
-
-                public String getFailureMessage() {
-                    return "No summary set.";
-                }
-            }, SWTBotPreferences.TIMEOUT);
+            bot.waitUntil(new SummaryWaitCondition(), SWTBotPreferences.TIMEOUT);
             return summary.getMutationCoverage();
         }
 
@@ -82,6 +58,18 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
 
         Summary getSummary() {
             return summary;
+        }
+
+        private class SummaryWaitCondition extends DefaultCondition {
+            @Override
+            public boolean test() throws Exception {
+                return PitSummary.INSTANCE.getSummary() != null;
+            }
+
+            @Override
+            public String getFailureMessage() {
+                return "No summary set.";
+            }
         }
     }
 
