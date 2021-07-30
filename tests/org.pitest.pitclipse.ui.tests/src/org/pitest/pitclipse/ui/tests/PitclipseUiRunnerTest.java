@@ -34,6 +34,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
     }
 
     @Test
@@ -47,6 +48,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
     }
 
     @Test

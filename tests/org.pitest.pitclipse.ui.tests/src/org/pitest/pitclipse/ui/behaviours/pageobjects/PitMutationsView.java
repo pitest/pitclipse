@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
 
 import java.util.List;
@@ -55,7 +54,6 @@ public class PitMutationsView {
     }
 
     private SWTBotTree mutationTreeRoot() {
-        PAGES.views().waitForTestsAreRunOnConsole();
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         // Make sure the 'PIT Mutations' view is opened
