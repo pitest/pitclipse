@@ -42,7 +42,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -313,11 +312,7 @@ public abstract class AbstractPitclipseSWTBotTest {
             int killedPercentage,
             int testsRun,
             int testsPerMutations) {
-        SWTBotView consoleView = bot.viewByPartName("Console");
-        consoleView.show();
-        String consoleText = consoleView.bot()
-                .styledText().getText()
-                .replace("\r", "");
+        final String consoleText = PAGES.getConsole().getConsoleText().replace("\r", "");
         if (generatedMutants == 0) {
             // in newer versions of PIT the Console will simply end with a warning
             assertThat(consoleText,

@@ -17,6 +17,7 @@
 package org.pitest.pitclipse.ui.swtbot;
 
 import static org.junit.Assert.fail;
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.IOException;
 
@@ -31,7 +32,7 @@ import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
  * @author Jonas Kutscha
  */
 public class PitResultNotifier implements ResultNotifier<PitResults> {
-    private static final String FAIL_MESSAGE = "Pit result was not ready for retrieval.";
+    private static final String FAIL_MESSAGE = "Pit result was not ready for retrieval. Console output was: ";
 
     public enum PitSummary {
         INSTANCE;
@@ -47,7 +48,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
                 return finishedWithoutResult ? -1 : summary.getClasses();
             } catch (NullPointerException e) {
                 // if the result is not ready
-                fail(FAIL_MESSAGE);
+                fail(getFailMessage());
                 return -1;
             }
         }
@@ -60,7 +61,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
                 return finishedWithoutResult ? -1 : summary.getCodeCoverage();
             } catch (NullPointerException e) {
                 // if the result is not ready
-                fail(FAIL_MESSAGE);
+                fail(getFailMessage());
                 return -1;
             }
         }
@@ -73,7 +74,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
                 return finishedWithoutResult ? -1 : summary.getMutationCoverage();
             } catch (NullPointerException e) {
                 // if the result is not ready
-                fail(FAIL_MESSAGE);
+                fail(getFailMessage());
                 return -1;
             }
         }
@@ -123,6 +124,10 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
 
         private void setSummary(Summary summary) {
             this.summary = summary;
+        }
+
+        private String getFailMessage() {
+            return FAIL_MESSAGE + PAGES.getConsole().getConsoleText();
         }
     }
 

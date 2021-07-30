@@ -31,6 +31,7 @@ public enum PageObjects {
     private final AbstractSyntaxTree abstractSyntaxTree;
     private final SourceMenu sourceMenu;
     private final RefactorMenu refactorMenu;
+    private Console console;
 
     private PageObjects() {
         SWTWorkbenchBot bot = new SWTWorkbenchBot();
@@ -44,6 +45,7 @@ public enum PageObjects {
         abstractSyntaxTree = new AbstractSyntaxTree();
         sourceMenu = new SourceMenu(bot);
         refactorMenu = new RefactorMenu(bot);
+        console = new Console(bot);
     }
 
     public FileMenu getFileMenu() {
@@ -84,5 +86,9 @@ public enum PageObjects {
 
     public PitMutationsView getPitMutationsView() {
         return pitMutationsView;
+    }
+
+    public Console getConsole() {
+        return console;
     }
 }
