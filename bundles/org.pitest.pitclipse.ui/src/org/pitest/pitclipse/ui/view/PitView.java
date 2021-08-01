@@ -22,6 +22,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.part.ViewPart;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 import java.io.File;
 
@@ -46,7 +47,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void setFocus() {
-        // Nothing to do
+        PitclipseUiUtils.safeSetFocus(browser);
     }
 
     @Override
@@ -56,5 +57,11 @@ public class PitView extends ViewPart implements SummaryView {
         } else {
             browser.setUrl(result.toURI().toString());
         }
+    }
+
+    @Override
+    public void dispose() {
+        PitclipseUiUtils.safeDispose(browser);
+        super.dispose();
     }
 }
