@@ -15,7 +15,10 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.utils;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 
 /**
  * A few utilities for the UI.
@@ -50,6 +53,25 @@ public class PitclipseUiUtils {
     public static void safeDispose(Composite c) {
         if (c != null && !c.isDisposed()) {
             c.dispose();
+        }
+    }
+
+    /**
+     * Executes the consumer with the passed parent and in case of {@link SWTError}
+     * shows a dialog with the specified error message.
+     * 
+     * @param consumer
+     * @param parent
+     * @param errorMessage
+     */
+    public static void safeExecute(Runnable runnable, Composite parent, String errorMessage) {
+        try {
+            runnable.run();
+        } catch (SWTError e) {
+            MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
+            messageBox.setMessage(errorMessage);
+            messageBox.setText("Exit");
+            messageBox.open();
         }
     }
 }
