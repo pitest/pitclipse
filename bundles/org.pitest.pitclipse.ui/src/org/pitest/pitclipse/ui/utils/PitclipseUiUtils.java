@@ -38,7 +38,7 @@ public class PitclipseUiUtils {
      * 
      * @param c
      */
-    public static void safeSetFocus(Composite c) {
+    public static void setFocusSafely(Composite c) {
         if (c != null && !c.isDisposed()) {
             c.setFocus();
         }
@@ -50,7 +50,7 @@ public class PitclipseUiUtils {
      * 
      * @param c
      */
-    public static void safeDispose(Composite c) {
+    public static void disposeSafely(Composite c) {
         if (c != null && !c.isDisposed()) {
             c.dispose();
         }
@@ -64,7 +64,7 @@ public class PitclipseUiUtils {
      * @param parent
      * @param errorMessage
      */
-    public static void safeExecute(Runnable runnable, Composite parent, String errorMessage) {
+    public static void executeSafely(Runnable runnable, Composite parent, String errorMessage) {
         try {
             runnable.run();
         } catch (SWTError e) {

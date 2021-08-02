@@ -32,7 +32,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public synchronized void createPartControl(Composite parent) {
-        PitclipseUiUtils.safeExecute
+        PitclipseUiUtils.executeSafely
             (() -> {
                 browser = new Browser(parent, SWT.NONE);
                 browser.addProgressListener(new PitUiUpdatePublisher(browser));
@@ -43,7 +43,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void setFocus() {
-        PitclipseUiUtils.safeSetFocus(browser);
+        PitclipseUiUtils.setFocusSafely(browser);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void dispose() {
-        PitclipseUiUtils.safeDispose(browser);
+        PitclipseUiUtils.disposeSafely(browser);
         super.dispose();
     }
 }
