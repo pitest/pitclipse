@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.MessageBox;
 public class PitclipseUiUtils {
 
     private PitclipseUiUtils() {
-        // Only static methods
+        // Only static utility methods
     }
 
     /**
@@ -57,10 +57,10 @@ public class PitclipseUiUtils {
     }
 
     /**
-     * Executes the consumer with the passed parent and in case of {@link SWTError}
-     * shows a dialog with the specified error message.
+     * Executes the {@link Runnable} and in case of {@link SWTError} shows a dialog
+     * with the specified error message, using the specified parent..
      * 
-     * @param consumer
+     * @param runnable
      * @param parent
      * @param errorMessage
      */
