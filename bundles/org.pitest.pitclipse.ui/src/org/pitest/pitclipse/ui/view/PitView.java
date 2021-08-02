@@ -46,15 +46,17 @@ public class PitView extends ViewPart implements SummaryView {
             browser = new Browser(parent, SWT.NONE);
             resetBrowser();
             browser.addProgressListener(new PitUiUpdatePublisher(browser));
+            IActionBars actionBars = getViewSite().getActionBars();
+            IToolBarManager toolBar = actionBars.getToolBarManager();
             // create back button
-            final Action backButtonAction = new Action(BACK_BUTTON_TEXT) {
+            toolBar.add(new Action(BACK_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     browser.back();
                 }
-            };
+            });
             // create home button for navigation
-            final Action homeButtonAction = new Action(HOME_BUTTON_TEXT) {
+            toolBar.add(new Action(HOME_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     if (homeUrlString != null) {
@@ -62,19 +64,14 @@ public class PitView extends ViewPart implements SummaryView {
                         browser.setUrl(homeUrlString);
                     }
                 }
-            };
+            });
             // create forward button
-            final Action forwardButtonAction = new Action(FORWARD_BUTTON_TEXT) {
+            toolBar.add(new Action(FORWARD_BUTTON_TEXT) {
                 @Override
                 public void run() {
                     browser.forward();
                 }
-            };
-            IActionBars actionBars = getViewSite().getActionBars();
-            IToolBarManager toolBar = actionBars.getToolBarManager();
-            toolBar.add(backButtonAction);
-            toolBar.add(homeButtonAction);
-            toolBar.add(forwardButtonAction);
+            });
             actionBars.updateActionBars();
         } catch (SWTError e) {
             MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
@@ -96,7 +93,7 @@ public class PitView extends ViewPart implements SummaryView {
 
     @Override
     public void setFocus() {
-        if (browser != null && !browser.isDisposed()) {
+        if (!browser.isDisposed()) {
             browser.setFocus();
         }
     }
@@ -109,13 +106,5 @@ public class PitView extends ViewPart implements SummaryView {
             homeUrlString = result.toURI().toString();
             browser.setUrl(homeUrlString);
         }
-    }
-
-    @Override
-    public void dispose() {
-        if (browser != null && !browser.isDisposed()) {
-            browser.dispose();
-        }
-        super.dispose();
     }
 }

@@ -43,10 +43,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.ui.IViewReference;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.intro.IIntroManager;
@@ -147,18 +147,17 @@ public abstract class AbstractPitclipseSWTBotTest {
         });
     }
 
-    public static void closeViewById(String viewId) throws InterruptedException {
-        Display.getDefault().syncExec(() -> {
-            IWorkbench workbench = PlatformUI.getWorkbench();
-            final IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
-            for (IViewReference view : page.getViewReferences()) {
-                if (view.getId().equals(viewId)) {
-                    page.hideView(view);
-                    return;
-                }
-            }
-            throw new RuntimeException("View with the id: '" + viewId + "' was not found and could not be closed.");
-        });
+    public static void closeViewById(String viewId) {
+        final long previousTimeout = SWTBotPreferences.TIMEOUT;
+        try {
+            // set timeout short, because if the view is not present we don't wait long
+            SWTBotPreferences.TIMEOUT = 100;
+            bot.viewById(viewId).close();
+        } catch (WidgetNotFoundException e) {
+            // expected, if the view was not present
+        } finally {
+            SWTBotPreferences.TIMEOUT = previousTimeout;
+        }
     }
 
     protected static IProject importTestProject(String projectName) throws CoreException {
