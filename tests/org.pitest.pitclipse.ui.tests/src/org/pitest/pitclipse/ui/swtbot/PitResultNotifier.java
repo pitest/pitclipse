@@ -36,7 +36,6 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
 
     public enum PitSummary {
         INSTANCE;
-
         private Summary summary;
         private boolean finishedWithoutResult = false;
 
@@ -72,6 +71,26 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         public double getMutationCoverage() {
             try {
                 return finishedWithoutResult ? -1 : summary.getMutationCoverage();
+            } catch (NullPointerException e) {
+                // if the result is not ready
+                fail(getFailMessage());
+                return -1;
+            }
+        }
+
+        public int getKilledMutants() {
+            try {
+                return finishedWithoutResult ? -1 : summary.getKilledMutants();
+            } catch (NullPointerException e) {
+                // if the result is not ready
+                fail(getFailMessage());
+                return -1;
+            }
+        }
+
+        public int getGeneratedMutants() {
+            try {
+                return finishedWithoutResult ? -1 : summary.getGeneratedMutants();
             } catch (NullPointerException e) {
                 // if the result is not ready
                 fail(getFailMessage());
@@ -136,7 +155,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         try {
             // file only exists, if mutations were done
             if (results.getHtmlResultFile() != null) {
-                PitSummary.INSTANCE.setSummary(new ResultsParser(results.getHtmlResultFile()).getSummary());
+                PitSummary.INSTANCE.setSummary(new ResultsParser(results).getSummary());
             } else {
                 // no result exists, notify summary
                 PitSummary.INSTANCE.finishedWithoutResult();

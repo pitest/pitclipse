@@ -18,7 +18,6 @@ package org.pitest.pitclipse.ui.tests;
 import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -308,46 +307,6 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runProjectTest(projectName);
     }
 
-    protected static void consoleContains(int generatedMutants, int killedMutants,
-            int killedPercentage,
-            int testsRun,
-            int testsPerMutations) {
-        final String consoleText = PAGES.getConsole().getConsoleText().replace("\r", "");
-        if (generatedMutants == 0) {
-            // in newer versions of PIT the Console will simply end with a warning
-            assertThat(consoleText,
-                containsString(
-                    "INFO : Created  0 mutation test units in pre scan"
-                )
-            );
-            assertThat(consoleText,
-                containsString(
-                    "WARNING : No mutations found."
-                )
-            );
-        } else {
-            // we are interested in two strings appearing in the Console
-            // newer versions of PIT generate other contents in between
-            // e.g., ">> Mutations with no coverage 0. Test strength 100%"
-            // so we must run the checks separately
-            assertThat(consoleText,
-                containsString(
-                    String.format(
-                      ">> Generated %d mutations Killed %d (%d%%)",
-                      generatedMutants, killedMutants,
-                      killedPercentage)
-                )
-            );
-            assertThat(consoleText,
-                containsString(
-                    String.format(
-                      ">> Ran %d tests (%d tests per mutation)",
-                      testsRun, testsPerMutations)
-                )
-            );
-        }
-    }
-
     /**
      * The expectedMutationsTable String argument represents the expected
      * mutations table, this is an example of String:
@@ -392,10 +351,12 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     /**
-     * @see {@link PitclipseSteps#coverageReportGenerated(int, double, double)}
+     * @see {@link PitclipseSteps#coverageReportGenerated(int, int, int, int, int)}
      */
-    protected static void coverageReportGenerated(int classes, double codeCoverage, double mutationCoverage) {
-        new PitclipseSteps().coverageReportGenerated(classes, codeCoverage, mutationCoverage);
+    protected static void coverageReportGenerated(int classes, int codeCoverage, int mutationCoverage,
+            int generatedMutants, int killedMutants) {
+        new PitclipseSteps().coverageReportGenerated(classes, codeCoverage, mutationCoverage, generatedMutants,
+                killedMutants);
     }
 
     /**
@@ -403,7 +364,7 @@ public abstract class AbstractPitclipseSWTBotTest {
      * nothing is tested
      */
     protected static void noCoverageReportGenerated() {
-        new PitclipseSteps().coverageReportGenerated(-1, -1, -1);
+        new PitclipseSteps().coverageReportGenerated(-1, -1, -1, -1, -1);
     }
 
     /**

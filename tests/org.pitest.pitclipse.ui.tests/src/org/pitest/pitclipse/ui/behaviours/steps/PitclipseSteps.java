@@ -76,18 +76,20 @@ public class PitclipseSteps {
      * @param classes          how many where analyzed from pit
      * @param codeCoverage     how much was calculated from pit
      * @param mutationCoverage how much was calculated from pit
+     * @param generatedMutants how many mutants were generated
+     * @param killedMutants    how many mutants were killed
      */
     @Then("a coverage report is generated with {int} class/classes tested with overall coverage of {int}% and mutation coverage of {int}%")
-    public void coverageReportGenerated(int classes, double codeCoverage, double mutationCoverage) {
-        try {
-            assertEquals("Number of tested classes mismatch", classes, PitSummary.INSTANCE.getClasses());
-            assertDoubleEquals("Total coverage mismatch", codeCoverage, PitSummary.INSTANCE.getCodeCoverage());
-            assertDoubleEquals("Mutation coverage mismatch", mutationCoverage,
-                    PitSummary.INSTANCE.getMutationCoverage());
-        } catch (Error e) {
-            e.printStackTrace();
-            throw e;
-        }
+    public void coverageReportGenerated(int classes, int codeCoverage, int mutationCoverage, int generatedMutants,
+            int killedMutants) {
+        assertEquals("Number of tested classes mismatch", classes, PitSummary.INSTANCE.getClasses());
+        assertDoubleEquals("Total coverage mismatch", codeCoverage, PitSummary.INSTANCE.getCodeCoverage());
+        assertDoubleEquals("Mutation coverage mismatch", mutationCoverage,
+                PitSummary.INSTANCE.getMutationCoverage());
+        assertEquals("Number of generated Mutants mismatch", generatedMutants,
+                PitSummary.INSTANCE.getGeneratedMutants());
+        assertEquals("Number of killed Mutants mismatch", killedMutants,
+                PitSummary.INSTANCE.getKilledMutants());
     }
 
     @Then("the mutation results are")
