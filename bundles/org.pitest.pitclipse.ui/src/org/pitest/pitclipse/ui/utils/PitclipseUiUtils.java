@@ -68,7 +68,11 @@ public class PitclipseUiUtils {
         try {
             runnable.run();
         } catch (SWTError e) {
-            MessageBox messageBox = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
+            if (e.getMessage() != null) {
+                errorMessage += "\n" + e.getMessage();
+            }
+            MessageBox messageBox = new MessageBox(
+                    parent.getShell(), SWT.ICON_ERROR | SWT.OK);
             messageBox.setMessage(errorMessage);
             messageBox.setText("Exit");
             messageBox.open();
