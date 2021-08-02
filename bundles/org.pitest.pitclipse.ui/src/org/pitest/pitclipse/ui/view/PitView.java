@@ -38,7 +38,7 @@ public class PitView extends ViewPart implements SummaryView {
                 browser.addProgressListener(new PitUiUpdatePublisher(browser));
             },
             parent,
-            "Browser cannot be initialized.");
+            "Failed to create the Pit Summary view: browser cannot be initialized.");
     }
 
     @Override
