@@ -29,8 +29,6 @@ import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.runner.results.Mutations;
 
-import com.google.common.collect.ImmutableList;
-
 public class ModelBuilder {
 
     private final ProjectStructureService eclipseStructureService;
@@ -48,23 +46,25 @@ public class ModelBuilder {
     }
 
     private List<Status> buildMutationModelFor(List<String> projects, Mutations mutations) {
-        ImmutableList.Builder<Status> builder = ImmutableList.builder();
+        List<Status> statuses = new ArrayList<>();
         for (DetectionStatus status : DetectionStatus.values()) {
             List<org.pitest.pitclipse.runner.results.Mutations.Mutation> mutationsForStatus = selectMutationsByStatus(
                     mutations, status);
             if (!mutationsForStatus.isEmpty()) {
-                ImmutableList.Builder<ProjectMutations> projectMutations = ImmutableList.builder();
+                List<ProjectMutations> projectMutations = new ArrayList<>();
                 for (String project : projects) {
                     ProjectMutations projectMutation = buildProjectMutation(project, mutationsForStatus);
                     if (!projectMutation.getPackageMutations().isEmpty()) {
                         projectMutations.add(projectMutation);
                     }
                 }
-                builder.add(Status.builder().withDetectionStatus(status).withProjectMutations(projectMutations.build())
+                statuses.add(Status.builder()
+                            .withDetectionStatus(status)
+                            .withProjectMutations(projectMutations)
                         .build());
             }
         }
-        return builder.build();
+        return statuses;
     }
 
     private List<org.pitest.pitclipse.runner.results.Mutations.Mutation> selectMutationsByStatus(
