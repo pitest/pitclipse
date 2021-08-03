@@ -146,7 +146,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         }
 
         private String getFailMessage() {
-            return FAIL_MESSAGE + PAGES.getConsole().getConsoleText();
+            return FAIL_MESSAGE + PAGES.getConsole().getText();
         }
     }
 

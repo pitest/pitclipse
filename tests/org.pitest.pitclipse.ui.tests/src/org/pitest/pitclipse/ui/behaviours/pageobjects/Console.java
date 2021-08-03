@@ -33,7 +33,7 @@ public class Console {
      * Shows the view console and returns its text.
      * @return the console text
      */
-    public String getConsoleText() {
+    public String getText() {
         final SWTBotView console = bot.viewByPartName("Console");
         // need to show, otherwise bot can't get text
         console.show();
