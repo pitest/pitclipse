@@ -17,12 +17,11 @@
 package org.pitest.pitclipse.runner.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.Ordering;
 
 public class ClassMutations implements Visitable, Countable {
     private final String className;
@@ -75,8 +74,10 @@ public class ClassMutations implements Visitable, Countable {
             return this;
         }
 
-        public Builder withMutations(Iterable<Mutation> mutations) {
-            this.mutations = Ordering.from(MutationComparator.INSTANCE).immutableSortedCopy(mutations);
+        public Builder withMutations(Collection<Mutation> mutations) {
+            this.mutations = mutations.stream()
+                    .sorted(MutationComparator.INSTANCE)
+                    .collect(Collectors.toList());
             return this;
         }
 
