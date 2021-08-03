@@ -18,20 +18,18 @@ package org.pitest.pitclipse.runner.model;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
 import org.pitest.pitclipse.runner.results.Mutations;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 public class ModelBuilder {
 
@@ -73,7 +71,7 @@ public class ModelBuilder {
             Mutations mutations, final DetectionStatus status) {
         return mutations.getMutation().stream()
                 .filter(mutation -> status == mutation.getStatus())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private ProjectMutations buildProjectMutation(String project,
@@ -90,14 +88,17 @@ public class ModelBuilder {
     }
 
     private List<PackageMutations> packageMutationsFrom(final String project, List<ClassMutations> classMutations) {
-        Multimap<String, ClassMutations> mutationsByPackage = Multimaps.index(classMutations,
-                mutations -> eclipseStructureService.packageFrom(project, mutations.getClassName()));
-        ImmutableList.Builder<PackageMutations> builder = ImmutableList.builder();
-        for (String pkg : mutationsByPackage.keySet()) {
-            builder.add(PackageMutations.builder().withPackageName(pkg).withClassMutations(mutationsByPackage.get(pkg))
-                    .build());
+        Map<String, List<ClassMutations>> mutationsByPackage = classMutations.stream()
+            .collect(groupingBy(
+                mutations -> eclipseStructureService.packageFrom(project, mutations.getClassName())));
+        List<PackageMutations> packageMutations = new ArrayList<>();
+        for (Entry<String, List<ClassMutations>> entry : mutationsByPackage.entrySet()) {
+            packageMutations.add(
+                PackageMutations.builder()
+                    .withPackageName(entry.getKey())
+                    .withClassMutations(entry.getValue()).build());
         }
-        return builder.build();
+        return packageMutations;
     }
 
     private List<ClassMutations> buildClassMutationsFor(final String project,
@@ -113,7 +114,7 @@ public class ModelBuilder {
                             .withMutatedMethod(dtoMutation.getMutatedMethod())
                             .withMutator(dtoMutation.getMutator()).withStatus(dtoMutation.getStatus())
                             .withDescription(dtoMutation.getDescription()).build(),
-                        Collectors.toList())));
+                        toList())));
         return classMutationsFrom(transformedMutations);
     }
 
@@ -122,7 +123,7 @@ public class ModelBuilder {
         for (Entry<String, List<Mutation>> entry : mutationsByClass.entrySet()) {
             List<Mutation> sortedMutations = entry.getValue().stream()
                     .sorted(MutationSorter.INSTANCE)
-                    .collect(Collectors.toList());
+                    .collect(toList());
             classMutations.add(
                 ClassMutations.builder()
                     .withClassName(entry.getKey())
