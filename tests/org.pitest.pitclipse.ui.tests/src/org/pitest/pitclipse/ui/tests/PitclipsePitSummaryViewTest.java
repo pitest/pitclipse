@@ -43,7 +43,7 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void navigateWithButtons() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 80, 0, 0, 0);
+        coverageReportGenerated(2, 80, 0, 6, 0);
 
         assertThat(summaryView.getCurrentBrowserUrl(), endsWith(INDEX_URL_END));
         final String relativeUrl = summaryView.getCurrentBrowserUrl().replace("/index.html",
