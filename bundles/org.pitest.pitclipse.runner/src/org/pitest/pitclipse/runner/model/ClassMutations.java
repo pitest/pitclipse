@@ -16,26 +16,25 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import static com.google.common.collect.Collections2.transform;
-
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
 public class ClassMutations implements Visitable, Countable {
     private final String className;
-    private final ImmutableList<Mutation> mutations;
+    private final List<Mutation> mutations;
     private final PackageMutations packageMutations;
 
-    private ClassMutations(PackageMutations packageMutations, String className, ImmutableList<Mutation> mutations) {
+    private ClassMutations(PackageMutations packageMutations, String className, List<Mutation> mutations) {
         this.packageMutations = packageMutations;
         this.className = className;
-        this.mutations = ImmutableList.copyOf(
-                transform(mutations, input -> input.copyOf().withClassMutation(ClassMutations.this).build())
-        );
+        this.mutations = mutations.stream()
+            .map(input -> input.copyOf().withClassMutation(ClassMutations.this).build())
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -65,7 +64,7 @@ public class ClassMutations implements Visitable, Countable {
 
     public static class Builder {
         private String className;
-        private ImmutableList<Mutation> mutations = ImmutableList.of();
+        private List<Mutation> mutations = new ArrayList<>();
         private PackageMutations packageMutations;
 
         private Builder() {
@@ -91,9 +90,9 @@ public class ClassMutations implements Visitable, Countable {
             @Override
             public int compare(Mutation lhs, Mutation rhs) {
                 if (lhs.getLineNumber() != rhs.getLineNumber()) {
-                    return Ordering.natural().compare(lhs.getLineNumber(), rhs.getLineNumber());
+                    return Integer.compare(lhs.getLineNumber(), rhs.getLineNumber());
                 }
-                return Ordering.natural().compare(lhs.getDescription(), rhs.getDescription());
+                return lhs.getDescription().compareTo(rhs.getDescription());
             }
         }
 
