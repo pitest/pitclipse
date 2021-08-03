@@ -73,7 +73,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         PAGES.getWindowsMenu().setMutators(Mutators.OLD_DEFAULTS);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-            coverageReportGenerated(2, 80, 0);
+            coverageReportGenerated(2, 80, 0, 6, 0);
             mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
                             "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
                             "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 
@@ -38,5 +40,22 @@ public class Console {
         // need to show, otherwise bot can't get text
         console.show();
         return console.bot().styledText().getText();
+    }
+
+    /**
+     * If the Console view can be found, clear it
+     */
+    public void clearConsole() {
+        List<SWTBotView> allViews = bot.views();
+        for (SWTBotView view : allViews) {
+            if ("Console".equals(view.getTitle())) {
+                view.show();
+                if (!view.bot().styledText().getText().isEmpty()) {
+                    // use button to clear, because setting the text to "" works not synchronously
+                    view.toolbarButton("Clear Console").click();
+                }
+                return;
+            }
+        }
     }
 }

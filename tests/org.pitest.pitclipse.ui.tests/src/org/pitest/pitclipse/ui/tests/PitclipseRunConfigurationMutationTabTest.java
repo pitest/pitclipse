@@ -55,7 +55,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
 
     @After
     public void clearConsole() {
-        PAGES.views().clearConsole();
+        PAGES.getConsole().clearConsole();
     }
 
     @Test
@@ -64,7 +64,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 8, 0);
         mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
                         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
@@ -81,7 +81,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 6, 0);
         mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
@@ -96,7 +96,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.STRONGER);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 8, 0);
         mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
                         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
@@ -112,7 +112,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setOneCustomMutator(TEST_CONFIG_NAME, Mutators.NEGATE_CONDITIONALS);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 2, 0);
         // check that mutator was selected as only mutator
         mutatorIs(Mutators.NEGATE_CONDITIONALS);
         mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
@@ -125,7 +125,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 83, 1);
         mutationsAre(getAllMutantsResult());
     }
 
@@ -134,7 +134,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().checkAllMutators(TEST_CONFIG_NAME);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 83, 1);
         mutationsAre(getAllMutantsResult());
     }
 
@@ -223,6 +223,5 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with 2\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | replaced int return with 0 for foo/bar/Foo::f\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | replaced return of integer sized value with (x == 0 ? 1 : 0)";
-
     }
 }

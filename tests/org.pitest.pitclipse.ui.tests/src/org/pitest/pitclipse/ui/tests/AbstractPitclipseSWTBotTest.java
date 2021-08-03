@@ -18,6 +18,7 @@ package org.pitest.pitclipse.ui.tests;
 import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -25,6 +26,7 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -314,9 +316,8 @@ public abstract class AbstractPitclipseSWTBotTest {
      * Asserts that the only active mutator was the given mutator.
      * @param mutators which should be the only active mutator
      */
-    protected static void mutatorIs(Mutators mutators) {
-        final String consoleText = PAGES.getConsole().getText();
-        assertThat(consoleText, containsString(String.format("mutators=[%s]", mutators.name())));
+    protected static void mutatorIs(Mutators mutator) {
+        mutatorsAre(Arrays.asList(new Mutators[] { mutator }));
     }
 
     /**
