@@ -31,19 +31,19 @@ public class PitclipseUiRunnerJUnit5Test extends AbstractPitclipseSWTBotTest {
     // @Test This one is really flaky on Maven
     public void runPitJunit5AtPackageLevel() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(2, 100, 100, 2, 2);
     }
 
     // @Test This one is really flaky on Maven
     public void runPitJunit5AtPackageRootLevel() throws CoreException {
         runPackageRootTest("src", TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(2, 100, 100, 2, 2);
     }
 
     @Test
     public void runPitJunit5AtProjectLevel() throws CoreException {
         runProjectTest(TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
+        coverageReportGenerated(1, 100, 100, 2, 2);
     }
 
 }

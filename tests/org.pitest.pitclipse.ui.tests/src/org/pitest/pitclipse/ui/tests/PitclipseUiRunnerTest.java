@@ -32,8 +32,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         removeMethods(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         removeMethods(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
     }
 
     @Test
@@ -45,8 +45,8 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
               + "    Foo foo = new Foo();\n"
               + "}");
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(0, 0, 100, 0, 0);
         mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
     }
 
     @Test
@@ -61,11 +61,10 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
               + "    Foo foo = new Foo();\n"
               + "}");
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(2, 0, 0, 0, 0);
         mutationsAre(
         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-        coverageReportGenerated(1, 50, 0);
+        coverageReportGenerated(1, 50, 0, 2, 0);
     }
 
     @Test
@@ -80,11 +79,10 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
               + "    new Foo().doFoo(1);\n"
               + "}");
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(2, 0, 0, 2, 1);
         mutationsAre(
         "SURVIVED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "SURVIVED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-        coverageReportGenerated(1, 100, 0);
+        coverageReportGenerated(1, 100, 0, 2, 0);
     }
 
     @Test
@@ -100,11 +98,10 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
               + "            new Foo().doFoo(1));\n"
               + "}");
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
         mutationsAre(
         "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
-        coverageReportGenerated(1, 100, 100);
+        coverageReportGenerated(1, 100, 100, 2, 2);
     }
 
     @Test
@@ -120,14 +117,11 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
               + "            new Foo().doFoo(1));\n"
               + "}");
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
-        coverageReportGenerated(1, 100, 100);
+        coverageReportGenerated(1, 100, 100, 2, 2);
         runPackageRootTest("src", TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
-        coverageReportGenerated(1, 100, 100);
+        coverageReportGenerated(1, 100, 100, 2, 2);
         runProjectTest(TEST_PROJECT);
-        consoleContains(2, 2, 100, 2, 1);
-        coverageReportGenerated(1, 100, 100);
+        coverageReportGenerated(1, 100, 100, 2, 2);
     }
 
 }

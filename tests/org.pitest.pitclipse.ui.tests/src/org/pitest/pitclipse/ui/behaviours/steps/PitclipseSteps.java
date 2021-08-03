@@ -20,10 +20,10 @@ import static com.google.common.collect.ImmutableSet.copyOf;
 import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.util.AssertUtil.assertDoubleEquals;
 
@@ -66,21 +66,30 @@ public class PitclipseSteps {
         // ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD,
         // new NullProgressMonitor());
         System.out.println(String.format("Run PIT on: %s %s.%s", projectName, packageName, testClassName));
-        runPit(new SelectTestClass(testClassName, packageName, projectName));
+        runPitAndWaitForIt(new SelectTestClass(testClassName, packageName, projectName));
     }
 
+    /**
+     * Assert that the given classes, code coverage and mutation coverage matches
+     * with the result of pit.<br>
+     * <b>Expects<b> that pit was run before and is done.
+     * @param classes          how many where analyzed from pit
+     * @param codeCoverage     how much was calculated from pit
+     * @param mutationCoverage how much was calculated from pit
+     * @param generatedMutants how many mutants were generated
+     * @param killedMutants    how many mutants were killed
+     */
     @Then("a coverage report is generated with {int} class/classes tested with overall coverage of {int}% and mutation coverage of {int}%")
-    public void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
-        PAGES.views().waitForTestsAreRunOnConsole();
-        try {
-            assertEquals("Number of tested classes mismatch", classes, PitSummary.INSTANCE.getClasses());
-            assertDoubleEquals("Total coverage mismatch", totalCoverage, PitSummary.INSTANCE.getCodeCoverage());
-            assertDoubleEquals("Mutation coverage mismatch", mutationCoverage,
-                    PitSummary.INSTANCE.getMutationCoverage());
-        } catch (Error e) {
-            e.printStackTrace();
-            throw e;
-        }
+    public void coverageReportGenerated(int classes, int codeCoverage, int mutationCoverage, int generatedMutants,
+            int killedMutants) {
+        assertEquals("Number of tested classes mismatch", classes, PitSummary.INSTANCE.getClasses());
+        assertDoubleEquals("Total coverage mismatch", codeCoverage, PitSummary.INSTANCE.getCodeCoverage());
+        assertDoubleEquals("Mutation coverage mismatch", mutationCoverage,
+                PitSummary.INSTANCE.getMutationCoverage());
+        assertEquals("Number of generated Mutants mismatch", generatedMutants,
+                PitSummary.INSTANCE.getGeneratedMutants());
+        assertEquals("Number of killed Mutants mismatch", killedMutants,
+                PitSummary.INSTANCE.getKilledMutants());
     }
 
     @Then("the mutation results are")
@@ -114,33 +123,22 @@ public class PitclipseSteps {
         PAGES.getWindowsMenu().openPitMutationsView();
     }
 
-    @When("the Console view is closed")
-    public void closeTheConsole() {
-        PAGES.views().closeConsole();
-    }
-
     @When("tests in package {word} are run for project {word}")
     public void runPackageTest(final String packageName, final String projectName) {
-        System.out.println
-            (String.format("Run PIT on: %s %s",
-                projectName, packageName));
-        runPit(new SelectPackage(packageName, projectName));
+        System.out.println(String.format("Run PIT on: %s %s", projectName, packageName));
+        runPitAndWaitForIt(new SelectPackage(packageName, projectName));
     }
 
     @When("tests in source root {word} are run for project {word}")
     public void runPackageRootTest(final String packageRoot, final String projectName) {
-        System.out.println
-            (String.format("Run PIT on: %s %s",
-                projectName, packageRoot));
-        runPit(new SelectPackageRoot(packageRoot, projectName));
+        System.out.println(String.format("Run PIT on: %s %s", projectName, packageRoot));
+        runPitAndWaitForIt(new SelectPackageRoot(packageRoot, projectName));
     }
 
     @When("tests are run for project {word}")
     public void runProjectTest(String projectName) {
-        System.out.println
-            (String.format("Run PIT on: %s",
-                projectName));
-        runPit(new SelectProject(projectName));
+        System.out.println(String.format("Run PIT on: %s", projectName));
+        runPitAndWaitForIt(new SelectProject(projectName));
     }
 
     @Then("the options passed to Pit match(:)")
@@ -155,19 +153,22 @@ public class PitclipseSteps {
         assertThat(options, match(configMap));
     }
 
-    private void runPit(Runnable runnable) {
+    /**
+     * Runs pit after the given runnable is run and waits for it to finish.
+     * @param runnable which is executed prior to pit
+     */
+    private void runPitAndWaitForIt(Runnable runnable) {
         assertNoErrorsInWorkspace();
-        // make sure to clear the console to avoid interferences
-        // with the output of previous runs
-        PAGES.views().clearConsole();
-        // make sure summary is cleared
-        PitSummary.INSTANCE.reset();
+        // reset Summary result
+        PitSummary.INSTANCE.resetSummary();
         int retryCount = 20;
         int counter = 0;
         while (counter < retryCount) {
             try {
                 runnable.run();
                 PAGES.getRunMenu().runPit();
+                // wait for pit to finish
+                PitSummary.INSTANCE.waitForPitToFinish();
                 return;
             } catch (TimeoutException te) {
                 counter++;
