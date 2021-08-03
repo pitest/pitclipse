@@ -58,23 +58,25 @@ public class PitclipseUiUtils {
 
     /**
      * Executes the {@link Runnable} and in case of {@link SWTError} shows a dialog
-     * with the specified error message, using the specified parent..
+     * with the specified title and error message, using the specified parent.
      * 
      * @param runnable
      * @param parent
+     * @param title
      * @param errorMessage
      */
-    public static void executeSafely(Runnable runnable, Composite parent, String errorMessage) {
+    public static void executeSafely(Runnable runnable, Composite parent,
+            String title, String errorMessage) {
         try {
             runnable.run();
         } catch (SWTError e) {
             if (e.getMessage() != null) {
                 errorMessage += "\n" + e.getMessage();
             }
-            MessageBox messageBox = new MessageBox(
-                    parent.getShell(), SWT.ICON_ERROR | SWT.OK);
+            MessageBox messageBox = new MessageBox(parent.getShell(),
+                    SWT.ICON_ERROR | SWT.OK);
+            messageBox.setText(title);
             messageBox.setMessage(errorMessage);
-            messageBox.setText("Exit");
             messageBox.open();
         }
     }
