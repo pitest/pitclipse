@@ -64,11 +64,17 @@
 			**/*Exception.java,
 			**/*Activator.java,
 			**/*RunnerMain.java,
-			**/runner/model/*.java,
 			**/runner/results/summary/*.java,
 		</sonar.exclusions>
 		<sonar.coverage.exclusions>
-			**/PitclipseUiUtils.java
+			**/runner/model/ClassMutations.java,
+			**/runner/model/Mutation.java,
+			**/runner/model/MutationsModel.java,
+			**/runner/model/MutationSorter.java,
+			**/runner/model/PackageMutations.java,
+			**/runner/model/ProjectMutations.java,
+			**/runner/model/Status.java,
+			**/PitclipseUiUtils.java,
 		</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml
