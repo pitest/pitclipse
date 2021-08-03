@@ -73,8 +73,6 @@ public class PitView extends ViewPart implements SummaryView {
                     }
                     });
                     actionBars.updateActionBars();
-                    browser = new Browser(parent, SWT.NONE);
-                    browser.addProgressListener(new PitUiUpdatePublisher(browser));
                 },
                 parent,
                 "Failed to create the Pit Summary view",
