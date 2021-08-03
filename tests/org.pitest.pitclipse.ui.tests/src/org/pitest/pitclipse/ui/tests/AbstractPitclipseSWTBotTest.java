@@ -18,7 +18,6 @@ package org.pitest.pitclipse.ui.tests;
 import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -44,7 +43,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -312,64 +310,12 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runProjectTest(projectName);
     }
 
-    protected static void consoleContains(int generatedMutants, int killedMutants,
-            int killedPercentage,
-            int testsRun,
-            int testsPerMutations) {
-        PAGES.views().waitForTestsAreRunOnConsole();
-        final String consoleText = getConsoleText();
-        // System.out.println(consoleText);
-
-        if (generatedMutants == 0) {
-            // in newer versions of PIT the Console will simply end with a warning
-            assertThat(consoleText,
-                containsString(
-                    "INFO : Created  0 mutation test units in pre scan"
-                )
-            );
-            assertThat(consoleText,
-                containsString(
-                    "WARNING : No mutations found."
-                )
-            );
-        } else {
-            // we are interested in two strings appearing in the Console
-            // newer versions of PIT generate other contents in between
-            // e.g., ">> Mutations with no coverage 0. Test strength 100%"
-            // so we must run the checks separately
-            assertThat(consoleText,
-                containsString(
-                    String.format(
-                      ">> Generated %d mutations Killed %d (%d%%)",
-                      generatedMutants, killedMutants,
-                      killedPercentage)
-                )
-            );
-            assertThat(consoleText,
-                containsString(
-                    String.format(
-                      ">> Ran %d tests (%d tests per mutation)",
-                      testsRun, testsPerMutations)
-                )
-            );
-        }
-    }
-
-    private static String getConsoleText() {
-        SWTBotView consoleView = bot.viewByPartName("Console");
-        consoleView.show();
-        return consoleView.bot()
-                .styledText().getText()
-                .replace("\r", "");
-    }
-
     /**
      * Asserts that the only active mutator was the given mutator.
      * @param mutators which should be the only active mutator
      */
     protected static void mutatorIs(Mutators mutators) {
-        PAGES.views().waitForTestsAreRunOnConsole();
-        final String consoleText = getConsoleText();
+        final String consoleText = PAGES.getConsole().getText();
         assertThat(consoleText, containsString(String.format("mutators=[%s]", mutators.name())));
     }
 
@@ -378,8 +324,7 @@ public abstract class AbstractPitclipseSWTBotTest {
      * @param mutators which should be the only active mutators
      */
     protected static void mutatorsAre(Collection<Mutators> mutators) {
-        PAGES.views().waitForTestsAreRunOnConsole();
-        final String consoleText = getConsoleText();
+        final String consoleText = PAGES.getConsole().getText();
         // build String to match against console text
         Iterator<Mutators> iterator = mutators.iterator();
         StringBuilder sb = new StringBuilder();
@@ -435,8 +380,21 @@ public abstract class AbstractPitclipseSWTBotTest {
         assertThat(actualMutations, equalTo(expectedMutations));
     }
 
-    protected static void coverageReportGenerated(int classes, double totalCoverage, double mutationCoverage) {
-        new PitclipseSteps().coverageReportGenerated(classes, totalCoverage, mutationCoverage);
+    /**
+     * @see {@link PitclipseSteps#coverageReportGenerated(int, int, int, int, int)}
+     */
+    protected static void coverageReportGenerated(int classes, int codeCoverage, int mutationCoverage,
+            int generatedMutants, int killedMutants) {
+        new PitclipseSteps().coverageReportGenerated(classes, codeCoverage, mutationCoverage, generatedMutants,
+                killedMutants);
+    }
+
+    /**
+     * Since the new version of PIT we expect that no report is generated, if
+     * nothing is tested
+     */
+    protected static void noCoverageReportGenerated() {
+        new PitclipseSteps().coverageReportGenerated(-1, -1, -1, -1, -1);
     }
 
     /**

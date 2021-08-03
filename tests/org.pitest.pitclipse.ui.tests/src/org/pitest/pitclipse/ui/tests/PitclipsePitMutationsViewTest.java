@@ -34,7 +34,7 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void selectMutationOpensTheClassAtTheRightLineNumber() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 80, 0);
+        coverageReportGenerated(2, 80, 0, 6, 0);
         PitclipseSteps pitclipseSteps = new PitclipseSteps();
         PitMutation mutation = fromMutationLine(
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");

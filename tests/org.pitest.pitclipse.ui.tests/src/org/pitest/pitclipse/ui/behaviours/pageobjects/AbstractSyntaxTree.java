@@ -75,6 +75,8 @@ public class AbstractSyntaxTree {
         try {
             project.delete(true, progressMonitor);
         } catch (CoreException e) {
+            // let's see if we get some more information when it happens
+            e.printStackTrace();
             throw new StepException(e);
         }
     }

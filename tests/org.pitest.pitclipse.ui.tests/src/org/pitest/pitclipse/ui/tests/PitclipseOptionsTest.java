@@ -91,7 +91,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void useDefaultMutators() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 80, 0);
+        coverageReportGenerated(2, 80, 0, 6, 0);
         mutationsAre(
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
@@ -107,7 +107,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         PAGES.getWindowsMenu().setMutators(Mutators.STRONGER);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-            coverageReportGenerated(2, 80, 0);
+            coverageReportGenerated(2, 80, 0, 8, 0);
             mutationsAre(
             "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
             "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false\n" +
@@ -126,7 +126,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void launchConfigurationsWithDefaultOptions() throws CoreException {
         runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 40, 0);
+        coverageReportGenerated(2, 40, 0, 6, 0);
         runtimeOptionsMatch(
         "classUnderTest           | classesToMutate  | excludedClasses | excludedMethods | runInParallel | incrementalAnalysis | avoidCallsTo                                                               \n" +
         "foo.bar.FooTest | foo.bar.BarTest, foo.bar.Foo, foo.bar.Bar, foo.bar.FooTest       | *Test           |                 | true          | false               | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
@@ -136,7 +136,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
       + "FooTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"
         );
         runTest(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 40, 0);
+        coverageReportGenerated(2, 40, 0, 6, 0);
         launchConfigurationsMatch(
         "name    | runInParallel | useIncrementalAnalysis | excludedClasses | excludedMethods | avoidCallsTo                                                               \n"
       + "BarTest | true          | false                  | *Test           |                 | java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j |\n"
@@ -157,7 +157,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             selector.setExcludedMethods("*toString*, doNotMutateMe*");
             selector.close();
             runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-            coverageReportGenerated(2, 40, 0);
+            coverageReportGenerated(2, 40, 0, 6, 0);
             runtimeOptionsMatch(
             "classUnderTest  | timeoutConst | timeoutFactor | runInParallel | incrementalAnalysis | excludedClasses           | avoidCallsTo          | excludedMethods \n" +
             "foo.bar.FooTest | 2000         | 2             | false         | true                | org.foo.*IntTest, *DbTest | org.slf4j, org.apache | *toString*, doNotMutateMe*"
