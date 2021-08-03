@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,30 +41,34 @@ public class PitCliArguments {
     }
 
     private String[] toCliArgs(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         int threads = options.getThreads();
         File reportDir = options.getReportDirectory();
-        builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY",
+        List<String> args = new ArrayList<>(Arrays.asList(
+                "--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY",
                 "--verbose", "--threads", Integer.toString(threads), "--reportDir", reportDir.getPath(),
-                "--targetTests", testsToRunFrom(options));
-        builder.addAll(targetClassesFrom(options));
-        builder.add("--sourceDirs").add(sourceDirsFrom(options));
-        builder.addAll(historyLocationFrom(options));
-        builder.addAll(excludedClassesFrom(options));
-        builder.addAll(excludedMethodsFrom(options));
-        builder.addAll(avoidedCallsFrom(options));
-        builder.addAll(mutatorsFrom(options));
-        builder.add("--timeoutConst", Integer.toString(options.getTimeout()));
-        builder.add("--timeoutFactor", options.getTimeoutFactor().toPlainString());
+                "--targetTests", testsToRunFrom(options)));
+        args.addAll(targetClassesFrom(options));
+        args.add("--sourceDirs");
+        args.add(sourceDirsFrom(options));
+        args.addAll(historyLocationFrom(options));
+        args.addAll(excludedClassesFrom(options));
+        args.addAll(excludedMethodsFrom(options));
+        args.addAll(avoidedCallsFrom(options));
+        args.addAll(mutatorsFrom(options));
+        args.add("--timeoutConst");
+        args.add(Integer.toString(options.getTimeout()));
+        args.add("--timeoutFactor");
+        args.add(options.getTimeoutFactor().toPlainString());
         if (options.getUseJUnit5()) {
             // Specify that the 'pitest-junit5-plugin' should be used to discover tests
-            builder.add("--testPlugin", "junit5");
+            args.add("--testPlugin");
+            args.add("junit5");
         }
         String additionalClasspath = additionalClassPath(options);
         if (!additionalClasspath.isEmpty()) {
-            builder.add("--classPath", additionalClasspath);
+            args.add("--classPath");
+            args.add(additionalClasspath);
         }
-        List<String> args = builder.build();
         return args.toArray(new String[args.size()]);
     }
 
@@ -121,7 +127,7 @@ public class PitCliArguments {
     private List<String> targetClassesFrom(PitOptions options) {
         Builder<String> builder = ImmutableList.builder();
         List<String> classesToMutate = options.getClassesToMutate();
-        if (null != classesToMutate && !classesToMutate.isEmpty()) {
+        if (!classesToMutate.isEmpty()) {
             builder.add("--targetClasses");
             builder.add(classpath(options));
         }
