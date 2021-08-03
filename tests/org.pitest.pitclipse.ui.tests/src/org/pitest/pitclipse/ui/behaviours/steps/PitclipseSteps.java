@@ -92,6 +92,11 @@ public class PitclipseSteps {
                 PitSummary.INSTANCE.getKilledMutants());
     }
 
+    @When("the Console view is closed")
+    public void closeTheConsole() {
+        PAGES.getConsole().closeConsole();
+    }
+
     @Then("the mutation results are")
     public void mutationsAre(DataTable tableOfMutations) {
         List<PitMutation> expectedMutations = mutationsFromExampleTable(tableOfMutations);
