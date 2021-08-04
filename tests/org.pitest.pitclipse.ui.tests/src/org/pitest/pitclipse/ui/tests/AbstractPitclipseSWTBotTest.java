@@ -42,9 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
@@ -147,15 +145,11 @@ public abstract class AbstractPitclipseSWTBotTest {
     }
 
     public static void closeViewById(String viewId) {
-        final long previousTimeout = SWTBotPreferences.TIMEOUT;
-        try {
-            // set timeout short, because if the view is not present we don't wait long
-            SWTBotPreferences.TIMEOUT = 100;
-            bot.viewById(viewId).close();
-        } catch (WidgetNotFoundException e) {
-            // expected, if the view was not present
-        } finally {
-            SWTBotPreferences.TIMEOUT = previousTimeout;
+        for (SWTBotView view : bot.views()) {
+            if (view.getReference().getId().equals(viewId)) {
+                view.close();
+                return;
+            }
         }
     }
 

@@ -80,6 +80,7 @@ public class PitSummaryView {
     private class BrowserLoadCondition extends DefaultCondition {
         private final String titleOfPage;
         private String html;
+
         public BrowserLoadCondition(String titleOfPage) {
             getBrowserIfNotSet();
             final int lastSegment = titleOfPage.lastIndexOf('/') + 1;
@@ -89,6 +90,7 @@ public class PitSummaryView {
                 this.titleOfPage = titleOfPage;
             }
         }
+
         @Override
         public boolean test() throws Exception {
             // give the browser time to change.

@@ -33,8 +33,6 @@ public class PitclipsePitSummaryViewTest extends AbstractPitclipseSWTBotTest {
 
     @Before
     public void resetView() throws InterruptedException {
-        // If this class is run alone, the view can't be closed and a RuntimeException
-        // is thrown as expected
         closeViewById(PitView.VIEW_ID);
         openViewById(PitView.VIEW_ID);
         summaryView = PAGES.getPitSummaryView();

@@ -42,41 +42,41 @@ public class PitView extends ViewPart implements SummaryView {
     @Override
     public synchronized void createPartControl(Composite parent) {
         PitclipseUiUtils.executeSafely(
-                () -> {
-                    browser = new Browser(parent, SWT.NONE);
-                    resetBrowser();
-                    browser.addProgressListener(new PitUiUpdatePublisher(browser));
-                    IActionBars actionBars = getViewSite().getActionBars();
-                    IToolBarManager toolBar = actionBars.getToolBarManager();
-                    // create back button
-                    toolBar.add(new Action(BACK_BUTTON_TEXT) {
-                        @Override
-                        public void run() {
-                            browser.back();
-                        }
-                    });
-                    // create home button for navigation
-                    toolBar.add(new Action(HOME_BUTTON_TEXT) {
-                        @Override
-                        public void run() {
-                            if (homeUrlString != null) {
-                                // only set url, if an home is set otherwise NPE
-                                browser.setUrl(homeUrlString);
-                            }
-                        }
-                    });
-                    // create forward button
-                    toolBar.add(new Action(FORWARD_BUTTON_TEXT) {
-                        @Override
-                        public void run() {
-                            browser.forward();
+            () -> {
+                browser = new Browser(parent, SWT.NONE);
+                resetBrowser();
+                browser.addProgressListener(new PitUiUpdatePublisher(browser));
+                IActionBars actionBars = getViewSite().getActionBars();
+                IToolBarManager toolBar = actionBars.getToolBarManager();
+                // create back button
+                toolBar.add(new Action(BACK_BUTTON_TEXT) {
+                    @Override
+                    public void run() {
+                        browser.back();
                     }
-                    });
-                    actionBars.updateActionBars();
-                },
-                parent,
-                "Failed to create the Pit Summary view",
-                "Browser cannot be initialized.");
+                });
+                // create home button for navigation
+                toolBar.add(new Action(HOME_BUTTON_TEXT) {
+                    @Override
+                    public void run() {
+                        if (homeUrlString != null) {
+                            // only set url, if an home is set otherwise NPE
+                            browser.setUrl(homeUrlString);
+                        }
+                    }
+                });
+                // create forward button
+                toolBar.add(new Action(FORWARD_BUTTON_TEXT) {
+                    @Override
+                    public void run() {
+                        browser.forward();
+                }
+                });
+                actionBars.updateActionBars();
+            },
+            parent,
+            "Failed to create the Pit Summary view",
+            "Browser cannot be initialized.");
     }
 
     /**
