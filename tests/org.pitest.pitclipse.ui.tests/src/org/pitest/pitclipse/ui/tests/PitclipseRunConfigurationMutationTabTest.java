@@ -55,7 +55,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
 
     @After
     public void clearConsole() {
-        PAGES.getConsole().clearConsole();
+        PAGES.getConsole().clear();
     }
 
     @Test
