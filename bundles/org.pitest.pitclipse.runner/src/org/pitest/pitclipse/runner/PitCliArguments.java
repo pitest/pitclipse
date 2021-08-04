@@ -16,9 +16,7 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.Lists;
+import static java.util.Collections.emptyList;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,65 +71,71 @@ public class PitCliArguments {
     }
 
     private List<String> excludedClassesFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> excludedClasses = options.getExcludedClasses();
         if (!excludedClasses.isEmpty()) {
-            builder.add("--excludedClasses");
-            builder.add(concat(commaSeparate(excludedClasses)));
+            List<String> args = new ArrayList<>();
+            args.add("--excludedClasses");
+            args.add(concat(commaSeparate(excludedClasses)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> excludedMethodsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> excludedMethods = options.getExcludedMethods();
         if (!excludedMethods.isEmpty()) {
-            builder.add("--excludedMethods");
-            builder.add(concat(commaSeparate(excludedMethods)));
+            List<String> args = new ArrayList<>();
+            args.add("--excludedMethods");
+            args.add(concat(commaSeparate(excludedMethods)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> avoidedCallsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> avoidCallsTo = options.getAvoidCallsTo();
         if (!avoidCallsTo.isEmpty()) {
-            builder.add("--avoidCallsTo");
-            builder.add(concat(commaSeparate(avoidCallsTo)));
+            List<String> args = new ArrayList<>();
+            args.add("--avoidCallsTo");
+            args.add(concat(commaSeparate(avoidCallsTo)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> mutatorsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> mutators = options.getMutators();
         if (!mutators.isEmpty()) {
-            builder.add("--mutators");
-            builder.add(concat(commaSeparate(mutators)));
+            List<String> args = new ArrayList<>();
+            args.add("--mutators");
+            args.add(concat(commaSeparate(mutators)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> historyLocationFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         File historyLocation = options.getHistoryLocation();
         if (null != historyLocation) {
-            builder.add("--historyInputLocation");
-            builder.add(historyLocation.getPath());
-            builder.add("--historyOutputLocation");
-            builder.add(historyLocation.getPath());
+            List<String> args = new ArrayList<>();
+            args.add("--historyInputLocation");
+            args.add(historyLocation.getPath());
+            args.add("--historyOutputLocation");
+            args.add(historyLocation.getPath());
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> targetClassesFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> classesToMutate = options.getClassesToMutate();
         if (!classesToMutate.isEmpty()) {
-            builder.add("--targetClasses");
-            builder.add(classpath(options));
+            List<String> args = new ArrayList<>();
+            args.add("--targetClasses");
+            args.add(classpath(options));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private String testsToRunFrom(PitOptions options) {
@@ -159,11 +163,11 @@ public class PitCliArguments {
     }
 
     private List<String> fileAsStrings(List<File> files) {
-        Builder<String> builder = ImmutableList.builder();
+        List<String> args = new ArrayList<>();
         for (File file : files) {
-            builder.add(file.getPath());
+            args.add(file.getPath());
         }
-        return builder.build();
+        return args;
     }
 
     private String concat(List<String> entries) {
@@ -175,7 +179,7 @@ public class PitCliArguments {
     }
 
     private List<String> commaSeparate(List<String> candidates) {
-        List<String> formattedCandidates = Lists.newArrayList();
+        List<String> formattedCandidates = new ArrayList<>();
         int size = candidates.size();
         for (int i = 0; i < size; i++) {
             String candidate = candidates.get(i).trim();
