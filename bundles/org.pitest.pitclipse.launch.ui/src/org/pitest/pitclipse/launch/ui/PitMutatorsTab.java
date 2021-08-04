@@ -20,20 +20,15 @@ import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -52,7 +47,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.osgi.framework.Bundle;
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
@@ -75,7 +69,6 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String COLUMN_NAME = "Name";
     private static final String NO_DESCRIPTION_TEXT = "No description found yet.";
     private static final String ERROR_MESSAGE = "At least one mutator or mutator group needs to be selected!";
-    private Image icon;
     private String mutators;
     private CheckboxTableViewer mutatorsTable;
     private Button customMutatorsButton;
@@ -89,18 +82,11 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public Image getImage() {
-        Bundle bundle = Platform.getBundle(PitLaunchUiActivator.PLUGIN_ID);
-        Path path = new Path("icons/pit.gif");
-        URL iconURL = FileLocator.find(bundle, path, null);
-        icon = ImageDescriptor.createFromURL(iconURL).createImage();
-        return icon;
+        return PitCoreActivator.getDefault().getPitIcon();
     }
 
     @Override
     public void dispose() {
-        if (icon != null && !icon.isDisposed()) {
-            icon.dispose();
-        }
         if (mainComp != null && !mainComp.isDisposed()) {
             mainComp.dispose();
         }

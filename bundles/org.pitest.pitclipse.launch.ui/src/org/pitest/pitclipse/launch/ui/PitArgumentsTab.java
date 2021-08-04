@@ -31,19 +31,13 @@ import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
-import java.net.URL;
-
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -58,7 +52,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.framework.Bundle;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
@@ -76,8 +69,6 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     public static final String SCOPE_GROUP_TEXT = " Mutation Scope ";
     public static final String PROJECT_TEXT = "Project to mutate: ";
 
-    private Image icon;
-
     private Text testClassText;
     private Text projectText;
     private Button testClassRadioButton;
@@ -92,18 +83,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public Image getImage() {
-        Bundle bundle = Platform.getBundle(PitLaunchUiActivator.PLUGIN_ID);
-        Path path = new Path("icons/pit.gif");
-        URL iconURL = FileLocator.find(bundle, path, null);
-        icon = ImageDescriptor.createFromURL(iconURL).createImage();
-        return icon;
-    }
-
-    @Override
-    public void dispose() {
-        if (icon != null) {
-            icon.dispose();
-        }
+        return PitCoreActivator.getDefault().getPitIcon();
     }
 
     @Override
