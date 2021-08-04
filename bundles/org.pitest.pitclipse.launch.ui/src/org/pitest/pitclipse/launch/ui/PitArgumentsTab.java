@@ -148,9 +148,9 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
             testDirectoryRadioButton.setSelection(false);
         }
         final String targetClass = getAttributeFromConfig(config, ATTR_TARGET_CLASSES, "");
-        targetClassCheckBoxButton.setSelection(!targetClass.isBlank());
+        targetClassCheckBoxButton.setSelection(!targetClass.equals(""));
         targetClassText.setText(targetClass);
-        targetClassText.setEnabled(!targetClass.isBlank());
+        targetClassText.setEnabled(!targetClass.equals(""));
         initialiseWithPreferenceDefaults(config);
         testModeChanged();
     }
