@@ -94,7 +94,7 @@ public class PitclipseSteps {
 
     @When("the Console view is closed")
     public void closeTheConsole() {
-        PAGES.getConsole().closeConsole();
+        PAGES.getConsole().close();
     }
 
     @Then("the mutation results are")

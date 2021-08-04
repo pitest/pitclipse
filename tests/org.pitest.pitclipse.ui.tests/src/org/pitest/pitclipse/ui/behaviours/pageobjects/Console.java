@@ -42,7 +42,7 @@ public class Console {
         return console.bot().styledText().getText();
     }
 
-    public void closeConsole() {
+    public void close() {
         List<SWTBotView> allViews = bot.views();
         for (SWTBotView view : allViews) {
             if ("Console".equals(view.getTitle())) {
@@ -55,7 +55,7 @@ public class Console {
     /**
      * If the Console view can be found, clear it
      */
-    public void clearConsole() {
+    public void clear() {
         List<SWTBotView> allViews = bot.views();
         for (SWTBotView view : allViews) {
             if ("Console".equals(view.getTitle())) {
@@ -69,7 +69,7 @@ public class Console {
         }
     }
 
-    public SWTBotView showConsole() {
+    public SWTBotView show() {
         SWTBotView consoleView = bot.viewByPartName("Console");
         consoleView.show();
         return consoleView;
