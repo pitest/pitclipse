@@ -32,6 +32,8 @@ import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -104,14 +106,17 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
      */
     private Text targetClassText;
     /**
-     * Pattern which matches a String which contains packages separated by dots and
-     * end with a class.
+     * Helper pattern for {@link #CLASS_PATTERN}
      */
-    private static final String CLASS_PATTERN = "\\w+(\\.\\w+)*\\.\\w+";
+    private static final String ID_PATTERN = "\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*";
+    /**
+     * Pattern which matches a valid java class
+     */
+    private static final String CLASS_PATTERN = ID_PATTERN + "(\\." + ID_PATTERN + ")*";
     /**
      * Pattern which matches multiple {@link #CLASS_PATTERN} separated by commas
      */
-    private static final String MULTI_CLASS_PATTERN = CLASS_PATTERN + "(,\\s?" + CLASS_PATTERN + ")*";
+    private static final Pattern MULTI_CLASS_PATTERN = Pattern.compile(CLASS_PATTERN + "(,\\s?" + CLASS_PATTERN + ")*");
     /**
      * Target class error message. Which is displayed, if the text field has no
      * valid input
@@ -487,7 +492,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     @Override
     public boolean canSave() {
         return !targetClassCheckBoxButton.getSelection()
-                || targetClassCheckBoxButton.getSelection() && targetClassText.getText().matches(MULTI_CLASS_PATTERN);
+                || targetClassCheckBoxButton.getSelection()
+                        && MULTI_CLASS_PATTERN.matcher(targetClassText.getText()).matches();
     }
 
     @Override
