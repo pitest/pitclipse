@@ -59,7 +59,7 @@ public class RunMenu {
     }
 
     public void runPitWithConfiguration(String configurationName) {
-        runConfigurationSelector.runWithConfiguration(configurationName);
+        runConfigurationSelector.runWithConfigurationAndWaitForIt(configurationName);
     }
 
     /**

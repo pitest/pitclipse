@@ -125,7 +125,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 83, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 84, 1);
         mutationsAre(getAllMutantsResult());
     }
 
@@ -134,7 +134,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().checkAllMutators(TEST_CONFIG_NAME);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 83, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 84, 1);
         mutationsAre(getAllMutantsResult());
     }
 

@@ -35,6 +35,7 @@ import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.launch.ui.PitArgumentsTab;
 import org.pitest.pitclipse.launch.ui.PitMutatorsTab;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitRunConfiguration.Builder;
+import org.pitest.pitclipse.ui.swtbot.PitResultNotifier.PitSummary;
 import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
 
 import com.google.common.collect.ImmutableList;
@@ -239,8 +240,9 @@ public class RunConfigurationSelector {
         bot.radio(PitMutatorsTab.CUSTOM_MUTATOR_RADIO_TEXT).click();
         SWTBotTable table = bot.table();
         Display.getDefault().syncExec(() -> {
-            for (TableItem item : table.widget.getItems()) {
-                item.setChecked(true);
+            final int itemCount = table.widget.getItems().length;
+            for (int i = 0; i < itemCount; i++) {
+                table.getTableItem(i).check();
             }
         });
         closeConfigurationShell();
@@ -265,14 +267,7 @@ public class RunConfigurationSelector {
      * @param mutator which is set to active
      */
     private void setMutator(SWTBotTable table, Mutators mutator) {
-        Display.getDefault().syncExec(() -> {
-            for (TableItem item : table.widget.getItems()) {
-                if (item.getData().equals(mutator.name())) {
-                    item.setChecked(true);
-                    break;
-                }
-            }
-        });
+        table.getTableItem(mutator.getDescriptor()).check();
     }
 
     /**
@@ -287,12 +282,21 @@ public class RunConfigurationSelector {
         shell.close();
     }
 
-    public void runWithConfiguration(String configurationName) {
+    /**
+     * Runs the configuration specified by the given name and waits for it to be
+     * finished.
+     * @param configurationName
+     */
+    public void runWithConfigurationAndWaitForIt(String configurationName) {
+        // reset Summary result
+        PitSummary.INSTANCE.resetSummary();
         activateConfiguration(configurationName);
         SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
         shell.bot()
         .button(RUN)
         .click();
+        // wait for pit
+        PitSummary.INSTANCE.waitForPitToFinish();
     }
 
     /**
