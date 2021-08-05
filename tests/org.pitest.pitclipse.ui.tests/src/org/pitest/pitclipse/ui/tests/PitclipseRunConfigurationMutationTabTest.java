@@ -59,7 +59,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void useOldDefaultsMutatorsGroup() {
+    public void useOldDefaultsMutatorsGroup() { // NOSONAR
         // set OLD_DEFAULTS mutators
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);
         // run test and confirm result is as expected
@@ -76,7 +76,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void useDefaultMutatorsGroup() {
+    public void useDefaultMutatorsGroup() { // NOSONAR
         // set DEFAULTS mutators
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
         // run test and confirm result is as expected
@@ -91,7 +91,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void useStrongerMutatorsGroup() {
+    public void useStrongerMutatorsGroup() { // NOSONAR
         // now set STRONGER mutators
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.STRONGER);
         // run test and confirm result is as expected
@@ -108,7 +108,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void checkOneMutant() {
+    public void checkOneMutant() { // NOSONAR
         PAGES.getRunMenu().setOneCustomMutator(TEST_CONFIG_NAME, Mutators.NEGATE_CONDITIONALS);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
@@ -120,7 +120,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void useAllMutatorsGroup() {
+    public void useAllMutatorsGroup() { // NOSONAR
         // now set ALL mutators group
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
         // run test and confirm result is as expected
@@ -130,7 +130,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void checkAllMutants() {
+    public void checkAllMutants() { // NOSONAR
         PAGES.getRunMenu().checkAllMutators(TEST_CONFIG_NAME);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
