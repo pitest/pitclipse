@@ -122,13 +122,12 @@ public class RunMenu {
     }
 
     /**
-     * Adds the given mutator to the list of checked mutators for the given
-     * configuration
-     * @param configurationName which the mutator should be added
-     * @param mutator           which should be added
+     * Toggle the given mutator in the table of mutators
+     * @param configurationName which the mutator should be toggled
+     * @param mutator           which should be toggled
      */
-    public void setAdditionalCustomMutator(String configurationName, Mutators mutator) {
-        runConfigurationSelector.setAdditionalCustomMutator(configurationName, mutator);
+    public void toggleCustomMutator(String configurationName, Mutators mutator) {
+        runConfigurationSelector.toggleCustomMutator(configurationName, mutator);
     }
 
     /**

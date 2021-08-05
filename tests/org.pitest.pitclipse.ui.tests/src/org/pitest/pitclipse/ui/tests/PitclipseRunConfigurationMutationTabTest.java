@@ -59,6 +59,28 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
+    public void pressMutatorGroupButtons() { // NOSONAR
+        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);
+        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
+        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.STRONGER);
+        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
+        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
+    }
+
+    @Test
+    public void selectNoMutator() { // NOSONAR
+        PAGES.getRunMenu().setOneCustomMutator(TEST_CONFIG_NAME, Mutators.NEGATE_CONDITIONALS);
+        PAGES.getRunMenu().toggleCustomMutator(TEST_CONFIG_NAME, Mutators.NEGATE_CONDITIONALS);
+        // should switch back to previous selected mutator
+        PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 2, 0);
+        // check that mutator was selected as only mutator
+        mutatorIs(Mutators.NEGATE_CONDITIONALS);
+        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
+    }
+
+    @Test
     public void useOldDefaultsMutatorsGroup() { // NOSONAR
         // set OLD_DEFAULTS mutators
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);

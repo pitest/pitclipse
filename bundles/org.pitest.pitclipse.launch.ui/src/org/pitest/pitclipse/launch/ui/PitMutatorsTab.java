@@ -156,10 +156,9 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         link.setText("<a href=\"" + MUTATOR_LINK + "\">" + MUTATOR_LINK_TEXT + "</a>");
         link.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent e) { // NOSONAR we don't want to open external links
                 Program.launch(MUTATOR_LINK);
             }
-
         });
         GridDataFactory.swtDefaults().applyTo(link);
     }
@@ -330,9 +329,6 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      * @return true, if a button was selected
      */
     private boolean updateSelectionOfGroup(String value) {
-        if (groupButtons == null || value == null) {
-            return false;
-        }
         boolean found = false;
         for (Button button : groupButtons) {
             boolean selection = false;
@@ -360,7 +356,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
      */
     @Override
     public boolean canSave() {
-        return isBasicMutatorGroup() || (!isBasicMutatorGroup() && mutatorsTable.getCheckedElements().length > 0);
+        return isBasicMutatorGroup() || mutatorsTable.getCheckedElements().length > 0;
     }
 
     @Override

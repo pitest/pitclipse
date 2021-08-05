@@ -215,14 +215,12 @@ public class RunConfigurationSelector {
         closeConfigurationShell();
     }
 
-    public void setAdditionalCustomMutator(String configurationName, Mutators mutator) {
+    public void toggleCustomMutator(String configurationName, Mutators mutator) {
         activateMutatorsTab(configurationName);
         SWTBotRadio radioButton = bot.radio(PitMutatorsTab.CUSTOM_MUTATOR_RADIO_TEXT);
-        if (!radioButton.isSelected()) {
-            radioButton.click();
-        }
+        radioButton.click();
         SWTBotTable table = bot.table();
-        setMutator(table, mutator);
+        toggleMutator(table, mutator);
         closeConfigurationShell();
     }
 
@@ -231,7 +229,7 @@ public class RunConfigurationSelector {
         bot.radio(PitMutatorsTab.CUSTOM_MUTATOR_RADIO_TEXT).click();
         uncheckAllMutators();
         SWTBotTable table = bot.table();
-        setMutator(table, mutator);
+        toggleMutator(table, mutator);
         closeConfigurationShell();
     }
 
@@ -266,8 +264,8 @@ public class RunConfigurationSelector {
      * @param table   where to check the mutator
      * @param mutator which is set to active
      */
-    private void setMutator(SWTBotTable table, Mutators mutator) {
-        table.getTableItem(mutator.getDescriptor()).check();
+    private void toggleMutator(SWTBotTable table, Mutators mutator) {
+        table.getTableItem(mutator.getDescriptor()).toggleCheck();
     }
 
     /**
@@ -279,7 +277,7 @@ public class RunConfigurationSelector {
         if (apply.isEnabled()) {
             apply.click();
         }
-        shell.close();
+        shell.bot().button("Close").click();
     }
 
     /**
