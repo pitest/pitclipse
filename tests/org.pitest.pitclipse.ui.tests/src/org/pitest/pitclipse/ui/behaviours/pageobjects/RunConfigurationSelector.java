@@ -22,7 +22,6 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TableItem;
@@ -201,7 +200,7 @@ public class RunConfigurationSelector {
      *         commas
      */
     private String getProjectsAsString(PitRunConfiguration config) {
-        return Stream.of(config.getProjects())
+        return config.getProjects().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(","));
     }

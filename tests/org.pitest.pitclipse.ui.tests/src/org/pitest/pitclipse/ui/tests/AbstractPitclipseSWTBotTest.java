@@ -326,7 +326,7 @@ public abstract class AbstractPitclipseSWTBotTest {
     protected static void mutatorsAre(Collection<Mutators> mutators) {
         final String consoleText = PAGES.getConsole().getText();
         assertThat(consoleText, containsString(String.format("mutators=[%s]",
-                Stream.of(mutators).map(Object::toString).collect(Collectors.joining(",")))));
+                mutators.stream().map(Object::toString).collect(Collectors.joining(",")))));
     }
 
     /**
