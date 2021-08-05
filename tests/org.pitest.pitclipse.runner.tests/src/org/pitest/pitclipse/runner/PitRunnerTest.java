@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 
@@ -45,8 +44,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.pitest.mutationtest.MutationResultListenerFactory;
-import org.pitest.mutationtest.engine.gregor.config.Mutator;
-import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.example.empty.EmptyClass;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
 import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
@@ -179,39 +176,5 @@ public class PitRunnerTest {
             // Add JUnit dependency
             new File("lib/junit.jar").getAbsolutePath()
         );
-    }
-
-    /**
-     * This test case is in place to detect whether the supplied mutators from pit
-     * changed and we need to change {@link Mutators}.
-     */
-    @Test
-    public void testTheMutatorApiOfPit() {
-        assertThat(getPitMutatorsAsString(), equalTo(getExpectedMutatorsAsString()));
-    }
-
-    private String getPitMutatorsAsString() {
-        StringBuilder sb = new StringBuilder();
-        for (String mutator : Mutator.allMutatorIds()) {
-            sb.append(mutator).append(',');
-        }
-        return sb.toString();
-    }
-
-    private String getExpectedMutatorsAsString() {
-        return "INVERT_NEGS,RETURN_VALS,INLINE_CONSTS,MATH,VOID_METHOD_CALLS," +
-                "NEGATE_CONDITIONALS,CONDITIONALS_BOUNDARY,INCREMENTS," +
-                "REMOVE_INCREMENTS,NON_VOID_METHOD_CALLS,CONSTRUCTOR_CALLS," +
-                "REMOVE_CONDITIONALS_EQ_IF,REMOVE_CONDITIONALS_EQ_ELSE," +
-                "REMOVE_CONDITIONALS_ORD_IF,REMOVE_CONDITIONALS_ORD_ELSE," +
-                "REMOVE_CONDITIONALS,TRUE_RETURNS,FALSE_RETURNS," +
-                "PRIMITIVE_RETURNS,EMPTY_RETURNS,NULL_RETURNS," +
-                "RETURNS,EXPERIMENTAL_MEMBER_VARIABLE," +
-                "EXPERIMENTAL_SWITCH,EXPERIMENTAL_ARGUMENT_PROPAGATION," +
-                "EXPERIMENTAL_NAKED_RECEIVER,EXPERIMENTAL_BIG_INTEGER," +
-                "AOR_1,AOR_2,AOR_3,AOR_4,ABS,AOD1,AOD2,CRCR1,CRCR2,CRCR3,CRCR4," +
-                "CRCR5,CRCR6,OBBN1,OBBN2,OBBN3,ROR1,ROR2,ROR3,ROR4,ROR5,UOI1," +
-                "UOI2,UOI3,UOI4,REMOVE_SWITCH,OLD_DEFAULTS,STRONGER,ALL,DEFAULTS," +
-                "AOR,AOD,CRCR,OBBN,ROR,UOI,";
     }
 }
