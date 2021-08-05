@@ -110,7 +110,6 @@ public class RunMenu {
      */
     public void setMutatorGroup(String configurationName, Mutators mutatorGroup) {
         runConfigurationSelector.setMutatorGroup(configurationName, mutatorGroup);
-
     }
 
     /**

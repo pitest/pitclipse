@@ -141,6 +141,9 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
     }
 
+    /**
+     * This test will probably fail, if mutators of pit get changed
+     */
     @Test
     public void useAllMutatorsGroup() { // NOSONAR
         // now set ALL mutators group
@@ -151,6 +154,9 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         mutationsAre(getAllMutantsResult());
     }
 
+    /**
+     * This test will probably fail, if mutators of pit get changed
+     */
     @Test
     public void checkAllMutants() { // NOSONAR
         PAGES.getRunMenu().checkAllMutators(TEST_CONFIG_NAME);

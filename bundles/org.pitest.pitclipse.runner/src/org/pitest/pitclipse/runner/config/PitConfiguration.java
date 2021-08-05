@@ -16,9 +16,9 @@
 
 package org.pitest.pitclipse.runner.config;
 
-import java.math.BigDecimal;
-
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
+
+import java.math.BigDecimal;
 
 public class PitConfiguration {
     public static final String DEFAULT_AVOID_CALLS_TO_LIST = "java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j";
@@ -120,6 +120,7 @@ public class PitConfiguration {
             this.timeout = timeout;
             return this;
         }
+
         public PitConfiguration build() {
             return new PitConfiguration(executionMode, parallelExecution, incrementalAnalysis, excludedClasses,
                     excludedMethods, avoidCallsTo, mutators, timeout, timeoutFactor);

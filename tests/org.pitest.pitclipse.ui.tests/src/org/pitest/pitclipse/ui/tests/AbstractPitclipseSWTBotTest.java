@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -326,16 +325,8 @@ public abstract class AbstractPitclipseSWTBotTest {
      */
     protected static void mutatorsAre(Collection<Mutators> mutators) {
         final String consoleText = PAGES.getConsole().getText();
-        // build String to match against console text
-        Iterator<Mutators> iterator = mutators.iterator();
-        StringBuilder sb = new StringBuilder();
-        while (iterator.hasNext()) {
-            sb.append(iterator.next().name());
-            if (iterator.hasNext()) {
-                sb.append(',');
-            }
-        }
-        assertThat(consoleText, containsString(String.format("mutators=[%s]", sb.toString())));
+        assertThat(consoleText, containsString(String.format("mutators=[%s]",
+                Stream.of(mutators).map(Object::toString).collect(Collectors.joining(",")))));
     }
 
     /**

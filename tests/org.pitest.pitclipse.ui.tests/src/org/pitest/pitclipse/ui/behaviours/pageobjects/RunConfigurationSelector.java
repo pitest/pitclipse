@@ -18,9 +18,11 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import static com.google.common.collect.ImmutableList.builder;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellIsActive;
+import static org.junit.Assert.fail;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TableItem;
@@ -116,7 +118,8 @@ public class RunConfigurationSelector {
                 return treeItem.select().expand();
             }
         }
-        throw new RuntimeException("Could not find '" + itemName + "' in the configurations tab.");
+        fail("Could not find '" + itemName + "' in the configurations tab.");
+        return null; // never reached
     }
 
     private void activateConfiguration(String configurationName) {
@@ -126,7 +129,7 @@ public class RunConfigurationSelector {
                 return;
             }
         }
-        throw new RuntimeException("Could not find '" + configurationName + "' in the configurations of PIT.");
+        fail("Could not find '" + configurationName + "' in the configurations of PIT.");
     }
 
     public void activateMutatorsTab(String configurationName) {
@@ -198,15 +201,9 @@ public class RunConfigurationSelector {
      *         commas
      */
     private String getProjectsAsString(PitRunConfiguration config) {
-        Iterator<String> it = config.getProjects().iterator();
-        StringBuilder sb = new StringBuilder();
-        while (it.hasNext()) {
-            sb.append(it.next());
-            if (it.hasNext()) {
-                sb.append(',');
-            }
-        }
-        return sb.toString();
+        return Stream.of(config.getProjects())
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
     }
 
     public void setMutatorGroup(String configurationName, Mutators mutatorGroup) {
@@ -290,9 +287,7 @@ public class RunConfigurationSelector {
         PitSummary.INSTANCE.resetSummary();
         activateConfiguration(configurationName);
         SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
-        shell.bot()
-        .button(RUN)
-        .click();
+        shell.bot().button(RUN).click();
         // wait for pit
         PitSummary.INSTANCE.waitForPitToFinish();
     }
@@ -310,6 +305,6 @@ public class RunConfigurationSelector {
                 return;
             }
         }
-        throw new RuntimeException("Could not find '" + configurationName + "' in the configurations of PIT.");
+        fail("Could not find '" + configurationName + "' in the configurations of PIT.");
     }
 }

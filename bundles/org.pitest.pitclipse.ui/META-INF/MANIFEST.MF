@@ -18,5 +18,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Pitest.org
 Bundle-ClassPath: .
-Export-Package: org.pitest.pitclipse.ui.extension.point
+Export-Package: org.pitest.pitclipse.ui.extension.point,
+ org.pitest.pitclipse.ui.utils
 Automatic-Module-Name: org.pitest.pitclipse.ui

@@ -16,12 +16,11 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -109,14 +108,14 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     private void intializeMutatorsTable(ILaunchConfiguration config) {
-        final String individualMutatos = PitArgumentsTab.getAttributeFromConfig(config, INDIVIDUAL_MUTATORS, "");
-        if (individualMutatos.equals("")) {
+        final String individualMutators = PitArgumentsTab.getAttributeFromConfig(config, INDIVIDUAL_MUTATORS, "");
+        if (individualMutators.isEmpty()) {
             // no mutators where set, use defaults
             for (String mutator : Mutators.getDefaultMutators()) {
                 mutatorsTable.setChecked(mutator, true);
             }
         } else {
-            for (String mutator : individualMutatos.split(",")) {
+            for (String mutator : individualMutators.split(",")) {
                 mutatorsTable.setChecked(mutator, true);
             }
         }
@@ -185,14 +184,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
             button.setText(mutatorGroup.getDescriptor());
             button.setData(mutatorGroup.name());
             button.setFont(font);
-            button.addSelectionListener(widgetSelectedAdapter(event -> {
-                final String old = mutators;
-                mutators = (String) event.widget.getData();
-                if (((Button) event.widget).getSelection() && !old.equals(mutators)) {
-                    updateLaunchConfigurationDialog();
-                    disableTableIfUnused();
-                }
-            }));
+            button.addSelectionListener(new ButtonSelectionListener());
             groupButtons[i++] = button;
             GridDataFactory.swtDefaults().applyTo(button);
         }
@@ -200,15 +192,20 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         customMutatorsButton.setText(CUSTOM_MUTATOR_RADIO_TEXT);
         customMutatorsButton.setData(CUSTOM_MUTATOR_RADIO_DATA);
         customMutatorsButton.setFont(font);
-        customMutatorsButton.addSelectionListener(widgetSelectedAdapter(event -> {
+        customMutatorsButton.addSelectionListener(new ButtonSelectionListener());
+        GridDataFactory.swtDefaults().applyTo(customMutatorsButton);
+    }
+
+    private class ButtonSelectionListener extends SelectionAdapter {
+        @Override
+        public void widgetSelected(SelectionEvent event) {
             final String old = mutators;
             mutators = (String) event.widget.getData();
-            if (!old.equals(mutators)) {
+            if (((Button) event.widget).getSelection() && !old.equals(mutators)) {
                 updateLaunchConfigurationDialog();
                 disableTableIfUnused();
             }
-        }));
-        GridDataFactory.swtDefaults().applyTo(customMutatorsButton);
+        }
     }
 
     /**
@@ -298,15 +295,9 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     }
 
     private String getIndividualMutators() {
-        StringBuilder sb = new StringBuilder("");
-        Iterator<Object> iterator = Arrays.asList(mutatorsTable.getCheckedElements()).iterator();
-        while (iterator.hasNext()) {
-            sb.append((String) iterator.next());
-            if (iterator.hasNext()) {
-                sb.append(',');
-            }
-        }
-        return sb.toString();
+        return Stream.of(mutatorsTable.getCheckedElements())
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
     }
 
     @Override
