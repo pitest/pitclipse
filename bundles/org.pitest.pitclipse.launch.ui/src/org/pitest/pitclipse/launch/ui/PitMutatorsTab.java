@@ -51,6 +51,7 @@ import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 /**
  * Tab allowing to configure a PIT analyze.
@@ -87,9 +88,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void dispose() {
-        if (mainComp != null && !mainComp.isDisposed()) {
-            mainComp.dispose();
-        }
+        PitclipseUiUtils.disposeSafely(mainComp);
         // always call super.dispose() last, if dispose() is overridden.
         super.dispose();
     }
