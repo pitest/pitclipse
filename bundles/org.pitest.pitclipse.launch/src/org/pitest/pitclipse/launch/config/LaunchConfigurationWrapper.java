@@ -123,10 +123,10 @@ public class LaunchConfigurationWrapper {
         List<String> excludedClasses = getExcludedClasses();
         List<String> excludedMethods = getExcludedMethods();
         List<String> avoidCallsTo = getAvoidCallsTo();
-        List<String> mutators = getMutators();
+        String mutators = getMutators();
         int timeout = pitConfiguration.getTimeout();
         BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
-        
+
         PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
                 .withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
                 .withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)
@@ -261,13 +261,13 @@ public class LaunchConfigurationWrapper {
         return projectFinder.getProjects(this);
     }
 
-    private List<String> getMutators() throws CoreException {
+    private String getMutators() throws CoreException {
         final String mutators;
         if (launchConfig.hasAttribute(MUTATORS)) {
             mutators = launchConfig.getAttribute(MUTATORS, "");
         } else {
             mutators = pitConfiguration.getMutators();
         }
-        return ImmutableList.of(mutators);
+        return mutators;
     }
 }

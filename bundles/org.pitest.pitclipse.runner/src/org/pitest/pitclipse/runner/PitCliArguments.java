@@ -16,16 +16,16 @@
 
 package org.pitest.pitclipse.runner;
 
+import java.io.File;
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * Turns {@link PitOptions} instances into CLI arguments
- * that can be understand by PIT. 
+ * that can be understand by PIT.
  */
 public class PitCliArguments {
 
@@ -98,10 +98,10 @@ public class PitCliArguments {
 
     private List<String> mutatorsFrom(PitOptions options) {
         Builder<String> builder = ImmutableList.builder();
-        List<String> mutators = options.getMutators();
+        String mutators = options.getMutators();
         if (!mutators.isEmpty()) {
             builder.add("--mutators");
-            builder.add(concat(commaSeparate(mutators)));
+            builder.add(mutators);
         }
         return builder.build();
     }
