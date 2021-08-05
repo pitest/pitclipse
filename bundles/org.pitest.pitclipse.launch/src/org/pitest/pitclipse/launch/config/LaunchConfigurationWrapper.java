@@ -114,7 +114,7 @@ public class LaunchConfigurationWrapper {
     public PitOptions getPitOptions() throws CoreException {
         return getPitOptionsBuilder().build();
     }
-    
+
     public PitOptions.PitOptionsBuilder getPitOptionsBuilder() throws CoreException {
         List<String> classPath = getClassesFromProject();
         List<File> sourceDirs = getSourceDirsForProject();

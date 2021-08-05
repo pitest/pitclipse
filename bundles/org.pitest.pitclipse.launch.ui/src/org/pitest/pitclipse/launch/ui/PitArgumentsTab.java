@@ -173,6 +173,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         projectLabel.setFont(font);
 
         gd = new GridData(FILL_HORIZONTAL);
+        // 1 column less to fit label in front of the text field
         gd.horizontalSpan = NUMBER_OF_COLUMNS - 1;
         projectText = new Text(comp, SWT.SINGLE | SWT.BORDER);
         projectText.setLayoutData(gd);

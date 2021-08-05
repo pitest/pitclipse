@@ -208,7 +208,7 @@ public final class PitOptions implements Serializable {
             this.packages = copyOf(packages);
             return this;
         }
-        
+
         public PitOptionsBuilder withClassPath(List<String> classPath) {
             this.classPath = copyOf(classPath);
             return this;
@@ -297,7 +297,7 @@ public final class PitOptions implements Serializable {
     public List<String> getPackages() {
         return packages;
     }
-    
+
     public List<String> getClassPath() {
         return classPath;
     }
@@ -317,7 +317,7 @@ public final class PitOptions implements Serializable {
     public BigDecimal getTimeoutFactor() {
         return timeoutFactor;
     }
-    
+
     public boolean getUseJUnit5() {
         return useJUnit5;
     }
