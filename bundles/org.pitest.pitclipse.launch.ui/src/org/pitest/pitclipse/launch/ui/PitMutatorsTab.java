@@ -154,7 +154,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         link.setText("<a href=\"" + MUTATOR_LINK + "\">" + MUTATOR_LINK_TEXT + "</a>");
         link.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(SelectionEvent e) { // NOSONAR we don't want to open external links
+            public void widgetSelected(SelectionEvent e) {
                 Program.launch(MUTATOR_LINK);
             }
         });
