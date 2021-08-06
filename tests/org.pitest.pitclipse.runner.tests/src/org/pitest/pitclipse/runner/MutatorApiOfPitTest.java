@@ -16,8 +16,7 @@
 
 package org.pitest.pitclipse.runner;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
@@ -30,7 +29,7 @@ import org.pitest.pitclipse.core.Mutators;
 public class MutatorApiOfPitTest {
     @Test
     public void testTheMutatorApiOfPit() {
-        assertThat(getPitMutatorsAsString(), equalTo(getExpectedMutatorsAsString()));
+        assertEquals(getExpectedMutatorsAsString(), getPitMutatorsAsString());
     }
 
     private String getPitMutatorsAsString() {
@@ -42,19 +41,68 @@ public class MutatorApiOfPitTest {
     }
 
     private String getExpectedMutatorsAsString() {
-        return "INVERT_NEGS\nRETURN_VALS\nINLINE_CONSTS\nMATH\nVOID_METHOD_CALLS\n"
-                + "NEGATE_CONDITIONALS\nCONDITIONALS_BOUNDARY\nINCREMENTS\n"
-                + "REMOVE_INCREMENTS\nNON_VOID_METHOD_CALLS\nCONSTRUCTOR_CALLS\n"
-                + "REMOVE_CONDITIONALS_EQ_IF\nREMOVE_CONDITIONALS_EQ_ELSE\n"
-                + "REMOVE_CONDITIONALS_ORD_IF\nREMOVE_CONDITIONALS_ORD_ELSE\n"
-                + "REMOVE_CONDITIONALS\nTRUE_RETURNS\nFALSE_RETURNS\n"
-                + "PRIMITIVE_RETURNS\nEMPTY_RETURNS\nNULL_RETURNS\n"
-                + "RETURNS\nEXPERIMENTAL_MEMBER_VARIABLE\n"
-                + "EXPERIMENTAL_SWITCH\nEXPERIMENTAL_ARGUMENT_PROPAGATION\n"
-                + "EXPERIMENTAL_NAKED_RECEIVER\nEXPERIMENTAL_BIG_INTEGER\n"
-                + "AOR_1\nAOR_2\nAOR_3\nAOR_4\nABS\nAOD1\nAOD2\nCRCR1\nCRCR2\nCRCR3\nCRCR4\n"
-                + "CRCR5\nCRCR6\nOBBN1\nOBBN2\nOBBN3\nROR1\nROR2\nROR3\nROR4\nROR5\nUOI1\n"
-                + "UOI2\nUOI3\nUOI4\nREMOVE_SWITCH\nOLD_DEFAULTS\nSTRONGER\nALL\nDEFAULTS\n"
-                + "AOR\nAOD\nCRCR\nOBBN\nROR\nUOI\n";
+        return "INVERT_NEGS\n"
+                + "RETURN_VALS\n"
+                + "INLINE_CONSTS\n"
+                + "MATH\n"
+                + "VOID_METHOD_CALLS\n"
+                + "NEGATE_CONDITIONALS\n"
+                + "CONDITIONALS_BOUNDARY\n"
+                + "INCREMENTS\n"
+                + "REMOVE_INCREMENTS\n"
+                + "NON_VOID_METHOD_CALLS\n"
+                + "CONSTRUCTOR_CALLS\n"
+                + "REMOVE_CONDITIONALS_EQ_IF\n"
+                + "REMOVE_CONDITIONALS_EQ_ELSE\n"
+                + "REMOVE_CONDITIONALS_ORD_IF\n"
+                + "REMOVE_CONDITIONALS_ORD_ELSE\n"
+                + "REMOVE_CONDITIONALS\n"
+                + "TRUE_RETURNS\n"
+                + "FALSE_RETURNS\n"
+                + "PRIMITIVE_RETURNS\n"
+                + "EMPTY_RETURNS\n"
+                + "NULL_RETURNS\n"
+                + "RETURNS\n"
+                + "EXPERIMENTAL_MEMBER_VARIABLE\n"
+                + "EXPERIMENTAL_SWITCH\n"
+                + "EXPERIMENTAL_ARGUMENT_PROPAGATION\n"
+                + "EXPERIMENTAL_NAKED_RECEIVER\n"
+                + "EXPERIMENTAL_BIG_INTEGER\n"
+                + "AOR_1\n"
+                + "AOR_2\n"
+                + "AOR_3\n"
+                + "AOR_4\n"
+                + "ABS\n"
+                + "AOD1\n"
+                + "AOD2\n"
+                + "CRCR1\n"
+                + "CRCR2\n"
+                + "CRCR3\n"
+                + "CRCR4\n"
+                + "CRCR5\n"
+                + "CRCR6\n"
+                + "OBBN1\n"
+                + "OBBN2\n"
+                + "OBBN3\n"
+                + "ROR1\n"
+                + "ROR2\n"
+                + "ROR3\n"
+                + "ROR4\n"
+                + "ROR5\n"
+                + "UOI1\n"
+                + "UOI2\n"
+                + "UOI3\n"
+                + "UOI4\n"
+                + "REMOVE_SWITCH\n"
+                + "OLD_DEFAULTS\n"
+                + "STRONGER\n"
+                + "ALL\n"
+                + "DEFAULTS\n"
+                + "AOR\n"
+                + "AOD\n"
+                + "CRCR\n"
+                + "OBBN\n"
+                + "ROR\n"
+                + "UOI\n";
     }
 }
