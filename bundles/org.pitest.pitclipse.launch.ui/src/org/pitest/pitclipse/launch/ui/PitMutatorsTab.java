@@ -64,6 +64,9 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String MUTATOR_LINK_TEXT = "See the documentation on Pitest.org";
     private static final String MUTATOR_LINK = "https://pitest.org/quickstart/mutators/";
     public static final String CUSTOM_MUTATOR_RADIO_TEXT = "Mutators selected below";
+    /**
+     * Needed for {@link ButtonSelectionListener#widgetSelected(SelectionEvent)}
+     */
     private static final String CUSTOM_MUTATOR_RADIO_DATA = "CUSTOM";
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_NAME = "Name";
