@@ -160,7 +160,7 @@ public class WindowsMenu {
     }
 
     public void setMutatorGroup(Mutators mutators) {
-        PitCoreActivator.getDefault().setMutatorGroup(mutators);
+        PitCoreActivator.getDefault().setDefaultMutatorGroup(mutators);
     }
 
     public void setTimeoutConstant(int timeout) {

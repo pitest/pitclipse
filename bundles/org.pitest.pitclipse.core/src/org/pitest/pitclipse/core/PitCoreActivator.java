@@ -346,11 +346,11 @@ public class PitCoreActivator extends Plugin {
         getPreferenceStore().setValue(EXECUTION_MODE, pitExecutionMode.getId());
     }
 
-    public void setMutatorGroup(Mutators mutators) {
+    public void setDefaultMutatorGroup(Mutators mutators) {
         getPreferenceStore().setValue(MUTATOR_GROUP, mutators.name());
     }
 
-    public String getDefaultMutators() {
+    public String getDefaultMutatorGroup() {
         return getPreferenceStore().getString(MUTATOR_GROUP);
     }
 }
