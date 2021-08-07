@@ -86,7 +86,7 @@ public class RunConfigurationSelector {
         boolean incrementalAnalysis = bot.checkBox(PitPreferences.INCREMENTAL_ANALYSIS_LABEL).isChecked();
         String excludedClasses = bot.textWithLabel(PitPreferences.EXCLUDED_CLASSES_LABEL).getText();
         String excludedMethods = bot.textWithLabel(PitPreferences.EXCLUDED_METHODS_LABEL).getText();
-        String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_LABEL).getText();
+        String avoidCallsTo = bot.textWithLabel(PitPreferences.AVOID_CALLS_TO_LABEL).getText();
         return new Builder().withName(name).withProjects(project).withRunInParallel(runInParallel)
                 .withIncrementalAnalysis(incrementalAnalysis).withExcludedClasses(excludedClasses)
                 .withExcludedMethods(excludedMethods).withAvoidCallsTo(avoidCallsTo).withTestObject(testObject)
@@ -189,7 +189,7 @@ public class RunConfigurationSelector {
         }
         bot.textWithLabel(PitPreferences.EXCLUDED_CLASSES_LABEL).setText(config.getExcludedClasses());
         bot.textWithLabel(PitPreferences.EXCLUDED_METHODS_LABEL).setText(config.getExcludedMethods());
-        bot.textWithLabel(PitPreferences.AVOID_CALLS_LABEL).setText(config.getAvoidCallsTo());
+        bot.textWithLabel(PitPreferences.AVOID_CALLS_TO_LABEL).setText(config.getAvoidCallsTo());
         // close shell and save
         closeConfigurationShell();
     }

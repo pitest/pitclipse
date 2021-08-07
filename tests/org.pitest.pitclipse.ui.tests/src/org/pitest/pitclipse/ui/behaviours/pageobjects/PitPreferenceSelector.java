@@ -28,10 +28,10 @@ import java.io.Closeable;
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ZERO;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS_LABEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_MODE_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR_LABEL;
@@ -72,7 +72,7 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public PitExecutionMode getPitExecutionMode() {
-        return getSelectedExecutionMode().from(EXECUTION_SCOPE_LABEL);
+        return getSelectedExecutionMode().from(EXECUTION_MODE_LABEL);
     }
 
     private PitExecutionMode getActiveExecutionMode() {
@@ -117,11 +117,11 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public String getAvoidCallsTo() {
-        return getText().from(AVOID_CALLS_LABEL);
+        return getText().from(AVOID_CALLS_TO_LABEL);
     }
 
     public void setAvoidCallsTo(String avoidCallsTo) {
-        setTextFor(AVOID_CALLS_LABEL).to(avoidCallsTo);
+        setTextFor(AVOID_CALLS_TO_LABEL).to(avoidCallsTo);
     }
 
     public Mutators getMutators() {

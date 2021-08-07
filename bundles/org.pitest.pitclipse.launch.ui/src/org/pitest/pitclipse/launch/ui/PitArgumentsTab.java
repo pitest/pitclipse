@@ -19,7 +19,7 @@ package org.pitest.pitclipse.launch.ui;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.eclipse.swt.layout.GridData.FILL_HORIZONTAL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS_LABEL;
@@ -261,7 +261,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         excludedMethodsText = createTextPreference(font, misc, miscLayout.numColumns,
                 EXCLUDED_METHODS_LABEL);
         avoidCallsTo = createTextPreference(font, misc, miscLayout.numColumns,
-                AVOID_CALLS_LABEL);
+                AVOID_CALLS_TO_LABEL);
     }
 
     private Text createTextPreference(Font font, Composite comp, int columnsInParent, String label) {

@@ -174,7 +174,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             preferenceStore.setValue(PitPreferences.RUN_IN_PARALLEL, true);
             preferenceStore.setValue(PitPreferences.INCREMENTAL_ANALYSIS, false);
             preferenceStore.setValue(PitPreferences.EXCLUDED_CLASSES, PitConfiguration.DEFAULT_EXCLUDED_CLASSES);
-            preferenceStore.setValue(PitPreferences.AVOID_CALLS, PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST);
+            preferenceStore.setValue(PitPreferences.AVOID_CALLS_TO, PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST);
             preferenceStore.setValue(PitPreferences.EXCLUDED_METHODS, "");
         }
     }

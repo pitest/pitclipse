@@ -65,7 +65,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
     }
 
     private void createAvoidCallsToField() {
-        addField(new StringFieldEditor(AVOID_CALLS, AVOID_CALLS_LABEL, getFieldEditorParent()));
+        addField(new StringFieldEditor(AVOID_CALLS_TO, AVOID_CALLS_TO_LABEL, getFieldEditorParent()));
     }
 
     private void createExcludeClassesField() {
@@ -98,7 +98,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
         for (int i = 0; i < values.length; i++) {
             executionModeValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
         }
-        addField(new RadioGroupFieldEditor(EXECUTION_SCOPE, EXECUTION_SCOPE_LABEL, 1, executionModeValues, getFieldEditorParent()));
+        addField(new RadioGroupFieldEditor(EXECUTION_MODE, EXECUTION_MODE_LABEL, 1, executionModeValues, getFieldEditorParent()));
     }
 
     /*

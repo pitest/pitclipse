@@ -17,11 +17,11 @@
 package org.pitest.pitclipse.core;
 
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
@@ -305,13 +305,13 @@ public class PitCoreActivator extends Plugin {
 
     public PitConfiguration getConfiguration() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        String executionMode = preferenceStore.getString(EXECUTION_SCOPE);
+        String executionMode = preferenceStore.getString(EXECUTION_MODE);
         String mutators = preferenceStore.getString(MUTATORS);
         boolean parallelRun = preferenceStore.getBoolean(RUN_IN_PARALLEL);
         boolean incrementalAnalysis = preferenceStore.getBoolean(INCREMENTAL_ANALYSIS);
         String excludedClasses = preferenceStore.getString(EXCLUDED_CLASSES);
         String excludedMethods = preferenceStore.getString(EXCLUDED_METHODS);
-        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS);
+        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS_TO);
         String timeout = preferenceStore.getString(TIMEOUT);
         String timeoutFactor = preferenceStore.getString(TIMEOUT_FACTOR);
         PitConfiguration.Builder builder = PitConfiguration.builder().withParallelExecution(parallelRun)
@@ -340,7 +340,7 @@ public class PitCoreActivator extends Plugin {
     }
 
     public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-        getPreferenceStore().setValue(EXECUTION_SCOPE, pitExecutionMode.getId());
+        getPreferenceStore().setValue(EXECUTION_MODE, pitExecutionMode.getId());
     }
 
     public void setMutators(Mutators mutators) {

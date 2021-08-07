@@ -37,8 +37,8 @@ public final class PitPreferences {
     public static final String EXCLUDED_METHODS_LABEL = "Excluded &methods (e.g.*toString*)";
     public static final String EXCLUDED_METHODS = "excludedMethods";
 
-    public static final String AVOID_CALLS_LABEL = "&Avoid calls to";
-    public static final String AVOID_CALLS = "avoidCallsTo";
+    public static final String AVOID_CALLS_TO_LABEL = "&Avoid calls to";
+    public static final String AVOID_CALLS_TO = "avoidCallsTo";
 
     public static final String TIMEOUT_LABEL = "Pit Ti&meout";
     public static final String TIMEOUT = "pitTimeout";
@@ -47,8 +47,8 @@ public final class PitPreferences {
     public static final String TIMEOUT_FACTOR = "pitTimeoutFactor";
 
 
-    public static final String EXECUTION_SCOPE_LABEL = "Pit execution scope";
-    public static final String EXECUTION_SCOPE = "pitExecutionMode";
+    public static final String EXECUTION_MODE_LABEL = "Pit execution scope";
+    public static final String EXECUTION_MODE = "pitExecutionMode";
 
     public static final String PREFERENCE_DESCRIPTION_LABEL = "Pitclipse Preferences";
     public static final String MUTATORS_DESCRIPTION_LABEL = "Mutator Preferences";
