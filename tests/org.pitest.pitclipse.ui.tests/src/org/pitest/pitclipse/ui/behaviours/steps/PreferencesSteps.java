@@ -153,12 +153,12 @@ public class PreferencesSteps {
 
     @Given("the stronger mutator preference is selected")
     public void useStrongerMutators() {
-        PAGES.getWindowsMenu().setMutators(Mutators.STRONGER);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.STRONGER);
     }
 
     @Given("the all mutators preference is selected")
     public void useAllMutators() {
-        PAGES.getWindowsMenu().setMutators(Mutators.ALL);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.ALL);
     }
 
     @Given("the timeout constant is {int}")

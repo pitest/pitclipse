@@ -21,7 +21,7 @@ package org.pitest.pitclipse.core.preferences;
  */
 public final class PitPreferences {
     public static final String MUTATORS_LABEL = "Mutators";
-    public static final String MUTATORS = "pitMutators";
+    public static final String MUTATOR_GROUP = "pitMutators";
 
     public static final String INDIVIDUAL_MUTATORS = "pitIndividualMutators";
 

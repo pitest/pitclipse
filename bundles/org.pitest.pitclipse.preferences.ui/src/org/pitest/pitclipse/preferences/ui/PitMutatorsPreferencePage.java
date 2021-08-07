@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.preferences.ui;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_DESCRIPTION_LABEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS_LABEL;
 
@@ -49,7 +49,7 @@ public class PitMutatorsPreferencePage extends FieldEditorPreferencePage impleme
         for (Mutators mutator : values) {
             mutatorValues[i++] = new String[] { mutator.getDescriptor(), mutator.name() };
         }
-        addField(new RadioGroupFieldEditor(MUTATORS, MUTATORS_LABEL, 1, mutatorValues, getFieldEditorParent()));
+        addField(new RadioGroupFieldEditor(MUTATOR_GROUP, MUTATORS_LABEL, 1, mutatorValues, getFieldEditorParent()));
     }
 
     @Override
