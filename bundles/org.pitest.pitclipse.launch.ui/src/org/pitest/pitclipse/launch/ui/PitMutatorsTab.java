@@ -50,6 +50,7 @@ import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.ui.core.PitUiActivator;
 import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 /**
@@ -81,7 +82,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public Image getImage() {
-        return PitCoreActivator.getDefault().getPitIcon();
+        return PitUiActivator.getDefault().getPitIcon();
     }
 
     @Override

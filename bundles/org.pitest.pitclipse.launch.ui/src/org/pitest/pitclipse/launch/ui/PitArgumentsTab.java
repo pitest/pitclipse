@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.ui.core.PitUiActivator;
 
 /**
  * Tab allowing to configure a PIT analyze.
@@ -83,7 +84,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public Image getImage() {
-        return PitCoreActivator.getDefault().getPitIcon();
+        return PitUiActivator.getDefault().getPitIcon();
     }
 
     @Override
