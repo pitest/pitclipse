@@ -18,6 +18,9 @@ package org.pitest.pitclipse.ui.swtbot;
 
 import static org.junit.Assert.fail;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -80,7 +83,9 @@ public class SWTBotMenuHelper {
                 return shell.menu().menu(menuString);
             }
         }
-        fail("Could not find workbench shell.");
+
+        fail("Could not find workbench shell.\n" +
+                "Shells found were: " + Stream.of(bot.shells()).map(s -> s.getText()).collect(Collectors.toList()));
         return null; // never reached
     }
 }
