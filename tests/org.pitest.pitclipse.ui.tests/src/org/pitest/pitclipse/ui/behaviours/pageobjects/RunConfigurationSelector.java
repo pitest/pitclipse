@@ -101,11 +101,15 @@ public class RunConfigurationSelector {
                 return shell;
             }
         }
+        // make sure we don't have pending shells
+        bot.closeAllShells();
         // shell was not open, open and activate it
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
         menuHelper.findMenu(bot.menu(RUN), RUN_CONFIGURATIONS + "...").click();
         SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
         shell.activate();
+        // make sure the dialog is active
+        bot.waitUntil(shellIsActive(RUN_CONFIGURATIONS));
         return shell;
     }
 
