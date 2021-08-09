@@ -33,9 +33,14 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 public class SWTBotMenuHelper {
     /**
      * Text which identifies the workspace shell, to get workspace shell reliable
-     * with the swt bot.
+     * with the swt bot while running local tests.
      */
-    private static final String WORKSPACE_SHELL_TEXT = "junit-workspace";
+    private static final String WORKSPACE_SHELL_TEXT_LOCAL = "junit-workspace";
+    /**
+     * Text which identifies the workspace shell, to get workspace shell reliable
+     * with the swt bot while running maven.
+     */
+    private static final String WORKSPACE_SHELL_TEXT_MAVEN = "data";
 
     private static final class MenuFinder implements WidgetResult<MenuItem> {
         private final SWTBotMenu parentMenu;
@@ -79,7 +84,8 @@ public class SWTBotMenuHelper {
 
     public SWTBotMenu findWorkbenchMenu(final SWTWorkbenchBot bot, final String menuString) {
         for (SWTBotShell shell : bot.shells()) {
-            if (shell.getText().contains(WORKSPACE_SHELL_TEXT)) {
+            if (shell.getText().contains(WORKSPACE_SHELL_TEXT_LOCAL)
+                    || shell.getText().contains(WORKSPACE_SHELL_TEXT_MAVEN)) {
                 return shell.menu().menu(menuString);
             }
         }
