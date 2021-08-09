@@ -2,6 +2,7 @@ package org.pitest.pitclipse.ui.tests;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,16 +34,22 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
 
     @Test
     public void selectMutationOpensTheClassAtTheRightLineNumber() throws CoreException {
-        runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
-        coverageReportGenerated(2, 80, 0, 6, 0);
-        PitclipseSteps pitclipseSteps = new PitclipseSteps();
-        PitMutation mutation = fromMutationLine(
-        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");
-        pitclipseSteps.doubleClickMutationInMutationsView(mutation);
-        pitclipseSteps.mutationIsOpened(FOO_CLASS + ".java", 7);
-        mutation = fromMutationLine(
-        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
-        pitclipseSteps.doubleClickMutationInMutationsView(mutation);
-        pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
+        final long timeOutBefore = SWTBotPreferences.TIMEOUT;
+        try {
+            SWTBotPreferences.TIMEOUT = 10000;
+            runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
+            coverageReportGenerated(2, 80, 0, 6, 0);
+            PitclipseSteps pitclipseSteps = new PitclipseSteps();
+            PitMutation mutation = fromMutationLine(
+                    "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");
+            pitclipseSteps.doubleClickMutationInMutationsView(mutation);
+            pitclipseSteps.mutationIsOpened(FOO_CLASS + ".java", 7);
+            mutation = fromMutationLine(
+                    "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
+            pitclipseSteps.doubleClickMutationInMutationsView(mutation);
+            pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
+        } finally {
+            SWTBotPreferences.TIMEOUT = timeOutBefore;
+        }
     }
 }
