@@ -319,7 +319,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         boolean found = false;
         for (Button button : groupButtons) {
             boolean selection = false;
-            if (((String) button.getData()).equals(value)) {
+            if (button.getData().equals(value)) {
                 selection = true;
                 found = true;
             }
