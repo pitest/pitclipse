@@ -27,6 +27,11 @@ import java.util.Map;
 import org.pitest.pitclipse.runner.PitResults;
 import org.pitest.pitclipse.runner.results.Mutations.Mutation;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class ResultsParser {
 
     public static final class Summary {

@@ -17,7 +17,7 @@
 package org.pitest.pitclipse.launch.ui;
 
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,7 +41,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -50,6 +49,8 @@ import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.ui.core.PitUiActivator;
+import org.pitest.pitclipse.ui.utils.LinkSelectionAdapter;
 import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 /**
@@ -64,12 +65,11 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     private static final String MUTATOR_LINK_TEXT = "See the documentation on Pitest.org";
     private static final String MUTATOR_LINK = "https://pitest.org/quickstart/mutators/";
     public static final String CUSTOM_MUTATOR_RADIO_TEXT = "Mutators selected below";
-    private static final String CUSTOM_MUTATOR_RADIO_DATA = "CUSTOM";
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_NAME = "Name";
     private static final String NO_DESCRIPTION_TEXT = "No description found yet.";
     private static final String ERROR_MESSAGE = "At least one mutator or mutator group needs to be selected!";
-    private String mutators;
+    private String currentMutatorGroup;
     private CheckboxTableViewer mutatorsTable;
     private Button customMutatorsButton;
     private Button[] groupButtons;
@@ -82,7 +82,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public Image getImage() {
-        return PitCoreActivator.getDefault().getPitIcon();
+        return PitUiActivator.getDefault().getPitIcon();
     }
 
     @Override
@@ -95,8 +95,8 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     @Override
     public void initializeFrom(ILaunchConfiguration config) {
         PitConfiguration preferences = PitCoreActivator.getDefault().getConfiguration();
-        mutators = PitArgumentsTab.getAttributeFromConfig(config, MUTATORS, preferences.getMutators());
-        if (!updateSelectionOfGroup(mutators)) {
+        currentMutatorGroup = PitArgumentsTab.getAttributeFromConfig(config, MUTATOR_GROUP, preferences.getMutators());
+        if (!updateSelectionOfGroup(currentMutatorGroup)) {
             // no selection was made, because no match of data
             // select custom mutators button
             customMutatorsButton.setSelection(true);
@@ -152,12 +152,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         GridDataFactory.swtDefaults().indent(5, 0).applyTo(descriptionLabel);
         Link link = new Link(parent, SWT.NONE);
         link.setText("<a href=\"" + MUTATOR_LINK + "\">" + MUTATOR_LINK_TEXT + "</a>");
-        link.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) { // NOSONAR we don't want to open external links
-                Program.launch(MUTATOR_LINK);
-            }
-        });
+        link.addSelectionListener(new LinkSelectionAdapter(MUTATOR_LINK));
         GridDataFactory.swtDefaults().applyTo(link);
     }
 
@@ -184,24 +179,30 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
             button.setText(mutatorGroup.getDescriptor());
             button.setData(mutatorGroup.name());
             button.setFont(font);
-            button.addSelectionListener(new ButtonSelectionListener());
+            button.addSelectionListener(new UpdateDialogOnCurrentMutatorGroupChanged());
             groupButtons[i++] = button;
             GridDataFactory.swtDefaults().applyTo(button);
         }
         customMutatorsButton = new Button(grouopComposite, SWT.RADIO);
         customMutatorsButton.setText(CUSTOM_MUTATOR_RADIO_TEXT);
-        customMutatorsButton.setData(CUSTOM_MUTATOR_RADIO_DATA);
+        // set data of button to name of the mutator custom
+        customMutatorsButton.setData(Mutators.CUSTOM.name());
         customMutatorsButton.setFont(font);
-        customMutatorsButton.addSelectionListener(new ButtonSelectionListener());
+        customMutatorsButton.addSelectionListener(new UpdateDialogOnCurrentMutatorGroupChanged());
         GridDataFactory.swtDefaults().applyTo(customMutatorsButton);
     }
 
-    private class ButtonSelectionListener extends SelectionAdapter {
+    /**
+     * Called each time a mutator group is selected. If this mutator group was not
+     * previously selected, the launch configuration dialog is updated and the table
+     * may be disabled if unused.
+     */
+    private class UpdateDialogOnCurrentMutatorGroupChanged extends SelectionAdapter {
         @Override
         public void widgetSelected(SelectionEvent event) {
-            final String old = mutators;
-            mutators = (String) event.widget.getData();
-            if (((Button) event.widget).getSelection() && !old.equals(mutators)) {
+            final String old = currentMutatorGroup;
+            currentMutatorGroup = (String) event.widget.getData();
+            if (((Button) event.widget).getSelection() && !old.equals(currentMutatorGroup)) {
                 updateLaunchConfigurationDialog();
                 disableTableIfUnused();
             }
@@ -282,11 +283,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     @Override
     public void performApply(ILaunchConfigurationWorkingCopy config) {
         config.setAttribute(INDIVIDUAL_MUTATORS, getIndividualMutators());
-        if (isBasicMutatorGroup()) {
-            config.setAttribute(MUTATORS, mutators);
-        } else {
-            config.setAttribute(MUTATORS, getIndividualMutators());
-        }
+        config.setAttribute(MUTATOR_GROUP, currentMutatorGroup);
         try {
             PitMigrationDelegate.mapResources(config);
         } catch (CoreException ce) {
@@ -322,7 +319,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         boolean found = false;
         for (Button button : groupButtons) {
             boolean selection = false;
-            if (((String) button.getData()).equals(value)) {
+            if (button.getData().equals(value)) {
                 selection = true;
                 found = true;
             }

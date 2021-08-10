@@ -70,7 +70,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void useOldDefaultsMutators() throws CoreException {
         // set OLD_DEFAULTS mutators
-        PAGES.getWindowsMenu().setMutators(Mutators.OLD_DEFAULTS);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.OLD_DEFAULTS);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0, 8, 0);
@@ -84,7 +84,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
                             "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)");
         } finally {
             // it's crucial to reset it to the default or we break other tests
-            PAGES.getWindowsMenu().setMutators(Mutators.DEFAULTS);
+            PAGES.getWindowsMenu().setMutatorGroup(Mutators.DEFAULTS);
         }
     }
 
@@ -104,7 +104,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void useStrongerMutators() throws CoreException {
         // now set STRONGER mutators
-        PAGES.getWindowsMenu().setMutators(Mutators.STRONGER);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.STRONGER);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0, 8, 0);
@@ -119,7 +119,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
         } finally {
             // it's crucial to reset it to the default or we break other tests
-            PAGES.getWindowsMenu().setMutators(Mutators.DEFAULTS);
+            PAGES.getWindowsMenu().setMutatorGroup(Mutators.DEFAULTS);
         }
     }
 
@@ -174,7 +174,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             preferenceStore.setValue(PitPreferences.RUN_IN_PARALLEL, true);
             preferenceStore.setValue(PitPreferences.INCREMENTAL_ANALYSIS, false);
             preferenceStore.setValue(PitPreferences.EXCLUDED_CLASSES, PitConfiguration.DEFAULT_EXCLUDED_CLASSES);
-            preferenceStore.setValue(PitPreferences.AVOID_CALLS, PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST);
+            preferenceStore.setValue(PitPreferences.AVOID_CALLS_TO, PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST);
             preferenceStore.setValue(PitPreferences.EXCLUDED_METHODS, "");
         }
     }

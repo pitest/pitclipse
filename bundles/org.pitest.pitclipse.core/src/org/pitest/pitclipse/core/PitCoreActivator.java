@@ -17,12 +17,13 @@
 package org.pitest.pitclipse.core;
 
 import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_SCOPE;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
@@ -31,29 +32,20 @@ import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
@@ -87,15 +79,6 @@ public class PitCoreActivator extends Plugin {
     // The shared instance
     private static PitCoreActivator plugin;
     
-    /**
-     * Image registry for this plug in
-     */
-    private ImageRegistry imageRegistry;
-    /**
-     * Key under which the pit icon is put in the registry
-     */
-    private static final String PIT_ICON = "org.pitest.pitclipse.pitIcon";
-
     private IPreferenceStore preferences;
 
     private List<String> pitClasspath = new ArrayList<>();
@@ -105,24 +88,6 @@ public class PitCoreActivator extends Plugin {
     private File resultDir;
 
     private File historyFile;
-
-
-    /**
-     * <b>Must</b> run in UI thread.
-     */
-    private void initIcons() {
-        imageRegistry = new ImageRegistry();
-        Bundle bundle = FrameworkUtil.getBundle(getClass());
-        URL url = FileLocator.find(bundle, new Path("icons/pit.gif"), null);
-        imageRegistry.put(PIT_ICON, ImageDescriptor.createFromURL(url).createImage());
-    }
-
-    /**
-     * @return Returns the pit icon.
-     */
-    public Image getPitIcon() {
-        return imageRegistry.get(PIT_ICON);
-    }
 
     public List<String> getPitClasspath() {
         return pitClasspath;
@@ -177,8 +142,6 @@ public class PitCoreActivator extends Plugin {
             pitestJunit5PluginClasspath = new ArrayList<>();
             addMavenJarToClasspath(pitestJunit5PluginClasspath, ORG_PITEST_JUNIT5_PLUGIN, "pitest-junit5-plugin.jar");
         }
-        // needs to run in UI thread to create icons
-        Display.getDefault().syncExec(this::initIcons);
     }
 
     private void addMavenJarToClasspath(List<String> classpath, String bundleName, String jarFile) throws IOException {
@@ -305,13 +268,14 @@ public class PitCoreActivator extends Plugin {
 
     public PitConfiguration getConfiguration() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        String executionMode = preferenceStore.getString(EXECUTION_SCOPE);
-        String mutators = preferenceStore.getString(MUTATORS);
+        String executionMode = preferenceStore.getString(EXECUTION_MODE);
+        String mutatorGroup = preferenceStore.getString(MUTATOR_GROUP);
+        String mutators = preferenceStore.getString(INDIVIDUAL_MUTATORS);
         boolean parallelRun = preferenceStore.getBoolean(RUN_IN_PARALLEL);
         boolean incrementalAnalysis = preferenceStore.getBoolean(INCREMENTAL_ANALYSIS);
         String excludedClasses = preferenceStore.getString(EXCLUDED_CLASSES);
         String excludedMethods = preferenceStore.getString(EXCLUDED_METHODS);
-        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS);
+        String avoidCallsTo = preferenceStore.getString(AVOID_CALLS_TO);
         String timeout = preferenceStore.getString(TIMEOUT);
         String timeoutFactor = preferenceStore.getString(TIMEOUT_FACTOR);
         PitConfiguration.Builder builder = PitConfiguration.builder().withParallelExecution(parallelRun)
@@ -330,24 +294,25 @@ public class PitCoreActivator extends Plugin {
                 break;
             }
         }
-        for (Mutators mutatorMode : Mutators.values()) {
-            if (mutatorMode.name().equals(mutators)) {
-                builder.withMutators(mutatorMode.toString());
-                break;
-            }
+
+        if (mutatorGroup.equals(Mutators.CUSTOM.name())) {
+            builder.withMutators(mutators);
+        } else {
+            builder.withMutators(mutatorGroup);
         }
+
         return builder.build();
     }
 
     public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-        getPreferenceStore().setValue(EXECUTION_SCOPE, pitExecutionMode.getId());
+        getPreferenceStore().setValue(EXECUTION_MODE, pitExecutionMode.getId());
     }
 
-    public void setMutators(Mutators mutators) {
-        getPreferenceStore().setValue(MUTATORS, mutators.name());
+    public void setDefaultMutatorGroup(Mutators mutators) {
+        getPreferenceStore().setValue(MUTATOR_GROUP, mutators.name());
     }
-    
-    public String getDefaultMutators() {
-        return getPreferenceStore().getString(MUTATORS);
+
+    public String getDefaultMutatorGroup() {
+        return getPreferenceStore().getString(MUTATOR_GROUP);
     }
 }

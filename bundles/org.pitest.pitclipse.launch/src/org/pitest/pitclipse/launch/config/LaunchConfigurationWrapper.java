@@ -19,7 +19,8 @@ package org.pitest.pitclipse.launch.config;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
@@ -263,8 +265,14 @@ public class LaunchConfigurationWrapper {
 
     private String getMutators() throws CoreException {
         final String mutators;
-        if (launchConfig.hasAttribute(MUTATORS)) {
-            mutators = launchConfig.getAttribute(MUTATORS, "");
+        if (launchConfig.hasAttribute(MUTATOR_GROUP)) {
+            if (launchConfig.getAttribute(MUTATOR_GROUP, "").equals(Mutators.CUSTOM.name())) {
+                // if we have custom mutators set, get them
+                mutators = launchConfig.getAttribute(INDIVIDUAL_MUTATORS, "");
+            } else {
+                // use group
+                mutators = launchConfig.getAttribute(MUTATOR_GROUP, "");
+            }
         } else {
             mutators = pitConfiguration.getMutators();
         }

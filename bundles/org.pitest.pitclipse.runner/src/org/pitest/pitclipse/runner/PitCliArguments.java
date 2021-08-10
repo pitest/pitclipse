@@ -99,7 +99,7 @@ public class PitCliArguments {
     private List<String> mutatorsFrom(PitOptions options) {
         Builder<String> builder = ImmutableList.builder();
         String mutators = options.getMutators();
-        if (!mutators.isEmpty()) {
+        if (!mutators.trim().isEmpty()) {
             builder.add("--mutators");
             builder.add(mutators);
         }

@@ -159,8 +159,8 @@ public class WindowsMenu {
         return openPreferences().andThen().getMutators();
     }
 
-    public void setMutators(Mutators mutators) {
-        PitCoreActivator.getDefault().setMutators(mutators);
+    public void setMutatorGroup(Mutators mutators) {
+        PitCoreActivator.getDefault().setDefaultMutatorGroup(mutators);
     }
 
     public void setTimeoutConstant(int timeout) {
