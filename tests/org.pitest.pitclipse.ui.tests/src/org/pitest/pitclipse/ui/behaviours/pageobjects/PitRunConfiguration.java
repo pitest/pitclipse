@@ -41,6 +41,10 @@ public class PitRunConfiguration {
      */
     private final boolean testClass;
     /**
+     * Class name or names separated by commas.
+     */
+    private final String targetClass;
+    /**
      * True, if the tests should be run in pararllel
      */
     private final boolean runInParallel;
@@ -67,10 +71,11 @@ public class PitRunConfiguration {
 
     private PitRunConfiguration(String name, List<String> projects, String testObject, boolean testClass,
             boolean runInParallel, boolean incrementalAnalysis, String excludedClasses, String excludedMethods,
-            String avoidCallsTo) {
+            String avoidCallsTo, String targetClass) {
         this.name = name;
         this.projects = projects;
         this.testObject = testObject;
+        this.targetClass = targetClass;
         this.runInParallel = runInParallel;
         this.incrementalAnalysis = incrementalAnalysis;
         this.excludedClasses = excludedClasses;
@@ -101,10 +106,12 @@ public class PitRunConfiguration {
         private String excludedClasses = "*Test";
         private String excludedMethods = "";
         private String avoidCallsTo = DEFAULT_AVOID_CALLS_TO_LIST;
+        private String targetClass = null;
 
         public Builder(PitRunConfiguration configuration) {
             this.name = configuration.getName();
             this.testObject = configuration.getTestObject();
+            this.targetClass = configuration.getTargetClass();
             this.projects = copyOf(configuration.getProjects());
             this.runInParallel = configuration.isRunInParallel();
             this.incrementalAnalysis = configuration.isIncrementalAnalysis();
@@ -120,7 +127,7 @@ public class PitRunConfiguration {
 
         public PitRunConfiguration build() {
             return new PitRunConfiguration(name, projects, testObject, testClass, runInParallel, incrementalAnalysis,
-                    excludedClasses, excludedMethods, avoidCallsTo);
+                    excludedClasses, excludedMethods, avoidCallsTo, targetClass);
         }
 
         public Builder withName(String name) {
@@ -177,10 +184,19 @@ public class PitRunConfiguration {
             this.avoidCallsTo = avoidCallsTo;
             return this;
         }
+
+        public Builder withTargetClass(String targetClass) {
+            this.targetClass = targetClass;
+            return this;
+        }
     }
 
     public boolean isRunInParallel() {
         return runInParallel;
+    }
+
+    public String getTargetClass() {
+        return targetClass;
     }
 
     public boolean isIncrementalAnalysis() {

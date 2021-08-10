@@ -69,6 +69,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     public static final String TEST_CLASS_TEXT = "Test Class:";
     public static final String TEST_DIR_RADIO_TEXT = "Run mutations against a package or directory";
     public static final String TEST_DIR_TEXT = "Directory:";
+    public static final String TARGET_CLASS_CHECK_BOX_TEXT = "Run mutations against specific target classes";
+    public static final String TARGET_CLASS_TEXT = "Target Class(es):";
     public static final String FILTERS_GROUP_TEXT = " Filters ";
     public static final String SCOPE_GROUP_TEXT = " Mutation Scope ";
     public static final String PROJECT_TEXT = "Project to mutate: ";
@@ -302,7 +304,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     private void createTargetClassWidgets(Font font, Composite comp) {
         targetClassCheckBoxButton = createNewCheckBox(font, comp, NUMBER_OF_COLUMNS,
-                "Run mutations against specific target classes");
+                TARGET_CLASS_CHECK_BOX_TEXT);
         targetClassCheckBoxButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -312,7 +314,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         });
     
         Label targetClassLabel = new Label(comp, SWT.NONE);
-        targetClassLabel.setText("Target Class(es):");
+        targetClassLabel.setText(TARGET_CLASS_TEXT);
         GridData labelGrid = new GridData(FILL_HORIZONTAL);
         labelGrid.horizontalIndent = 25;
         labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
@@ -492,8 +494,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     @Override
     public boolean canSave() {
         return !targetClassCheckBoxButton.getSelection()
-                || targetClassCheckBoxButton.getSelection()
-                        && MULTI_CLASS_PATTERN.matcher(targetClassText.getText()).matches();
+                || MULTI_CLASS_PATTERN.matcher(targetClassText.getText()).matches();
     }
 
     @Override

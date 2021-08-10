@@ -115,6 +115,12 @@ public class RunMenu {
         }
     }
 
+    public void setTargetClassForConfiguration(String configurationName, String targetClass) {
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            runConfigurationSelector.setTargetClassForConfiguration(configurationName, targetClass);
+        }
+    }
+
     public PitOptions getLastUsedPitOptions() {
         return PitOptionsNotifier.INSTANCE.getLastUsedOptions();
     }

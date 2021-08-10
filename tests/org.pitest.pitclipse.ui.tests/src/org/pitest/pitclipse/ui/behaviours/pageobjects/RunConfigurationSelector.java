@@ -55,9 +55,7 @@ public class RunConfigurationSelector implements Closeable {
     }
 
     public PitRunConfiguration getConfiguration(String configName) {
-        activateConfiguration(configName);
-        Builder builder = new PitRunConfiguration.Builder();
-        return builder.build();
+        return getPitConfiguration(activateConfiguration(configName));
     }
 
     public List<PitRunConfiguration> getConfigurations() {
@@ -121,14 +119,15 @@ public class RunConfigurationSelector implements Closeable {
         return null; // never reached
     }
 
-    private void activateConfiguration(String configurationName) {
+    private SWTBotTreeItem activateConfiguration(String configurationName) {
         for (SWTBotTreeItem i : getPitConfigurationItem().getItems()) {
             if (i.getText().equals(configurationName)) {
                 i.click();
-                return;
+                return i;
             }
         }
         fail("Could not find '" + configurationName + "' in the configurations of PIT.");
+        return null; // never reached
     }
 
     public void activateMutatorsTab(String configurationName) {
@@ -162,6 +161,10 @@ public class RunConfigurationSelector implements Closeable {
         setConfiguration(new Builder(config).withTestClass(testClass).build());
     }
 
+    public void setTargetClassForConfiguration(String configurationName, String targetClass) {
+        setConfiguration(new Builder(getConfiguration(configurationName)).withTargetClass(targetClass).build());
+    }
+
     public void setTestDirForConfiguration(String configurationName, String testDir) {
         final PitRunConfiguration config = getConfiguration(configurationName);
         setConfiguration(new Builder(config).withTestDir(testDir).build());
@@ -179,8 +182,16 @@ public class RunConfigurationSelector implements Closeable {
         } else {
             bot.radio(PitArgumentsTab.TEST_DIR_RADIO_TEXT).click();
             bot.textWithLabel(PitArgumentsTab.TEST_DIR_TEXT).setText(config.getTestObject());
-
         }
+
+        final String targetClass = config.getTargetClass();
+        if (targetClass != null && !targetClass.trim().isEmpty()) {
+            bot.checkBox(PitArgumentsTab.TARGET_CLASS_CHECK_BOX_TEXT).select();
+            bot.textWithLabel(PitArgumentsTab.TARGET_CLASS_TEXT).setText(targetClass);
+        } else {
+            bot.checkBox(PitArgumentsTab.TARGET_CLASS_CHECK_BOX_TEXT).deselect();
+        }
+
         if (config.isRunInParallel()) {
             bot.checkBox(PitPreferences.RUN_IN_PARALLEL_LABEL).select();
         } else {
