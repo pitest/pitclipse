@@ -41,7 +41,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -51,6 +50,7 @@ import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.core.PitUiActivator;
+import org.pitest.pitclipse.ui.utils.LinkSelectionAdapter;
 import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 /**
@@ -152,12 +152,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         GridDataFactory.swtDefaults().indent(5, 0).applyTo(descriptionLabel);
         Link link = new Link(parent, SWT.NONE);
         link.setText("<a href=\"" + MUTATOR_LINK + "\">" + MUTATOR_LINK_TEXT + "</a>");
-        link.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                Program.launch(MUTATOR_LINK);
-            }
-        });
+        link.addSelectionListener(new LinkSelectionAdapter(MUTATOR_LINK));
         GridDataFactory.swtDefaults().applyTo(link);
     }
 
