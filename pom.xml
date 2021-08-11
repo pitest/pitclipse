@@ -14,7 +14,7 @@
 		<module>bundles</module>
 		<module>features</module>
 		<module>releng</module>
-        <module>tests</module>
+		<module>tests</module>
 	</modules>
 
 	<prerequisites>
@@ -69,6 +69,7 @@
 		</sonar.exclusions>
 		<sonar.coverage.exclusions>
 			**/PitclipseUiUtils.java,
+			**/PitclipseLaunchUiUtils.java,
 			**/LinkSelectionAdapter.java,
 		</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>

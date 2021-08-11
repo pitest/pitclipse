@@ -22,7 +22,6 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -48,6 +47,7 @@ import org.eclipse.swt.widgets.Link;
 import org.pitest.mutationtest.engine.gregor.config.Mutator;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.core.PitUiActivator;
 import org.pitest.pitclipse.ui.utils.LinkSelectionAdapter;
@@ -284,11 +284,8 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
     public void performApply(ILaunchConfigurationWorkingCopy config) {
         config.setAttribute(INDIVIDUAL_MUTATORS, getIndividualMutators());
         config.setAttribute(MUTATOR_GROUP, currentMutatorGroup);
-        try {
-            PitMigrationDelegate.mapResources(config);
-        } catch (CoreException ce) {
-            setErrorMessage(ce.getStatus().getMessage());
-        }
+        PitclipseLaunchUiUtils.executeSafely
+            (() -> PitMigrationDelegate.mapResources(config), this);
     }
 
     private String getIndividualMutators() {
@@ -359,5 +356,13 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
             setErrorMessage(ERROR_MESSAGE);
         }
         super.updateLaunchConfigurationDialog();
+    }
+
+    /**
+     * Made public to be callable from utility classes
+     */
+    @Override
+    public void setErrorMessage(String errorMessage) {
+        super.setErrorMessage(errorMessage);
     }
 }
