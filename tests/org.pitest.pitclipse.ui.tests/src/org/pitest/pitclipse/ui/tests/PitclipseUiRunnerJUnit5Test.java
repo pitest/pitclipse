@@ -2,7 +2,6 @@ package org.pitest.pitclipse.ui.tests;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,14 +42,8 @@ public class PitclipseUiRunnerJUnit5Test extends AbstractPitclipseSWTBotTest {
 
     @Test
     public void runPitJunit5AtProjectLevel() throws CoreException {
-        final long timeOutBefore = SWTBotPreferences.TIMEOUT;
-        try {
-            SWTBotPreferences.TIMEOUT = 10000;
-            runProjectTest(TEST_PROJECT);
-            coverageReportGenerated(1, 100, 100, 2, 2);
-        } finally {
-            SWTBotPreferences.TIMEOUT = timeOutBefore;
-        }
+        runProjectTest(TEST_PROJECT);
+        coverageReportGenerated(1, 100, 100, 2, 2);
     }
 
 }
