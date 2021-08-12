@@ -138,7 +138,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
                 public String getFailureMessage() {
                     return "No summary was generated after the specified time.";
                 }
-            }, (timeOut > 0) ? timeOut : Long.parseLong(System.getProperty(SWTBotPreferences.KEY_TIMEOUT)));
+            }, (timeOut > 0) ? timeOut : SWTBotPreferences.TIMEOUT);
         }
 
         private void setSummary(Summary summary) {

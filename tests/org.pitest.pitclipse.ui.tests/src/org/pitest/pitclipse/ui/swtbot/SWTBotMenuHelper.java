@@ -70,6 +70,14 @@ public class SWTBotMenuHelper {
         }
     }
 
+    /**
+     * This method does not rely on the focus and gets the workbench shell and from
+     * that the asked menu. With this we can avoid to wait for focus and be sure we
+     * are getting the correct shell for the menus.
+     * @param bot        which is used to get the display
+     * @param menuString which identifies the menu
+     * @return the asked menu
+     */
     public SWTBotMenu findWorkbenchMenu(final SWTWorkbenchBot bot, final String menuString) {
         return (new SWTBotShell(getActiveWorkbenchWindowShell(bot))).menu().menu(menuString);
     }

@@ -37,11 +37,11 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         coverageReportGenerated(2, 80, 0, 6, 0);
         PitclipseSteps pitclipseSteps = new PitclipseSteps();
         PitMutation mutation = fromMutationLine(
-                "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
         pitclipseSteps.mutationIsOpened(FOO_CLASS + ".java", 7);
         mutation = fromMutationLine(
-                "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
         pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
     }
