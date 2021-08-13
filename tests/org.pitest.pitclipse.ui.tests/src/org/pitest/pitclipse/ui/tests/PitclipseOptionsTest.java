@@ -47,7 +47,6 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         openEditor(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }
 
-
     @Before
     public void removeLaunchConfigurations() throws CoreException {
         removePitLaunchConfigurations();
