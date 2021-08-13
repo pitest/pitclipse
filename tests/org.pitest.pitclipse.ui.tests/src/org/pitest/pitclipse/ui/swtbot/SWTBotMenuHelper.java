@@ -18,13 +18,18 @@ package org.pitest.pitclipse.ui.swtbot;
 
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.results.WidgetResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class SWTBotMenuHelper {
-
     private static final class MenuFinder implements WidgetResult<MenuItem> {
         private final SWTBotMenu parentMenu;
         private final String searchString;
@@ -63,5 +68,30 @@ public class SWTBotMenuHelper {
         } else {
             return new SWTBotMenu(menuItem);
         }
+    }
+
+    /**
+     * This method does not rely on the focus and gets the workbench shell and from
+     * that the asked menu. With this we can avoid to wait for focus and be sure we
+     * are getting the correct shell for the menus.
+     * @param bot        which is used to get the display
+     * @param menuString which identifies the menu
+     * @return the asked menu
+     */
+    public SWTBotMenu findWorkbenchMenu(final SWTWorkbenchBot bot, final String menuString) {
+        return (new SWTBotShell(getActiveWorkbenchWindowShell(bot))).menu().menu(menuString);
+    }
+
+    private IWorkbenchWindow getActiveWorkbenchWindow(SWTWorkbenchBot bot) {
+        return UIThreadRunnable.syncExec(bot.getDisplay(), new Result<IWorkbenchWindow>() {
+            @Override
+            public IWorkbenchWindow run() {
+                return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+            }
+        });
+    }
+
+    private Shell getActiveWorkbenchWindowShell(SWTWorkbenchBot bot) {
+        return getActiveWorkbenchWindow(bot).getShell();
     }
 }
