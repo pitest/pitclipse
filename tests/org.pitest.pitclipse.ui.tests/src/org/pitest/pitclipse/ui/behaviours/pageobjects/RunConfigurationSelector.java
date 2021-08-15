@@ -26,14 +26,11 @@ import java.util.stream.Collectors;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.eclipse.ui.PlatformUI;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.launch.ui.PitArgumentsTab;
@@ -104,18 +101,9 @@ public class RunConfigurationSelector {
                 return shell;
             }
         }
-        // make sure we don't have pending shells
-        bot.closeAllShells();
-        // make sure the workbench is active
-        UIThreadRunnable.syncExec(new VoidResult() {
-            public void run() {
-                PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                    .getShell().forceActive();
-            }
-        });
         // open the "Run Configurations" dialog
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
-        menuHelper.findMenu(bot.menu(RUN), RUN_CONFIGURATIONS + "...").click();
+        menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, RUN), RUN_CONFIGURATIONS + "...").click();
         SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
         shell.activate();
         // make sure the dialog is active
