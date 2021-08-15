@@ -34,6 +34,8 @@ import org.pitest.pitclipse.ui.swtbot.ResultsParser.Summary;
 public class PitResultNotifier implements ResultNotifier<PitResults> {
     private static final String FAIL_MESSAGE = "Pit result was not ready for retrieval. Console output was: ";
 
+    private static long PIT_TIMEOUT = Long.valueOf(System.getProperty("org.pitest.pitclipse.tests.pit.timeout", "5000"));
+
     public enum PitSummary {
         INSTANCE;
         private Summary summary;
@@ -138,7 +140,7 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
                 public String getFailureMessage() {
                     return "No summary was generated after the specified time.";
                 }
-            }, (timeOut > 0) ? timeOut : SWTBotPreferences.TIMEOUT);
+            }, (timeOut > 0) ? timeOut : PIT_TIMEOUT);
         }
 
         private void setSummary(Summary summary) {
