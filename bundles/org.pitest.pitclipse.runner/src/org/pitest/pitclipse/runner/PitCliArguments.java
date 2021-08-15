@@ -121,7 +121,7 @@ public class PitCliArguments {
     private List<String> targetClassesFrom(PitOptions options) {
         Builder<String> builder = ImmutableList.builder();
         List<String> classesToMutate = options.getClassesToMutate();
-        if (null != classesToMutate && !classesToMutate.isEmpty()) {
+        if (!classesToMutate.isEmpty()) {
             builder.add("--targetClasses");
             builder.add(classpath(options));
         }
