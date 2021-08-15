@@ -39,8 +39,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -166,23 +164,10 @@ public class PitclipseSteps {
         assertNoErrorsInWorkspace();
         // reset Summary result
         PitSummary.INSTANCE.resetSummary();
-        int retryCount = 20;
-        int counter = 0;
-        while (counter < retryCount) {
-            try {
-                runnable.run();
-                PAGES.getRunMenu().runPit();
-                // wait for pit to finish
-                PitSummary.INSTANCE.waitForPitToFinish();
-                return;
-            } catch (TimeoutException te) {
-                counter++;
-                te.printStackTrace();
-            } catch (WidgetNotFoundException wfne) {
-                counter++;
-                wfne.printStackTrace();
-            }
-        }
+        runnable.run();
+        PAGES.getRunMenu().runPit();
+        // wait for pit to finish
+        PitSummary.INSTANCE.waitForPitToFinish();
     }
     
     public void assertNoErrorsInWorkspace() {

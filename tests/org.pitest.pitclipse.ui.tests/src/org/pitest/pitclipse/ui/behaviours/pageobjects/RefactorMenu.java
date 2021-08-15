@@ -39,7 +39,7 @@ public class RefactorMenu {
 
     private void clickRename() {
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
-        menuHelper.findMenu(bot.menu(REFACTOR), RENAME).click();
+        menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, REFACTOR), RENAME).click();
     }
 
     public void renamePackage(String packageName) {

@@ -33,6 +33,7 @@ public class RunMenu {
     private static final String RUN_AS = "Run As";
     private static final String PIT_MUTATION_TEST = "PIT Mutation Test";
     private static final String JUNIT_TEST = "JUnit Test";
+    private static final String RUN_CONFIGURATIONS = "Run Configurations";
     private final SWTWorkbenchBot bot;
     private final RunConfigurationSelector runConfigurationSelector;
 
@@ -43,15 +44,14 @@ public class RunMenu {
 
     public void runJUnit() {
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
-        menuHelper.findMenu(bot.menu(RUN).menu(RUN_AS), JUNIT_TEST).click();
+        menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, RUN).menu(RUN_AS), JUNIT_TEST).click();
     }
 
     public void runPit() {
         // focus package explorer to ensure the menu is found
         bot.viewByTitle("Package Explorer").setFocus();
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
-        SWTBotMenu runAsMenu = bot.menu(RUN)
-                                  .menu(RUN_AS);
+        SWTBotMenu runAsMenu = menuHelper.findWorkbenchMenu(bot, RUN).menu(RUN_AS);
         menuHelper.findMenu(runAsMenu, PIT_MUTATION_TEST)
                   .click();
         
@@ -84,6 +84,8 @@ public class RunMenu {
     }
 
     public List<PitRunConfiguration> runConfigurations() {
+        SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
+        menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, RUN), RUN_CONFIGURATIONS).click();
         return runConfigurationSelector.getConfigurations();
     }
 
