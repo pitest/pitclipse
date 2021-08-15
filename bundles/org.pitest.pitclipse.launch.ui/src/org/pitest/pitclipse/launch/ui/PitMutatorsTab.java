@@ -202,7 +202,7 @@ public final class PitMutatorsTab extends AbstractLaunchConfigurationTab {
         public void widgetSelected(SelectionEvent event) {
             final String old = currentMutatorGroup;
             currentMutatorGroup = (String) event.widget.getData();
-            if (((Button) event.widget).getSelection() && !old.equals(currentMutatorGroup)) {
+            if (!old.equals(currentMutatorGroup)) {
                 updateLaunchConfigurationDialog();
                 disableTableIfUnused();
             }
