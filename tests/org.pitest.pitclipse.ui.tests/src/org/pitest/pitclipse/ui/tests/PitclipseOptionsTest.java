@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.core.PitMutators.STRONGER;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
@@ -18,8 +17,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.core.PitMutators;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
@@ -69,6 +68,27 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
+    public void useOldDefaultsMutators() throws CoreException {
+        // set OLD_DEFAULTS mutators
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.OLD_DEFAULTS);
+        try {
+            runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
+            coverageReportGenerated(2, 80, 0, 8, 0);
+            mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+                            "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
+                            "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)");
+        } finally {
+            // it's crucial to reset it to the default or we break other tests
+            PAGES.getWindowsMenu().setMutatorGroup(Mutators.DEFAULTS);
+        }
+    }
+
+    @Test
     public void useDefaultMutators() throws CoreException {
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0, 6, 0);
@@ -84,7 +104,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     @Test
     public void useStrongerMutators() throws CoreException {
         // now set STRONGER mutators
-        PAGES.getWindowsMenu().setMutators(STRONGER);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.STRONGER);
         try {
             runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
             coverageReportGenerated(2, 80, 0, 8, 0);
@@ -99,7 +119,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
             "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
         } finally {
             // it's crucial to reset it to the default or we break other tests
-            PAGES.getWindowsMenu().setMutators(PitMutators.DEFAULTS);
+            PAGES.getWindowsMenu().setMutatorGroup(Mutators.DEFAULTS);
         }
     }
 

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2021 Jonas Kutscha and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -14,27 +14,25 @@
  * the License.
  ******************************************************************************/
 
-package org.pitest.pitclipse.core;
+package org.pitest.pitclipse.ui.utils;
 
-public enum PitMutators {
-    
-    DEFAULTS("defaultMutators", "&Default Mutators"), 
-    STRONGER("strongerMutators", "&Stronger Mutators"), 
-    ALL("allMutators", "&All Mutators");
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.program.Program;
 
-    private final String label;
-    private final String id;
+/**
+ * Selection adapter which launches a browser with the link.
+ * @author jkutscha
+ */
+public class LinkSelectionAdapter extends SelectionAdapter {
+    private final String link;
 
-    private PitMutators(String id, String label) {
-        this.id = id;
-        this.label = label;
+    public LinkSelectionAdapter(final String link) {
+        this.link = link;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public String getId() {
-        return id;
+    @Override
+    public void widgetSelected(SelectionEvent e) {
+        Program.launch(link);
     }
 }

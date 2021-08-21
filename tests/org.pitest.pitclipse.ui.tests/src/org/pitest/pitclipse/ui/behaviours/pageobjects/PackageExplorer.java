@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
- *  
+ * Copyright 2012-2021 Phil Glover and contributors
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- *  
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -16,19 +16,19 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 import static org.pitest.pitclipse.ui.util.VerifyUtil.isNotNull;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 public class PackageExplorer {
 
@@ -57,6 +57,9 @@ public class PackageExplorer {
     }
 
     private SWTBotTreeItem getProject(String projectName) {
+        // You need to have the focus on the explorer, otherwise the project doesn't get
+        // selected properly
+        bot.viewByTitle(PACKAGE_EXPLORER).show();
         SWTBotTreeItem[] treeItems = bot.viewByTitle(PACKAGE_EXPLORER).bot().tree().getAllItems();
         for (SWTBotTreeItem treeItem : treeItems) {
             if (projectName.equals(treeItem.getText())) {

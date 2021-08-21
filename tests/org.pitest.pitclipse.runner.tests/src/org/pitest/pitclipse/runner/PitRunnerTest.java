@@ -16,17 +16,16 @@
 
 package org.pitest.pitclipse.runner;
 
-import org.eclipse.core.runtime.Platform;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.pitest.mutationtest.MutationResultListenerFactory;
-import org.pitest.pitclipse.example.empty.EmptyClass;
-import org.pitest.pitclipse.runner.results.ObjectFactory;
-import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
-import org.pitest.util.ServiceLoader;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toSet;
+import static org.eclipse.core.runtime.FileLocator.getBundleFile;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,16 +37,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toSet;
-import static org.eclipse.core.runtime.FileLocator.getBundleFile;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
+import org.eclipse.core.runtime.Platform;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
+import org.junit.Test;
+import org.pitest.mutationtest.MutationResultListenerFactory;
+import org.pitest.pitclipse.example.empty.EmptyClass;
+import org.pitest.pitclipse.runner.results.ObjectFactory;
+import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
+import org.pitest.util.ServiceLoader;
 
 /**
  * Tests the behavior of a {@link PitRunner}'s functions.
@@ -177,5 +177,4 @@ public class PitRunnerTest {
             new File("lib/junit.jar").getAbsolutePath()
         );
     }
-    
 }

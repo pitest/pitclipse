@@ -75,6 +75,8 @@
 			**/runner/model/ProjectMutations.java,
 			**/runner/model/Status.java,
 			**/PitclipseUiUtils.java,
+			**/PitclipseLaunchUiUtils.java,
+			**/LinkSelectionAdapter.java,
 		</sonar.coverage.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${basedir}/../../tests/org.pitest.pitclipse.tests.coverage.report/target/site/jacoco-aggregate/jacoco.xml

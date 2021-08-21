@@ -21,26 +21,26 @@ import com.google.common.base.Optional;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import java.io.Closeable;
 import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ZERO;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_MODE_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR_LABEL;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS_LABEL;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.selectAndExpand;
 
 public class PitPreferenceSelector implements Closeable {
 
-    private static final String USE_INCREMENTAL_ANALYSIS_LABEL = "Use incremental analysis";
-    private static final String MUTATION_TESTS_RUN_IN_PARALLEL_LABEL = "Mutation tests run in parallel";
-    private static final String EXCLUDED_CLASSES_LABEL = "Excluded classes (e.g.*IntTest)";
-    private static final String EXCLUDED_METHODS_LABEL = "Excluded methods (e.g.*toString*)";
-    private static final String AVOID_CALLS_TO_LABEL = "Avoid calls to";
     private static final String MUTATORS_LABEL = "Mutators";
-    private static final String EXECUTION_MODE_LABEL = "Pit Execution Scope";
-    private static final String PIT_TIMEOUT_LABEL = "Pit Timeout";
-    private static final String PIT_TIMEOUT_FACTOR_LABEL = "Timeout Factor";
     private final SWTWorkbenchBot bot;
 
     public PitPreferenceSelector(SWTWorkbenchBot bot) {
@@ -85,19 +85,19 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public boolean isPitRunInParallel() {
-        return getBoolean().from(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL);
+        return getBoolean().from(RUN_IN_PARALLEL_LABEL);
     }
 
     public boolean isIncrementalAnalysisEnabled() {
-        return getBoolean().from(USE_INCREMENTAL_ANALYSIS_LABEL);
+        return getBoolean().from(INCREMENTAL_ANALYSIS_LABEL);
     }
 
     public void setPitRunInParallel(boolean inParallel) {
-        setSelectionFor(MUTATION_TESTS_RUN_IN_PARALLEL_LABEL).to(inParallel);
+        setSelectionFor(RUN_IN_PARALLEL_LABEL).to(inParallel);
     }
 
     public void setPitIncrementalAnalysisEnabled(boolean incremental) {
-        setSelectionFor(USE_INCREMENTAL_ANALYSIS_LABEL).to(incremental);
+        setSelectionFor(INCREMENTAL_ANALYSIS_LABEL).to(incremental);
     }
 
     public String getExcludedClasses() {
@@ -124,7 +124,7 @@ public class PitPreferenceSelector implements Closeable {
         setTextFor(AVOID_CALLS_TO_LABEL).to(avoidCallsTo);
     }
 
-    public PitMutators getMutators() {
+    public Mutators getMutators() {
         return getSelectedMutators().from(MUTATORS_LABEL);
     }
 
@@ -139,11 +139,11 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public void setPitTimeoutConst(int timeout) {
-        setTextFor(PIT_TIMEOUT_LABEL).to(timeout);
+        setTextFor(TIMEOUT_LABEL).to(timeout);
     }
 
     public void setPitTimeoutFactor(int factor) {
-        setTextFor(PIT_TIMEOUT_FACTOR_LABEL).to(factor);
+        setTextFor(TIMEOUT_FACTOR_LABEL).to(factor);
     }
 
     private static interface PreferenceGetter<T> {
@@ -263,17 +263,17 @@ public class PitPreferenceSelector implements Closeable {
         });
     }
 
-    private PreferenceGetterBuilder<PitMutators> getSelectedMutators() {
-        return new PreferenceGetterBuilder<PitMutators>(new PreferenceGetter<PitMutators>() {
+    private PreferenceGetterBuilder<Mutators> getSelectedMutators() {
+        return new PreferenceGetterBuilder<Mutators>(new PreferenceGetter<Mutators>() {
             @Override
-            public PitMutators getPreference(String label) {
+            public Mutators getPreference(String label) {
                 expandPitMutatorPreferences();
-                for (PitMutators mutator : PitMutators.values()) {
-                    if (bot.radio(mutator.getLabel()).isSelected()) {
+                for (Mutators mutator : Mutators.getMainGroup()) {
+                    if (bot.radio(mutator.getDescriptor()).isSelected()) {
                         return mutator;
                     }
                 }
-                return PitMutators.DEFAULTS;
+                return Mutators.DEFAULTS;
             }
         });
     }
@@ -288,10 +288,10 @@ public class PitPreferenceSelector implements Closeable {
     }
 
     public int getTimeout() {
-        return getInteger().from(PIT_TIMEOUT_LABEL);
+        return getInteger().from(TIMEOUT_LABEL);
     }
 
     public BigDecimal getPitTimeoutFactor() {
-        return getBigDecimal().from(PIT_TIMEOUT_FACTOR_LABEL);
+        return getBigDecimal().from(TIMEOUT_FACTOR_LABEL);
     }
 }

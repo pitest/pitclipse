@@ -51,7 +51,7 @@ public final class PitOptions implements Serializable {
     private final ImmutableList<String> excludedClasses;
     private final ImmutableList<String> excludedMethods;
     private final ImmutableList<String> avoidCallsTo;
-    private final ImmutableList<String> mutators;
+    private final String mutators;
     private final int timeout;
     private final BigDecimal timeoutFactor;
     private final boolean useJUnit5;
@@ -59,7 +59,8 @@ public final class PitOptions implements Serializable {
     private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs, // NOSONAR this is used by our builder
             File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
             ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
-            ImmutableList<String> avoidCallsTo, ImmutableList<String> mutators, int timeout, BigDecimal timeoutFactor, boolean useJUnit5) {
+            ImmutableList<String> avoidCallsTo, String mutators, int timeout, BigDecimal timeoutFactor,
+            boolean useJUnit5) {
         this.classUnderTest = classUnderTest;
         this.threads = threads;
         this.historyLocation = historyLocation;
@@ -102,7 +103,7 @@ public final class PitOptions implements Serializable {
         private ImmutableList<String> excludedClasses = ImmutableList.of();
         private ImmutableList<String> excludedMethods = ImmutableList.of();
         private ImmutableList<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
-        private ImmutableList<String> mutators = copyOf(split(DEFAULT_MUTATORS));
+        private String mutators = DEFAULT_MUTATORS;
         private int timeout = 3000;
         private BigDecimal timeoutFactor = BigDecimal.valueOf(1.25);
         private boolean useJUnit5 = false;
@@ -208,7 +209,7 @@ public final class PitOptions implements Serializable {
             this.packages = copyOf(packages);
             return this;
         }
-        
+
         public PitOptionsBuilder withClassPath(List<String> classPath) {
             this.classPath = copyOf(classPath);
             return this;
@@ -239,8 +240,8 @@ public final class PitOptions implements Serializable {
             return this;
         }
 
-        public PitOptionsBuilder withMutators(List<String> mutators) {
-            this.mutators = copyOf(mutators);
+        public PitOptionsBuilder withMutators(String mutators) {
+            this.mutators = mutators;
             return this;
         }
 
@@ -297,7 +298,7 @@ public final class PitOptions implements Serializable {
     public List<String> getPackages() {
         return packages;
     }
-    
+
     public List<String> getClassPath() {
         return classPath;
     }
@@ -306,7 +307,7 @@ public final class PitOptions implements Serializable {
         return avoidCallsTo;
     }
 
-    public List<String> getMutators() {
+    public String getMutators() {
         return mutators;
     }
 
@@ -317,7 +318,7 @@ public final class PitOptions implements Serializable {
     public BigDecimal getTimeoutFactor() {
         return timeoutFactor;
     }
-    
+
     public boolean getUseJUnit5() {
         return useJUnit5;
     }

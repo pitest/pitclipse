@@ -51,7 +51,7 @@ public class PitCliArgumentsTest {
     private static final List<String> EXCLUDED_METHODS = ImmutableList.of("*toString*", "leaveMeAlone*");
     private static final File NO_HISTORY_FILE = null;
     private static final int DEFAULT_NUMBER_OF_THREADS = 1;
-    private static final List<String> MUTATORS = ImmutableList.of("FOO", "BAR");
+    private static final String MUTATORS = "FOO,BAR";
 
     private static final List<String> DEFAULT_AVOID_LIST = ImmutableList.copyOf(Splitter.on(',').trimResults()
             .omitEmptyStrings().split(DEFAULT_AVOID_CALLS_TO_LIST));
@@ -84,14 +84,14 @@ public class PitCliArgumentsTest {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(emptyList())
                 .withReportDirectory(reportDir)
-                .withMutators(emptyList())
+                .withMutators("")
                 .withAvoidCallsTo(emptyList()).build();
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1,
                 emptyList(), // classes to mutate
                 NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS,
                 emptyList(), // avoidsCallsTo
-                emptyList(), // mutators
+                null, // mutators
                 DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
@@ -214,7 +214,7 @@ public class PitCliArgumentsTest {
 
     private void thenTheArgumentsAreMadeUpOf(File reportDir, List<File> testSrcDirs, int threadCount, String testClass,
             List<String> classesToMutate, File historyFile, List<String> excludedClasses, List<String> excludedMethods,
-            List<String> avoidCallsTo, List<String> mutators, int timeout, BigDecimal timeoutFactor, List<String> additionalClassPath, boolean junit5) {
+            List<String> avoidCallsTo, String mutators, int timeout, BigDecimal timeoutFactor, List<String> additionalClassPath, boolean junit5) {
         Object[] expectedCliArgs = new ExpectedArgsBuilder().withThreadCount(threadCount).withReportDir(reportDir)
                 .withClassUnderTest(testClass).withTargetClasses(classesToMutate)
                 .withSourceDirectories(filesAsStrings(testSrcDirs)).withHistoryLocation(historyFile)
@@ -248,7 +248,7 @@ public class PitCliArgumentsTest {
         private List<String> excludedClasses = NO_EXCLUDED_CLASSES;
         private List<String> excludedMethods = NO_EXCLUDED_METHODS;
         private List<String> avoidCallsTo = DEFAULT_AVOID_LIST;
-        private List<String> mutators = MUTATORS;
+        private String mutators = MUTATORS;
         private int timeout = DEFAULT_TIMEOUT;
         private BigDecimal timeoutFactor = DEFAULT_TIMEOUT_FACTOR;
         private List<String> additionalClassPath;
@@ -276,8 +276,8 @@ public class PitCliArgumentsTest {
             return asStrings(resultBuilder.build());
         }
 
-        public ExpectedArgsBuilder withMutators(List<String> mutators) {
-            this.mutators = ImmutableList.copyOf(mutators);
+        public ExpectedArgsBuilder withMutators(String mutators) {
+            this.mutators = mutators;
             return this;
         }
 

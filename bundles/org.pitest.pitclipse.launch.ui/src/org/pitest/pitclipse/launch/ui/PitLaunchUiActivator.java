@@ -25,12 +25,18 @@ import org.osgi.framework.BundleContext;
 
 public class PitLaunchUiActivator extends AbstractUIPlugin {
     
+    public static String PLUGIN_ID = "org.pitest.pitclipse.launch.ui";
+    
     private static PitLaunchUiActivator plugin;
 
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+    }
+    
+    public static PitLaunchUiActivator getInstance() {
+        return plugin;
     }
 
     public static Shell getActiveWorkbenchShell() {

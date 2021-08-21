@@ -13,4 +13,5 @@ Require-Bundle: org.apache.commons.lang3;bundle-version="3.1.0",
  org.objenesis;bundle-version="1.0.0",
  org.junit;bundle-version="4.12.0",
  org.eclipse.core.runtime;bundle-version="[3.11.1,4.0.0)",
- com.google.guava
+ com.google.guava,
+ org.pitest.pitclipse.core

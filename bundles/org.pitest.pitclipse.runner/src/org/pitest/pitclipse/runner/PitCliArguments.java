@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * Turns {@link PitOptions} instances into CLI arguments
- * that can be understand by PIT. 
+ * that can be understand by PIT.
  */
 public class PitCliArguments {
 
@@ -104,11 +104,11 @@ public class PitCliArguments {
     }
 
     private List<String> mutatorsFrom(PitOptions options) {
-        List<String> mutators = options.getMutators();
-        if (!mutators.isEmpty()) {
+        String mutators = options.getMutators();
+        if (!mutators.trim().isEmpty()) {
             List<String> args = new ArrayList<>();
             args.add("--mutators");
-            args.add(concat(commaSeparate(mutators)));
+            args.add(mutators);
             return args;
         }
         return emptyList();
