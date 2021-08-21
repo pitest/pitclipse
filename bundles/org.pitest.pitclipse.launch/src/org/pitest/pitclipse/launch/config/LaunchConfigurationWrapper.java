@@ -16,8 +16,15 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
+import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
+import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -28,6 +35,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.launch.ProjectClosedException;
 import org.pitest.pitclipse.core.launch.ProjectNotFoundException;
 import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
@@ -35,13 +43,8 @@ import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
-import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
-import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
 
 public class LaunchConfigurationWrapper {
 
@@ -113,7 +116,7 @@ public class LaunchConfigurationWrapper {
     public PitOptions getPitOptions() throws CoreException {
         return getPitOptionsBuilder().build();
     }
-    
+
     public PitOptions.PitOptionsBuilder getPitOptionsBuilder() throws CoreException {
         List<String> classPath = getClassesFromProject();
         List<File> sourceDirs = getSourceDirsForProject();
@@ -122,7 +125,7 @@ public class LaunchConfigurationWrapper {
         List<String> excludedClasses = getExcludedClasses();
         List<String> excludedMethods = getExcludedMethods();
         List<String> avoidCallsTo = getAvoidCallsTo();
-        List<String> mutators = getMutators();
+        String mutators = getMutators();
         int timeout = pitConfiguration.getTimeout();
         BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
 
@@ -260,7 +263,19 @@ public class LaunchConfigurationWrapper {
         return projectFinder.getProjects(this);
     }
 
-    private List<String> getMutators() {
-        return ImmutableList.of(pitConfiguration.getMutators());
+    private String getMutators() throws CoreException {
+        final String mutators;
+        if (launchConfig.hasAttribute(MUTATOR_GROUP)) {
+            if (launchConfig.getAttribute(MUTATOR_GROUP, "").equals(Mutators.CUSTOM.name())) {
+                // if we have custom mutators set, get them
+                mutators = launchConfig.getAttribute(INDIVIDUAL_MUTATORS, "");
+            } else {
+                // use group
+                mutators = launchConfig.getAttribute(MUTATOR_GROUP, "");
+            }
+        } else {
+            mutators = pitConfiguration.getMutators();
+        }
+        return mutators;
     }
 }

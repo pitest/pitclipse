@@ -30,6 +30,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,7 +51,7 @@ public class PitCliArgumentsTest {
     private static final List<String> EXCLUDED_METHODS = ImmutableList.of("*toString*", "leaveMeAlone*");
     private static final File NO_HISTORY_FILE = null;
     private static final int DEFAULT_NUMBER_OF_THREADS = 1;
-    private static final List<String> MUTATORS = ImmutableList.of("FOO", "BAR");
+    private static final String MUTATORS = "FOO,BAR";
 
     private static final List<String> DEFAULT_AVOID_LIST = ImmutableList.copyOf(Splitter.on(',').trimResults()
             .omitEmptyStrings().split(DEFAULT_AVOID_CALLS_TO_LIST));
@@ -79,13 +80,54 @@ public class PitCliArgumentsTest {
     }
 
     @Test
+    public void someEmptyOptionsSet() {
+        PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
+                .withClassesToMutate(emptyList())
+                .withReportDirectory(reportDir)
+                .withMutators("")
+                .withAvoidCallsTo(emptyList()).build();
+        whenArgumentsAreMadeFrom(options);
+        thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1,
+                emptyList(), // classes to mutate
+                NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS,
+                emptyList(), // avoidsCallsTo
+                null, // mutators
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
+    }
+
+    @Test
     public void minimumOptionsSet() {
         PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
                 .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS).build();
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
+    }
+
+    @Test
+    public void testAdditionalClassPathSupplied() {
+        PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
+                .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir).withMutators(MUTATORS)
+                .withClassPath(CLASS_PATH)
+                .build();
+        whenArgumentsAreMadeFrom(options);
+        thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
+                NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, CLASS_PATH, false);
+    }
+
+    @Test
+    public void junit5Supplied() {
+        PitOptions options = PitOptions.builder().withSourceDirectory(testSrcDir).withClassUnderTest(TEST_CLASS1)
+                .withClassesToMutate(CLASS_PATH).withReportDirectory(reportDir)
+                .withMutators(MUTATORS)
+                .withUseJUnit5(true)
+                .build();
+        whenArgumentsAreMadeFrom(options);
+        thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
+                NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), true);
     }
 
     @Test
@@ -95,7 +137,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, PACKAGE_1 + "," + PACKAGE_2,
                 CLASS_PATH, NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -106,7 +148,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, srcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -118,7 +160,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, nonStandardThreadCount, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -129,7 +171,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 historyLocation, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -140,7 +182,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS, DEFAULT_TIMEOUT,
-                DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -151,7 +193,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, EXCLUDED_CLASSES, EXCLUDED_METHODS, DEFAULT_AVOID_LIST, MUTATORS, DEFAULT_TIMEOUT,
-                DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     @Test
@@ -163,7 +205,7 @@ public class PitCliArgumentsTest {
         whenArgumentsAreMadeFrom(options);
         thenTheArgumentsAreMadeUpOf(reportDir, defaultSrcDirs, DEFAULT_NUMBER_OF_THREADS, TEST_CLASS1, CLASS_PATH,
                 NO_HISTORY_FILE, NO_EXCLUDED_CLASSES, NO_EXCLUDED_METHODS, alternativeAvoidList, MUTATORS,
-                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR);
+                DEFAULT_TIMEOUT, DEFAULT_TIMEOUT_FACTOR, emptyList(), false);
     }
 
     private void whenArgumentsAreMadeFrom(PitOptions options) {
@@ -172,12 +214,14 @@ public class PitCliArgumentsTest {
 
     private void thenTheArgumentsAreMadeUpOf(File reportDir, List<File> testSrcDirs, int threadCount, String testClass,
             List<String> classesToMutate, File historyFile, List<String> excludedClasses, List<String> excludedMethods,
-            List<String> avoidCallsTo, List<String> mutators, int timeout, BigDecimal timeoutFactor) {
+            List<String> avoidCallsTo, String mutators, int timeout, BigDecimal timeoutFactor, List<String> additionalClassPath, boolean junit5) {
         Object[] expectedCliArgs = new ExpectedArgsBuilder().withThreadCount(threadCount).withReportDir(reportDir)
                 .withClassUnderTest(testClass).withTargetClasses(classesToMutate)
                 .withSourceDirectories(filesAsStrings(testSrcDirs)).withHistoryLocation(historyFile)
                 .withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods).withMutators(MUTATORS)
                 .withAvoidCallsTo(avoidCallsTo).withMutators(mutators).withTimeout(timeout).withTimeoutFactor(timeoutFactor)
+                .withAdditionalClassPath(additionalClassPath)
+                .withJUnit5(junit5)
                 .build();
         assertThat(actualCliArgs, is(equalTo(expectedCliArgs)));
     }
@@ -204,9 +248,11 @@ public class PitCliArgumentsTest {
         private List<String> excludedClasses = NO_EXCLUDED_CLASSES;
         private List<String> excludedMethods = NO_EXCLUDED_METHODS;
         private List<String> avoidCallsTo = DEFAULT_AVOID_LIST;
-        private List<String> mutators = MUTATORS;
+        private String mutators = MUTATORS;
         private int timeout = DEFAULT_TIMEOUT;
         private BigDecimal timeoutFactor = DEFAULT_TIMEOUT_FACTOR;
+        private List<String> additionalClassPath;
+        private boolean junit5 = false;
 
         public String[] build() {
             Builder<String> resultBuilder = ImmutableList.builder();
@@ -224,11 +270,14 @@ public class PitCliArgumentsTest {
             resultBuilder.addAll(addIfKnown("--mutators", mutators));
             resultBuilder.add("--timeoutConst", Integer.toString(timeout));
             resultBuilder.add("--timeoutFactor", timeoutFactor.toPlainString());
+            resultBuilder.addAll(addIfKnown("--classPath", additionalClassPath));
+            if (junit5)
+                resultBuilder.add("--testPlugin", "junit5");
             return asStrings(resultBuilder.build());
         }
 
-        public ExpectedArgsBuilder withMutators(List<String> mutators) {
-            this.mutators = ImmutableList.copyOf(mutators);
+        public ExpectedArgsBuilder withMutators(String mutators) {
+            this.mutators = mutators;
             return this;
         }
 
@@ -271,6 +320,16 @@ public class PitCliArgumentsTest {
             if (null != timeoutFactor) {
                 this.timeoutFactor = timeoutFactor;
             }
+            return this;
+        }
+
+        public ExpectedArgsBuilder withAdditionalClassPath(List<String> additionalClassPath) {
+            this.additionalClassPath = additionalClassPath;
+            return this;
+        }
+
+        public ExpectedArgsBuilder withJUnit5(boolean junit5) {
+            this.junit5 = junit5;
             return this;
         }
 

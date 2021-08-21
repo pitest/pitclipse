@@ -20,9 +20,10 @@ import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.EXECUTION_MODE;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.INDIVIDUAL_MUTATORS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
@@ -267,8 +268,9 @@ public class PitCoreActivator extends Plugin {
 
     public PitConfiguration getConfiguration() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        String executionMode = preferenceStore.getString(PIT_EXECUTION_MODE);
-        String mutators = preferenceStore.getString(PIT_MUTATORS);
+        String executionMode = preferenceStore.getString(EXECUTION_MODE);
+        String mutatorGroup = preferenceStore.getString(MUTATOR_GROUP);
+        String mutators = preferenceStore.getString(INDIVIDUAL_MUTATORS);
         boolean parallelRun = preferenceStore.getBoolean(RUN_IN_PARALLEL);
         boolean incrementalAnalysis = preferenceStore.getBoolean(INCREMENTAL_ANALYSIS);
         String excludedClasses = preferenceStore.getString(EXCLUDED_CLASSES);
@@ -292,20 +294,25 @@ public class PitCoreActivator extends Plugin {
                 break;
             }
         }
-        for (PitMutators mutatorMode : PitMutators.values()) {
-            if (mutatorMode.getId().equals(mutators)) {
-                builder.withMutators(mutatorMode.toString());
-                break;
-            }
+
+        if (mutatorGroup.equals(Mutators.CUSTOM.name())) {
+            builder.withMutators(mutators);
+        } else {
+            builder.withMutators(mutatorGroup);
         }
+
         return builder.build();
     }
 
     public void setExecutionMode(PitExecutionMode pitExecutionMode) {
-        getPreferenceStore().setValue(PIT_EXECUTION_MODE, pitExecutionMode.getId());
+        getPreferenceStore().setValue(EXECUTION_MODE, pitExecutionMode.getId());
     }
 
-    public void setMutators(PitMutators mutators) {
-        getPreferenceStore().setValue(PIT_MUTATORS, mutators.getId());
+    public void setDefaultMutatorGroup(Mutators mutators) {
+        getPreferenceStore().setValue(MUTATOR_GROUP, mutators.name());
+    }
+
+    public String getDefaultMutatorGroup() {
+        return getPreferenceStore().getString(MUTATOR_GROUP);
     }
 }

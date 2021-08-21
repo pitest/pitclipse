@@ -18,6 +18,7 @@ package org.pitest.pitclipse.ui.tests;
 import static java.lang.Integer.parseInt;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -25,6 +26,8 @@ import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +57,7 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.launch.ui.PitLaunchShortcut;
 import org.pitest.pitclipse.runner.results.DetectionStatus;
@@ -326,6 +330,24 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void runProjectTest(final String projectName) throws CoreException {
         new PitclipseSteps().runProjectTest(projectName);
+    }
+
+    /**
+     * Asserts that the only active mutator was the given mutator.
+     * @param mutators which should be the only active mutator
+     */
+    protected static void mutatorIs(Mutators mutator) {
+        mutatorsAre(Arrays.asList(new Mutators[] { mutator }));
+    }
+
+    /**
+     * Asserts that the only active mutators are the given mutators.
+     * @param mutators which should be the only active mutators
+     */
+    protected static void mutatorsAre(Collection<Mutators> mutators) {
+        final String consoleText = PAGES.getConsole().getText();
+        assertThat(consoleText, containsString(String.format("mutators=[%s]",
+                mutators.stream().map(Object::toString).collect(Collectors.joining(",")))));
     }
 
     /**

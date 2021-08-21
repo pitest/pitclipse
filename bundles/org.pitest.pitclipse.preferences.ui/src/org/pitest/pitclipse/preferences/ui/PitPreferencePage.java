@@ -25,21 +25,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_CLASSES_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDE_METHODS_FROM_PIT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.INCREMENTAL_ANALYSIS;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATION_TESTS_RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_EXECUTION_MODE;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_TIMEOUT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.PIT_TIMEOUT_FACTOR;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.RUN_IN_PARALLEL;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.TIMEOUT_FACTOR;
-import static org.pitest.pitclipse.core.preferences.PitPreferences.USE_INCREMENTAL_ANALYSIS;
+import static org.pitest.pitclipse.core.preferences.PitPreferences.*;
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.values;
 
 /**
@@ -58,7 +44,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
     public PitPreferencePage() {
         super(GRID);
         setPreferenceStore(PitCoreActivator.getDefault().getPreferenceStore());
-        setDescription("Pitclipse Preferences");
+        setDescription(PREFERENCE_DESCRIPTION_LABEL);
     }
 
     /**
@@ -79,31 +65,31 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
     }
 
     private void createAvoidCallsToField() {
-        addField(new StringFieldEditor(AVOID_CALLS_TO, AVOID_CALLS_FROM_PIT, getFieldEditorParent()));
+        addField(new StringFieldEditor(AVOID_CALLS_TO, AVOID_CALLS_TO_LABEL, getFieldEditorParent()));
     }
 
     private void createExcludeClassesField() {
-        addField(new StringFieldEditor(EXCLUDED_CLASSES, EXCLUDE_CLASSES_FROM_PIT, getFieldEditorParent()));
+        addField(new StringFieldEditor(EXCLUDED_CLASSES, EXCLUDED_CLASSES_LABEL, getFieldEditorParent()));
     }
 
     private void createExcludeMethodsField() {
-        addField(new StringFieldEditor(EXCLUDED_METHODS, EXCLUDE_METHODS_FROM_PIT, getFieldEditorParent()));
+        addField(new StringFieldEditor(EXCLUDED_METHODS, EXCLUDED_METHODS_LABEL, getFieldEditorParent()));
     }
 
     private void createUseIncrementalAnalysisOption() {
-        addField(new BooleanFieldEditor(INCREMENTAL_ANALYSIS, USE_INCREMENTAL_ANALYSIS, getFieldEditorParent()));
+        addField(new BooleanFieldEditor(INCREMENTAL_ANALYSIS, INCREMENTAL_ANALYSIS_LABEL, getFieldEditorParent()));
     }
 
     private void createRunInParallelOption() {
-        addField(new BooleanFieldEditor(RUN_IN_PARALLEL, MUTATION_TESTS_RUN_IN_PARALLEL, getFieldEditorParent()));
+        addField(new BooleanFieldEditor(RUN_IN_PARALLEL, RUN_IN_PARALLEL_LABEL, getFieldEditorParent()));
     }
 
     private void createPitTimeoutField() {
-        addField(new StringFieldEditor(TIMEOUT, PIT_TIMEOUT, getFieldEditorParent()));
+        addField(new StringFieldEditor(TIMEOUT, TIMEOUT_LABEL, getFieldEditorParent()));
     }
 
     private void createPitTimeoutFactorField() {
-        addField(new StringFieldEditor(TIMEOUT_FACTOR, PIT_TIMEOUT_FACTOR, getFieldEditorParent()));
+        addField(new StringFieldEditor(TIMEOUT_FACTOR, TIMEOUT_FACTOR_LABEL, getFieldEditorParent()));
     }
 
     private void createExecutionModeRadioButtons() {
@@ -112,7 +98,7 @@ public class PitPreferencePage extends FieldEditorPreferencePage implements IWor
         for (int i = 0; i < values.length; i++) {
             executionModeValues[i] = new String[] { values[i].getLabel(), values[i].getId() };
         }
-        addField(new RadioGroupFieldEditor(PIT_EXECUTION_MODE, "Pit execution scope", 1, executionModeValues, getFieldEditorParent()));
+        addField(new RadioGroupFieldEditor(EXECUTION_MODE, EXECUTION_MODE_LABEL, 1, executionModeValues, getFieldEditorParent()));
     }
 
     /*

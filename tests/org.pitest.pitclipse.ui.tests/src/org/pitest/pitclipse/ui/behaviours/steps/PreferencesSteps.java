@@ -21,7 +21,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.pitest.pitclipse.core.PitMutators;
+import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.runner.config.PitExecutionMode;
 
 import java.math.BigDecimal;
@@ -33,8 +33,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.pitest.pitclipse.core.PitMutators.ALL;
-import static org.pitest.pitclipse.core.PitMutators.STRONGER;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.runner.config.PitExecutionMode.PROJECT_ISOLATION;
@@ -149,18 +147,18 @@ public class PreferencesSteps {
 
     @Then("the default mutators preference is selected")
     public void defaultMutators() {
-        PitMutators selectedMutators = PAGES.getWindowsMenu().getMutators();
+        Mutators selectedMutators = PAGES.getWindowsMenu().getMutators();
         assertThat(selectedMutators.toString(), is(equalTo(DEFAULT_MUTATORS)));
     }
 
     @Given("the stronger mutator preference is selected")
     public void useStrongerMutators() {
-        PAGES.getWindowsMenu().setMutators(STRONGER);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.STRONGER);
     }
 
     @Given("the all mutators preference is selected")
     public void useAllMutators() {
-        PAGES.getWindowsMenu().setMutators(ALL);
+        PAGES.getWindowsMenu().setMutatorGroup(Mutators.ALL);
     }
 
     @Given("the timeout constant is {int}")

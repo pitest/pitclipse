@@ -124,7 +124,8 @@ public class PitResultNotifier implements ResultNotifier<PitResults> {
         }
 
         /**
-         * Waits for PIT to finish.
+         * Waits for PIT to finish.<br>
+         * <b>Mandatory</b> to call {@link #resetSummary()} before.
          * @param timeOut after the wait stops, if not set use SWTBotPreferences.TIMEOUT
          */
         public void waitForPitToFinish(long timeOut) {
