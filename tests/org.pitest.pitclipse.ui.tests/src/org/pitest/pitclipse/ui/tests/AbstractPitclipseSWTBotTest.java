@@ -41,6 +41,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -130,6 +131,26 @@ public abstract class AbstractPitclipseSWTBotTest {
                 }
             }
         });
+    }
+
+    public static void openViewById(String viewId) throws InterruptedException {
+        Display.getDefault().syncExec(()-> {
+            IWorkbench workbench = PlatformUI.getWorkbench();
+            try {
+                workbench.getActiveWorkbenchWindow().getActivePage().showView(viewId);
+            } catch (WorkbenchException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void closeViewById(String viewId) {
+        for (SWTBotView view : bot.views()) {
+            if (view.getReference().getId().equals(viewId)) {
+                view.close();
+                return;
+            }
+        }
     }
 
     protected static IProject importTestProject(String projectName) throws CoreException {
