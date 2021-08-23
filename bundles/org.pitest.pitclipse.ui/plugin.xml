@@ -4,8 +4,8 @@
    <extension-point id="org.pitest.pitclipse.ui.results" name="ResultsUpdated" schema="schema/org.pitest.pitclipse.ui.results.exsd"/>
    <extension
          point="org.pitest.pitclipse.core.results">
-      <results
-            class="org.pitest.pitclipse.ui.notify.PitResultsNotifier"></results>
+		<results
+            class="org.pitest.pitclipse.ui.notify.PitResultsNotifier"/>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -36,5 +36,250 @@
          point="org.pitest.pitclipse.core.mutations.results">
       <results
             class="org.pitest.pitclipse.ui.view.mutations.MutationModelChangedNotifier"></results>
+      <results
+    		class="org.pitest.pitclipse.ui.highlighting.PitclipseMutantHighlighter"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.pitclipsemarker"
+         name="Survived Mutant"
+         point="org.eclipse.core.resources.markers">
+         <persistent
+               value="false"/>
+         <super
+               type="org.eclipse.core.resources.taskmarker">
+         </super>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.survived"
+         name="Survived Mutant"
+         point="org.eclipse.core.resources.markers">
+         <persistent
+               value="false"/>
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <attribute
+               name="org.pitest.pitclipse.ui.fixHint"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.killed"
+         name="Killed Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.nocoverage"
+         name="No Coverage Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.timeout"
+         name="Timeout Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.nonViable"
+         name="Non Viable Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.memError"
+         name="Memory Error Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         id="org.pitest.pitclipse.ui.runError"
+         name="Run Error Mutant"
+         point="org.eclipse.core.resources.markers">
+         <super
+               type="org.pitest.pitclipse.ui.pitclipsemarker">
+         </super>
+         <persistent
+               value="false"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+         <type
+               markerType="org.pitest.pitclipse.ui.survived"
+               name="org.pitest.pitclipse.ui.survived"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.killed"
+	        name="org.pitest.pitclipse.ui.killed"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.nocoverage"
+	        name="org.pitest.pitclipse.ui.nocoverage"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.timeout"
+	        name="org.pitest.pitclipse.ui.timeout"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.nonViable"
+	        name="org.pitest.pitclipse.ui.nonViable"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.memError"
+	        name="org.pitest.pitclipse.ui.memError"/>
+		<type
+	        markerType="org.pitest.pitclipse.ui.runError"
+	        name="org.pitest.pitclipse.ui.runError"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+     <specification
+           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationType="org.pitest.pitclipse.ui.survived"
+           colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.survived"
+           colorPreferenceValue="255,0,0"
+           contributesToHeader="false"
+           highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.survived"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="Pitclipse Surviving Mutant"
+           overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.survived"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="0"
+           textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.survived"
+           textPreferenceValue="true"
+           textStylePreferenceValue="BOX"
+           verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.survived"
+           verticalRulerPreferenceValue="true">
+      </specification>
+     <specification
+           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationType="org.pitest.pitclipse.ui.killed"
+           colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.killed"
+           colorPreferenceValue="0,204,0"
+           contributesToHeader="false"
+           highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.killed"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="Pitclipse Killed Mutant"
+           overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.killed"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="0"
+           textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.killed"
+           textPreferenceValue="true"
+           textStylePreferenceValue="BOX"
+           verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.killed"
+           verticalRulerPreferenceValue="true">
+      </specification>
+     <specification
+           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationType="org.pitest.pitclipse.ui.nocoverage"
+           colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.nocoverage"
+           colorPreferenceValue="255,100,100"
+           contributesToHeader="false"
+           highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.nocoverage"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="Pitclipse No Coverage Mutant"
+           overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.nocoverage"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="0"
+           textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.nocoverage"
+           textPreferenceValue="true"
+           textStylePreferenceValue="BOX"
+           verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.nocoverage"
+           verticalRulerPreferenceValue="true">
+      </specification>
+     <specification
+           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationType="org.pitest.pitclipse.ui.timeout"
+           colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.timeout"
+           colorPreferenceValue="104,50,131"
+           contributesToHeader="false"
+           highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.timeout"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="Pitclipse Timeout Mutant"
+           overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.timeout"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="0"
+           textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.timeout"
+           textPreferenceValue="true"
+           textStylePreferenceValue="BOX"
+           verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.timeout"
+           verticalRulerPreferenceValue="true">
+      </specification>
+     <specification
+           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationType="org.pitest.pitclipse.ui.nonViable"
+           colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.nonViable"
+           colorPreferenceValue="197,197,197"
+           contributesToHeader="false"
+           highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.nonViable"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="Pitclipse Non Viable Mutant"
+           overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.nonViable"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="0"
+           textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.nonViable"
+           textPreferenceValue="true"
+           textStylePreferenceValue="BOX"
+           verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.nonViable"
+           verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+            annotationType="org.pitest.pitclipse.ui.memError"
+            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.memError"
+            colorPreferenceValue="197,197,197"
+            contributesToHeader="false"
+            highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.memError"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="Pitclipse Memory Error Mutant"
+            overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.memError"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.memError"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.memError"
+            verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+            annotationType="org.pitest.pitclipse.ui.runError"
+            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.runError"
+            colorPreferenceValue="197,197,197"
+            contributesToHeader="false"
+            highlightPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.highlight.runError"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="Pitclipse Run Error Mutant"
+            overviewRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.overview.runError"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.text.runError"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.ruler.runError"
+            verticalRulerPreferenceValue="true">
+      </specification>
    </extension>
 </plugin>
