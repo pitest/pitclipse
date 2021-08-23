@@ -110,9 +110,11 @@ public class PitclipseMutantHighlighter implements ResultNotifier<MutationsModel
         }
     }
 
-    private IMarker createMarker(IResource iResource, String type, Map<String, Object> map) {
+    private IMarker createMarker(IResource iResource, String type, Map<String, Object> attributes) {
         try {
-            return iResource.createMarker(type, map);
+            IMarker marker = iResource.createMarker(type);
+            marker.setAttributes(attributes);
+            return marker;
         } catch (CoreException e) {
             return null;
         }
