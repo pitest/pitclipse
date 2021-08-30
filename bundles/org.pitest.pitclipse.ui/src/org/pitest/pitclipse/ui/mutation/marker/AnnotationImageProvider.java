@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.ui.highlighting;
+package org.pitest.pitclipse.ui.mutation.marker;
 
 
 import org.eclipse.jface.resource.ImageDescriptor;

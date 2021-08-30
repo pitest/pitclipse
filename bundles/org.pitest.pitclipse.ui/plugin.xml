@@ -149,7 +149,7 @@
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
      <specification
-           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
            annotationType="org.pitest.pitclipse.ui.survived"
            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.survived"
            colorPreferenceValue="255,0,0"
@@ -168,7 +168,7 @@
            verticalRulerPreferenceValue="true">
       </specification>
      <specification
-           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
            annotationType="org.pitest.pitclipse.ui.killed"
            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.killed"
            colorPreferenceValue="0,204,0"
@@ -187,7 +187,7 @@
            verticalRulerPreferenceValue="true">
       </specification>
      <specification
-           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
            annotationType="org.pitest.pitclipse.ui.nocoverage"
            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.nocoverage"
            colorPreferenceValue="255,100,100"
@@ -206,7 +206,7 @@
            verticalRulerPreferenceValue="true">
       </specification>
      <specification
-           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
            annotationType="org.pitest.pitclipse.ui.timeout"
            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.timeout"
            colorPreferenceValue="104,50,131"
@@ -225,7 +225,7 @@
            verticalRulerPreferenceValue="true">
       </specification>
      <specification
-           annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+           annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
            annotationType="org.pitest.pitclipse.ui.nonViable"
            colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.nonViable"
            colorPreferenceValue="197,197,197"
@@ -244,7 +244,7 @@
            verticalRulerPreferenceValue="true">
       </specification>
       <specification
-            annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+            annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
             annotationType="org.pitest.pitclipse.ui.memError"
             colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.memError"
             colorPreferenceValue="197,197,197"
@@ -263,7 +263,7 @@
             verticalRulerPreferenceValue="true">
       </specification>
       <specification
-            annotationImageProvider="org.pitest.pitclipse.ui.highlighting.AnnotationImageProvider"
+            annotationImageProvider="org.pitest.pitclipse.ui.mutation.marker.AnnotationImageProvider"
             annotationType="org.pitest.pitclipse.ui.runError"
             colorPreferenceKey="org.pitest.pitclipse.ui.mutation.marker.color.runError"
             colorPreferenceValue="197,197,197"

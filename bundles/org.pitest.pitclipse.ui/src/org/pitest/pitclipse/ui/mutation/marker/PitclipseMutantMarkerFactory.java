@@ -1,4 +1,4 @@
-package org.pitest.pitclipse.ui.highlighting;
+package org.pitest.pitclipse.ui.mutation.marker;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ import org.pitest.pitclipse.runner.model.ProjectMutations;
 import org.pitest.pitclipse.runner.model.Status;
 import org.pitest.pitclipse.ui.core.PitUiActivator;
 
-public class PitclipseMutantHighlighter implements ResultNotifier<MutationsModel> {
+public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsModel> {
     /**
      * Id where all pitclipse markers can be found
      */

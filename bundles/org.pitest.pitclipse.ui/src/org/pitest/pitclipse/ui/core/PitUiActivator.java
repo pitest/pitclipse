@@ -28,7 +28,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-import org.pitest.pitclipse.ui.highlighting.PitclipseMutantHighlighter;
+import org.pitest.pitclipse.ui.mutation.marker.PitclipseMutantMarkerFactory;
 
 /**
  * The ui activator class which initializes the icons of the plug in
@@ -69,24 +69,24 @@ public class PitUiActivator extends AbstractUIPlugin {
             imageRegistry.put(PIT_ICON, ImageDescriptor.createFromURL(url).createImage());
             // annotation icons
             final URL killedUrl = FileLocator.find(bundle, new Path("icons/killed.gif"), null);
-            imageRegistry.put(PitclipseMutantHighlighter.KILLED_MUTANT_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.KILLED_MUTANT_MARKER,
                     ImageDescriptor.createFromURL(killedUrl).createImage());
             final URL survivingUrl = FileLocator.find(bundle, new Path("icons/survived.gif"), null);
-            imageRegistry.put(PitclipseMutantHighlighter.SURVIVING_MUTANT_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.SURVIVING_MUTANT_MARKER,
                     ImageDescriptor.createFromURL(survivingUrl).createImage());
             final URL noCoverageUrl = FileLocator.find(bundle, new Path("icons/noCoverage.gif"), null);
-            imageRegistry.put(PitclipseMutantHighlighter.NO_COVERAGE_MUTANT_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.NO_COVERAGE_MUTANT_MARKER,
                     ImageDescriptor.createFromURL(noCoverageUrl).createImage());
             final URL timeoutUrl = FileLocator.find(bundle, new Path("icons/timeout.gif"), null);
-            imageRegistry.put(PitclipseMutantHighlighter.TIMEOUT_MUTANT_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.TIMEOUT_MUTANT_MARKER,
                     ImageDescriptor.createFromURL(timeoutUrl).createImage());
             // use same icon for these 3, because they are not from huge interest
             final URL nonViableUrl = FileLocator.find(bundle, new Path("icons/nonViable.gif"), null);
-            imageRegistry.put(PitclipseMutantHighlighter.NON_VIABLE_MUTANT_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.NON_VIABLE_MUTANT_MARKER,
                     ImageDescriptor.createFromURL(nonViableUrl).createImage());
-            imageRegistry.put(PitclipseMutantHighlighter.MEMORY_ERROR_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.MEMORY_ERROR_MARKER,
                     ImageDescriptor.createFromURL(nonViableUrl).createImage());
-            imageRegistry.put(PitclipseMutantHighlighter.RUN_ERROR_MARKER,
+            imageRegistry.put(PitclipseMutantMarkerFactory.RUN_ERROR_MARKER,
                     ImageDescriptor.createFromURL(nonViableUrl).createImage());
         });
     }
