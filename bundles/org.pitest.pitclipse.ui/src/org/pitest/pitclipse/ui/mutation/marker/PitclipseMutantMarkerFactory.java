@@ -108,7 +108,7 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
                 IViewPart view = page.showView(TASKS_VIEW_ID);
                 page.activate(view);
             } catch (PartInitException e) {
-                e.printStackTrace();
+                throw new RuntimeException("Could not show task view.", e);
             }
         });
     }
@@ -120,7 +120,6 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
     private void createMarkers(MutationsModel results) {
         removeOldMarkers();
         List<Mutation> mutations = ModelsVisitor.VISITOR.extractAllMutations(results);
-
         int i = 0;
         final IResource[] resources = new IResource[mutations.size()];
         final String[] types = new String[mutations.size()];
@@ -145,6 +144,7 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
                 attributes[i].put(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
                 break;
             default:
+                // default. Used for killed mutants
                 attributes[i].put(IMarker.DONE, true);
                 attributes[i].put(IMarker.PRIORITY, IMarker.PRIORITY_LOW);
             }
@@ -157,10 +157,9 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
      * Removes all old markers, which are Pitclipse markers
      */
     private void removeOldMarkers() {
-        IMarker[] marker = null;
-        int depth = IResource.DEPTH_INFINITE;
         try {
-            marker = ResourcesPlugin.getWorkspace().getRoot().findMarkers(PITCLIPSE_MUTANT_MARKER, true, depth);
+            IMarker[] marker = ResourcesPlugin.getWorkspace().getRoot().findMarkers(PITCLIPSE_MUTANT_MARKER, true,
+                    IResource.DEPTH_INFINITE);
             for (IMarker iMarker : marker) {
                 iMarker.delete();
             }
