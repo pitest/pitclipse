@@ -32,11 +32,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.pitest.pitclipse.core.extension.point.ResultNotifier;
 import org.pitest.pitclipse.runner.model.ClassMutations;
 import org.pitest.pitclipse.runner.model.Mutation;
@@ -87,30 +82,14 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
      * Id for markers of <b>run error</b> mutants
      */
     public static final String RUN_ERROR_MARKER = PitUiActivator.PLUGIN_ID + ".runError";
-    /**
-     * Id of the task view from Eclipse
-     */
-    private static final String TASKS_VIEW_ID = "org.eclipse.ui.views.TaskList";
-
 
     /**
-     * Uses the results to create a marker for each mutant and shows the task view
-     * of Eclipse
+     * Uses the results to create a marker for each mutant
      * @param results from pit which holds the information about the mutants
      */
     @Override
     public void handleResults(MutationsModel results) {
         createMarkers(results);
-        // open and show tasks view after the marker are created
-        Display.getDefault().asyncExec(() -> {
-            try {
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                IViewPart view = page.showView(TASKS_VIEW_ID);
-                page.activate(view);
-            } catch (PartInitException e) {
-                throw new RuntimeException("Could not show task view.", e);
-            }
-        });
     }
 
     /**
