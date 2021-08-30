@@ -37,7 +37,7 @@
       <results
             class="org.pitest.pitclipse.ui.view.mutations.MutationModelChangedNotifier"></results>
       <results
-    		class="org.pitest.pitclipse.ui.highlighting.PitclipseMutantHighlighter"/>
+            class="org.pitest.pitclipse.ui.mutation.marker.PitclipseMutantMarkerFactory"/>
    </extension>
    <extension
          id="org.pitest.pitclipse.ui.pitclipsemarker"
