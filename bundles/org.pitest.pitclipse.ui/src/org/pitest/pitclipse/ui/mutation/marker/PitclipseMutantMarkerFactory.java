@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright 2021 Jonas Kutscha and contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.  You may obtain a copy
+ * of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ ******************************************************************************/
+
 package org.pitest.pitclipse.ui.mutation.marker;
 
 import java.util.HashMap;
@@ -30,22 +46,58 @@ import org.pitest.pitclipse.runner.model.ProjectMutations;
 import org.pitest.pitclipse.runner.model.Status;
 import org.pitest.pitclipse.ui.core.PitUiActivator;
 
+/**
+ * Class which creates mutation markers after a PIT run
+ * @author Jonas Kutscha
+ */
 public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsModel> {
     /**
-     * Id where all pitclipse markers can be found
+     * Id where all Pitclipse markers can be found
      */
     public static final String PITCLIPSE_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".pitclipsemarker";
+    /**
+     * Id for markers of <b>surviving</b> mutants
+     */
     public static final String SURVIVING_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".survived";
+    /**
+     * Id of the marker attribute fix hint
+     */
     public static final String SURVIVING_MUTANT_MARKER_ATTRIBUTE = PitUiActivator.PLUGIN_ID + ".fixHint";
+    /**
+     * Id for markers of <b>killed</b> mutants
+     */
     public static final String KILLED_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".killed";
+    /**
+     * Id for markers of <b>no coverage</b> mutants
+     */
     public static final String NO_COVERAGE_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".nocoverage";
+    /**
+     * Id for markers of <b>timeout</b> mutants
+     */
     public static final String TIMEOUT_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".timeout";
+    /**
+     * Id for markers of <b>non viable</b> mutants
+     */
     public static final String NON_VIABLE_MUTANT_MARKER = PitUiActivator.PLUGIN_ID + ".nonViable";
+    /**
+     * Id for markers of <b>memory error</b> mutants
+     */
     public static final String MEMORY_ERROR_MARKER = PitUiActivator.PLUGIN_ID + ".memError";
+    /**
+     * Id for markers of <b>run error</b> mutants
+     */
     public static final String RUN_ERROR_MARKER = PitUiActivator.PLUGIN_ID + ".runError";
+    /**
+     * Id of the task view from Eclipse
+     */
     private static final String TASKS_VIEW_ID = "org.eclipse.ui.views.TaskList";
 
 
+    /**
+     * Uses the results to create a marker for each mutant and shows the task view
+     * of Eclipse
+     * @param results from pit which holds the information about the mutants
+     */
     @Override
     public void handleResults(MutationsModel results) {
         createMarkers(results);
@@ -61,7 +113,10 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
         });
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Extracts all mutants of the results to create a marker for each one
+     * @param results which hold the mutants
+     */
     private void createMarkers(MutationsModel results) {
         removeOldMarkers();
         List<Mutation> mutations = ModelsVisitor.VISITOR.extractAllMutations(results);
@@ -69,6 +124,7 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
         int i = 0;
         final IResource[] resources = new IResource[mutations.size()];
         final String[] types = new String[mutations.size()];
+        @SuppressWarnings("unchecked")
         final Map<String, Object>[] attributes = new Map[mutations.size()];
 
         for (Mutation m : mutations) {
@@ -80,7 +136,7 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
 
             switch (types[i]) {
             case SURVIVING_MUTANT_MARKER:
-                // if mutation survived, add hint how to probably kill it
+                // TODO: if mutation survived, add hint how to probably kill it
                 attributes[i].put(SURVIVING_MUTANT_MARKER_ATTRIBUTE, "NOT IMPLEMENTED YET");
                 attributes[i].put(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
                 break;
@@ -97,6 +153,9 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
         }
     }
 
+    /**
+     * Removes all old markers, which are Pitclipse markers
+     */
     private void removeOldMarkers() {
         IMarker[] marker = null;
         int depth = IResource.DEPTH_INFINITE;
@@ -106,20 +165,36 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
                 iMarker.delete();
             }
         } catch (CoreException e) {
-            // something went wrong
+            throw new RuntimeException("Error while deleting old markers occured.", e);
         }
     }
 
+    /**
+     * Tries to create a marker for the given resource with the given type and
+     * attributes.
+     * @param iResource  resource where to create the marker
+     * @param type       of the marker to create
+     * @param attributes which should be added to the marker
+     * @return the created marker or null, if the marker could not be created
+     */
     private IMarker createMarker(IResource iResource, String type, Map<String, Object> attributes) {
         try {
             IMarker marker = iResource.createMarker(type);
             marker.setAttributes(attributes);
             return marker;
         } catch (CoreException e) {
+            // could not create marker
             return null;
         }
     }
 
+    /**
+     * Maps the detection status of the given mutation to the corresponding marker
+     * id. If the detection status has no corresponding marker id the non viable
+     * marker is used.
+     * @param mutation which detection status is mapped
+     * @return the marker id which corresponds to the detection status of the mutant
+     */
     private String getType(Mutation mutation) {
         switch (mutation.getStatus()) {
         case SURVIVED:
@@ -139,6 +214,13 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
         }
     }
 
+    /**
+     * Tries to find the class specified by its name in the project which name is
+     * given.
+     * @param projectName where the class file is located
+     * @param className   which identifies the class
+     * @return the file handle or null, if the file was not found
+     */
     private IFile findClass(final String projectName, final String className) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         for (IProject project : root.getProjects()) {
@@ -157,14 +239,27 @@ public class PitclipseMutantMarkerFactory implements ResultNotifier<MutationsMod
         return null;
     }
 
+    /**
+     * Extracts the project name from the given mutation where it occured.
+     * @param mutation from which the project is desired
+     * @return the project name where the mutation occured
+     */
     private String getProjectName(Mutation mutation) {
         return mutation.getClassMutations().getPackageMutations().getProjectMutations().getProjectName();
     }
 
+    /**
+     * Extracts the class name from the given mutation where it occured.
+     * @param mutation from which the class is desired
+     * @return the class name where the mutation occured
+     */
     private String getClassName(Mutation mutation) {
         return mutation.getClassMutations().getClassName();
     }
 
+    /**
+     * Visitor which is used to extract all mutations from the mutation model
+     */
     private enum ModelsVisitor {
         VISITOR;
         public List<Mutation> extractAllMutations(MutationsModel mutationsModel) {
