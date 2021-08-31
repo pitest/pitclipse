@@ -20,6 +20,7 @@ import static com.google.common.collect.ImmutableList.builder;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellIsActive;
 import static org.junit.Assert.fail;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ import org.pitest.pitclipse.ui.swtbot.SWTBotMenuHelper;
 
 import com.google.common.collect.ImmutableList;
 
-public class RunConfigurationSelector {
+public class RunConfigurationSelector implements Closeable {
 
     private static final String RUN = "Run";
     private static final String RUN_CONFIGURATIONS = "Run Configurations";
@@ -93,14 +94,11 @@ public class RunConfigurationSelector {
                 .withTestClassOrDir(isTestClass).build();
     }
 
-    private SWTBotShell activateShell() {
-        // look if shell is already open
-        for (SWTBotShell shell : bot.shells()) {
-            if (shell.getText().equals(RUN_CONFIGURATIONS)) {
-                shell.activate();
-                return shell;
-            }
-        }
+    /**
+     * Opens the run configuration shell and activates it
+     * @return the run configuration shell
+     */
+    public SWTBotShell openRunConfigurationShell() {
         // open the "Run Configurations" dialog
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
         menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, RUN), RUN_CONFIGURATIONS + "...").click();
@@ -112,7 +110,6 @@ public class RunConfigurationSelector {
     }
 
     private SWTBotTreeItem getPitConfigurationItem() {
-        activateShell();
         final String itemName = "PIT Mutation Test";
         for (SWTBotTreeItem treeItem : bot.tree().getAllItems()) {
             if (itemName.equals(treeItem.getText())) {
@@ -142,7 +139,6 @@ public class RunConfigurationSelector {
     }
 
     private void activateConfigurationTab(String configurationName, String name) {
-        activateShell();
         activateConfiguration(configurationName);
         bot.cTabItem(PitMutatorsTab.NAME).activate();
     }
@@ -150,26 +146,31 @@ public class RunConfigurationSelector {
     public void createRunConfiguration(String configurationName, String projectName, String className) {
         getPitConfigurationItem().contextMenu("New Configuration").click();
         bot.textWithLabel("Name:").setText(configurationName);
-        activateShell().bot().button("Apply").click();
         PitRunConfiguration config = new Builder().withName(configurationName).withProjects(projectName)
                 .withTestClass(className).build();
         setConfiguration(config);
     }
 
     public void setProjectForConfiguration(String configurationName, String project) {
-        setConfiguration(new Builder(getConfiguration(configurationName)).withProjects(project).build());
+        final PitRunConfiguration config = getConfiguration(configurationName);
+        setConfiguration(new Builder(config).withProjects(project).build());
     }
 
     public void setTestClassForConfiguration(String configurationName, String testClass) {
-        setConfiguration(new Builder(getConfiguration(configurationName)).withTestClass(testClass).build());
+        final PitRunConfiguration config = getConfiguration(configurationName);
+        setConfiguration(new Builder(config).withTestClass(testClass).build());
     }
 
     public void setTestDirForConfiguration(String configurationName, String testDir) {
-        setConfiguration(new Builder(getConfiguration(configurationName)).withTestDir(testDir).build());
+        final PitRunConfiguration config = getConfiguration(configurationName);
+        setConfiguration(new Builder(config).withTestDir(testDir).build());
     }
 
+    /**
+     * Sets the values of the currently open pit run configuration
+     * @param config where the values are extracted from
+     */
     private void setConfiguration(PitRunConfiguration config) {
-        activateConfiguration(config.getName());
         bot.textWithLabel(PitArgumentsTab.PROJECT_TEXT).setText(getProjectsAsString(config));
         if (config.isTestClass()) {
             bot.radio(PitArgumentsTab.TEST_CLASS_RADIO_TEXT).click();
@@ -192,8 +193,7 @@ public class RunConfigurationSelector {
         bot.textWithLabel(PitPreferences.EXCLUDED_CLASSES_LABEL).setText(config.getExcludedClasses());
         bot.textWithLabel(PitPreferences.EXCLUDED_METHODS_LABEL).setText(config.getExcludedMethods());
         bot.textWithLabel(PitPreferences.AVOID_CALLS_TO_LABEL).setText(config.getAvoidCallsTo());
-        // close shell and save
-        closeConfigurationShell();
+        pressApplyIfEnabled();
     }
 
     /**
@@ -210,7 +210,7 @@ public class RunConfigurationSelector {
     public void setMutatorGroup(String configurationName, Mutators mutatorGroup) {
         activateMutatorsTab(configurationName);
         bot.radio(mutatorGroup.getDescriptor()).click();
-        closeConfigurationShell();
+        pressApplyIfEnabled();
     }
 
     public void toggleCustomMutator(String configurationName, Mutators mutator) {
@@ -219,7 +219,7 @@ public class RunConfigurationSelector {
         radioButton.click();
         SWTBotTable table = bot.table();
         toggleMutator(table, mutator);
-        closeConfigurationShell();
+        pressApplyIfEnabled();
     }
 
     public void setOneCustomMutator(String configurationName, Mutators mutator) {
@@ -228,7 +228,7 @@ public class RunConfigurationSelector {
         uncheckAllMutators();
         SWTBotTable table = bot.table();
         toggleMutator(table, mutator);
-        closeConfigurationShell();
+        pressApplyIfEnabled();
     }
 
     public void checkAllMutators(String configurationName) {
@@ -241,7 +241,7 @@ public class RunConfigurationSelector {
                 table.getTableItem(i).check();
             }
         });
-        closeConfigurationShell();
+        pressApplyIfEnabled();
     }
 
     /**
@@ -255,6 +255,7 @@ public class RunConfigurationSelector {
             }
         });
         // don't close, because you cannot apply empty mutators
+        pressApplyIfEnabled();
     }
 
     /**
@@ -264,16 +265,39 @@ public class RunConfigurationSelector {
      */
     private void toggleMutator(SWTBotTable table, Mutators mutator) {
         table.getTableItem(mutator.getDescriptor()).toggleCheck();
+        pressApplyIfEnabled();
+    }
+
+    private void pressApplyIfEnabled() {
+        SWTBotButton apply = bot.shell(RUN_CONFIGURATIONS).bot().button("Apply");
+        if (apply.isEnabled()) {
+            apply.click();
+        }
+    }
+
+    /**
+     * @return the run configuration shell or null, if it is not open
+     */
+    private SWTBotShell getRunConfigShellIfOpen() {
+        // look if shell is already open
+        for (SWTBotShell shell : bot.shells()) {
+            if (shell.getText().equals(RUN_CONFIGURATIONS)) {
+                shell.activate();
+                return shell;
+            }
+        }
+        return null;
     }
 
     /**
      * Closes the configuration shell and applies, if possible.
      */
-    private void closeConfigurationShell() {
-        SWTBotShell shell = bot.shell(RUN_CONFIGURATIONS);
-        SWTBotButton apply = shell.bot().button("Apply");
-        if (apply.isEnabled()) {
-            apply.click();
+    @Override
+    public void close() {
+        SWTBotShell shell = getRunConfigShellIfOpen();
+        if (shell == null) {
+            // shell is not open
+            return;
         }
         shell.bot().button("Close").click();
     }
