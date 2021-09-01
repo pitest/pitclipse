@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -300,6 +301,7 @@ public class RunConfigurationSelector implements Closeable {
             return;
         }
         shell.bot().button("Close").click();
+        bot.waitUntil(Conditions.shellCloses(shell));
     }
 
     /**
