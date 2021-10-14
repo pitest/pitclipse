@@ -28,6 +28,7 @@ import static org.pitest.pitclipse.launch.PitLaunchArgumentsConstants.ATTR_TEST_
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_AVOID_CALLS_TO;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_CLASSES;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_EXCLUDE_METHODS;
+import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TARGET_CLASSES;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_INCREMENTALLY;
 import static org.pitest.pitclipse.launch.config.LaunchConfigurationWrapper.ATTR_TEST_IN_PARALLEL;
 
@@ -70,16 +71,73 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     public static final String SCOPE_GROUP_TEXT = " Mutation Scope ";
     public static final String PROJECT_TEXT = "Project to mutate: ";
 
-    private Text testClassText;
+    /**
+     * Text which holds the information about which project to mutate.
+     */
     private Text projectText;
-    private Button testClassRadioButton;
-    private Button testDirectoryRadioButton;
-    private Text testDirText;
     private String containerId;
+    /**
+     * Radio button, if selected a test class is specified with
+     * {@link #testClassText}.
+     */
+    private Button testClassRadioButton;
+    /**
+     * Text which holds the information about which test class is used
+     */
+    private Text testClassText;
+    /**
+     * Radio button, if selected a test directory is specified with
+     * {@link #testDirText}.
+     */
+    private Button testDirectoryRadioButton;
+    /**
+     * Text which holds the information about which directory the tests are located
+     */
+    private Text testDirText;
+    /**
+     * Check box button, if selected a single or more target class is specified with
+     * {@link #targetClassText}.
+     */
+    private Button targetClassCheckBoxButton;
+    /**
+     * Text which holds the information about which classes should be mutated
+     */
+    private Text targetClassText;
+    /**
+     * Pattern which matches a String which contains packages separated by dots and
+     * end with a class.
+     */
+    private static final String CLASS_PATTERN = "\\w+(\\.\\w+)*\\.\\w+";
+    /**
+     * Pattern which matches multiple {@link #CLASS_PATTERN} separated by commas
+     */
+    private static final String MULTI_CLASS_PATTERN = CLASS_PATTERN + "(,\\s?" + CLASS_PATTERN + ")*";
+    /**
+     * Target class error message. Which is displayed, if the text field has no
+     * valid input
+     */
+    private static final String TARGET_CLASS_ERROR_MESSAGE = "The target class field can only contain classes seperated by commas, with their packages divided by dots and shouldn't end with .java.\n" + "Example: foo.bar.Foo";
+    /**
+     * Radio button, if selected the tests are run in parallel
+     */
     private Button runInParallel;
+    /**
+     * Radio button, if selected the tests are run with incremental analysis
+     */
     private Button incrementalAnalysis;
+    /**
+     * Text which holds the information about which classes should <b>not</b> be
+     * mutated
+     */
     private Text excludedClassesText;
+    /**
+     * Text which holds the information about which methods should <b>not</b> be
+     * mutated
+     */
     private Text excludedMethodsText;
+    /**
+     * Text which holds the information about which methods should <b>not</b> called
+     */
     private Text avoidCallsTo;
 
     @Override
@@ -105,6 +163,10 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
             testClassRadioButton.setSelection(true);
             testDirectoryRadioButton.setSelection(false);
         }
+        final String targetClass = getAttributeFromConfig(config, ATTR_TARGET_CLASSES, "");
+        targetClassCheckBoxButton.setSelection(!targetClass.equals(""));
+        targetClassText.setText(targetClass);
+        targetClassText.setEnabled(!targetClass.equals(""));
         initialiseWithPreferenceDefaults(config);
         testModeChanged();
     }
@@ -163,6 +225,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         createTestClassWidgets(font, group, groupLayout.numColumns);
         createSpacer(group);
         createTestDirWidgets(font, group, groupLayout.numColumns);
+        createSpacer(group);
+        createTargetClassWidgets(font, group);
     }
 
     private void createProjectWidgets(Font font, Composite comp) {
@@ -229,6 +293,33 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         testDirText = new Text(comp, SWT.SINGLE | SWT.BORDER);
         testDirText.setLayoutData(textGrid);
         testDirText.addModifyListener(new UpdateOnModifyListener());
+    }
+
+    private void createTargetClassWidgets(Font font, Composite comp) {
+        targetClassCheckBoxButton = createNewCheckBox(font, comp, NUMBER_OF_COLUMNS,
+                "Run mutations against specific target classes");
+        targetClassCheckBoxButton.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                targetClassText.setEnabled(targetClassCheckBoxButton.getSelection());
+                updateLaunchConfigurationDialog();
+            }
+        });
+    
+        Label targetClassLabel = new Label(comp, SWT.NONE);
+        targetClassLabel.setText("Target Class(es):");
+        GridData labelGrid = new GridData(FILL_HORIZONTAL);
+        labelGrid.horizontalIndent = 25;
+        labelGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        targetClassLabel.setLayoutData(labelGrid);
+        targetClassLabel.setFont(font);
+    
+        GridData textGrid = new GridData(FILL_HORIZONTAL);
+        textGrid.horizontalSpan = NUMBER_OF_COLUMNS;
+        textGrid.horizontalIndent = 25;
+        targetClassText = new Text(comp, SWT.SINGLE | SWT.BORDER);
+        targetClassText.setLayoutData(textGrid);
+        targetClassText.addModifyListener(new UpdateOnModifyListener());
     }
 
     private void createFilters(Font font, Composite comp) {
@@ -307,6 +398,8 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
             workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "");
             workingCopy.setAttribute(ATTR_TEST_CONTAINER, containerId);
         }
+        workingCopy.setAttribute(ATTR_TARGET_CLASSES,
+                targetClassText.getText().trim());
         workingCopy.setAttribute(ATTR_TEST_IN_PARALLEL,
                 runInParallel.getSelection());
         workingCopy.setAttribute(ATTR_TEST_INCREMENTALLY,
@@ -389,5 +482,26 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
         public void modifyText(ModifyEvent evt) {
             updateLaunchConfigurationDialog();
         }
+    }
+
+    @Override
+    public boolean canSave() {
+        return !targetClassCheckBoxButton.getSelection()
+                || targetClassCheckBoxButton.getSelection() && targetClassText.getText().matches(MULTI_CLASS_PATTERN);
+    }
+
+    @Override
+    public boolean isValid(ILaunchConfiguration launchConfig) {
+        return canSave();
+    }
+
+    @Override
+    protected void updateLaunchConfigurationDialog() {
+        if (canSave()) {
+            setErrorMessage(null);
+        } else {
+            setErrorMessage(TARGET_CLASS_ERROR_MESSAGE);
+        }
+        super.updateLaunchConfigurationDialog();
     }
 }
