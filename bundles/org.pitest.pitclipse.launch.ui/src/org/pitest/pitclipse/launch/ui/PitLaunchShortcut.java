@@ -135,14 +135,12 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     private void performLaunch(IJavaElement element, String mode) throws InterruptedException, CoreException {
         ILaunchConfigurationWorkingCopy tmp = createLaunchConfiguration(element);
         Optional<ILaunchConfiguration> existingConfig = findExistingLaunchConfiguration(tmp);
-        ILaunchConfiguration config = existingConfig.orElseGet(() -> {
-            try {
-                return tmp.doSave();
-            } catch (CoreException e) {
-                // produces a NullPointerException
-                return null;
-            }
-        });
+        ILaunchConfiguration config;
+        if (existingConfig.isPresent()) {
+            config = existingConfig.get();
+        } else {
+            config = tmp.doSave();
+        }
         DebugUITools.launch(config, mode);
     }
 
