@@ -240,7 +240,6 @@ public class RunConfigurationSelector implements Closeable {
         uncheckAllMutators();
         SWTBotTable table = bot.table();
         toggleMutator(table, mutator);
-        pressApplyIfEnabled();
     }
 
     public void checkAllMutators(String configurationName) {
@@ -266,8 +265,6 @@ public class RunConfigurationSelector implements Closeable {
                 item.setChecked(false);
             }
         });
-        // don't close, because you cannot apply empty mutators
-        pressApplyIfEnabled();
     }
 
     /**
