@@ -22,9 +22,8 @@
 	</prerequisites>
 
 	<properties>
-		<!-- DEPENDENCIES -->
-		<!-- last version of Tycho before requiring Java 11 -->
-		<tycho-version>2.4.0</tycho-version>
+		<!-- PLUGIN DEPENDENCIES -->
+		<tycho-version>2.7.4</tycho-version>
 		<jacoco-version>0.8.6</jacoco-version>
 
 		<!-- MISC -->
