@@ -23,9 +23,6 @@
         <module>org.pitest.pitclipse.runner.tests</module>
         <module>org.pitest.pitclipse.ui.tests</module>
 
-        <!-- Test dependencies -->
-        <module>io.cucumber</module>
-
         <!-- Global utilities -->
         <module>org.pitest.pitclipse.tests.coverage.report</module>
 	</modules>
