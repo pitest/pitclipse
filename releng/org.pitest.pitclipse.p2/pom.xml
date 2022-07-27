@@ -17,7 +17,7 @@
 		<!-- for verifying our p2 repository and its references -->
 		<build.destination>${project.build.directory}/installed-plugins</build.destination>
 		<features>org.pitest.pitclipse.ui.feature.feature.group</features>
-		<sites>file:/${project.build.directory}/repository</sites>
+		<sites>file:/${project.build.directory}/repository,https://download.eclipse.org/releases/${eclipse-version}</sites>
 	</properties>
 
 	<build>

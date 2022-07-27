@@ -38,7 +38,7 @@
 		<github-local-clone>${project.build.directory}/checkout</github-local-clone>
 		<releases-directory>${github-local-clone}/releases</releases-directory>
 		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
-		<eclipse-version>oxygen</eclipse-version>
+		<eclipse-version>2022-06</eclipse-version>
 
 		<!-- For target platform -->
 		<!-- This can be replaced on the command line, e.g.,
