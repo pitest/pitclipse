@@ -34,4 +34,4 @@ jobs:
       run: >
          mvn verify -Pverify-installation -Dmaven.test.skip=true
     - name: Show installed contents
-      run: tree ~/pitclipse/pitclipse/releng/org.pitest.pitclipse.p2/target/installed-plugins
+      run: tree /home/runner/work/pitclipse/pitclipse/releng/org.pitest.pitclipse.p2/target/installed-plugins
