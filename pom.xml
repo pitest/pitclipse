@@ -38,7 +38,12 @@
 		<github-local-clone>${project.build.directory}/checkout</github-local-clone>
 		<releases-directory>${github-local-clone}/releases</releases-directory>
 		<current-release-directory>${releases-directory}/${qualifiedVersion}</current-release-directory>
-		<eclipse-version>oxygen</eclipse-version>
+
+		<!-- This is used for tycho-eclipserun-plugin for managing composite update sites
+			and for verifying that we can install our features from our p2 site.
+			If we change this, we have to change it accordingly also in
+			.github/workflows/check-installation.yml -->
+		<eclipse-version>2022-06</eclipse-version>
 
 		<!-- For target platform -->
 		<!-- This can be replaced on the command line, e.g.,
