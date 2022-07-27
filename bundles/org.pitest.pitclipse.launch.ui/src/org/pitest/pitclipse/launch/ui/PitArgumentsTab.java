@@ -114,11 +114,11 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
     /**
      * Pattern which matches a valid java class
      */
-    private static final String CLASS_PATTERN = ID_PATTERN + "(\\." + ID_PATTERN + ")*";
+    private static final String CLASS_PATTERN = ID_PATTERN + "(\\." + ID_PATTERN + ")*+";
     /**
      * Pattern which matches multiple {@link #CLASS_PATTERN} separated by commas
      */
-    private static final Pattern MULTI_CLASS_PATTERN = Pattern.compile(CLASS_PATTERN + "(,\\s?" + CLASS_PATTERN + ")*");
+    private static final Pattern MULTI_CLASS_PATTERN = Pattern.compile(CLASS_PATTERN + "(,\\s?" + CLASS_PATTERN + ")*+");
     /**
      * Target class error message. Which is displayed, if the text field has no
      * valid input
