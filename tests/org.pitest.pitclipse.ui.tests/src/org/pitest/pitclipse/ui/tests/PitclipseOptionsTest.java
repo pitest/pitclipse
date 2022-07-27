@@ -36,6 +36,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
     private static final String FOO_TEST_CLASS = "FooTest";
     private static final String BAR_CLASS = "Bar";
     private static final String BAR_TEST_CLASS = "BarTest";
+    private static final String TEST_CONFIG_NAME = "PitclipseOptionsTest_config";
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
@@ -45,6 +46,7 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         openEditor(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }
+
 
     @Before
     public void removeLaunchConfigurations() throws CoreException {
@@ -179,4 +181,21 @@ public class PitclipseOptionsTest extends AbstractPitclipseSWTBotTest {
         }
     }
 
+    @Test
+    public void launchConfigWithTargetClass() { // NOSONAR
+        createTestConfig();
+        PAGES.getRunMenu().setTargetClassForConfiguration(TEST_CONFIG_NAME, FOO_BAR_PACKAGE + '.' + FOO_CLASS);
+        // run test and confirm result is as expected
+        PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
+        coverageReportGenerated(1, 80, 0, 3, 0);
+        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
+                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
+                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced int return with 0 for foo/bar/Foo::f");
+    }
+
+    private void createTestConfig() {
+        PAGES.getRunMenu().createRunConfiguration(TEST_CONFIG_NAME,
+                TEST_PROJECT,
+                FOO_BAR_PACKAGE + '.' + FOO_TEST_CLASS);
+    }
 }

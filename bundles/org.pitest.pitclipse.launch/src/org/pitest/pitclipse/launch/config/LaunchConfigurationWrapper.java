@@ -55,6 +55,7 @@ public class LaunchConfigurationWrapper {
     private final PitConfiguration pitConfiguration;
     public static final String ATTR_TEST_INCREMENTALLY = "org.pitest.pitclipse.core.test.incrementalAnalysis";
     public static final String ATTR_TEST_IN_PARALLEL = "org.pitest.pitclipse.core.test.parallel";
+    public static final String ATTR_TARGET_CLASSES = "org.pitest.pitclipse.core.target.classes";
     public static final String ATTR_EXCLUDE_CLASSES = "org.pitest.pitclipse.core.test.excludeClasses";
     public static final String ATTR_EXCLUDE_METHODS = "org.pitest.pitclipse.core.test.excludeMethods";
     public static final String ATTR_AVOID_CALLS_TO = "org.pitest.pitclipse.core.test.avoidCallsTo";
@@ -119,6 +120,7 @@ public class LaunchConfigurationWrapper {
 
     public PitOptions.PitOptionsBuilder getPitOptionsBuilder() throws CoreException {
         List<String> classPath = getClassesFromProject();
+        List<String> targetClasses = getTargetClasses();
         List<File> sourceDirs = getSourceDirsForProject();
         int threadCount = getThreadCount();
         File reportDir = getDefault().emptyResultDir();
@@ -129,8 +131,8 @@ public class LaunchConfigurationWrapper {
         int timeout = pitConfiguration.getTimeout();
         BigDecimal timeoutFactor = pitConfiguration.getTimeoutFactor();
 
-        PitOptionsBuilder builder = PitOptions.builder().withClassesToMutate(classPath)
-                .withSourceDirectories(sourceDirs).withReportDirectory(reportDir).withThreads(threadCount)
+        PitOptionsBuilder builder = PitOptions.builder().withSourceDirectories(sourceDirs)
+                .withReportDirectory(reportDir).withThreads(threadCount)
                 .withExcludedClasses(excludedClasses).withExcludedMethods(excludedMethods)
                 .withAvoidCallsTo(avoidCallsTo).withMutators(mutators).withTimeout(timeout)
                 .withTimeoutFactor(timeoutFactor);
@@ -143,6 +145,12 @@ public class LaunchConfigurationWrapper {
         } else {
             List<String> packages = getPackagesToTest();
             builder.withPackagesToTest(packages);
+        }
+        if (targetClasses == null) {
+            // if no target classes are given, use complete class path
+            builder.withClassesToMutate(classPath);
+        } else {
+            builder.withClassesToMutate(targetClasses);
         }
         return builder;
     }
@@ -253,6 +261,13 @@ public class LaunchConfigurationWrapper {
 
     private List<String> getClassesFromProject() throws CoreException {
         return classFinder.getClasses(this);
+    }
+
+    private List<String> getTargetClasses() throws CoreException {
+        ImmutableList.Builder<String> results = ImmutableList.builder();
+        final String targetClasses = launchConfig.getAttribute(ATTR_TARGET_CLASSES, "");
+        return targetClasses.equals("") ? null
+                : results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(targetClasses)).build();
     }
 
     public IResource[] getMappedResources() throws CoreException {
