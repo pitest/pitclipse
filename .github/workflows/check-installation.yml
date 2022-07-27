@@ -1,17 +1,16 @@
 name: Check Installation with p2 site
 
 on:
-  push:
-    paths-ignore:
-     - '**.md'
   pull_request:
     paths-ignore:
      - '**.md'
 
 jobs:
   build:
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    strategy:
+      matrix:
+        eclipse-version: ['2022-06', 'oxygen']
+      fail-fast: false
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +31,6 @@ jobs:
         restore-keys: ${{ runner.os }}-p2-
     - name: Verify Installation
       run: >
-         mvn verify -Pverify-installation -Dmaven.test.skip=true
+         mvn verify -Pverify-installation -Dmaven.test.skip=true -Declipse-version=${{ matrix.eclipse-version }}
     - name: Show installed contents
       run: tree /home/runner/work/pitclipse/pitclipse/releng/org.pitest.pitclipse.p2/target/installed-plugins
