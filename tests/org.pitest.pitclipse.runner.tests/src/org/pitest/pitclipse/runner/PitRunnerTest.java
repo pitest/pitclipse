@@ -162,7 +162,7 @@ public class PitRunnerTest {
     
     private static List<String> classPathWithPitestAndJUnit() throws IOException {
         final String jarDir = "lib";
-        EquinoxBundle pitestBundle = (EquinoxBundle) Platform.getBundle("org.pitest.bundles");
+        EquinoxBundle pitestBundle = (EquinoxBundle) Platform.getBundle("org.pitest");
         Bundle[] bundles = Platform.getBundle("org.eclipse.core.runtime").getBundleContext().getBundles();
         System.out.println("symbolic name: " + pitestBundle.getSymbolicName());
         List<EquinoxBundle> pitestWrappedBundles = Stream.of(bundles)
