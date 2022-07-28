@@ -26,7 +26,7 @@ import org.pitest.pitclipse.runner.results.Mutations;
 public enum RecordingMutationsDispatcher implements MutationsDispatcher {
     INSTANCE;
 
-    private volatile Optional<Mutations> dispatchedMutations = Optional.empty();
+    private Optional<Mutations> dispatchedMutations = Optional.empty();
 
     @Override
     public void dispatch(Mutations result) {
