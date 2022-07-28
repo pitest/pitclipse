@@ -218,7 +218,7 @@
    </requires>
 
    <plugin
-         id="org.pitest.bundles"
+         id="org.pitest"
          download-size="0"
          install-size="0"
          version="0.0.0"
