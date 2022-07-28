@@ -16,7 +16,7 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 public class ProjectUtils {
 
@@ -45,6 +45,10 @@ public class ProjectUtils {
 
     public static boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
         return testProject.isOnClasspath(project);
+    }
+
+    public static boolean onClassPathOf(IJavaProject project, String fullyQualifiedName) throws CoreException {
+        return project.findType(fullyQualifiedName) != null;
     }
 
     public static boolean sameProject(IJavaProject testProject, IJavaProject project) {
