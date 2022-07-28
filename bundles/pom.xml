@@ -14,8 +14,7 @@
 	<description>Pitclipse's bundles.</description>
 
 	<modules>
-        <module>org.pitest</module>
-		<module>org.pitest.pitest-junit5-plugin</module>
+        <module>org.pitest.bundles</module>
         <module>org.pitest.pitclipse.core</module>
         <module>org.pitest.pitclipse.launch</module>
         <module>org.pitest.pitclipse.launch.ui</module>
