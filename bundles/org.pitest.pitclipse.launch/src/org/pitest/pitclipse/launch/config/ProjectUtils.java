@@ -16,26 +16,16 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.launching.JavaRuntime;
-import org.pitest.pitclipse.launch.AbstractPitLaunchDelegate;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 public class ProjectUtils {
 
@@ -58,30 +48,7 @@ public class ProjectUtils {
     }
 
     public static boolean onClassPathOf(IJavaProject project, String fullyQualifiedName) throws CoreException {
-        String[] classPathEntries = JavaRuntime.computeDefaultRuntimeClassPath(project);
-        List<URL> urlList = new ArrayList<>();
-        for (int i = 0; i < classPathEntries.length; i++) {
-            String entry = classPathEntries[i];
-            IPath path = new Path(entry);
-            URL url;
-            try {
-                url = path.toFile().toURI().toURL();
-                urlList.add(url);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        URL[] urls = urlList.toArray(new URL[urlList.size()]);
-        try (URLClassLoader classLoader = new URLClassLoader(urls, AbstractPitLaunchDelegate.class.getClassLoader())) {
-            try {
-                classLoader.loadClass(fullyQualifiedName);
-                return true;
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        } catch (IOException e1) {
-            throw new CoreException(Status.error("Closing the classloader", e1));
-        }
+        return project.findType(fullyQualifiedName) != null;
     }
 
     public static boolean sameProject(IJavaProject testProject, IJavaProject project) {
