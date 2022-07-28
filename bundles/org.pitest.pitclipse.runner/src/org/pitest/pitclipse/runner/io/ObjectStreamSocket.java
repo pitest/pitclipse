@@ -82,7 +82,7 @@ public class ObjectStreamSocket implements Closeable {
     @SuppressWarnings("unchecked")
     public <T> T read() {
         try {
-            return (T) inputStream.readObject();
+            return (T) inputStream.readObject(); // NOSONAR we can safely cast since we know what we read
         } catch (Exception e) {
             throw new ReadException(e);
         }
