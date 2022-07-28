@@ -425,12 +425,7 @@ public final class PitArgumentsTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void setDefaults(ILaunchConfigurationWorkingCopy workingCopy) {
-        /*
-         * IJavaElement javaElement = getContext(); if (javaElement != null) {
-         * initializeJavaProject(javaElement, workingCopy); } else {
-         * workingCopy.setAttribute(
-         * IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, ""); }
-         */
+      // nothing to do
     }
 
     public static String getAttributeFromConfig(ILaunchConfiguration config,
