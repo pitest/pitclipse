@@ -33,16 +33,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.internal.framework.EquinoxBundle;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 import org.pitest.mutationtest.MutationResultListenerFactory;
 import org.pitest.pitclipse.example.empty.EmptyClass;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
@@ -157,24 +162,41 @@ public class PitRunnerTest {
     
     private static List<String> classPathWithPitestAndJUnit() throws IOException {
         final String jarDir = "lib";
-        return asList(
-            // TODO [Refactor] Pitest's classpath should be managed by the org.pitest bundle
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath(),
-            getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath(),
-            getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR,
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-entry.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-command-line.jar",
-            getBundleFile(Platform.getBundle("org.pitest")).getCanonicalPath()
-               + File.separator + jarDir + File.separator + "pitest-html-report.jar",
-            getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath(),
-            // Add .class files to mutate
-            new File(BUILD_OUTPUT_DIR).getAbsolutePath(),
-            // Add JUnit dependency
-            new File("lib/junit.jar").getAbsolutePath()
-        );
+        EquinoxBundle pitestBundle = (EquinoxBundle) Platform.getBundle("org.pitest.bundles");
+        Bundle[] bundles = Platform.getBundle("org.eclipse.core.runtime").getBundleContext().getBundles();
+        System.out.println("symbolic name: " + pitestBundle.getSymbolicName());
+        List<EquinoxBundle> pitestWrappedBundles = Stream.of(bundles)
+        	.filter(b -> b instanceof EquinoxBundle)
+        	.map(b -> (EquinoxBundle) b)
+        	.filter(b -> b.getSymbolicName().startsWith("wrapped.org.pitest"))
+        	.collect(Collectors.toList());
+        List<String> locations = pitestWrappedBundles.stream()
+        	.map(b -> b.getLocation())
+        	.collect(Collectors.toList());
+    	// hack, exclude JUnit 5?
+        locations.remove(locations.size() - 1);
+        
+
+        List<String> classPath = new ArrayList<>();
+        
+//        classPath.add(getBundleFile(pitestBundle).getCanonicalPath());
+
+        classPath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath());
+        classPath.add(getBundleFile(Platform.getBundle("org.pitest.pitclipse.runner")).getCanonicalPath() + File.separator + BUILD_OUTPUT_DIR);
+        
+        for (Bundle bundle : pitestWrappedBundles) {
+			classPath.add(getBundleFile(bundle).getCanonicalPath());
+		}
+        
+        // Guava is needed
+        classPath.add(getBundleFile(Platform.getBundle("com.google.guava")).getCanonicalPath());
+        
+        // Add .class files to mutate
+        classPath.add(new File(BUILD_OUTPUT_DIR).getAbsolutePath());
+
+        // Add JUnit dependency
+        classPath.add(new File("lib/junit.jar").getAbsolutePath());
+
+        return classPath;
     }
 }

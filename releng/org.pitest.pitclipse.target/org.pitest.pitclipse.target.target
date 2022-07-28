@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="org.pitest.pitclipse.target" sequenceNumber="9">
+<target name="org.pitest.pitclipse.target" sequenceNumber="11">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="org.eclipse.e4.core.tools.feature.source.feature.group" version="0.0.0"/>
@@ -62,14 +62,32 @@
 			<dependencies>
 				<dependency>
 					<groupId>io.cucumber</groupId>
-					<artifactId>cucumber-junit</artifactId>
+					<artifactId>cucumber-java</artifactId>
 					<version>4.3.0</version>
 					<type>jar</type>
 				</dependency>
 				<dependency>
 					<groupId>io.cucumber</groupId>
-					<artifactId>cucumber-java</artifactId>
+					<artifactId>cucumber-junit</artifactId>
 					<version>4.3.0</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-command-line</artifactId>
+					<version>1.6.8</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-html-report</artifactId>
+					<version>1.6.8</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-junit5-plugin</artifactId>
+					<version>0.14</version>
 					<type>jar</type>
 				</dependency>
 			</dependencies>

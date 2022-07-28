@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pitest Bundles
+Bundle-SymbolicName: org.pitest.bundles;singleton:=true
+Bundle-Version: 2.2.0.qualifier
+Bundle-Vendor: Henry Coles
+Automatic-Module-Name: org.pitest.bundles
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: wrapped.org.pitest.pitest;visibility:=reexport,
+ wrapped.org.pitest.pitest-command-line;visibility:=reexport,
+ wrapped.org.pitest.pitest-entry;visibility:=reexport,
+ wrapped.org.pitest.pitest-html-report;visibility:=reexport,
+ org.junit;bundle-version="4.12.0"

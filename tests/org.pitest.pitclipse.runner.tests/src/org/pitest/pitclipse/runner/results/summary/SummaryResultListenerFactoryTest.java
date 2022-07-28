@@ -33,7 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class SummaryResultListenerFactoryTest {
 
     private final SummaryResultListenerFactory factory = new SummaryResultListenerFactory();
