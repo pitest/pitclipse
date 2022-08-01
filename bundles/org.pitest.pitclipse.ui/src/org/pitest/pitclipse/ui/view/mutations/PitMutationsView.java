@@ -16,21 +16,65 @@
 
 package org.pitest.pitclipse.ui.view.mutations;
 
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
     private static final int TREE_STYLE = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
     private TreeViewer viewer;
 
+    public static final String EXPAND_ALL_BUTTON_TEXT = "Expand All";
+    public static final String COLLAPSE_ALL_BUTTON_TEXT = "Collapse All";
+
+    private static final ImageDescriptor EXPAND_ALL = getBundleImage("expandall.png");
+    private static final ImageDescriptor COLLAPSE_ALL = getBundleImage("collapseall.png");
+
     @Override
     public void createPartControl(Composite parent) {
-        createTreeViewer(parent);
+        PitclipseUiUtils.executeSafely(
+            () -> {
+                createTreeViewer(parent);
+                IActionBars actionBars = getViewSite().getActionBars();
+                IToolBarManager toolBar = actionBars.getToolBarManager();
+
+                final Action expandAllAction = new Action(EXPAND_ALL_BUTTON_TEXT) {
+                    @Override
+                    public void run() {
+                        viewer.expandAll();
+                    }
+                };
+                expandAllAction.setImageDescriptor(EXPAND_ALL);
+                toolBar.add(expandAllAction);
+
+                final Action collapseAllAction = new Action(COLLAPSE_ALL_BUTTON_TEXT) {
+                    @Override
+                    public void run() {
+                        viewer.collapseAll();
+                    }
+                };
+                collapseAllAction.setImageDescriptor(COLLAPSE_ALL);
+                toolBar.add(collapseAllAction);
+            },
+            parent,
+            "Failed to create the Pit Mutations view",
+            "Mutations view cannot be initialized."
+        );
     }
 
     private void createTreeViewer(Composite parent) {
@@ -66,4 +110,11 @@ public class PitMutationsView extends ViewPart implements MutationsView {
             viewer.setInput(mutations);
         }
     }
+
+    private static ImageDescriptor getBundleImage(String file) {
+        Bundle bundle = FrameworkUtil.getBundle(PitMutationsView.class);
+        URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+        return ImageDescriptor.createFromURL(url);
+    }
+
 }
