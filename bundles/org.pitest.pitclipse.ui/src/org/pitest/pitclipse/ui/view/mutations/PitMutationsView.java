@@ -32,7 +32,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.runner.model.MutationsModel;
-import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
@@ -47,34 +46,28 @@ public class PitMutationsView extends ViewPart implements MutationsView {
 
     @Override
     public void createPartControl(Composite parent) {
-        PitclipseUiUtils.executeSafely(
-            () -> {
-                createTreeViewer(parent);
-                IActionBars actionBars = getViewSite().getActionBars();
-                IToolBarManager toolBar = actionBars.getToolBarManager();
+        createTreeViewer(parent);
 
-                final Action expandAllAction = new Action(EXPAND_ALL_BUTTON_TEXT) {
-                    @Override
-                    public void run() {
-                        viewer.expandAll();
-                    }
-                };
-                expandAllAction.setImageDescriptor(EXPAND_ALL);
-                toolBar.add(expandAllAction);
+        IActionBars actionBars = getViewSite().getActionBars();
+        IToolBarManager toolBar = actionBars.getToolBarManager();
 
-                final Action collapseAllAction = new Action(COLLAPSE_ALL_BUTTON_TEXT) {
-                    @Override
-                    public void run() {
-                        viewer.collapseAll();
-                    }
-                };
-                collapseAllAction.setImageDescriptor(COLLAPSE_ALL);
-                toolBar.add(collapseAllAction);
-            },
-            parent,
-            "Failed to create the Pit Mutations view",
-            "Mutations view cannot be initialized."
-        );
+        final Action expandAllAction = new Action(EXPAND_ALL_BUTTON_TEXT) {
+            @Override
+            public void run() {
+                viewer.expandAll();
+            }
+        };
+        expandAllAction.setImageDescriptor(EXPAND_ALL);
+        toolBar.add(expandAllAction);
+
+        final Action collapseAllAction = new Action(COLLAPSE_ALL_BUTTON_TEXT) {
+            @Override
+            public void run() {
+                viewer.collapseAll();
+            }
+        };
+        collapseAllAction.setImageDescriptor(COLLAPSE_ALL);
+        toolBar.add(collapseAllAction);
     }
 
     private void createTreeViewer(Composite parent) {
