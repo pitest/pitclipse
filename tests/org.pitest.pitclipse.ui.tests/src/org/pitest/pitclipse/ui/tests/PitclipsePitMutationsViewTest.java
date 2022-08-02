@@ -1,12 +1,19 @@
 package org.pitest.pitclipse.ui.tests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.PitMutationsViewPageObject;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
+import org.pitest.pitclipse.ui.view.mutations.PitMutationsView;
 
 /**
  * @author Lorenzo Bettini
@@ -25,14 +32,14 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
         importTestProject(TEST_PROJECT);
-        openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        openEditor(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
-        openEditor(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
     }
 
     @Test
     public void selectMutationOpensTheClassAtTheRightLineNumber() throws CoreException {
+        openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(BAR_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        openEditor(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         runPackageTest(FOO_BAR_PACKAGE, TEST_PROJECT);
         coverageReportGenerated(2, 80, 0, 6, 0);
         PitclipseSteps pitclipseSteps = new PitclipseSteps();
@@ -44,5 +51,20 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
         pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
+    }
+
+    @Test
+    public void expandAndCollapse() throws CoreException {
+        runTest(BAR_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        final PitMutationsViewPageObject pitMutationsView = new PitMutationsViewPageObject(bot);
+        SWTBotTree mutationTreeRoot = pitMutationsView.mutationTreeRoot();
+        final SWTBotTreeItem firstItem = mutationTreeRoot.getAllItems()[0];
+        assertFalse("should be collapsed", firstItem.isExpanded());
+        bot.toolbarButtonWithTooltip
+            (PitMutationsView.EXPAND_ALL_BUTTON_TEXT).click();
+        assertTrue("should be expanded", firstItem.isExpanded());
+        bot.toolbarButtonWithTooltip
+            (PitMutationsView.COLLAPSE_ALL_BUTTON_TEXT).click();
+        assertFalse("should be collapsed", firstItem.isExpanded());
     }
 }
