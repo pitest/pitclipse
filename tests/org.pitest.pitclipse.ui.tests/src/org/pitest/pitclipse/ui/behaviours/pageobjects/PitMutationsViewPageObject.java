@@ -40,11 +40,11 @@ import com.google.common.collect.ImmutableList;
 
 import junit.framework.AssertionFailedError;
 
-public class PitMutationsView {
+public class PitMutationsViewPageObject {
 
     private final SWTWorkbenchBot bot;
 
-    public PitMutationsView(SWTWorkbenchBot bot) {
+    public PitMutationsViewPageObject(SWTWorkbenchBot bot) {
         this.bot = bot;
     }
 
@@ -53,13 +53,18 @@ public class PitMutationsView {
         return mutationsFrom(mutationTree);
     }
 
-    private SWTBotTree mutationTreeRoot() {
+    public SWTBotTree mutationTreeRoot() {
+        SWTBotView mutationsView = getView();
+        SWTBotTree mutationTree = mutationsView.bot().tree();
+        return mutationTree;
+    }
+
+    public SWTBotView getView() {
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         // Make sure the 'PIT Mutations' view is opened
         bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
-        SWTBotTree mutationTree = mutationsView.bot().tree();
-        return mutationTree;
+        return mutationsView;
     }
 
     private ImmutableList<PitMutation> mutationsFrom(SWTBotTree mutationTree) {
