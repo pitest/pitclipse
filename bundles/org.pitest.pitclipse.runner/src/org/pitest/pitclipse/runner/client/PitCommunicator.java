@@ -58,7 +58,7 @@ public class PitCommunicator implements Runnable {
             server.sendRequest(request);
             resultHandler.handle(server.receiveResults());
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // NOSONAR
             throw e;
         } finally {
             server.close();

@@ -19,9 +19,7 @@ package org.pitest.pitclipse.ui.behaviours.pageobjects;
 import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.pitest.pitclipse.core.Mutators;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.ui.swtbot.PitOptionsNotifier;
@@ -54,51 +52,48 @@ public class RunMenu {
         SWTBotMenu runAsMenu = menuHelper.findWorkbenchMenu(bot, RUN).menu(RUN_AS);
         menuHelper.findMenu(runAsMenu, PIT_MUTATION_TEST)
                   .click();
-        
-        ensureSelectTestConfigurationDialogIsClosed();
     }
 
     public void runPitWithConfiguration(String configurationName) {
-        runConfigurationSelector.runWithConfigurationAndWaitForIt(configurationName);
-    }
-
-    /**
-     * The 'Select a Test Configuration' dialog only appears when Pit has been
-     * launched at least once. If it is not found then PIT has been launched
-     * directly during the click on 'Run As > PIT Mutation Test' so everything's
-     * alright.
-     * 
-     * This is a fast way for closing the dialog by iterating over the shells, instead
-     * of searching for such a shell swallowing {@link WidgetNotFoundException}.
-     */
-    private void ensureSelectTestConfigurationDialogIsClosed() {
-        SWTBotShell[] shells = bot.shells();
-        for (SWTBotShell shell : shells) {
-            if ("Select a Test Configuration".equals(shell.getText())) {
-                shell.bot()
-                    .button("OK")
-                    .click();
-                return;
-            }
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.runWithConfigurationAndWaitForIt(configurationName);
         }
     }
 
     public List<PitRunConfiguration> runConfigurations() {
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
         menuHelper.findMenu(menuHelper.findWorkbenchMenu(bot, RUN), RUN_CONFIGURATIONS).click();
-        return runConfigurationSelector.getConfigurations();
+        return openRunMenu().andThen().getConfigurations();
     }
 
     public void createRunConfiguration(String configurationName, String projectName, String className) {
-        runConfigurationSelector.createRunConfiguration(configurationName, projectName, className);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.createRunConfiguration(configurationName, projectName, className);
+        }
     }
 
     public void setProjectForConfiguration(String configurationName, String project) {
-        runConfigurationSelector.setProjectForConfiguration(configurationName, project);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.setProjectForConfiguration(configurationName, project);
+        }
     }
 
     public void setTestClassForConfiguration(String configurationName, String testClass) {
-        runConfigurationSelector.setTestClassForConfiguration(configurationName, testClass);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.setTestClassForConfiguration(configurationName, testClass);
+        }
+    }
+
+    public void setTestDirForConfiguration(String configurationName, String testDir) {
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.setTestDirForConfiguration(configurationName, testDir);
+        }
+    }
+
+    public void setTargetClassForConfiguration(String configurationName, String targetClass) {
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            runConfigurationSelector.setTargetClassForConfiguration(configurationName, targetClass);
+        }
     }
 
     public PitOptions getLastUsedPitOptions() {
@@ -111,7 +106,9 @@ public class RunMenu {
      * @param mutatorGroup      which group to select
      */
     public void setMutatorGroup(String configurationName, Mutators mutatorGroup) {
-        runConfigurationSelector.setMutatorGroup(configurationName, mutatorGroup);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.setMutatorGroup(configurationName, mutatorGroup);
+        }
     }
 
     /**
@@ -119,7 +116,9 @@ public class RunMenu {
      * @param configurationName of the configuration, where to select all mutators
      */
     public void checkAllMutators(String configurationName) {
-        runConfigurationSelector.checkAllMutators(configurationName);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.checkAllMutators(configurationName);
+        }
     }
 
     /**
@@ -128,7 +127,10 @@ public class RunMenu {
      * @param mutator           which should be toggled
      */
     public void toggleCustomMutator(String configurationName, Mutators mutator) {
-        runConfigurationSelector.toggleCustomMutator(configurationName, mutator);
+
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.toggleCustomMutator(configurationName, mutator);
+        }
     }
 
     /**
@@ -138,7 +140,9 @@ public class RunMenu {
      * @param mutator           which to select in the configuration
      */
     public void setOneCustomMutator(String configurationName, Mutators mutator) {
-        runConfigurationSelector.setOneCustomMutator(configurationName, mutator);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.setOneCustomMutator(configurationName, mutator);
+        }
     }
 
     /**
@@ -146,7 +150,22 @@ public class RunMenu {
      * @param configurationName which should be removed
      */
     public void removeConfig(String configurationName) {
-        runConfigurationSelector.removeConfig(configurationName);
+        try (RunConfigurationSelector selector = openRunMenu().andThen()) {
+            selector.removeConfig(configurationName);
+        }
     }
 
+    /**
+     * Opens the run menu and activates it
+     */
+    public RunConficurationDsl openRunMenu() {
+        runConfigurationSelector.openRunConfigurationShell();
+        return new RunConficurationDsl();
+    }
+
+    public class RunConficurationDsl {
+        public RunConfigurationSelector andThen() {
+            return runConfigurationSelector;
+        }
+    }
 }

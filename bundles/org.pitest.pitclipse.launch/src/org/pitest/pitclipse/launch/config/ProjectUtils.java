@@ -46,6 +46,10 @@ public class ProjectUtils {
         return testProject.isOnClasspath(project);
     }
 
+    public static boolean onClassPathOf(IJavaProject project, String fullyQualifiedName) throws CoreException {
+        return project.findType(fullyQualifiedName) != null;
+    }
+
     public static boolean sameProject(IJavaProject testProject, IJavaProject project) {
         return testProject.getElementName().equals(project.getElementName());
     }
