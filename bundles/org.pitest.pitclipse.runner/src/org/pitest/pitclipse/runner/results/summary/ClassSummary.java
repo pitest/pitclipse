@@ -16,17 +16,13 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.base.Predicate;
-
-import org.pitest.classinfo.ClassInfo;
-import org.pitest.mutationtest.ClassMutationResults;
-import org.pitest.mutationtest.MutationResult;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
-import static com.google.common.collect.Collections2.filter;
+import org.pitest.classinfo.ClassInfo;
+import org.pitest.mutationtest.ClassMutationResults;
+import org.pitest.mutationtest.MutationResult;
 
 /**
  * <p>Summary of the PIT analysis about a specific class.</p>
@@ -49,10 +45,10 @@ class ClassSummary implements Serializable {
 
     public static ClassSummary from(ClassMutationResults results, ClassInfo classInfo, int linesCovered) {
         Collection<MutationResult> mutations = results.getMutations();
-        // int totalLines = resultsByLine.size();
         int totalMutations = mutations.size();
-        // int linesCovered = countCoveredLines(resultsByLine);
-        int survivedMutations = filter(mutations, DetectedMutations.INSTANCE).size();
+        int survivedMutations = (int) mutations.stream()
+                .filter(m -> !m.getStatus().isDetected())
+                .count();
         Coverage lineCoverage = Coverage.from(linesCovered, classInfo.getNumberOfCodeLines());
         Coverage mutationCoverage = Coverage.from(totalMutations - survivedMutations, totalMutations);
 
@@ -95,11 +91,4 @@ class ClassSummary implements Serializable {
                 + mutationCoverage + "]";
     }
 
-    private enum DetectedMutations implements Predicate<MutationResult> {
-        INSTANCE;
-        @Override
-        public boolean apply(MutationResult m) {
-            return !m.getStatus().isDetected();
-        }
-    }
 }
