@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Splitter;
@@ -42,24 +44,24 @@ public final class PitOptions implements Serializable {
     private static final long serialVersionUID = 1543633254516962868L;
     private final File reportDir;
     private final String classUnderTest;
-    private final ImmutableList<String> classesToMutate;
-    private final ImmutableList<File> sourceDirs;
-    private final ImmutableList<String> packages;
-    private final ImmutableList<String> classPath;
+    private final List<String> classesToMutate;
+    private final List<File> sourceDirs;
+    private final List<String> packages;
+    private final List<String> classPath;
     private final int threads;
     private final File historyLocation;
-    private final ImmutableList<String> excludedClasses;
-    private final ImmutableList<String> excludedMethods;
-    private final ImmutableList<String> avoidCallsTo;
+    private final List<String> excludedClasses;
+    private final List<String> excludedMethods;
+    private final List<String> avoidCallsTo;
     private final String mutators;
     private final int timeout;
     private final BigDecimal timeoutFactor;
     private final boolean useJUnit5;
 
-    private PitOptions(String classUnderTest, ImmutableList<String> classesToMutate, ImmutableList<File> sourceDirs, // NOSONAR this is used by our builder
-            File reportDir, ImmutableList<String> packages, ImmutableList<String> classPath, int threads, File historyLocation,
-            ImmutableList<String> excludedClasses, ImmutableList<String> excludedMethods,
-            ImmutableList<String> avoidCallsTo, String mutators, int timeout, BigDecimal timeoutFactor,
+    private PitOptions(String classUnderTest, List<String> classesToMutate, List<File> sourceDirs, // NOSONAR this is used by our builder
+            File reportDir, List<String> packages, List<String> classPath, int threads, File historyLocation,
+            List<String> excludedClasses, List<String> excludedMethods,
+            List<String> avoidCallsTo, String mutators, int timeout, BigDecimal timeoutFactor,
             boolean useJUnit5) {
         this.classUnderTest = classUnderTest;
         this.threads = threads;
@@ -82,7 +84,7 @@ public final class PitOptions implements Serializable {
         return new File(reportDir.getPath());
     }
 
-    public ImmutableList<File> getSourceDirectories() {
+    public List<File> getSourceDirectories() {
         return sourceDirs;
     }
 
@@ -93,16 +95,16 @@ public final class PitOptions implements Serializable {
     public static final class PitOptionsBuilder {
         private static final String UNABLE_TO_USE_PATH = "Unable to use path: ";
         private String classUnderTest = null;
-        private ImmutableList<String> classesToMutate = ImmutableList.of();
+        private List<String> classesToMutate = Collections.emptyList();
         private File reportDir = null;
-        private ImmutableList<File> sourceDirs = ImmutableList.of();
-        private ImmutableList<String> packages = ImmutableList.of();
-        private ImmutableList<String> classPath = ImmutableList.of();
+        private List<File> sourceDirs = Collections.emptyList();
+        private List<String> packages = Collections.emptyList();
+        private List<String> classPath = Collections.emptyList();
         private int threads = 1;
         private File historyLocation = null;
-        private ImmutableList<String> excludedClasses = ImmutableList.of();
-        private ImmutableList<String> excludedMethods = ImmutableList.of();
-        private ImmutableList<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
+        private List<String> excludedClasses = Collections.emptyList();
+        private List<String> excludedMethods = Collections.emptyList();
+        private List<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
         private String mutators = DEFAULT_MUTATORS;
         private int timeout = 3000;
         private BigDecimal timeoutFactor = BigDecimal.valueOf(1.25);
@@ -117,11 +119,11 @@ public final class PitOptions implements Serializable {
         }
 
         public PitOptionsBuilder withSourceDirectory(File sourceDir) {
-            return withSourceDirectories(ImmutableList.of(copyOfFile(sourceDir)));
+            return withSourceDirectories(Collections.singletonList(copyOfFile(sourceDir)));
         }
 
         public PitOptionsBuilder withSourceDirectories(List<File> sourceDirs) {
-            this.sourceDirs = copyOf(sourceDirs);
+            this.sourceDirs = new ArrayList<>(sourceDirs);
             return this;
         }
 
@@ -201,17 +203,17 @@ public final class PitOptions implements Serializable {
         }
 
         public PitOptionsBuilder withClassesToMutate(List<String> classPath) {
-            classesToMutate = copyOf(classPath);
+            classesToMutate = new ArrayList<>(classPath);
             return this;
         }
 
         public PitOptionsBuilder withPackagesToTest(List<String> packages) {
-            this.packages = copyOf(packages);
+            this.packages = new ArrayList<>(packages);
             return this;
         }
 
         public PitOptionsBuilder withClassPath(List<String> classPath) {
-            this.classPath = copyOf(classPath);
+            this.classPath = new ArrayList<>(classPath);
             return this;
         }
 
@@ -226,17 +228,17 @@ public final class PitOptions implements Serializable {
         }
 
         public PitOptionsBuilder withExcludedClasses(List<String> excludedClasses) {
-            this.excludedClasses = copyOf(excludedClasses);
+            this.excludedClasses = new ArrayList<>(excludedClasses);
             return this;
         }
 
         public PitOptionsBuilder withExcludedMethods(List<String> excludedMethods) {
-            this.excludedMethods = copyOf(excludedMethods);
+            this.excludedMethods = new ArrayList<>(excludedMethods);
             return this;
         }
 
         public PitOptionsBuilder withAvoidCallsTo(List<String> avoidCallsTo) {
-            this.avoidCallsTo = copyOf(avoidCallsTo);
+            this.avoidCallsTo = new ArrayList<>(avoidCallsTo);
             return this;
         }
 
