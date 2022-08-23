@@ -1,6 +1,7 @@
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 
 class ViewOpenedCondition extends DefaultCondition {
@@ -15,7 +16,13 @@ class ViewOpenedCondition extends DefaultCondition {
     
     @Override
     public boolean test() throws Exception {
-        return bot.viewByTitle(viewTitle) != null;
+        final SWTBotView view = bot.viewByTitle(viewTitle);
+        final boolean condition = view != null
+            && view.isActive();
+        if (!condition) {
+            System.out.println("*** " + viewTitle + " not yet active...");
+        }
+        return condition;
     }
     
     @Override
