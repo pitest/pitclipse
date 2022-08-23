@@ -15,10 +15,18 @@
  ******************************************************************************/
 package org.pitest.pitclipse.ui.utils;
 
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.pitest.pitclipse.ui.view.mutations.PitMutationsView;
 
 /**
  * A few utilities for the UI.
@@ -79,5 +87,18 @@ public class PitclipseUiUtils {
             messageBox.setMessage(errorMessage);
             messageBox.open();
         }
+    }
+
+    /**
+     * Creates an image descriptor from the image file located in the "images"
+     * folder.
+     * 
+     * @param file
+     * @return
+     */
+    public static ImageDescriptor getBundleImage(String file) {
+        Bundle bundle = FrameworkUtil.getBundle(PitMutationsView.class);
+        URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+        return ImageDescriptor.createFromURL(url);
     }
 }
