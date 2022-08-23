@@ -20,6 +20,7 @@ import java.io.File;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
@@ -33,11 +34,15 @@ import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 public class PitView extends ViewPart implements SummaryView {
     public static final String VIEW_ID = "org.pitest.pitclipse.ui.view.PitView";
     public static final String BLANK_PAGE = "about:blank";
-    public static final String BACK_BUTTON_TEXT = "<";
+    public static final String BACK_BUTTON_TEXT = "Back";
     public static final String HOME_BUTTON_TEXT = "Home";
-    public static final String FORWARD_BUTTON_TEXT = ">";
+    public static final String FORWARD_BUTTON_TEXT = "Forward";
     private Browser browser = null;
     private String homeUrlString = null;
+
+    private static final ImageDescriptor BACK_BUTTON_IMAGE = PitclipseUiUtils.getBundleImage("nav_backward.png");
+    private static final ImageDescriptor HOME_BUTTON_IMAGE = PitclipseUiUtils.getBundleImage("nav_home.png");
+    private static final ImageDescriptor FORWARD_BUTTON_IMAGE = PitclipseUiUtils.getBundleImage("nav_forward.png");
 
     @Override
     public synchronized void createPartControl(Composite parent) {
@@ -49,14 +54,15 @@ public class PitView extends ViewPart implements SummaryView {
                 IActionBars actionBars = getViewSite().getActionBars();
                 IToolBarManager toolBar = actionBars.getToolBarManager();
                 // create back button
-                toolBar.add(new Action(BACK_BUTTON_TEXT) {
+                final Action backAction = new Action(BACK_BUTTON_TEXT, BACK_BUTTON_IMAGE) {
                     @Override
                     public void run() {
                         browser.back();
                     }
-                });
+                };
+                toolBar.add(backAction);
                 // create home button for navigation
-                toolBar.add(new Action(HOME_BUTTON_TEXT) {
+                toolBar.add(new Action(HOME_BUTTON_TEXT, HOME_BUTTON_IMAGE) {
                     @Override
                     public void run() {
                         if (homeUrlString != null) {
@@ -66,11 +72,11 @@ public class PitView extends ViewPart implements SummaryView {
                     }
                 });
                 // create forward button
-                toolBar.add(new Action(FORWARD_BUTTON_TEXT) {
+                toolBar.add(new Action(FORWARD_BUTTON_TEXT, FORWARD_BUTTON_IMAGE) {
                     @Override
                     public void run() {
                         browser.forward();
-                }
+                    }
                 });
                 actionBars.updateActionBars();
             },

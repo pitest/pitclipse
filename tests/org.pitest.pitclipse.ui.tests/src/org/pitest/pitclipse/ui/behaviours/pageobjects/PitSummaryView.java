@@ -31,21 +31,21 @@ public class PitSummaryView {
 
     public String clickBack(String expectedUrl) {
         showSummaryView();
-        bot.toolbarButton(PitView.BACK_BUTTON_TEXT).click();
+        bot.toolbarButtonWithTooltip(PitView.BACK_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
     public String clickHome(String expectedUrl) {
         showSummaryView();
-        bot.toolbarButton(PitView.HOME_BUTTON_TEXT).click();
+        bot.toolbarButtonWithTooltip(PitView.HOME_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
 
     public String clickForward(String expectedUrl) {
         showSummaryView();
-        bot.toolbarButton(PitView.FORWARD_BUTTON_TEXT).click();
+        bot.toolbarButtonWithTooltip(PitView.FORWARD_BUTTON_TEXT).click();
         bot.waitUntil(new BrowserLoadCondition(expectedUrl));
         return getCurrentBrowserUrl();
     }
