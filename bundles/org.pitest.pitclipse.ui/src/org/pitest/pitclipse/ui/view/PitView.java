@@ -54,13 +54,12 @@ public class PitView extends ViewPart implements SummaryView {
                 IActionBars actionBars = getViewSite().getActionBars();
                 IToolBarManager toolBar = actionBars.getToolBarManager();
                 // create back button
-                final Action backAction = new Action(BACK_BUTTON_TEXT, BACK_BUTTON_IMAGE) {
+                toolBar.add(new Action(BACK_BUTTON_TEXT, BACK_BUTTON_IMAGE) {
                     @Override
                     public void run() {
                         browser.back();
                     }
-                };
-                toolBar.add(backAction);
+                });
                 // create home button for navigation
                 toolBar.add(new Action(HOME_BUTTON_TEXT, HOME_BUTTON_IMAGE) {
                     @Override
