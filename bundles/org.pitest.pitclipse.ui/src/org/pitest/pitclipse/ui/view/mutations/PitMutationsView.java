@@ -16,10 +16,6 @@
 
 package org.pitest.pitclipse.ui.view.mutations;
 
-import java.net.URL;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -29,9 +25,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
@@ -41,8 +36,8 @@ public class PitMutationsView extends ViewPart implements MutationsView {
     public static final String EXPAND_ALL_BUTTON_TEXT = "Expand All";
     public static final String COLLAPSE_ALL_BUTTON_TEXT = "Collapse All";
 
-    private static final ImageDescriptor EXPAND_ALL = getBundleImage("expandall.png");
-    private static final ImageDescriptor COLLAPSE_ALL = getBundleImage("collapseall.png");
+    private static final ImageDescriptor EXPAND_ALL = PitclipseUiUtils.getBundleImage("expandall.png");
+    private static final ImageDescriptor COLLAPSE_ALL = PitclipseUiUtils.getBundleImage("collapseall.png");
 
     @Override
     public void createPartControl(Composite parent) {
@@ -102,12 +97,6 @@ public class PitMutationsView extends ViewPart implements MutationsView {
             // see https://github.com/pitest/pitclipse/issues/147
             viewer.setInput(mutations);
         }
-    }
-
-    private static ImageDescriptor getBundleImage(String file) {
-        Bundle bundle = FrameworkUtil.getBundle(PitMutationsView.class);
-        URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-        return ImageDescriptor.createFromURL(url);
     }
 
 }
