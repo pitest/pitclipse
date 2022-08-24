@@ -17,15 +17,7 @@ class ViewOpenedCondition extends DefaultCondition {
     @Override
     public boolean test() throws Exception {
         final SWTBotView view = bot.viewByTitle(viewTitle);
-        boolean viewIsNotNull = view != null;
-        final boolean condition = viewIsNotNull
-                && view.isActive();
-        if (!viewIsNotNull) {
-            System.out.println("*** " + viewTitle + " null...");
-        } else if (!condition) {
-            System.out.println("*** " + viewTitle + " not yet active...");
-        }
-        return condition;
+        return view.isActive();
     }
 
     @Override
