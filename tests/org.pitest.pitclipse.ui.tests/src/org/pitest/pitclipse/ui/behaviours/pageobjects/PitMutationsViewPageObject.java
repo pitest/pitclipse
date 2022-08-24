@@ -66,7 +66,7 @@ public class PitMutationsViewPageObject {
         mutationsView.show();
         mutationsView.setFocus();
         // Make sure the 'PIT Mutations' view is opened
-        bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
+        // bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         return mutationsView;
     }
 
