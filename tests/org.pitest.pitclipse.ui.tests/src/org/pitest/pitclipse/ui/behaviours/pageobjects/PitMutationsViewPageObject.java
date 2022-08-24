@@ -61,11 +61,14 @@ public class PitMutationsViewPageObject {
     }
 
     public SWTBotView getView() {
+        // let's close the Console view first, otherwise it seems
+        // to block the opening of "PIT Mutations"
         PAGES.getConsole().close();
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         mutationsView.setFocus();
         // Make sure the 'PIT Mutations' view is opened
+        // this should not be required anymore
         // bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         return mutationsView;
     }
