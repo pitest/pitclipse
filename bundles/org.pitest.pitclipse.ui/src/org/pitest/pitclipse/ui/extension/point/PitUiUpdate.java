@@ -23,27 +23,13 @@ import org.pitest.pitclipse.ui.view.PitView;
  */
 public class PitUiUpdate {
 
-    private final String html;
-
-    private PitUiUpdate(String html) {
-        this.html = html;
-    }
-
-    public String getHtml() {
-        return html;
+    private PitUiUpdate() {
     }
 
     public static final class Builder {
 
-        private String html;
-
-        public Builder withHtml(String html) {
-            this.html = html;
-            return this;
-        }
-
         public PitUiUpdate build() {
-            return new PitUiUpdate(html);
+            return new PitUiUpdate();
         }
 
     }

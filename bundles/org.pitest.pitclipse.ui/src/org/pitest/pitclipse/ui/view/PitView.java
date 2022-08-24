@@ -50,7 +50,7 @@ public class PitView extends ViewPart implements SummaryView {
             () -> {
                 browser = new Browser(parent, SWT.NONE);
                 resetBrowser();
-                browser.addProgressListener(new PitUiUpdatePublisher(browser));
+                browser.addProgressListener(new PitUiUpdatePublisher());
                 IActionBars actionBars = getViewSite().getActionBars();
                 IToolBarManager toolBar = actionBars.getToolBarManager();
                 // create back button
