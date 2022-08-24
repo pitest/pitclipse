@@ -16,6 +16,7 @@
 
 package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.SwtBotTreeHelper.expand;
 
 import java.util.List;
@@ -60,10 +61,15 @@ public class PitMutationsViewPageObject {
     }
 
     public SWTBotView getView() {
+        // let's close the Console view first, otherwise it seems
+        // to block the opening of "PIT Mutations"
+        PAGES.getConsole().close();
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
+        mutationsView.setFocus();
         // Make sure the 'PIT Mutations' view is opened
-        bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
+        // this should not be required anymore
+        // bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         return mutationsView;
     }
 

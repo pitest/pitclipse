@@ -12,12 +12,12 @@ class ViewOpenedCondition extends DefaultCondition {
         this.bot = bot;
         this.viewTitle = viewTitle;
     }
-    
+
     @Override
     public boolean test() throws Exception {
-        return bot.viewByTitle(viewTitle) != null;
+        return bot.viewByTitle(viewTitle).isActive();
     }
-    
+
     @Override
     public String getFailureMessage() {
         return "The view '" + viewTitle + "' did not open";
