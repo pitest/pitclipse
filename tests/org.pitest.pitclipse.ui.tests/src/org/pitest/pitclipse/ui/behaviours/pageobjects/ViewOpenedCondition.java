@@ -22,9 +22,8 @@ class ViewOpenedCondition extends DefaultCondition {
                 && view.isActive();
         if (!viewIsNotNull) {
             System.out.println("*** " + viewTitle + " null...");
-            if (viewIsNotNull && !condition) {
-                System.out.println("*** " + viewTitle + " not yet active...");
-            }
+        } else if (!condition) {
+            System.out.println("*** " + viewTitle + " not yet active...");
         }
         return condition;
     }
