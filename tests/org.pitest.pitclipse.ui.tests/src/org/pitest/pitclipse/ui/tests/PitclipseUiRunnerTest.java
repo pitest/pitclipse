@@ -128,7 +128,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     }
 
     @Test
-    public void runPitOnTwoSelectedElementsShowDialogNoTestsFound() throws CoreException {
+    public void runPitOnTwoSelectedElementsShowsDialogNoTestsFound() throws CoreException {
         PAGES.getPackageExplorer().selectFiles(TEST_PROJECT, FOO_BAR_PACKAGE,
                 FOO_CLASS + ".java", FOO_TEST_CLASS + ".java");
         PAGES.getRunMenu().runPit();
@@ -165,5 +165,14 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
         "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
         coverageReportGenerated(1, 100, 100, 2, 2);
+    }
+
+    @Test
+    public void runSingleFieldShowsDialogNoTestsFound() throws CoreException {
+        createMethod(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
+                "int aField;\n");
+        PAGES.getPackageExplorer().selectClassMember("aField", FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        PAGES.getRunMenu().runPit();
+        new NoTestsFoundDialog(bot).assertAppears();
     }
 }

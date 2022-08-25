@@ -448,7 +448,7 @@ public class PitclipseSteps {
 
         @Override
         public void run() {
-            PAGES.getPackageExplorer().selectMethod(testMethodName, testClassName, packageName, projectName);
+            PAGES.getPackageExplorer().selectClassMember(testMethodName, testClassName, packageName, projectName);
         }
     }
 }

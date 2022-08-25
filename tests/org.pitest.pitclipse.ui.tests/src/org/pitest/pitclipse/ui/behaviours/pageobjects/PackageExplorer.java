@@ -119,7 +119,7 @@ public class PackageExplorer {
         return selectAndExpand(classItem);
     }
 
-    public void selectMethod(String methodName, String className, String packageName, String projectName) {
+    public void selectClassMember(String methodName, String className, String packageName, String projectName) {
         SWTBotTreeItem selectClass = selectClass(className, packageName, projectName);
         SWTBotTreeItem classNameNode = selectClass.expandNode(className);
         classNameNode.select(methodName);
