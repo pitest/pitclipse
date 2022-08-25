@@ -20,21 +20,25 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
-public class NoTestsFoundDialog {
+public class TestConfigurationSelectorDialog {
 
     private final SWTWorkbenchBot bot;
+    private SWTBotShell shell;
 
-    public NoTestsFoundDialog(SWTWorkbenchBot bot) {
+    public TestConfigurationSelectorDialog(SWTWorkbenchBot bot) {
         this.bot = bot;
+        shell = bot.shell("Select a Test Configuration");
+        shell.activate();
     }
 
-    public void assertAppears() {
-        SWTBotShell shell = bot.shell("Pitclipse");
-        shell.activate();
-        bot.label("No tests found");
-        bot.button("OK").click();
-
+    public void cancel() {
+        bot.button("Cancel").click();
         bot.waitUntil(Conditions.shellCloses(shell));
     }
 
+    public void choose(String option) {
+        bot.table().select(option);
+        bot.button("OK").click();
+        bot.waitUntil(Conditions.shellCloses(shell));
+    }
 }

@@ -266,17 +266,13 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             return Optional.empty();
         } else if (candidateCount == 1) {
             return Optional.ofNullable(candidateConfigs.get(0));
-        } else {
-            // Prompt the user to choose a config. A null result means the user
-            // cancelled the dialog, in which case this method returns null,
-            // since cancelling the dialog should also cancel launching
-            // anything.
-            ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
-            if (config != null) {
-                return Optional.ofNullable(config);
-            }
         }
-        return Optional.empty();
+
+        // Prompt the user to choose a config.
+        // if the user does not presses OK we have already interrupted
+        // the launch with an InterruptedException
+        ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
+        return Optional.ofNullable(config);
     }
 
     private List<ILaunchConfiguration> findExistingLaunchConfigurations(ILaunchConfigurationWorkingCopy temporary) throws CoreException {

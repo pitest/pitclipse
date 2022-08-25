@@ -1,5 +1,6 @@
 package org.pitest.pitclipse.ui.tests;
 
+import static org.junit.Assert.assertThrows;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.util.Collections;
@@ -10,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.NoTestsFoundDialog;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.TestConfigurationSelectorDialog;
 
 /**
  * @author Lorenzo Bettini
@@ -24,6 +26,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
     private static final String FOO_BAR_PACKAGE = "foo.bar";
     private static final String FOO_CLASS = "Foo";
     private static final String FOO_TEST_CLASS = "FooTest";
+    private static final String FOO_TEST_CLASS_MULTIPLE_LAUNCHES = "FooTestWithSavedConfigurations";
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
@@ -194,5 +197,43 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         );
         mutationsAre(Collections.emptyList());
         noCoverageReportGenerated();
+    }
+
+    @Test
+    public void multipleLaunchConfigurations() throws CoreException {
+        createMethod(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
+                "public int doFoo(int i) {\n"
+              + "    return i + 1;\n"
+              + "}");
+        runTest(FOO_TEST_CLASS_MULTIPLE_LAUNCHES, FOO_BAR_PACKAGE, TEST_PROJECT,
+            () -> 
+            new TestConfigurationSelectorDialog(bot)
+                .choose(FOO_TEST_CLASS_MULTIPLE_LAUNCHES));
+        coverageReportGenerated(1, 0, 0, 2, 0);
+        runTest(FOO_TEST_CLASS_MULTIPLE_LAUNCHES, FOO_BAR_PACKAGE, TEST_PROJECT,
+            () -> 
+            new TestConfigurationSelectorDialog(bot)
+                .choose(FOO_TEST_CLASS_MULTIPLE_LAUNCHES + " (All Mutators)"));
+        // not just 2 mutants, but much more since in this launch
+        // we enabled All Mutators
+        coverageReportGenerated(1, 0, 0, 20, 0);
+
+        @SuppressWarnings("serial")
+        class MyException extends RuntimeException {
+            
+        }
+
+        // cancel the launch
+        // we also have to interrupt with an exception, otherwise it waits
+        // for PIT to terminate
+        assertThrows(MyException.class, () ->
+            runTest(FOO_TEST_CLASS_MULTIPLE_LAUNCHES, FOO_BAR_PACKAGE, TEST_PROJECT,
+                () -> 
+                {
+                    new TestConfigurationSelectorDialog(bot)
+                        .cancel();
+                    throw new MyException();
+                })
+        );
     }
 }
