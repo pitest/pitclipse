@@ -204,6 +204,20 @@ public class PitclipseSteps {
         PitSummary.INSTANCE.waitForPitToFinish();
     }
 
+    /**
+     * Runs the runnable (expected to execute PIT) and waits for PIT to finish.
+     * @param runnable which is executed
+     */
+    public void runAndWaitForPit(Runnable runnable) {
+        assertNoErrorsInWorkspace();
+        // reset Summary result
+        PitSummary.INSTANCE.resetSummary();
+        // this is expected to run PIT somehow
+        runnable.run();
+        // wait for pit to finish
+        PitSummary.INSTANCE.waitForPitToFinish();
+    }
+
     public void assertNoErrorsInWorkspace() {
         Set<String> errors = errorsInWorkspace();
         assertThat(errors, empty());
