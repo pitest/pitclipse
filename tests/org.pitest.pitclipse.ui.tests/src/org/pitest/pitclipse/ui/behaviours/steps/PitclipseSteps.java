@@ -170,7 +170,7 @@ public class PitclipseSteps {
      * Runs pit after the given runnable is run and waits for it to finish.
      * @param runnable which is executed prior to pit
      */
-    private void runPitAndWaitForIt(Runnable runnable) {
+    public void runPitAndWaitForIt(Runnable runnable) {
         assertNoErrorsInWorkspace();
         // reset Summary result
         PitSummary.INSTANCE.resetSummary();

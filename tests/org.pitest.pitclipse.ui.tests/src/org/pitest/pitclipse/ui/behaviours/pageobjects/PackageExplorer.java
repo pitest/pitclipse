@@ -179,4 +179,8 @@ public class PackageExplorer {
         SWTBotTreeItem project = getProject(projectName);
         project.select(fileName);
     }
+
+    public void selectProjectElement(String... path) {
+        bot.tree().expandNode(path).select();
+    }
 }

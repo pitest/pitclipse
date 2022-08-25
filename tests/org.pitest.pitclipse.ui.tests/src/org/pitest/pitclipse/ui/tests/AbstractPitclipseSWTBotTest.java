@@ -336,6 +336,10 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runProjectTest(projectName);
     }
 
+    protected static void runFreeStyleTest(Runnable runnable) throws CoreException {
+        new PitclipseSteps().runPitAndWaitForIt(runnable);
+    }
+
     /**
      * Asserts that the only active mutator was the given mutator.
      * @param mutators which should be the only active mutator

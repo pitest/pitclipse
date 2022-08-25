@@ -19,12 +19,17 @@ import org.pitest.pitclipse.ui.behaviours.pageobjects.NoTestsFoundDialog;
 public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
 
     private static final String TEST_PROJECT = "org.pitest.pitclipse.testprojects.emptyclasses";
+    private static final String NON_JAVA_PROJECT = "org.pitest.pitclipse.testprojects.nonjava";
+
     private static final String FOO_BAR_PACKAGE = "foo.bar";
     private static final String FOO_CLASS = "Foo";
     private static final String FOO_TEST_CLASS = "FooTest";
 
     @BeforeClass
     public static void setupJavaProject() throws CoreException {
+        // NON_JAVA_PROJECT contains the folder "binarytests"
+        // used as an external library from FOO_PROJECT
+        importTestProject(NON_JAVA_PROJECT);
         importTestProject(TEST_PROJECT);
         openEditor(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         openEditor(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
@@ -174,5 +179,20 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         PAGES.getPackageExplorer().selectClassMember("aField", FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
         PAGES.getRunMenu().runPit();
         new NoTestsFoundDialog(bot).assertAppears();
+    }
+
+    @Test
+    public void runBinaryTest() throws CoreException {
+        removeMethods(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        removeMethods(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        runFreeStyleTest(() ->
+            PAGES.getPackageExplorer().selectProjectElement(TEST_PROJECT,
+                "Referenced Libraries",
+                "binarytests - org.pitest.pitclipse.testprojects.nonjava",
+                "(default package)",
+                "EmptyBinaryTest.class")
+        );
+        mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
     }
 }
