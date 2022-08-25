@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.tests;
 
+import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
+
 import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
@@ -7,6 +9,7 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.NoTestsFoundDialog;
 
 /**
  * @author Lorenzo Bettini
@@ -124,4 +127,11 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         coverageReportGenerated(1, 100, 100, 2, 2);
     }
 
+    @Test
+    public void runPitOnTwoSelectedElementsShowDialogNoTestsFound() throws CoreException {
+        PAGES.getPackageExplorer().selectFiles(TEST_PROJECT, FOO_BAR_PACKAGE,
+                FOO_CLASS + ".java", FOO_TEST_CLASS + ".java");
+        PAGES.getRunMenu().runPit();
+        new NoTestsFoundDialog(bot).assertAppears();
+    }
 }

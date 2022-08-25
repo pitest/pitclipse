@@ -119,6 +119,12 @@ public class PackageExplorer {
         selectAndExpand(classItem);
     }
 
+    public void selectFiles(String projectName, String packageName, String... fileNames) {
+        SWTBotTreeItem project = getProject(projectName);
+        SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
+        pkg.select(fileNames);
+    }
+
     public boolean doesClassExistInProject(String className, String packageName, String projectName) {
         SWTBotTreeItem project = getProject(projectName);
         SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
