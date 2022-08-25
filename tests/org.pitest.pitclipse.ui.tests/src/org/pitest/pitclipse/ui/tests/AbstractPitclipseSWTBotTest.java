@@ -316,6 +316,17 @@ public abstract class AbstractPitclipseSWTBotTest {
             .collect(Collectors.joining("\n"));
     }
 
+    /**
+     * The editor is expected to be already opened
+     * 
+     * @param fileName
+     * @throws CoreException
+     */
+    protected static void runFromEditorTest(final String fileName) throws CoreException {
+        new PitclipseSteps().runPitAndWaitForIt(() ->
+                bot.editorByTitle(fileName).setFocus());
+    }
+
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }

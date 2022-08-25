@@ -175,9 +175,11 @@ public class PackageExplorer {
 
     }
 
-    public void selectProjectFile(String projectName, String fileName) {
-        SWTBotTreeItem project = getProject(projectName);
-        project.select(fileName);
+    public SWTBotTreeItem selectProjectFile(String projectName, String fileName) {
+        SWTBotTreeItem project = getProject(projectName).expand();
+        // REMEMBER: first get the node and then selectAndExpand
+        SWTBotTreeItem fileItem = project.getNode(fileName);
+        return selectAndExpand(fileItem);
     }
 
     public void selectProjectElement(String... path) {
