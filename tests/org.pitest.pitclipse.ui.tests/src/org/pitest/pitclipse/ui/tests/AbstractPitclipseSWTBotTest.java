@@ -320,6 +320,10 @@ public abstract class AbstractPitclipseSWTBotTest {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
     }
 
+    protected static void runSingleMethodTest(String testMethodName, final String testClassName, final String packageName, final String projectName) throws CoreException {
+        new PitclipseSteps().runTestMethod(testMethodName, testClassName, packageName, projectName);
+    }
+
     protected static void runPackageTest(final String packageName, final String projectName) throws CoreException {
         new PitclipseSteps().runPackageTest(packageName, projectName);
     }

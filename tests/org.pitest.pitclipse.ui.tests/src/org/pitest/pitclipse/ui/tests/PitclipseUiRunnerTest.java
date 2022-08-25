@@ -141,4 +141,29 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         PAGES.getRunMenu().runPit();
         new NoTestsFoundDialog(bot).assertAppears();
     }
+
+    /**
+     * Results should be the same as
+     * {@link #classWithMethodAndBetterTestMethod()}
+     * 
+     * @throws CoreException
+     */
+    @Test
+    public void runSingleTestMethod() throws CoreException {
+        createMethod(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
+                "public int doFoo(int i) {\n"
+              + "    return i + 1;\n"
+              + "}");
+        createMethod(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT,
+                "@org.junit.Test\n"
+              + "public void fooTest3() {\n"
+              + "    org.junit.Assert.assertEquals(2,\n"
+              + "            new Foo().doFoo(1));\n"
+              + "}");
+        runSingleMethodTest("fooTest3() : void", FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        mutationsAre(
+        "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | Replaced integer addition with subtraction       \n" +
+        "KILLED | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    6 | replaced int return with 0 for foo/bar/Foo::doFoo ");
+        coverageReportGenerated(1, 100, 100, 2, 2);
+    }
 }

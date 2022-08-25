@@ -67,6 +67,16 @@ public class PitclipseSteps {
         runPitAndWaitForIt(new SelectTestClass(testClassName, packageName, projectName));
     }
 
+    public void runTestMethod(String testMethodName, final String testClassName, final String packageName, final String projectName)
+            throws CoreException {
+        // No need to do a full build: we should be now synchronized with building
+        // Build the whole workspace to prevent random compilation failures
+        // ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD,
+        // new NullProgressMonitor());
+        System.out.println(String.format("Run PIT on: %s %s.%s.%s", projectName, packageName, testClassName, testMethodName));
+        runPitAndWaitForIt(new SelectTestMethod(testMethodName, testClassName, packageName, projectName));
+    }
+
     /**
      * Assert that the given classes, code coverage and mutation coverage matches
      * with the result of pit.<br>
@@ -420,6 +430,25 @@ public class PitclipseSteps {
         @Override
         public void run() {
             PAGES.getPackageExplorer().selectClass(testClassName, packageName, projectName);
+        }
+    }
+
+    private static final class SelectTestMethod implements Runnable {
+        private final String testMethodName;
+        private final String testClassName;
+        private final String packageName;
+        private final String projectName;
+
+        private SelectTestMethod(String testMethodName, String testClassName, String packageName, String projectName) {
+            this.testMethodName = testMethodName;
+            this.testClassName = testClassName;
+            this.packageName = packageName;
+            this.projectName = projectName;
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectMethod(testMethodName, testClassName, packageName, projectName);
         }
     }
 }
