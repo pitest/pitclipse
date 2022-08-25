@@ -188,14 +188,6 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         final String containerHandleId;
 
         switch (element.getElementType()) {
-            case JAVA_PROJECT:
-            case PACKAGE_FRAGMENT_ROOT:
-            case PACKAGE_FRAGMENT:
-                String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
-                containerHandleId = element.getHandleIdentifier();
-                mainTypeQualifiedName = EMPTY_STRING;
-                testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
-                break;
             case TYPE:
                 containerHandleId = EMPTY_STRING;
                 // don't replace, fix for binary inner types
@@ -208,8 +200,11 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 mainTypeQualifiedName = method.getDeclaringType().getFullyQualifiedName('.');
                 testName = method.getDeclaringType().getElementName() + '.' + method.getElementName();
                 break;
-            default:
-                throw new IllegalArgumentException("Invalid element type to create a launch configuration: " + element.getClass().getName()); //$NON-NLS-1$
+            default: // JAVA_PROJECT, PACKAGE_FRAGMENT_ROOT, PACKAGE_FRAGMENT
+                String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
+                containerHandleId = element.getHandleIdentifier();
+                mainTypeQualifiedName = EMPTY_STRING;
+                testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
         }
 
         ILaunchConfigurationType configType = getLaunchManager().getLaunchConfigurationType(getLaunchConfigurationTypeId());
