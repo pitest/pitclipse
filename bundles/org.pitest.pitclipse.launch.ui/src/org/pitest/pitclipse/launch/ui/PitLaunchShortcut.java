@@ -245,7 +245,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     }
 
     private static boolean hasSameAttributes(ILaunchConfiguration config1, ILaunchConfiguration config2, String[] attributeToCompare) {
-        try {
+        return PitclipseLaunchUiUtils.executeSafely(() -> {
             for (String element : attributeToCompare) {
                 String val1 = config1.getAttribute(element, EMPTY_STRING);
                 String val2 = config2.getAttribute(element, EMPTY_STRING);
@@ -254,10 +254,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 }
             }
             return true;
-        } catch (CoreException e) {
-            // ignore access problems here, return false
-        }
-        return false;
+        });
     }
 
     private Optional<ILaunchConfiguration> findExistingLaunchConfiguration(ILaunchConfigurationWorkingCopy temporary) throws InterruptedException,

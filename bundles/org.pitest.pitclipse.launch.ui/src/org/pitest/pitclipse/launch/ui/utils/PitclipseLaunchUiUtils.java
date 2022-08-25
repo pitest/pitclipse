@@ -36,6 +36,11 @@ public class PitclipseLaunchUiUtils {
     }
 
     @FunctionalInterface
+    public static interface PredicateWithCoreException {
+        boolean test() throws CoreException;
+    }
+
+    @FunctionalInterface
     public static interface RunnableWithCoreExceptionInterruptable {
         void run() throws CoreException, InterruptedException;
     }
@@ -52,6 +57,20 @@ public class PitclipseLaunchUiUtils {
             runnable.run();
         } catch (CoreException ce) {
             configurationTab.setErrorMessage(ce.getStatus().getMessage());
+        }
+    }
+
+    /**
+     * Executes the passed predicate and in case of {@link CoreException} returns
+     * false.
+     * 
+     * @param predicate
+     */
+    public static boolean executeSafely(PredicateWithCoreException predicate) {
+        try {
+            return predicate.test();
+        } catch (CoreException ce) {
+            return false;
         }
     }
 
