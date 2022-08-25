@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 
 import java.util.List;
@@ -108,24 +109,19 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     }
 
     private void launch(Object[] elements, String mode) {
-        try {
+        PitclipseLaunchUiUtils.executeSafely(() -> {
             if (elements.length == 1) {
                 Optional<IJavaElement> selected = asJavaElement(elements[0]);
                 Optional<IJavaElement> launchElement =
                         selected.flatMap(this::getLaunchElementFor);
-
+                
                 if (launchElement.isPresent()) {
                     performLaunch(launchElement.get(), mode);
                 }
-            }
-            else {
+            } else {
                 showNoTestsFoundDialog();
             }
-        } catch (InterruptedException e) { // NOSONAR
-            // OK, silently move on
-        } catch (CoreException e) { // NOSONAR
-            // OK, silently move on
-        }
+        });
     }
 
     private void showNoTestsFoundDialog() {

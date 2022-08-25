@@ -35,6 +35,11 @@ public class PitclipseLaunchUiUtils {
         void run() throws CoreException;
     }
 
+    @FunctionalInterface
+    public static interface RunnableWithCoreExceptionInterruptable {
+        void run() throws CoreException, InterruptedException;
+    }
+
     /**
      * Executes the passed lambda and in case of {@link CoreException} sets the
      * error message.
@@ -47,6 +52,21 @@ public class PitclipseLaunchUiUtils {
             runnable.run();
         } catch (CoreException ce) {
             configurationTab.setErrorMessage(ce.getStatus().getMessage());
+        }
+    }
+
+    /**
+     * Executes the passed lambda and ignores exceptions.
+     * 
+     * @param runnable
+     */
+    public static void executeSafely(RunnableWithCoreExceptionInterruptable runnable) {
+        try {
+            runnable.run();
+        } catch (InterruptedException e) { // NOSONAR
+            // OK, silently move on
+        } catch (CoreException e) { // NOSONAR
+            // OK, silently move on
         }
     }
 }
