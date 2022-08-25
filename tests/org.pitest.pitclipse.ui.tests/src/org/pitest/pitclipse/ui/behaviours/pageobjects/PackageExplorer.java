@@ -168,4 +168,9 @@ public class PackageExplorer {
         return null;
 
     }
+
+    public void selectProjectFile(String projectName, String fileName) {
+        SWTBotTreeItem project = getProject(projectName);
+        project.select(fileName);
+    }
 }

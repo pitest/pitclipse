@@ -113,10 +113,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 
                 if (launchElement.isPresent()) {
                     performLaunch(launchElement.get(), mode);
+                    return;
                 }
-            } else {
-                showNoTestsFoundDialog();
             }
+            showNoTestsFoundDialog();
         });
     }
 

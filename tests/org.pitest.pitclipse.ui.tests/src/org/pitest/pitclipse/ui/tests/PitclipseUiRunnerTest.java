@@ -134,4 +134,11 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         PAGES.getRunMenu().runPit();
         new NoTestsFoundDialog(bot).assertAppears();
     }
+
+    @Test
+    public void runPitOnNonJavaFileShowsDialogNoTestsFound() throws CoreException {
+        PAGES.getPackageExplorer().selectProjectFile(TEST_PROJECT, "README");
+        PAGES.getRunMenu().runPit();
+        new NoTestsFoundDialog(bot).assertAppears();
+    }
 }
