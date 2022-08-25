@@ -1,1 +1,5 @@
-This contains an empty test file in binary shape
+This contains an empty test file in binary shape.
+
+The .class file contained here MUST be part of the Git repository, so it has been added with
+
+git add -f
