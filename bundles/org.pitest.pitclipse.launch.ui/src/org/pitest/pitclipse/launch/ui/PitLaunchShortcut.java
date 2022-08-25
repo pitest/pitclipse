@@ -101,11 +101,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 
     @Override
     public void launch(ISelection selection, String mode) {
-        if (selection instanceof IStructuredSelection) {
-            launch(((IStructuredSelection) selection).toArray(), mode);
-        } else {
-            showNoTestsFoundDialog();
-        }
+        launch(((IStructuredSelection) selection).toArray(), mode);
     }
 
     private void launch(Object[] elements, String mode) {
