@@ -1,6 +1,6 @@
 package org.pitest.pitclipse.ui.tests;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
 import static org.pitest.pitclipse.ui.behaviours.pageobjects.PageObjects.PAGES;
 
 import java.util.Collections;
@@ -226,14 +226,17 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         // cancel the launch
         // we also have to interrupt with an exception, otherwise it waits
         // for PIT to terminate
-        assertThrows(MyException.class, () ->
+        try {
             runTest(FOO_TEST_CLASS_MULTIPLE_LAUNCHES, FOO_BAR_PACKAGE, TEST_PROJECT,
                 () -> 
                 {
                     new TestConfigurationSelectorDialog(bot)
                         .cancel();
                     throw new MyException();
-                })
-        );
+                });
+            fail("should not get here: missed MyException");
+        } catch (MyException e) {
+            // OK
+        }
     }
 }
