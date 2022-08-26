@@ -16,42 +16,6 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.ui.DebugUITools;
-import org.eclipse.debug.ui.IDebugModelPresentation;
-import org.eclipse.debug.ui.ILaunchShortcut2;
-import org.eclipse.jdt.core.IClassFile;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
-import org.pitest.pitclipse.runner.config.PitConfiguration;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import static org.eclipse.jdt.core.IJavaElement.CLASS_FILE;
 import static org.eclipse.jdt.core.IJavaElement.COMPILATION_UNIT;
 import static org.eclipse.jdt.core.IJavaElement.JAVA_PROJECT;
@@ -78,6 +42,41 @@ import static org.pitest.pitclipse.launch.ui.LaunchShortcut.getCorrespondingReso
 import static org.pitest.pitclipse.launch.ui.LaunchShortcut.toArrayOfILaunchConfiguration;
 import static org.pitest.pitclipse.launch.ui.PitLaunchUiActivator.getActiveWorkbenchShell;
 import static org.pitest.pitclipse.launch.ui.PitMigrationDelegate.mapResources;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugModelPresentation;
+import org.eclipse.debug.ui.ILaunchShortcut2;
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 /**
  * Allows to launch a PIT analyze from a contextual menu.
@@ -323,17 +322,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public IResource getLaunchableResource(ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection ss = (IStructuredSelection) selection;
-            if (ss.size() == 1) {
-                Object selected = ss.getFirstElement();
-                if (!(selected instanceof IJavaElement) && selected instanceof IAdaptable) {
-                    selected = ((IAdaptable) selected).getAdapter(IJavaElement.class);
-                }
-                if (selected instanceof IJavaElement) {
-                    return ((IJavaElement) selected).getResource();
-                }
-            }
+        IStructuredSelection ss = (IStructuredSelection) selection;
+        if (ss.size() == 1) {
+            Object selected = ss.getFirstElement();
+            return asJavaElement(selected).map(IJavaElement::getResource).orElse(null);
         }
         return null;
     }
