@@ -316,6 +316,10 @@ public abstract class AbstractPitclipseSWTBotTest {
             .collect(Collectors.joining("\n"));
     }
 
+    protected static void focusOnOpenEditor(final String fileName) {
+        bot.editorByTitle(fileName).setFocus();
+    }
+
     /**
      * The editor is expected to be already opened
      * 
@@ -324,7 +328,7 @@ public abstract class AbstractPitclipseSWTBotTest {
      */
     protected static void runFromEditorTest(final String fileName) throws CoreException {
         new PitclipseSteps().runPitAndWaitForIt(() ->
-                bot.editorByTitle(fileName).setFocus());
+                focusOnOpenEditor(fileName));
     }
 
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {

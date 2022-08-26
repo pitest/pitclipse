@@ -289,4 +289,16 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         bot.toolbarDropDownButtonWithTooltip("Run").click();
         new NoTestsFoundDialog(bot).assertAppears();
     }
+
+    @Test
+    public void runWithRunToolbarButtonFromEditor() throws CoreException {
+        removeMethods(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        removeMethods(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+        focusOnOpenEditor(FOO_TEST_CLASS + ".java");
+        runAndWaitForPitTest(() ->
+            bot.toolbarDropDownButtonWithTooltip("Run").click()
+        );
+        mutationsAre(Collections.emptyList());
+        noCoverageReportGenerated();
+    }
 }
