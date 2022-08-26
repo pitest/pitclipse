@@ -16,22 +16,22 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import com.google.common.collect.ImmutableList;
-
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.ui.IEditorInput;
+import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.ui.IEditorInput;
+import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
+
+import com.google.common.collect.ImmutableList;
 
 final class LaunchShortcut {
 
@@ -52,14 +52,9 @@ final class LaunchShortcut {
 
     static Optional<IJavaElement> asJavaElement(Object o) {
         if (o instanceof IJavaElement) {
-            IJavaElement element = (IJavaElement) o;
-            return Optional.of(element);
-        } else if (o instanceof IAdaptable) {
-            Object adapted = ((IAdaptable) o).getAdapter(IJavaElement.class);
-            return Optional.ofNullable((IJavaElement) adapted);
-        } else {
-            return Optional.empty();
+            return Optional.of((IJavaElement) o);
         }
+        return Optional.ofNullable(PitclipseLaunchUiUtils.tryToAdapt(o, IJavaElement.class));
     }
 
     static ImmutableList<ILaunchConfiguration> emptyLaunchConfiguration() {

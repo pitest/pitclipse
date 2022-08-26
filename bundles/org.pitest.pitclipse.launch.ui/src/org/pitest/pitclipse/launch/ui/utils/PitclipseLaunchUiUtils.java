@@ -16,6 +16,7 @@
 package org.pitest.pitclipse.launch.ui.utils;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.pitest.pitclipse.launch.ui.PitMutatorsTab;
 
 /**
@@ -106,5 +107,21 @@ public class PitclipseLaunchUiUtils {
         } catch (CoreException e) { // NOSONAR
             // OK, silently move on
         }
+    }
+
+    /**
+     * Try to adapt the object to the {@link IAdaptable} type, or returns null
+     * if it's not an {@link IAdaptable}.
+     * 
+     * @param <T>
+     * @param o
+     * @param type
+     * @return
+     */
+    public static <T extends IAdaptable> T tryToAdapt(Object o, Class<T> type) {
+        if (o instanceof IAdaptable) {
+            return ((IAdaptable) o).getAdapter(type);
+        }
+        return null;
     }
 }
