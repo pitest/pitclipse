@@ -297,12 +297,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection ss = (IStructuredSelection) selection;
-            if (ss.size() == 1) {
-                List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss.getFirstElement());
-                return toArrayOfILaunchConfiguration(configs);
-            }
+        IStructuredSelection ss = (IStructuredSelection) selection;
+        if (ss.size() == 1) {
+            List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss.getFirstElement());
+            return toArrayOfILaunchConfiguration(configs);
         }
         return null; // NOSONAR Eclipse code relies on returned null array
     }
