@@ -289,7 +289,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         Optional<IJavaElement> element = asJavaElement(candidate);
         return element.map(findLaunchConfigurations()).orElse(emptyLaunchConfiguration());
     }
-    
+
     /**
      * {@inheritDoc}
      * 
@@ -345,26 +345,23 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public IResource getLaunchableResource(IEditorPart editor) {
-        return forEditorInputDo(editor.getEditorInput(), getCorrespondingResource(), Optional::empty).orElse(null);
+        return forEditorInputDo(
+                editor.getEditorInput(),
+                getCorrespondingResource(),
+                Optional::empty)
+            .orElse(null);
     }
 
     private Function<IJavaElement, List<ILaunchConfiguration>> findLaunchConfigurations() {
-        return new Function<IJavaElement, List<ILaunchConfiguration>>() {
-            public List<ILaunchConfiguration> apply(IJavaElement element) {
-                Optional<IJavaElement> launchElement = getLaunchElementFor(element);
-                return launchElement.map(locateLaunchConfigurations()).orElse(emptyLaunchConfiguration());
-            }
-
-            private Function<IJavaElement, List<ILaunchConfiguration>> locateLaunchConfigurations() {
-                return javaElement -> {
-                    try {
-                        ILaunchConfigurationWorkingCopy workingCopy = createLaunchConfiguration(javaElement);
-                        return findExistingLaunchConfigurations(workingCopy);
-                    } catch (CoreException e1) {
-                        return emptyLaunchConfiguration();
-                    }
-                };
-            }
+        return element -> {
+            Optional<IJavaElement> launchElement = getLaunchElementFor(element);
+            return launchElement
+                .map(javaElement -> 
+                    PitclipseLaunchUiUtils.executeSafelyOrElse(
+                        () -> findExistingLaunchConfigurations
+                            (createLaunchConfiguration(javaElement)),
+                        emptyLaunchConfiguration()))
+                .orElse(emptyLaunchConfiguration());
         };
     }
 
@@ -384,7 +381,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 return Optional.empty();
         }
     }
-    
+
     private Function<ITypeRoot, ILaunchConfiguration[]> toLaunchConfigurations() {
         return typeRoot -> {
             List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(typeRoot);

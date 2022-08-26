@@ -36,6 +36,11 @@ public class PitclipseLaunchUiUtils {
     }
 
     @FunctionalInterface
+    public static interface ProviderWithCoreException<T> {
+        T get() throws CoreException;
+    }
+
+    @FunctionalInterface
     public static interface PredicateWithCoreException {
         boolean test() throws CoreException;
     }
@@ -71,6 +76,20 @@ public class PitclipseLaunchUiUtils {
             return predicate.test();
         } catch (CoreException ce) {
             return false;
+        }
+    }
+
+    /**
+     * Returns the result of the passed provider and in case of {@link CoreException} returns
+     * the orElse argument.
+     * 
+     * @param predicate
+     */
+    public static <T> T executeSafelyOrElse(ProviderWithCoreException<T> provider, T orElse) {
+        try {
+            return provider.get();
+        } catch (CoreException ce) {
+            return orElse;
         }
     }
 
