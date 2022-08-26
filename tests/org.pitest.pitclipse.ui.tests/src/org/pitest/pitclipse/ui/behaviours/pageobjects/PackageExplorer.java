@@ -106,7 +106,7 @@ public class PackageExplorer {
         return null;
     }
 
-    public void selectClass(String className, String packageName, String projectName) {
+    public SWTBotTreeItem selectClass(String className, String packageName, String projectName) {
         SWTBotTreeItem project = getProject(projectName);
         SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
         SWTBotTreeItem classItem = getClassFromPackage(pkg, className);
@@ -116,7 +116,19 @@ public class PackageExplorer {
                                              " not found in package " + packageName + 
                                              " of project " + projectName);
         }
-        selectAndExpand(classItem);
+        return selectAndExpand(classItem);
+    }
+
+    public void selectClassMember(String methodName, String className, String packageName, String projectName) {
+        SWTBotTreeItem selectClass = selectClass(className, packageName, projectName);
+        SWTBotTreeItem classNameNode = selectClass.expandNode(className);
+        classNameNode.select(methodName);
+    }
+
+    public void selectFiles(String projectName, String packageName, String... fileNames) {
+        SWTBotTreeItem project = getProject(projectName);
+        SWTBotTreeItem pkg = selectAndExpand(getPackageFromProject(project, packageName));
+        pkg.select(fileNames);
     }
 
     public boolean doesClassExistInProject(String className, String packageName, String projectName) {
@@ -161,5 +173,16 @@ public class PackageExplorer {
         }
         return null;
 
+    }
+
+    public SWTBotTreeItem selectProjectFile(String projectName, String fileName) {
+        SWTBotTreeItem project = getProject(projectName).expand();
+        // REMEMBER: first get the node and then selectAndExpand
+        SWTBotTreeItem fileItem = project.getNode(fileName);
+        return selectAndExpand(fileItem);
+    }
+
+    public void selectProjectElement(String... path) {
+        bot.tree().expandNode(path).select();
     }
 }

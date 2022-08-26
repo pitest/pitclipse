@@ -46,8 +46,10 @@ public class RunMenu {
     }
 
     public void runPit() {
+        // focusing on package explorer does not allow to run PIT
+        // when an editor is selected, and it should not be needed at all anyway
         // focus package explorer to ensure the menu is found
-        bot.viewByTitle("Package Explorer").setFocus();
+        //        bot.viewByTitle("Package Explorer").setFocus();
         SWTBotMenuHelper menuHelper = new SWTBotMenuHelper();
         SWTBotMenu runAsMenu = menuHelper.findWorkbenchMenu(bot, RUN).menu(RUN_AS);
         menuHelper.findMenu(runAsMenu, PIT_MUTATION_TEST)

@@ -316,8 +316,32 @@ public abstract class AbstractPitclipseSWTBotTest {
             .collect(Collectors.joining("\n"));
     }
 
+    protected static void focusOnOpenEditor(final String fileName) {
+        bot.editorByTitle(fileName).setFocus();
+    }
+
+    /**
+     * The editor is expected to be already opened
+     * 
+     * @param fileName
+     * @throws CoreException
+     */
+    protected static void runFromEditorTest(final String fileName) throws CoreException {
+        new PitclipseSteps().runPitAndWaitForIt(() ->
+                focusOnOpenEditor(fileName));
+    }
+
     protected static void runTest(final String testClassName, final String packageName, final String projectName) throws CoreException {
         new PitclipseSteps().runTest(testClassName, packageName, projectName);
+    }
+
+    protected static void runTest(final String testClassName, final String packageName, final String projectName,
+            Runnable after) throws CoreException {
+        new PitclipseSteps().runTest(testClassName, packageName, projectName, after);
+    }
+
+    protected static void runSingleMethodTest(String testMethodName, final String testClassName, final String packageName, final String projectName) throws CoreException {
+        new PitclipseSteps().runTestMethod(testMethodName, testClassName, packageName, projectName);
     }
 
     protected static void runPackageTest(final String packageName, final String projectName) throws CoreException {
@@ -330,6 +354,14 @@ public abstract class AbstractPitclipseSWTBotTest {
 
     protected static void runProjectTest(final String projectName) throws CoreException {
         new PitclipseSteps().runProjectTest(projectName);
+    }
+
+    protected static void runFreeStyleTest(Runnable runnable) throws CoreException {
+        new PitclipseSteps().runPitAndWaitForIt(runnable);
+    }
+
+    protected static void runAndWaitForPitTest(Runnable runnable) throws CoreException {
+        new PitclipseSteps().runAndWaitForPit(runnable);
     }
 
     /**

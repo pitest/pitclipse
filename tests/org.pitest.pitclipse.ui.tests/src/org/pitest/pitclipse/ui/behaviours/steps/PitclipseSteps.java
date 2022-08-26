@@ -67,6 +67,29 @@ public class PitclipseSteps {
         runPitAndWaitForIt(new SelectTestClass(testClassName, packageName, projectName));
     }
 
+    public void runTest(final String testClassName, final String packageName, final String projectName,
+            Runnable after)
+            throws CoreException {
+        // No need to do a full build: we should be now synchronized with building
+        // Build the whole workspace to prevent random compilation failures
+        // ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD,
+        // new NullProgressMonitor());
+        System.out.println(String.format("Run PIT on: %s %s.%s", projectName, packageName, testClassName));
+        runPitAndWaitForIt(
+            new SelectTestClass(testClassName, packageName, projectName),
+            after);
+    }
+
+    public void runTestMethod(String testMethodName, final String testClassName, final String packageName, final String projectName)
+            throws CoreException {
+        // No need to do a full build: we should be now synchronized with building
+        // Build the whole workspace to prevent random compilation failures
+        // ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.FULL_BUILD,
+        // new NullProgressMonitor());
+        System.out.println(String.format("Run PIT on: %s %s.%s.%s", projectName, packageName, testClassName, testMethodName));
+        runPitAndWaitForIt(new SelectTestMethod(testMethodName, testClassName, packageName, projectName));
+    }
+
     /**
      * Assert that the given classes, code coverage and mutation coverage matches
      * with the result of pit.<br>
@@ -160,16 +183,41 @@ public class PitclipseSteps {
      * Runs pit after the given runnable is run and waits for it to finish.
      * @param runnable which is executed prior to pit
      */
-    private void runPitAndWaitForIt(Runnable runnable) {
+    public void runPitAndWaitForIt(Runnable runnable) {
+        runPitAndWaitForIt(runnable, () -> {});
+    }
+
+    /**
+     * Runs pit after the given runnable is run and waits for it to finish.
+     * @param runnable which is executed prior to pit
+     * @param after which is executed after pit is selected to run (e.g.,
+     * to select an entry in the test selection dialog)
+     */
+    public void runPitAndWaitForIt(Runnable runnable, Runnable after) {
         assertNoErrorsInWorkspace();
         // reset Summary result
         PitSummary.INSTANCE.resetSummary();
         runnable.run();
         PAGES.getRunMenu().runPit();
+        after.run();
         // wait for pit to finish
         PitSummary.INSTANCE.waitForPitToFinish();
     }
-    
+
+    /**
+     * Runs the runnable (expected to execute PIT) and waits for PIT to finish.
+     * @param runnable which is executed
+     */
+    public void runAndWaitForPit(Runnable runnable) {
+        assertNoErrorsInWorkspace();
+        // reset Summary result
+        PitSummary.INSTANCE.resetSummary();
+        // this is expected to run PIT somehow
+        runnable.run();
+        // wait for pit to finish
+        PitSummary.INSTANCE.waitForPitToFinish();
+    }
+
     public void assertNoErrorsInWorkspace() {
         Set<String> errors = errorsInWorkspace();
         assertThat(errors, empty());
@@ -420,6 +468,25 @@ public class PitclipseSteps {
         @Override
         public void run() {
             PAGES.getPackageExplorer().selectClass(testClassName, packageName, projectName);
+        }
+    }
+
+    private static final class SelectTestMethod implements Runnable {
+        private final String testMethodName;
+        private final String testClassName;
+        private final String packageName;
+        private final String projectName;
+
+        private SelectTestMethod(String testMethodName, String testClassName, String packageName, String projectName) {
+            this.testMethodName = testMethodName;
+            this.testClassName = testClassName;
+            this.packageName = packageName;
+            this.projectName = projectName;
+        }
+
+        @Override
+        public void run() {
+            PAGES.getPackageExplorer().selectClassMember(testMethodName, testClassName, packageName, projectName);
         }
     }
 }

@@ -16,39 +16,6 @@
 
 package org.pitest.pitclipse.launch.ui;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.ui.DebugUITools;
-import org.eclipse.debug.ui.IDebugModelPresentation;
-import org.eclipse.debug.ui.ILaunchShortcut2;
-import org.eclipse.jdt.core.IClassFile;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.runner.config.PitConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import static org.eclipse.jdt.core.IJavaElement.CLASS_FILE;
 import static org.eclipse.jdt.core.IJavaElement.COMPILATION_UNIT;
 import static org.eclipse.jdt.core.IJavaElement.JAVA_PROJECT;
@@ -76,6 +43,39 @@ import static org.pitest.pitclipse.launch.ui.LaunchShortcut.toArrayOfILaunchConf
 import static org.pitest.pitclipse.launch.ui.PitLaunchUiActivator.getActiveWorkbenchShell;
 import static org.pitest.pitclipse.launch.ui.PitMigrationDelegate.mapResources;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.IDebugModelPresentation;
+import org.eclipse.debug.ui.ILaunchShortcut2;
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeRoot;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.pitest.pitclipse.core.PitCoreActivator;
+import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
+import org.pitest.pitclipse.runner.config.PitConfiguration;
+
 /**
  * Allows to launch a PIT analyze from a contextual menu.
  */
@@ -98,32 +98,23 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
 
     @Override
     public void launch(ISelection selection, String mode) {
-        if (selection instanceof IStructuredSelection) {
-            launch(((IStructuredSelection) selection).toArray(), mode);
-        } else {
-            showNoTestsFoundDialog();
-        }
+        launch(((IStructuredSelection) selection).toArray(), mode);
     }
 
     private void launch(Object[] elements, String mode) {
-        try {
+        PitclipseLaunchUiUtils.executeSafely(() -> {
             if (elements.length == 1) {
                 Optional<IJavaElement> selected = asJavaElement(elements[0]);
                 Optional<IJavaElement> launchElement =
                         selected.flatMap(this::getLaunchElementFor);
-
+                
                 if (launchElement.isPresent()) {
                     performLaunch(launchElement.get(), mode);
+                    return;
                 }
             }
-            else {
-                showNoTestsFoundDialog();
-            }
-        } catch (InterruptedException e) { // NOSONAR
-            // OK, silently move on
-        } catch (CoreException e) { // NOSONAR
-            // OK, silently move on
-        }
+            showNoTestsFoundDialog();
+        });
     }
 
     private void showNoTestsFoundDialog() {
@@ -194,14 +185,6 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         final String containerHandleId;
 
         switch (element.getElementType()) {
-            case JAVA_PROJECT:
-            case PACKAGE_FRAGMENT_ROOT:
-            case PACKAGE_FRAGMENT:
-                String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
-                containerHandleId = element.getHandleIdentifier();
-                mainTypeQualifiedName = EMPTY_STRING;
-                testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
-                break;
             case TYPE:
                 containerHandleId = EMPTY_STRING;
                 // don't replace, fix for binary inner types
@@ -214,8 +197,11 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 mainTypeQualifiedName = method.getDeclaringType().getFullyQualifiedName('.');
                 testName = method.getDeclaringType().getElementName() + '.' + method.getElementName();
                 break;
-            default:
-                throw new IllegalArgumentException("Invalid element type to create a launch configuration: " + element.getClass().getName()); //$NON-NLS-1$
+            default: // JAVA_PROJECT, PACKAGE_FRAGMENT_ROOT, PACKAGE_FRAGMENT
+                String name = getTextLabel(element, ALL_FULLY_QUALIFIED);
+                containerHandleId = element.getHandleIdentifier();
+                mainTypeQualifiedName = EMPTY_STRING;
+                testName = name.substring(name.lastIndexOf(IPath.SEPARATOR) + 1);
         }
 
         ILaunchConfigurationType configType = getLaunchManager().getLaunchConfigurationType(getLaunchConfigurationTypeId());
@@ -247,7 +233,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     }
 
     private static boolean hasSameAttributes(ILaunchConfiguration config1, ILaunchConfiguration config2, String[] attributeToCompare) {
-        try {
+        return PitclipseLaunchUiUtils.executeSafely(() -> {
             for (String element : attributeToCompare) {
                 String val1 = config1.getAttribute(element, EMPTY_STRING);
                 String val2 = config2.getAttribute(element, EMPTY_STRING);
@@ -256,10 +242,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 }
             }
             return true;
-        } catch (CoreException e) {
-            // ignore access problems here, return false
-        }
-        return false;
+        });
     }
 
     private Optional<ILaunchConfiguration> findExistingLaunchConfiguration(ILaunchConfigurationWorkingCopy temporary) throws InterruptedException,
@@ -275,17 +258,13 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             return Optional.empty();
         } else if (candidateCount == 1) {
             return Optional.ofNullable(candidateConfigs.get(0));
-        } else {
-            // Prompt the user to choose a config. A null result means the user
-            // cancelled the dialog, in which case this method returns null,
-            // since cancelling the dialog should also cancel launching
-            // anything.
-            ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
-            if (config != null) {
-                return Optional.ofNullable(config);
-            }
         }
-        return Optional.empty();
+
+        // Prompt the user to choose a config.
+        // if the user does not presses OK we have already interrupted
+        // the launch with an InterruptedException
+        ILaunchConfiguration config = chooseConfiguration(candidateConfigs);
+        return Optional.ofNullable(config);
     }
 
     private List<ILaunchConfiguration> findExistingLaunchConfigurations(ILaunchConfigurationWorkingCopy temporary) throws CoreException {
@@ -307,7 +286,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
         Optional<IJavaElement> element = asJavaElement(candidate);
         return element.map(findLaunchConfigurations()).orElse(emptyLaunchConfiguration());
     }
-    
+
     /**
      * {@inheritDoc}
      * 
@@ -315,12 +294,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection ss = (IStructuredSelection) selection;
-            if (ss.size() == 1) {
-                List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss.getFirstElement());
-                return toArrayOfILaunchConfiguration(configs);
-            }
+        IStructuredSelection ss = (IStructuredSelection) selection;
+        if (ss.size() == 1) {
+            List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(ss.getFirstElement());
+            return toArrayOfILaunchConfiguration(configs);
         }
         return null; // NOSONAR Eclipse code relies on returned null array
     }
@@ -343,17 +320,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public IResource getLaunchableResource(ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection ss = (IStructuredSelection) selection;
-            if (ss.size() == 1) {
-                Object selected = ss.getFirstElement();
-                if (!(selected instanceof IJavaElement) && selected instanceof IAdaptable) {
-                    selected = ((IAdaptable) selected).getAdapter(IJavaElement.class);
-                }
-                if (selected instanceof IJavaElement) {
-                    return ((IJavaElement) selected).getResource();
-                }
-            }
+        IStructuredSelection ss = (IStructuredSelection) selection;
+        if (ss.size() == 1) {
+            Object selected = ss.getFirstElement();
+            return asJavaElement(selected).map(IJavaElement::getResource).orElse(null);
         }
         return null;
     }
@@ -365,26 +335,23 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
      */
     @Override
     public IResource getLaunchableResource(IEditorPart editor) {
-        return forEditorInputDo(editor.getEditorInput(), getCorrespondingResource(), Optional::empty).orElse(null);
+        return forEditorInputDo(
+                editor.getEditorInput(),
+                getCorrespondingResource(),
+                Optional::empty)
+            .orElse(null);
     }
 
     private Function<IJavaElement, List<ILaunchConfiguration>> findLaunchConfigurations() {
-        return new Function<IJavaElement, List<ILaunchConfiguration>>() {
-            public List<ILaunchConfiguration> apply(IJavaElement element) {
-                Optional<IJavaElement> launchElement = getLaunchElementFor(element);
-                return launchElement.map(locateLaunchConfigurations()).orElse(emptyLaunchConfiguration());
-            }
-
-            private Function<IJavaElement, List<ILaunchConfiguration>> locateLaunchConfigurations() {
-                return javaElement -> {
-                    try {
-                        ILaunchConfigurationWorkingCopy workingCopy = createLaunchConfiguration(javaElement);
-                        return findExistingLaunchConfigurations(workingCopy);
-                    } catch (CoreException e1) {
-                        return emptyLaunchConfiguration();
-                    }
-                };
-            }
+        return element -> {
+            Optional<IJavaElement> launchElement = getLaunchElementFor(element);
+            return launchElement
+                .map(javaElement -> 
+                    PitclipseLaunchUiUtils.executeSafelyOrElse(
+                        () -> findExistingLaunchConfigurations
+                            (createLaunchConfiguration(javaElement)),
+                        emptyLaunchConfiguration()))
+                .orElse(emptyLaunchConfiguration());
         };
     }
 
@@ -404,7 +371,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
                 return Optional.empty();
         }
     }
-    
+
     private Function<ITypeRoot, ILaunchConfiguration[]> toLaunchConfigurations() {
         return typeRoot -> {
             List<ILaunchConfiguration> configs = findExistingLaunchConfigurations(typeRoot);
