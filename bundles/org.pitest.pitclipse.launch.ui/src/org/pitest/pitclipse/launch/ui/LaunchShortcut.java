@@ -27,7 +27,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorInput;
 import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
 
@@ -41,13 +40,9 @@ final class LaunchShortcut {
     }
 
     static Function<ITypeRoot, Optional<IResource>> getCorrespondingResource() {
-        return t -> {
-            try {
-                return Optional.ofNullable(t.getCorrespondingResource());
-            } catch (JavaModelException e) {
-                return Optional.empty();
-            }
-        };
+        return t -> 
+            Optional.ofNullable(PitclipseLaunchUiUtils.executeSafelyOrElse(
+                t::getCorrespondingResource, null));
     }
 
     static Optional<IJavaElement> asJavaElement(Object o) {
