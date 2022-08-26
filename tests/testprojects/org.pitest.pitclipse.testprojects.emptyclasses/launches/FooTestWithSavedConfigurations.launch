@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.pitest.pitclipse.launch.mutationTest">
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/org.pitest.pitclipse.testprojects.emptyclasses/src/foo/bar/FooTestWithSavedConfigurations.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="foo.bar.FooTestWithSavedConfigurations"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.pitest.pitclipse.testprojects.emptyclasses"/>
+    <stringAttribute key="org.pitest.pitclipse.core.target.classes" value=""/>
+    <stringAttribute key="org.pitest.pitclipse.core.test.avoidCallsTo" value="java.util.logging, org.apache.log4j, org.slf4j, org.apache.commons.logging, org.apache.logging.log4j"/>
+    <stringAttribute key="org.pitest.pitclipse.core.test.container" value=""/>
+    <stringAttribute key="org.pitest.pitclipse.core.test.excludeClasses" value="*Test"/>
+    <stringAttribute key="org.pitest.pitclipse.core.test.excludeMethods" value=""/>
+    <booleanAttribute key="org.pitest.pitclipse.core.test.incrementalAnalysis" value="false"/>
+    <booleanAttribute key="org.pitest.pitclipse.core.test.parallel" value="true"/>
+    <stringAttribute key="pitIndividualMutators" value="INVERT_NEGS,MATH,VOID_METHOD_CALLS,NEGATE_CONDITIONALS,CONDITIONALS_BOUNDARY,INCREMENTS,TRUE_RETURNS,FALSE_RETURNS,PRIMITIVE_RETURNS,EMPTY_RETURNS,NULL_RETURNS"/>
+    <stringAttribute key="pitMutators" value="DEFAULTS"/>
+</launchConfiguration>

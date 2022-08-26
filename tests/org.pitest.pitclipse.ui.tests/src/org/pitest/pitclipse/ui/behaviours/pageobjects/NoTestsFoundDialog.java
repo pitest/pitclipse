@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
+ * Copyright 2022 Lorenzo Bettini and contributors
  *  
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -14,24 +14,27 @@
  * the License.
  ******************************************************************************/
 
-package org.pitest.pitclipse.ui.extension.point;
+package org.pitest.pitclipse.ui.behaviours.pageobjects;
 
-import org.pitest.pitclipse.ui.view.PitView;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
-/**
- * Represents an update of Pitclipse's summary view {@link PitView}.
- */
-public class PitUiUpdate {
+public class NoTestsFoundDialog {
 
-    private PitUiUpdate() {
+    private final SWTWorkbenchBot bot;
+
+    public NoTestsFoundDialog(SWTWorkbenchBot bot) {
+        this.bot = bot;
     }
 
-    public static final class Builder {
+    public void assertAppears() {
+        SWTBotShell shell = bot.shell("Pitclipse");
+        shell.activate();
+        bot.label("No tests found");
+        bot.button("OK").click();
 
-        public PitUiUpdate build() {
-            return new PitUiUpdate();
-        }
-
+        bot.waitUntil(Conditions.shellCloses(shell));
     }
 
 }
