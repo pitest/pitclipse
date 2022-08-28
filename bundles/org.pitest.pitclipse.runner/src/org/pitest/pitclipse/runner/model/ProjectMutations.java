@@ -16,25 +16,26 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.google.common.collect.Collections2.transform;
+import java.util.stream.Collectors;
 
 public class ProjectMutations implements Visitable, Countable {
     private final String projectName;
-    private final ImmutableList<PackageMutations> packageMutations;
+    private final List<PackageMutations> packageMutations;
     private final Status status;
 
-    private ProjectMutations(Status status, String projectName, ImmutableList<PackageMutations> packageMutations) {
+    private ProjectMutations(Status status, String projectName, List<PackageMutations> packageMutations) {
         this.status = status;
         this.projectName = projectName;
-        this.packageMutations = ImmutableList.copyOf(transform(packageMutations,
-                input -> input.copyOf().withProjectMutations(ProjectMutations.this).build()));
+        this.packageMutations = packageMutations.stream()
+                .map(input -> input.copyOf().withProjectMutations(ProjectMutations.this).build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,7 +52,9 @@ public class ProjectMutations implements Visitable, Countable {
     }
 
     public Builder copyOf() {
-        return builder().withPackageMutations(packageMutations).withProjectName(projectName);
+        return builder()
+            .withPackageMutations(packageMutations)
+            .withProjectName(projectName);
     }
 
     public List<PackageMutations> getPackageMutations() {
@@ -60,7 +63,7 @@ public class ProjectMutations implements Visitable, Countable {
 
     public static class Builder {
         private String projectName;
-        private ImmutableList<PackageMutations> packageMutations = ImmutableList.of();
+        private List<PackageMutations> packageMutations = new ArrayList<>();
         private Status status;
 
         private Builder() {
@@ -72,8 +75,12 @@ public class ProjectMutations implements Visitable, Countable {
         }
 
         public Builder withPackageMutations(List<PackageMutations> packages) {
-            this.packageMutations = Ordering.natural().nullsLast().onResultOf(PackageName.GET)
-                    .immutableSortedCopy(packages);
+            this.packageMutations = packages.stream()
+                    .sorted(
+                            comparing(PackageMutations::getPackageName,
+                                nullsLast(
+                                    naturalOrder())))
+                        .collect(Collectors.toList());
             return this;
         }
 
@@ -122,15 +129,6 @@ public class ProjectMutations implements Visitable, Countable {
 
     public Status getStatus() {
         return status;
-    }
-
-    private enum PackageName implements Function<PackageMutations, String> {
-        GET;
-
-        @Override
-        public String apply(PackageMutations input) {
-            return input.getPackageName();
-        }
     }
 
 }
