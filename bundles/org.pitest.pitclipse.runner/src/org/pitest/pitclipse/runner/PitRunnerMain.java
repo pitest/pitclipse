@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Integer.parseInt;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class PitRunnerMain {
     public static void main(String[] args) {
         validateArgs(args);
         int port = parseInt(args[0]);
-        
+
         try (PitClient client = new PitClient(port)) {
             client.connect();
             Optional<PitRequest> request = client.readRequest();
@@ -45,9 +44,10 @@ public class PitRunnerMain {
         }
     }
 
-
     private static void validateArgs(String[] args) {
-        checkArgument(args.length == 1);
+        if (args.length != 1) {
+            throw new IllegalArgumentException();
+        }
     }
 
 }
