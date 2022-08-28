@@ -17,13 +17,12 @@
 package org.pitest.pitclipse.runner;
 
 import java.io.File;
+import java.util.function.Function;
 
 import org.pitest.mutationtest.commandline.MutationCoverageReport;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.mutations.RecordingMutationsDispatcher;
 import org.pitest.pitclipse.runner.util.PitFileUtils;
-
-import com.google.common.base.Function;
 
 /**
  * Executes PIT.
