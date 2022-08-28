@@ -26,8 +26,6 @@ import static org.pitest.pitclipse.runner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.SURVIVED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.TIMED_OUT;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -40,20 +38,26 @@ import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public class MutationsModel implements Visitable, Countable {
 
+    /**
+     * Orders according to the specified list {@link #STATUSES_IN_ORDER}
+     * 
+     * @author Lorenzo Bettini
+     *
+     */
     private enum StatusComparator implements Comparator<Status> {
         INSTANCE;
 
         private static final Map<DetectionStatus, Integer> STATUSES_IN_ORDER = indexMap(
-                Arrays.asList(
-                    SURVIVED, NOT_STARTED, STARTED, KILLED, TIMED_OUT, NON_VIABLE,
-                    MEMORY_ERROR, RUN_ERROR, NO_COVERAGE));
+            SURVIVED, NOT_STARTED,
+            STARTED, KILLED, TIMED_OUT, NON_VIABLE,
+            MEMORY_ERROR, RUN_ERROR, NO_COVERAGE);
 
         /**
          * Returns a map from the ith element of list to i.
          * 
          * Similar to what Guava Orderig.explicit does
          */
-        static Map<DetectionStatus, Integer> indexMap(Collection<DetectionStatus> list) {
+        static Map<DetectionStatus, Integer> indexMap(DetectionStatus... list) {
             Map<DetectionStatus, Integer> map = new EnumMap<>(DetectionStatus.class);
             int i = 0;
             for (DetectionStatus e : list) {
