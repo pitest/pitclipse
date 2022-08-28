@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.runner;
 
-import static com.google.common.collect.ImmutableList.copyOf;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_AVOID_CALLS_TO_LIST;
 import static org.pitest.pitclipse.runner.config.PitConfiguration.DEFAULT_MUTATORS;
 import static org.pitest.pitclipse.runner.util.PitFileUtils.createParentDirs;
@@ -30,8 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.runner.util.PitUtils;
 
 /**
  * <p>Options used to parameterize a PIT analysis.</p>
@@ -104,7 +102,7 @@ public final class PitOptions implements Serializable {
         private File historyLocation = null;
         private List<String> excludedClasses = Collections.emptyList();
         private List<String> excludedMethods = Collections.emptyList();
-        private List<String> avoidCallsTo = copyOf(split(DEFAULT_AVOID_CALLS_TO_LIST));
+        private List<String> avoidCallsTo = split(DEFAULT_AVOID_CALLS_TO_LIST);
         private String mutators = DEFAULT_MUTATORS;
         private int timeout = 3000;
         private BigDecimal timeoutFactor = BigDecimal.valueOf(1.25);
@@ -253,7 +251,7 @@ public final class PitOptions implements Serializable {
         }
 
         private static List<String> split(String toSplit) {
-            return ImmutableList.copyOf(Splitter.on(',').trimResults().omitEmptyStrings().split(toSplit));
+            return PitUtils.splitBasedOnComma(toSplit);
         }
 
         private static File copyOfFile(File sourceDir) {
