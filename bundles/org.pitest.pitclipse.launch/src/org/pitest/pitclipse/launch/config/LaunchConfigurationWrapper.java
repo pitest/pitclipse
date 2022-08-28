@@ -26,9 +26,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -46,6 +44,7 @@ import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.runner.util.PitUtils;
 
 public class LaunchConfigurationWrapper {
 
@@ -214,7 +213,7 @@ public class LaunchConfigurationWrapper {
         } else {
             excludedMethods = pitConfiguration.getExcludedMethods();
         }
-        return splitBasedOnComma(excludedMethods);
+        return PitUtils.splitBasedOnComma(excludedMethods);
     }
 
     private List<String> getAvoidCallsTo() throws CoreException {
@@ -224,7 +223,7 @@ public class LaunchConfigurationWrapper {
         } else {
             avoidCallsTo = pitConfiguration.getAvoidCallsTo();
         }
-        return splitBasedOnComma(avoidCallsTo);
+        return PitUtils.splitBasedOnComma(avoidCallsTo);
     }
 
     private List<String> getExcludedClasses() throws CoreException {
@@ -234,14 +233,7 @@ public class LaunchConfigurationWrapper {
         } else {
             excludedClasses = pitConfiguration.getExcludedClasses();
         }
-        return splitBasedOnComma(excludedClasses);
-    }
-
-    private List<String> splitBasedOnComma(String elements) {
-        return Arrays.stream(elements.split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
+        return PitUtils.splitBasedOnComma(excludedClasses);
     }
 
     private boolean isIncrementalAnalysis() throws CoreException {
@@ -268,7 +260,7 @@ public class LaunchConfigurationWrapper {
     private List<String> getTargetClasses() throws CoreException {
         final String targetClasses = launchConfig.getAttribute(ATTR_TARGET_CLASSES, "");
         return targetClasses.equals("") ? null
-                : new ArrayList<>(splitBasedOnComma(targetClasses));
+                : new ArrayList<>(PitUtils.splitBasedOnComma(targetClasses));
     }
 
     public IResource[] getMappedResources() throws CoreException {
