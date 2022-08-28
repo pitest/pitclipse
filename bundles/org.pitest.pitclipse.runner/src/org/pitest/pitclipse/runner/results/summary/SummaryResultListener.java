@@ -16,7 +16,8 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
+import java.util.List;
 
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
@@ -24,8 +25,6 @@ import org.pitest.coverage.CoverageDatabase;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.runner.results.Dispatcher;
-
-import java.util.List;
 
 /**
  * <p>Listens for mutations results sent by PIT in order to sum them up.</p>
@@ -60,7 +59,7 @@ public class SummaryResultListener implements MutationResultListener {
 
     @Override
     public void handleMutationResult(ClassMutationResults results) {
-        List<ClassName> classUnderTest = ImmutableList.of(results.getMutatedClass());
+        List<ClassName> classUnderTest = Collections.singletonList(results.getMutatedClass());
         int coveredLines = coverage.getNumberOfCoveredLines(classUnderTest);
         for (ClassInfo info : coverage.getClassInfo(classUnderTest)) {
             ClassSummary classSummary = ClassSummary.from(results, info, coveredLines);
