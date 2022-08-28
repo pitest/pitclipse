@@ -25,10 +25,9 @@ import org.pitest.pitclipse.runner.model.MutationsModel;
 import org.pitest.pitclipse.ui.view.mutations.MutationsView;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * Singleton making easier to find Pitclipse views. 
@@ -48,7 +47,7 @@ public enum PitViewFinder {
     }
 
     private static final class ViewSearch implements Runnable {
-        private static Set<String> initialisedViews = newHashSet();
+        private static Set<String> initialisedViews = new HashSet<>();
         private final AtomicReference<IViewPart> viewRef = new AtomicReference<>();
         private final String viewId;
 
