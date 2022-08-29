@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -105,7 +104,7 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
                         .map(new OpenFileInEditorAtLine(lineNumber))
                         .orElse(org.eclipse.core.runtime.Status.OK_STATUS);
             }
-            
+
             @Override
             public boolean belongsTo(Object family) {
                 return JOB_FAMILY.equals(family);
@@ -134,37 +133,30 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
                 @Override
                 public IStatus apply(final IFile file) {
                     IWorkbenchWindow workbench = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-                    if (workbench != null) {
-                        try {
-                            tryToOpen(workbench, file);
-                        } catch (CoreException e) {
-                            return org.eclipse.core.runtime.Status.CANCEL_STATUS;
-                        }
-                    }
-                    return org.eclipse.core.runtime.Status.OK_STATUS;
+                    return PitclipseUiUtils.executeSafelyOrElse(() -> {
+                        tryToOpen(workbench, file);
+                        return org.eclipse.core.runtime.Status.OK_STATUS;
+                    }, org.eclipse.core.runtime.Status.CANCEL_STATUS);
                 }
 
                 private void tryToOpen(IWorkbenchWindow workbench, final IFile file) throws CoreException {
                     IEditorPart editorPart = openEditor(workbench.getActivePage(), file);
-                    if (editorPart instanceof ITextEditor && lineNumber >= 0) {
-                        ITextEditor textEditor = (ITextEditor) editorPart;
-                        IEditorInput editorInput = textEditor.getEditorInput();
-                        openEditorAtLine(textEditor, editorInput);
-                    }
+                    ITextEditor textEditor = (ITextEditor) editorPart;
+                    IEditorInput editorInput = textEditor.getEditorInput();
+                    openEditorAtLine(textEditor, editorInput);
                 }
 
                 private void openEditorAtLine(ITextEditor textEditor, IEditorInput editorInput) throws CoreException {
                     IDocumentProvider provider = textEditor.getDocumentProvider();
                     provider.connect(editorInput);
-                    try {
-                        IDocument document = provider.getDocument(editorInput);
-                        IRegion line = document.getLineInformation(lineNumber);
-                        textEditor.selectAndReveal(line.getOffset(), line.getLength());
-                    } catch (BadLocationException e) {
-                        // Invalid line number - perhaps file has since changed.  Do nothing
-                    } finally {
-                        provider.disconnect(editorInput);
-                    }
+                    PitclipseUiUtils.executeSafelyAndFinally(
+                        () -> {
+                            IDocument document = provider.getDocument(editorInput);
+                            IRegion line = document.getLineInformation(lineNumber);
+                            textEditor.selectAndReveal(line.getOffset(), line.getLength());
+                        },
+                        () -> provider.disconnect(editorInput)
+                    );
                 }
             }
         }

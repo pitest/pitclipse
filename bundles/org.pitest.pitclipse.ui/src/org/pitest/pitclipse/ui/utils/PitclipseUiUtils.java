@@ -43,6 +43,11 @@ public class PitclipseUiUtils {
     }
 
     @FunctionalInterface
+    public static interface RunnableWithException<T extends Exception> {
+        void run() throws T;
+    }
+
+    @FunctionalInterface
     public static interface RunnableWithCoreException {
         void run() throws CoreException;
     }
@@ -60,6 +65,23 @@ public class PitclipseUiUtils {
     @FunctionalInterface
     public static interface RunnableWithCoreExceptionInterruptable {
         void run() throws CoreException, InterruptedException;
+    }
+
+    /**
+     * Executes the passed runnable and in case of {@link Exception} ignores that
+     * and finally executes the andFinally Runnable.
+     * 
+     * @param predicate
+     */
+    public static <T extends Exception > void executeSafelyAndFinally(RunnableWithException<T> runnable,
+            Runnable andFinally) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            // ignore that
+        } finally {
+            andFinally.run();
+        }
     }
 
     /**
