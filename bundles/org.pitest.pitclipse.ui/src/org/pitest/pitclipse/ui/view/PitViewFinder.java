@@ -16,18 +16,20 @@
 
 package org.pitest.pitclipse.ui.view;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.pitest.pitclipse.runner.model.MutationsModel;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 import org.pitest.pitclipse.ui.view.mutations.MutationsView;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import org.pitest.pitclipse.ui.view.mutations.PitMutationsView;
 
 /**
  * Singleton making easier to find Pitclipse views. 
@@ -35,16 +37,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public enum PitViewFinder {
     INSTANCE;
 
-    private static final String PIT_SUMMARY_VIEW = "org.pitest.pitclipse.ui.view.PitView";
-    private static final String PIT_MUTATIONS_VIEW = "org.pitest.pitclipse.ui.view.mutations.PitMutationsView";
-
-    private static final class MissingViewException extends RuntimeException {
-        private static final long serialVersionUID = 6672829886156086528L;
-
-        public MissingViewException(Exception e) {
-            super(e);
-        }
-    }
+    private static final String PIT_SUMMARY_VIEW = PitView.VIEW_ID;
+    private static final String PIT_MUTATIONS_VIEW = PitMutationsView.VIEW_ID;
 
     private static final class ViewSearch implements Runnable {
         private static Set<String> initialisedViews = new HashSet<>();
@@ -62,11 +56,8 @@ public enum PitViewFinder {
         }
 
         private IViewPart findView(String viewId) {
-            try {
-                return tryFindView(viewId);
-            } catch (PartInitException e) {
-                throw new MissingViewException(e);
-            }
+            return PitclipseUiUtils.executeViewSafelyOrThrow(
+                    () -> tryFindView(viewId));
         }
 
         private IViewPart tryFindView(String viewId) throws PartInitException {

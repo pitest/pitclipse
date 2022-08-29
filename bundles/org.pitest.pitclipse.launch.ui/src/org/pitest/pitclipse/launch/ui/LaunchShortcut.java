@@ -29,7 +29,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.ui.IEditorInput;
-import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 final class LaunchShortcut {
 
@@ -40,7 +40,7 @@ final class LaunchShortcut {
 
     static Function<ITypeRoot, Optional<IResource>> getCorrespondingResource() {
         return t -> 
-            Optional.ofNullable(PitclipseLaunchUiUtils.executeSafelyOrElse(
+            Optional.ofNullable(PitclipseUiUtils.executeSafelyOrElse(
                 t::getCorrespondingResource, null));
     }
 
@@ -48,7 +48,7 @@ final class LaunchShortcut {
         if (o instanceof IJavaElement) {
             return Optional.of((IJavaElement) o);
         }
-        return Optional.ofNullable(PitclipseLaunchUiUtils.tryToAdapt(o, IJavaElement.class));
+        return Optional.ofNullable(PitclipseUiUtils.tryToAdapt(o, IJavaElement.class));
     }
 
     static List<ILaunchConfiguration> emptyLaunchConfiguration() {

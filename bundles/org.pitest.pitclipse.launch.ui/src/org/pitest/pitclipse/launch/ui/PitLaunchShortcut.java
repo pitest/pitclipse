@@ -73,8 +73,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.pitest.pitclipse.core.PitCoreActivator;
-import org.pitest.pitclipse.launch.ui.utils.PitclipseLaunchUiUtils;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 /**
  * Allows to launch a PIT analyze from a contextual menu.
@@ -102,7 +102,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     }
 
     private void launch(Object[] elements, String mode) {
-        PitclipseLaunchUiUtils.executeSafely(() -> {
+        PitclipseUiUtils.executeSafely(() -> {
             if (elements.length == 1) {
                 Optional<IJavaElement> selected = asJavaElement(elements[0]);
                 Optional<IJavaElement> launchElement =
@@ -233,7 +233,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
     }
 
     private static boolean hasSameAttributes(ILaunchConfiguration config1, ILaunchConfiguration config2, String[] attributeToCompare) {
-        return PitclipseLaunchUiUtils.executeSafely(() -> {
+        return PitclipseUiUtils.executeSafely(() -> {
             for (String element : attributeToCompare) {
                 String val1 = config1.getAttribute(element, EMPTY_STRING);
                 String val2 = config2.getAttribute(element, EMPTY_STRING);
@@ -347,7 +347,7 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             Optional<IJavaElement> launchElement = getLaunchElementFor(element);
             return launchElement
                 .map(javaElement -> 
-                    PitclipseLaunchUiUtils.executeSafelyOrElse(
+                    PitclipseUiUtils.executeSafelyOrElse(
                         () -> findExistingLaunchConfigurations
                             (createLaunchConfiguration(javaElement)),
                         emptyLaunchConfiguration()))

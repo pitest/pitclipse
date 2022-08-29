@@ -30,6 +30,8 @@ import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
+    public static final String VIEW_ID = "org.pitest.pitclipse.ui.view.mutations.PitMutationsView";
+
     private static final int TREE_STYLE = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
     private TreeViewer viewer;
 
@@ -67,8 +69,8 @@ public class PitMutationsView extends ViewPart implements MutationsView {
 
     private void createTreeViewer(Composite parent) {
         viewer = new TreeViewer(parent, TREE_STYLE);
-        viewer.setContentProvider(new ViewContentProvider());
-        viewer.setLabelProvider(new ViewLabelProvider());
+        viewer.setContentProvider(new PitMutationsViewContentProvider());
+        viewer.setLabelProvider(new PitMutationsViewLabelProvider());
         viewer.addDoubleClickListener(ExpandingDoubleClick.LISTENER);
         viewer.addDoubleClickListener(OpenMutationDoubleClick.LISTENER);
         viewer.setInput(MutationsModel.EMPTY_MODEL);

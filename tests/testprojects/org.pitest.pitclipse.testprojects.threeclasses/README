@@ -1,0 +1,4 @@
+This is a project imported by our SWTBot tests (org.pitest.pitclipse.ui.tests)
+in particular, by the PitclipseOptionsTest and PitclipsePitMutationsViewTest.
+
+This one also has a default package with a class
