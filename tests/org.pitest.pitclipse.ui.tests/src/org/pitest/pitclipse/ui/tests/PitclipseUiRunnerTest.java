@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.NoTestsFoundDialog;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.TestConfigurationSelectorDialog;
+import org.pitest.pitclipse.ui.view.PitView;
+import org.pitest.pitclipse.ui.view.mutations.PitMutationsView;
 
 /**
  * @author Lorenzo Bettini
@@ -300,5 +302,32 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
         );
         mutationsAre(Collections.emptyList());
         noCoverageReportGenerated();
+    }
+
+    @Test
+    public void withViewsClosed() throws CoreException, InterruptedException {
+        try {
+            closeViewById(PitView.VIEW_ID);
+            closeViewById(PitMutationsView.VIEW_ID);
+
+            removeMethods(FOO_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+            removeMethods(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+            runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+
+            // to make sure our views are not opened by our code (see below)
+            // we run the PIT tests twice
+            closeViewById(PitView.VIEW_ID);
+            closeViewById(PitMutationsView.VIEW_ID);
+            runTest(FOO_TEST_CLASS, FOO_BAR_PACKAGE, TEST_PROJECT);
+
+            // we just verify that nothing bad happens, but we cannot
+            // assert mutations because depending on the order of the tests
+            // our views are still closed
+            // see org.pitest.pitclipse.ui.view.PitViewFinder.ViewSearch.activateViewOnceAndOnceOnly(String)
+        } finally {
+            // of course, for the other tests the views must be open
+            openViewById(PitView.VIEW_ID);
+            openViewById(PitMutationsView.VIEW_ID);
+        }
     }
 }

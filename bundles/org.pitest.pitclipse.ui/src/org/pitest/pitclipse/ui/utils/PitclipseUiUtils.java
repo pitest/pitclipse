@@ -31,7 +31,8 @@ import org.osgi.framework.FrameworkUtil;
 import org.pitest.pitclipse.ui.view.mutations.PitMutationsView;
 
 /**
- * A few utilities for the UI.
+ * A few utilities for the UI not meant to be subject of code coverage,
+ * since they deal with borderline situations that are very likely not to happen.
  * 
  * @author Lorenzo Bettini
  *
@@ -67,11 +68,35 @@ public class PitclipseUiUtils {
         void run() throws CoreException, InterruptedException;
     }
 
+    private static final class MissingViewException extends RuntimeException {
+        private static final long serialVersionUID = -2200645197888948647L;
+
+        public MissingViewException(Exception e) {
+            super(e);
+        }
+    }
+
+    /**
+     * Executes the passed runnable and in case of {@link Exception} throws a
+     * {@link RuntimeException} (a {@link MissingViewException}).
+     * 
+     * @param runnable
+     * @return 
+     */
+    public static <T> T executeViewSafelyOrThrow(ProviderWithCoreException<T> provider) {
+        try {
+            return provider.get();
+        } catch (Exception e) {
+            throw new MissingViewException(e);
+        }
+    }
+
     /**
      * Executes the passed runnable and in case of {@link Exception} ignores that
      * and finally executes the andFinally Runnable.
      * 
-     * @param predicate
+     * @param runnable
+     * @param andFinally
      */
     public static <T extends Exception > void executeSafelyAndFinally(RunnableWithException<T> runnable,
             Runnable andFinally) {

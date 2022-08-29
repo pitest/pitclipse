@@ -30,6 +30,8 @@ import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public class PitMutationsView extends ViewPart implements MutationsView {
 
+    public static final String VIEW_ID = "org.pitest.pitclipse.ui.view.mutations.PitMutationsView";
+
     private static final int TREE_STYLE = SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
     private TreeViewer viewer;
 
