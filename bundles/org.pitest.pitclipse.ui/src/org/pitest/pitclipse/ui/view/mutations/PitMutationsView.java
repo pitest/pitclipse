@@ -68,7 +68,7 @@ public class PitMutationsView extends ViewPart implements MutationsView {
     private void createTreeViewer(Composite parent) {
         viewer = new TreeViewer(parent, TREE_STYLE);
         viewer.setContentProvider(new PitMutationsViewContentProvider());
-        viewer.setLabelProvider(new ViewLabelProvider());
+        viewer.setLabelProvider(new PitMutationsViewLabelProvider());
         viewer.addDoubleClickListener(ExpandingDoubleClick.LISTENER);
         viewer.addDoubleClickListener(OpenMutationDoubleClick.LISTENER);
         viewer.setInput(MutationsModel.EMPTY_MODEL);
