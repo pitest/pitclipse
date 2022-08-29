@@ -45,13 +45,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.pitest.pitclipse.runner.model.ClassMutations;
 import org.pitest.pitclipse.runner.model.Mutation;
-import org.pitest.pitclipse.runner.model.MutationsModel;
-import org.pitest.pitclipse.runner.model.MutationsModelVisitor;
-import org.pitest.pitclipse.runner.model.PackageMutations;
-import org.pitest.pitclipse.runner.model.ProjectMutations;
-import org.pitest.pitclipse.runner.model.Status;
+import org.pitest.pitclipse.runner.model.MutationsModelVisitorAdapter;
 import org.pitest.pitclipse.runner.model.Visitable;
 
 public enum OpenMutationDoubleClick implements IDoubleClickListener {
@@ -70,38 +65,16 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
     public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = selectionFrom(event);
         Object element = selection.getFirstElement();
-        if (element instanceof Visitable) {
-            Visitable visitable = (Visitable) element;
-            visitable.accept(MutationSource.VIEWER);
-        }
+        Visitable visitable = (Visitable) element;
+        visitable.accept(MutationSource.VIEWER);
     }
 
     private IStructuredSelection selectionFrom(DoubleClickEvent event) {
         return (IStructuredSelection) event.getSelection();
     }
 
-    private enum MutationSource implements MutationsModelVisitor<Void> {
+    private enum MutationSource implements MutationsModelVisitorAdapter<Void> {
         VIEWER;
-
-        @Override
-        public Void visitModel(MutationsModel mutationsModel) {
-            return null;
-        }
-
-        @Override
-        public Void visitProject(ProjectMutations projectMutations) {
-            return null;
-        }
-
-        @Override
-        public Void visitPackage(PackageMutations packageMutations) {
-            return null;
-        }
-
-        @Override
-        public Void visitClass(ClassMutations classMutations) {
-            return null;
-        }
 
         @Override
         public Void visitMutation(Mutation mutation) {
@@ -111,11 +84,6 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
             final int lineNumber = mutation.getLineNumber() - 1;
 
             new MutationSelectingJob(projectName, lineNumber, className).schedule();
-            return null;
-        }
-
-        @Override
-        public Void visitStatus(Status status) {
             return null;
         }
 
