@@ -63,11 +63,17 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         SWTBotTree mutationTreeRoot = pitMutationsView.mutationTreeRoot();
         final SWTBotTreeItem firstItem = mutationTreeRoot.getAllItems()[0];
         assertFalse("should be collapsed", firstItem.isExpanded());
+        // with toolbar buttons
         bot.toolbarButtonWithTooltip
             (PitMutationsView.EXPAND_ALL_BUTTON_TEXT).click();
         assertTrue("should be expanded", firstItem.isExpanded());
         bot.toolbarButtonWithTooltip
             (PitMutationsView.COLLAPSE_ALL_BUTTON_TEXT).click();
+        assertFalse("should be collapsed", firstItem.isExpanded());
+        // with double-click
+        firstItem.doubleClick();
+        assertTrue("should be expanded", firstItem.isExpanded());
+        firstItem.doubleClick();
         assertFalse("should be collapsed", firstItem.isExpanded());
     }
 }
