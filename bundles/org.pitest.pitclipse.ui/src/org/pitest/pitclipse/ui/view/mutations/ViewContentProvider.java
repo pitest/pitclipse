@@ -26,7 +26,7 @@ import org.pitest.pitclipse.runner.model.ProjectMutations;
 import org.pitest.pitclipse.runner.model.Status;
 import org.pitest.pitclipse.runner.model.Visitable;
 
-public class PitMutationsViewContentProvider implements ITreeContentProvider {
+public class ViewContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(Object element) {
@@ -39,21 +39,30 @@ public class PitMutationsViewContentProvider implements ITreeContentProvider {
     }
 
     private Object[] handleElementsOrChildren(Object element) {
-        Visitable visitable = (Visitable) element;
-        return visitable.accept(Structure.VISITOR);
+        if (element instanceof Visitable) {
+            Visitable visitable = (Visitable) element;
+            return visitable.accept(Structure.VISITOR);
+        }
+        return nothing();
     }
 
     @Override
     public Object getParent(Object element) {
-        Visitable visitable = (Visitable) element;
-        return visitable.accept(Parent.VISITOR);
+        if (element instanceof Visitable) {
+            Visitable visitable = (Visitable) element;
+            return visitable.accept(Parent.VISITOR);
+        }
+        return null;
     }
 
     @Override
     public boolean hasChildren(Object element) {
-        Visitable visitable = (Visitable) element;
-        Object[] children = visitable.accept(Structure.VISITOR);
-        return children.length > 0;
+        if (element instanceof Visitable) {
+            Visitable visitable = (Visitable) element;
+            Object[] children = visitable.accept(Structure.VISITOR);
+            return children.length > 0;
+        }
+        return false;
     }
 
     private enum Structure implements MutationsModelVisitor<Object[]> {
