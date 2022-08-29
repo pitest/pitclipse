@@ -18,8 +18,10 @@ package org.pitest.pitclipse.ui.view.mutations;
 
 import static org.eclipse.ui.ide.IDE.openEditor;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -28,10 +30,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -48,6 +47,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.pitest.pitclipse.runner.model.Mutation;
 import org.pitest.pitclipse.runner.model.MutationsModelVisitorAdapter;
 import org.pitest.pitclipse.runner.model.Visitable;
+import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
 
 public enum OpenMutationDoubleClick implements IDoubleClickListener {
     
@@ -113,20 +113,15 @@ public enum OpenMutationDoubleClick implements IDoubleClickListener {
 
             private Optional<IFile> findClass(final String projectName, final String className) {
                 IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-                for (IProject project : root.getProjects()) {
-                    if (project.getName().equals(projectName) && project.isOpen()) {
-                        IJavaProject javaProject = JavaCore.create(project);
-                        if (javaProject != null) {
-                            try {
-                                IType type = javaProject.findType(className);
-                                return Optional.ofNullable(root.getFile(type.getPath()));
-                            } catch (JavaModelException e) {
-                                // Maybe type no longer exists. Do nothing
-                            }
-                        }
-                    }
-                }
-                return Optional.empty();
+                return Stream.of(root.getProjects())
+                    .filter(IProject::isOpen)
+                    .filter(project -> project.getName().equals(projectName))
+                    .map(JavaCore::create)
+                    .filter(Objects::nonNull)
+                    .map(javaProject -> PitclipseUiUtils.executeSafelyOrElse(() ->
+                        root.getFile(javaProject.findType(className).getPath()), null))
+                    .filter(Objects::nonNull)
+                    .findFirst();
             }
 
             private static final class OpenFileInEditorAtLine implements Function<IFile, IStatus> {
