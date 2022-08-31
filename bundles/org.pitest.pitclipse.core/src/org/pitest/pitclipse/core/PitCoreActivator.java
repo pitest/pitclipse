@@ -131,7 +131,7 @@ public class PitCoreActivator extends Plugin {
         addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-entry.jar");
         addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-command-line.jar");
         addMavenJarToClasspath(pitestClasspath, ORG_PITEST, "pitest-html-report.jar");
-        pitestClasspath.add(getBundleCanonicalPath("com.google.guava"));
+        // we don't need "com.google.guava" anymore
 
         if (Platform.getBundle(ORG_PITEST_PITCLIPSE_LISTENERS) != null) {
             addOurBundleToClasspath(pitestClasspath, ORG_PITEST_PITCLIPSE_LISTENERS);
