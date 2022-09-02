@@ -16,9 +16,8 @@
 
 package org.pitest.pitclipse.ui.view;
 
-import static com.google.common.collect.Sets.newHashSet;
-
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -42,7 +41,7 @@ public enum PitViewFinder {
     private static final String PIT_MUTATIONS_VIEW = PitMutationsView.VIEW_ID;
 
     private static final class ViewSearch implements Runnable {
-        private static Set<String> initialisedViews = newHashSet();
+        private static Set<String> initialisedViews = new HashSet<>();
         private final AtomicReference<IViewPart> viewRef = new AtomicReference<>();
         private final String viewId;
 

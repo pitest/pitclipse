@@ -16,8 +16,17 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import static org.eclipse.core.resources.IResource.FOLDER;
+import static org.eclipse.core.resources.IResource.NONE;
+import static org.eclipse.core.resources.IResource.PROJECT;
+import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
+import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
+import static org.eclipse.jdt.core.IPackageFragment.DEFAULT_PACKAGE_NAME;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -31,24 +40,13 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.ImmutableList.copyOf;
-import static org.eclipse.core.resources.IResource.FOLDER;
-import static org.eclipse.core.resources.IResource.NONE;
-import static org.eclipse.core.resources.IResource.PROJECT;
-import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT;
-import static org.eclipse.jdt.core.IJavaElement.PACKAGE_FRAGMENT_ROOT;
-import static org.eclipse.jdt.core.IPackageFragment.DEFAULT_PACKAGE_NAME;
-
 public class PackageFinder {
 
     private static final class ProjectLevelProxyVisitor implements IResourceProxyVisitor {
         private final LaunchConfigurationWrapper configurationWrapper;
-        private final Builder<String> builder;
+        private final Set<String> builder;
 
-        private ProjectLevelProxyVisitor(LaunchConfigurationWrapper configurationWrapper, Builder<String> builder) {
+        private ProjectLevelProxyVisitor(LaunchConfigurationWrapper configurationWrapper, Set<String> builder) {
             this.configurationWrapper = configurationWrapper;
             this.builder = builder;
         }
@@ -75,18 +73,18 @@ public class PackageFinder {
         }
 
         private Set<String> getPackagesFromRoot(IJavaProject project, String handleId) throws CoreException {
-            Builder<String> setBuilder = ImmutableSet.builder();
+            Set<String> setBuilder = new HashSet<>();
             IPackageFragmentRoot[] roots = project.getPackageFragmentRoots();
             for (IPackageFragmentRoot root : roots) {
                 if (handleId.equals(root.getHandleIdentifier())) {
                     setBuilder.addAll(packagesFrom(root));
                 }
             }
-            return setBuilder.build();
+            return setBuilder;
         }
 
         private Set<String> packagesFrom(IPackageFragmentRoot root) throws CoreException {
-            Builder<String> setBuilder = ImmutableSet.builder();
+            Set<String> setBuilder = new HashSet<>();
             IJavaElement[] elements = root.getChildren();
             for (IJavaElement element : elements) {
                 if (element instanceof IPackageFragment) {
@@ -95,11 +93,11 @@ public class PackageFinder {
                 }
 
             }
-            return setBuilder.build();
+            return setBuilder;
         }
 
         private Set<String> packagesFrom(IPackageFragment packageFragment) throws CoreException {
-            Builder<String> setBuilder = ImmutableSet.builder();
+            Set<String> setBuilder = new HashSet<>();
             if (packageFragment.getElementName().equals(DEFAULT_PACKAGE_NAME)) {
                 setBuilder.addAll(classesFromDefaultPackage(packageFragment));
             } else {
@@ -107,28 +105,28 @@ public class PackageFinder {
                     setBuilder.add(packageFragment.getElementName() + ".*");
                 }
             }
-            return setBuilder.build();
+            return setBuilder;
         }
 
         private Set<String> classesFromDefaultPackage(IPackageFragment packageFragment) throws CoreException {
-            Builder<String> setBuilder = ImmutableSet.builder();
+            Set<String> setBuilder = new HashSet<>();
             for (ICompilationUnit c : packageFragment.getCompilationUnits()) {
                 for (IType type : c.getAllTypes()) {
                     setBuilder.add(type.getFullyQualifiedName());
                 }
             }
-            return setBuilder.build();
+            return setBuilder;
         }
     }
 
     public List<String> getPackages(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        final Builder<String> builder = ImmutableSet.builder();
+        Set<String> setBuilder = new HashSet<>();
         IResource[] resources = configurationWrapper.getMappedResources();
-        IResourceProxyVisitor visitor = new ProjectLevelProxyVisitor(configurationWrapper, builder);
+        IResourceProxyVisitor visitor = new ProjectLevelProxyVisitor(configurationWrapper, setBuilder);
         for (IResource resource : resources) {
             resource.accept(visitor, NONE);
         }
-        return copyOf(builder.build());
+        return new ArrayList<>(setBuilder);
     }
 
 }

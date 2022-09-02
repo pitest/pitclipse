@@ -16,12 +16,12 @@
 
 package org.pitest.pitclipse.runner;
 
-import java.io.File;
-import java.util.List;
+import static java.util.Collections.emptyList;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.Lists;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Turns {@link PitOptions} instances into CLI arguments
@@ -39,93 +39,103 @@ public class PitCliArguments {
     }
 
     private String[] toCliArgs(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         int threads = options.getThreads();
         File reportDir = options.getReportDirectory();
-        builder.add("--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY",
+        List<String> args = new ArrayList<>(Arrays.asList(
+                "--failWhenNoMutations", "false", "--outputFormats", "HTML,PITCLIPSE_MUTATIONS,PITCLIPSE_SUMMARY",
                 "--verbose", "--threads", Integer.toString(threads), "--reportDir", reportDir.getPath(),
-                "--targetTests", testsToRunFrom(options));
-        builder.addAll(targetClassesFrom(options));
-        builder.add("--sourceDirs").add(sourceDirsFrom(options));
-        builder.addAll(historyLocationFrom(options));
-        builder.addAll(excludedClassesFrom(options));
-        builder.addAll(excludedMethodsFrom(options));
-        builder.addAll(avoidedCallsFrom(options));
-        builder.addAll(mutatorsFrom(options));
-        builder.add("--timeoutConst", Integer.toString(options.getTimeout()));
-        builder.add("--timeoutFactor", options.getTimeoutFactor().toPlainString());
+                "--targetTests", testsToRunFrom(options)));
+        args.addAll(targetClassesFrom(options));
+        args.add("--sourceDirs");
+        args.add(sourceDirsFrom(options));
+        args.addAll(historyLocationFrom(options));
+        args.addAll(excludedClassesFrom(options));
+        args.addAll(excludedMethodsFrom(options));
+        args.addAll(avoidedCallsFrom(options));
+        args.addAll(mutatorsFrom(options));
+        args.add("--timeoutConst");
+        args.add(Integer.toString(options.getTimeout()));
+        args.add("--timeoutFactor");
+        args.add(options.getTimeoutFactor().toPlainString());
         if (options.getUseJUnit5()) {
             // Specify that the 'pitest-junit5-plugin' should be used to discover tests
-            builder.add("--testPlugin", "junit5");
+            args.add("--testPlugin");
+            args.add("junit5");
         }
         String additionalClasspath = additionalClassPath(options);
         if (!additionalClasspath.isEmpty()) {
-            builder.add("--classPath", additionalClasspath);
+            args.add("--classPath");
+            args.add(additionalClasspath);
         }
-        List<String> args = builder.build();
         return args.toArray(new String[args.size()]);
     }
 
     private List<String> excludedClassesFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> excludedClasses = options.getExcludedClasses();
         if (!excludedClasses.isEmpty()) {
-            builder.add("--excludedClasses");
-            builder.add(concat(commaSeparate(excludedClasses)));
+            List<String> args = new ArrayList<>();
+            args.add("--excludedClasses");
+            args.add(concat(commaSeparate(excludedClasses)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> excludedMethodsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> excludedMethods = options.getExcludedMethods();
         if (!excludedMethods.isEmpty()) {
-            builder.add("--excludedMethods");
-            builder.add(concat(commaSeparate(excludedMethods)));
+            List<String> args = new ArrayList<>();
+            args.add("--excludedMethods");
+            args.add(concat(commaSeparate(excludedMethods)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> avoidedCallsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> avoidCallsTo = options.getAvoidCallsTo();
         if (!avoidCallsTo.isEmpty()) {
-            builder.add("--avoidCallsTo");
-            builder.add(concat(commaSeparate(avoidCallsTo)));
+            List<String> args = new ArrayList<>();
+            args.add("--avoidCallsTo");
+            args.add(concat(commaSeparate(avoidCallsTo)));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> mutatorsFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         String mutators = options.getMutators();
         if (!mutators.trim().isEmpty()) {
-            builder.add("--mutators");
-            builder.add(mutators);
+            List<String> args = new ArrayList<>();
+            args.add("--mutators");
+            args.add(mutators);
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> historyLocationFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         File historyLocation = options.getHistoryLocation();
         if (null != historyLocation) {
-            builder.add("--historyInputLocation");
-            builder.add(historyLocation.getPath());
-            builder.add("--historyOutputLocation");
-            builder.add(historyLocation.getPath());
+            List<String> args = new ArrayList<>();
+            args.add("--historyInputLocation");
+            args.add(historyLocation.getPath());
+            args.add("--historyOutputLocation");
+            args.add(historyLocation.getPath());
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private List<String> targetClassesFrom(PitOptions options) {
-        Builder<String> builder = ImmutableList.builder();
         List<String> classesToMutate = options.getClassesToMutate();
         if (!classesToMutate.isEmpty()) {
-            builder.add("--targetClasses");
-            builder.add(classpath(options));
+            List<String> args = new ArrayList<>();
+            args.add("--targetClasses");
+            args.add(classpath(options));
+            return args;
         }
-        return builder.build();
+        return emptyList();
     }
 
     private String testsToRunFrom(PitOptions options) {
@@ -153,11 +163,11 @@ public class PitCliArguments {
     }
 
     private List<String> fileAsStrings(List<File> files) {
-        Builder<String> builder = ImmutableList.builder();
+        List<String> args = new ArrayList<>();
         for (File file : files) {
-            builder.add(file.getPath());
+            args.add(file.getPath());
         }
-        return builder.build();
+        return args;
     }
 
     private String concat(List<String> entries) {
@@ -169,7 +179,7 @@ public class PitCliArguments {
     }
 
     private List<String> commaSeparate(List<String> candidates) {
-        List<String> formattedCandidates = Lists.newArrayList();
+        List<String> formattedCandidates = new ArrayList<>();
         int size = candidates.size();
         for (int i = 0; i < size; i++) {
             String candidate = candidates.get(i).trim();

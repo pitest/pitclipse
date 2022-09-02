@@ -16,10 +16,9 @@
 
 package org.pitest.pitclipse.runner;
 
-import com.google.common.collect.ImmutableList;
-
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,9 +29,9 @@ import java.util.List;
 public class PitRequest implements Serializable {
     private static final long serialVersionUID = 2058881520214195050L;
     private final PitOptions options;
-    private final ImmutableList<String> projects;
+    private final List<String> projects;
 
-    private PitRequest(PitOptions options, ImmutableList<String> projects) {
+    private PitRequest(PitOptions options, List<String> projects) {
         this.options = options;
         this.projects = projects;
     }
@@ -44,7 +43,7 @@ public class PitRequest implements Serializable {
     public static final class Builder {
 
         private PitOptions options;
-        private ImmutableList<String> projects = ImmutableList.of();
+        private List<String> projects = new ArrayList<>();
 
         private Builder() {
         }
@@ -59,7 +58,7 @@ public class PitRequest implements Serializable {
         }
 
         public Builder withProjects(List<String> projects) {
-            this.projects = ImmutableList.copyOf(projects);
+            this.projects = new ArrayList<>(projects);
             return this;
         }
     }

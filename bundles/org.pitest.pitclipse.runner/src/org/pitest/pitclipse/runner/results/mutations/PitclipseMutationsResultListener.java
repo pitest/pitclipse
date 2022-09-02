@@ -16,7 +16,10 @@
 
 package org.pitest.pitclipse.runner.results.mutations;
 
-import com.google.common.collect.ImmutableList;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
@@ -26,8 +29,6 @@ import org.pitest.pitclipse.runner.results.DetectionStatusCoverter;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.Mutations.Mutation;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
-
-import java.math.BigInteger;
 
 /**
  * <p>Listens for mutations results sent by PIT in order to make them all available to Pitclipse.</p>
@@ -40,7 +41,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
 
     private final MutationsDispatcher dispatcher;
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
-    private ImmutableList<Mutation> mutations = ImmutableList.of();
+    private List<Mutation> mutations = Collections.emptyList();
 
     public PitclipseMutationsResultListener(MutationsDispatcher dispatcher) {
         this.dispatcher = dispatcher;
@@ -67,7 +68,8 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
             mutation.setDetected(result.getStatus().isDetected());
             mutation.setDescription(details.getDescription());
 
-            this.mutations = ImmutableList.<Mutation>builder().addAll(mutations).add(mutation).build();
+            this.mutations = new ArrayList<>(mutations);
+            this.mutations.add(mutation);
         }
 
     }

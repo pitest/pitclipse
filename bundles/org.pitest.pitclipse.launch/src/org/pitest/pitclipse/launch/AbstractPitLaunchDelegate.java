@@ -18,6 +18,8 @@ package org.pitest.pitclipse.launch;
 
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -41,8 +43,6 @@ import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.PitRunnerMain;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
 import org.pitest.pitclipse.runner.io.SocketProvider;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * <p>Abstract launch configuration used to execute PIT in a background VM.</p>
@@ -75,15 +75,13 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
     @Override
     public String[] getClasspath(ILaunchConfiguration launchConfig) throws CoreException {
-        ImmutableList.Builder<String> builder = ImmutableList.<String>builder()
-                .addAll(getDefault().getPitClasspath());
-        builder.addAll(ImmutableList.copyOf(super.getClasspath(launchConfig)));
+        List<String> newClasspath = new ArrayList<>(getDefault().getPitClasspath());
+        newClasspath.addAll(Arrays.asList(super.getClasspath(launchConfig)));
         if (projectUsesJunit5) {
             // Allow Pitest to detect Junit5 tests
-            builder.addAll(getDefault().getPitestJunit5PluginClasspath());
+            newClasspath.addAll(getDefault().getPitestJunit5PluginClasspath());
         }
-        List<String> newClasspath = builder.build();
-        
+
         return newClasspath.toArray(new String[newClasspath.size()]);
     }
 
@@ -103,15 +101,14 @@ public abstract class AbstractPitLaunchDelegate extends JavaLaunchDelegate {
 
         projectUsesJunit5 = isJUnit5InClasspathOf(configWrapper.getProject());
         PitOptionsBuilder optionsBuilder = configWrapper.getPitOptionsBuilder();
-        PitOptions options = optionsBuilder.withUseJUnit5(projectUsesJunit5)
-                                           .build();
+        PitOptions options = optionsBuilder.withUseJUnit5(projectUsesJunit5).build();
 
         super.launch(configuration, mode, launch, monitor);
 
         IExtensionRegistry registry = Platform.getExtensionRegistry();
 
-        new ExtensionPointHandler<PitRuntimeOptions>(EXTENSION_POINT_ID).execute(registry, new PitRuntimeOptions(
-                portNumber, options, configWrapper.getMutatedProjects()));
+        new ExtensionPointHandler<PitRuntimeOptions>(EXTENSION_POINT_ID).execute(registry,
+                new PitRuntimeOptions(portNumber, options, configWrapper.getMutatedProjects()));
 
     }
 

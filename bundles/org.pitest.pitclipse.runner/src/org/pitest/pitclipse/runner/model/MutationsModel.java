@@ -16,16 +16,6 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
-
-import org.pitest.pitclipse.runner.results.DetectionStatus;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import static com.google.common.collect.Collections2.transform;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.MEMORY_ERROR;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.NON_VIABLE;
@@ -36,32 +26,71 @@ import static org.pitest.pitclipse.runner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.SURVIVED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.TIMED_OUT;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.pitest.pitclipse.runner.results.DetectionStatus;
+
 public class MutationsModel implements Visitable, Countable {
 
+    /**
+     * Orders according to the specified list {@link #STATUSES_IN_ORDER}
+     * 
+     * @author Lorenzo Bettini
+     *
+     */
     private enum StatusComparator implements Comparator<Status> {
         INSTANCE;
 
-        private static final Ordering<DetectionStatus> STATUSES_IN_ORDER = Ordering.explicit(ImmutableList.of(SURVIVED,
-                NOT_STARTED, STARTED, KILLED, TIMED_OUT, NON_VIABLE, MEMORY_ERROR, RUN_ERROR, NO_COVERAGE));
+        private static final Map<DetectionStatus, Integer> STATUSES_IN_ORDER = indexMap(
+            SURVIVED, NOT_STARTED,
+            STARTED, KILLED, TIMED_OUT, NON_VIABLE,
+            MEMORY_ERROR, RUN_ERROR, NO_COVERAGE);
+
+        /**
+         * Returns a map from the ith element of list to i.
+         * 
+         * Similar to what Guava Orderig.explicit does
+         */
+        static Map<DetectionStatus, Integer> indexMap(DetectionStatus... list) {
+            Map<DetectionStatus, Integer> map = new EnumMap<>(DetectionStatus.class);
+            int i = 0;
+            for (DetectionStatus e : list) {
+                map.put(e, i++);
+            }
+            return map;
+        }
+
+        private static int rank(DetectionStatus value) {
+            return STATUSES_IN_ORDER.get(value);
+        }
 
         @Override
-        public int compare(Status lhs, Status rhs) {
-            return STATUSES_IN_ORDER.compare(lhs.getDetectionStatus(), rhs.getDetectionStatus());
+        public int compare(Status left, Status right) {
+            return rank(left.getDetectionStatus()) - rank(right.getDetectionStatus());
         }
+
     }
 
-    public static final MutationsModel EMPTY_MODEL = make(ImmutableList.<Status>of());
+    public static final MutationsModel EMPTY_MODEL = make(Collections.emptyList());
 
-    private final ImmutableList<Status> statuses;
+    private final List<Status> statuses;
 
-    private MutationsModel(ImmutableList<Status> statuses) {
-        this.statuses = ImmutableList.copyOf(
-                transform(statuses, input -> input.copyOf().withModel(MutationsModel.this).build())
-        );
+    private MutationsModel(List<Status> statuses) {
+        this.statuses = statuses.stream()
+            .map(input -> input.copyOf().withModel(MutationsModel.this).build())
+            .collect(Collectors.toList());
     }
 
     public static MutationsModel make(List<Status> statuses) {
-        ImmutableList<Status> sortedStatuses = Ordering.from(StatusComparator.INSTANCE).immutableSortedCopy(statuses);
+        List<Status> sortedStatuses = statuses.stream()
+                .sorted(StatusComparator.INSTANCE)
+                .collect(Collectors.toList());
         return new MutationsModel(sortedStatuses);
     }
 

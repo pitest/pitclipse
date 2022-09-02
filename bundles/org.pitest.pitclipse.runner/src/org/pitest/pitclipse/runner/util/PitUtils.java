@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2019 Phil Glover and contributors
+ * Copyright 2021 Lorenzo Bettini and contributors
  *  
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -13,13 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
+package org.pitest.pitclipse.runner.util;
 
-package org.pitest.pitclipse.runner.model;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Multimap;
+/**
+ * @author Lorenzo Bettini
+ *
+ */
+public class PitUtils {
 
-import org.pitest.pitclipse.runner.results.DetectionStatus;
-import org.pitest.pitclipse.runner.results.Mutations.Mutation;
+    private PitUtils() {
+        // only static methods
+    }
 
-public interface MutationsByStatus extends Multimap<DetectionStatus, Mutation> {
+    public static List<String> splitBasedOnComma(String elements) {
+        return Arrays.stream(elements.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
 }

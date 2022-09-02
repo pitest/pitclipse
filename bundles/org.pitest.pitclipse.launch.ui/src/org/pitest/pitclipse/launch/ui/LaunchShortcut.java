@@ -18,6 +18,7 @@ package org.pitest.pitclipse.launch.ui;
 
 import static org.eclipse.jdt.ui.JavaUI.getEditorInputTypeRoot;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -29,8 +30,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.ui.IEditorInput;
 import org.pitest.pitclipse.ui.utils.PitclipseUiUtils;
-
-import com.google.common.collect.ImmutableList;
 
 final class LaunchShortcut {
 
@@ -52,8 +51,8 @@ final class LaunchShortcut {
         return Optional.ofNullable(PitclipseUiUtils.tryToAdapt(o, IJavaElement.class));
     }
 
-    static ImmutableList<ILaunchConfiguration> emptyLaunchConfiguration() {
-        return ImmutableList.<ILaunchConfiguration>of();
+    static List<ILaunchConfiguration> emptyLaunchConfiguration() {
+        return Collections.emptyList();
     }
 
     static ILaunchConfiguration[] emptyList() {

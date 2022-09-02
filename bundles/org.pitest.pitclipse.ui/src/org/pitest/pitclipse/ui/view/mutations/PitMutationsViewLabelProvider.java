@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.ui.view.mutations;
 
-import static com.google.common.collect.Sets.immutableEnumSet;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.KILLED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.MEMORY_ERROR;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.NON_VIABLE;
@@ -26,6 +25,8 @@ import static org.pitest.pitclipse.runner.results.DetectionStatus.STARTED;
 import static org.pitest.pitclipse.runner.results.DetectionStatus.TIMED_OUT;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -52,8 +53,10 @@ public class PitMutationsViewLabelProvider extends LabelProvider {
 
     private static final Image MUTATION_DETECTED = getBundleImage("detected.gif");
     private static final Image MUTATION_NOT_DETECTED = getBundleImage("not_detected.gif");
-    private static final Set<DetectionStatus> DETECTED_STATUSES = immutableEnumSet(KILLED, TIMED_OUT, NON_VIABLE,
-            MEMORY_ERROR, NOT_STARTED, STARTED, RUN_ERROR);
+    private static final Set<DetectionStatus> DETECTED_STATUSES = new HashSet<>(
+        Arrays.asList(
+            KILLED, TIMED_OUT, NON_VIABLE,
+            MEMORY_ERROR, NOT_STARTED, STARTED, RUN_ERROR));
 
     @Override
     public String getText(Object element) {

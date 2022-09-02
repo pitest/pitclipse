@@ -23,7 +23,7 @@
 
 	<properties>
 		<!-- PLUGIN DEPENDENCIES -->
-		<tycho-version>2.7.4</tycho-version>
+		<tycho-version>2.7.3</tycho-version>
 		<jacoco-version>0.8.6</jacoco-version>
 
 		<!-- MISC -->
@@ -68,10 +68,16 @@
 			**/*Exception.java,
 			**/*Activator.java,
 			**/*RunnerMain.java,
-			**/runner/model/*.java,
 			**/runner/results/summary/*.java,
 		</sonar.exclusions>
 		<sonar.coverage.exclusions>
+			**/runner/model/ClassMutations.java,
+			**/runner/model/Mutation.java,
+			**/runner/model/MutationsModel.java,
+			**/runner/model/MutationSorter.java,
+			**/runner/model/PackageMutations.java,
+			**/runner/model/ProjectMutations.java,
+			**/runner/model/Status.java,
 			**/PitclipseUiUtils.java,
 			**/PitclipseLaunchUiUtils.java,
 			**/LinkSelectionAdapter.java,

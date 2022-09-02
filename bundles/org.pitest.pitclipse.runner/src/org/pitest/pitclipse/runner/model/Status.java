@@ -16,43 +16,43 @@
 
 package org.pitest.pitclipse.runner.model;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
 
-import org.pitest.pitclipse.runner.results.DetectionStatus;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Collections2.transform;
+import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public class Status implements Visitable, Countable {
 
     private final DetectionStatus detectionStatus;
-    private final ImmutableList<ProjectMutations> projectMutations;
+    private final List<ProjectMutations> projectMutations;
     private final MutationsModel mutationsModel;
 
     private Status(MutationsModel mutationsModel, DetectionStatus detectionStatus,
-            ImmutableList<ProjectMutations> projectMutations) {
+            List<ProjectMutations> projectMutations) {
         this.mutationsModel = mutationsModel;
         this.detectionStatus = detectionStatus;
-        this.projectMutations = ImmutableList.copyOf(
-                transform(projectMutations, input -> input.copyOf().withStatus(Status.this).build())
-        );
+        this.projectMutations = projectMutations.stream()
+                .map(input -> input.copyOf().withStatus(Status.this).build())
+                .collect(Collectors.toList());
     }
 
     public DetectionStatus getDetectionStatus() {
         return detectionStatus;
     }
 
-    public ImmutableList<ProjectMutations> getProjectMutations() {
+    public List<ProjectMutations> getProjectMutations() {
         return projectMutations;
     }
 
     public static class Builder {
         private DetectionStatus detectionStatus;
-        private ImmutableList<ProjectMutations> projectMutations = ImmutableList.of();
+        private List<ProjectMutations> projectMutations = new ArrayList<>();
         private MutationsModel mutationsModel;
 
         private Builder() {
@@ -64,8 +64,12 @@ public class Status implements Visitable, Countable {
         }
 
         public Builder withProjectMutations(List<ProjectMutations> projectMutations) {
-            this.projectMutations = Ordering.natural().nullsLast().onResultOf(ProjectName.GET)
-                    .immutableSortedCopy(projectMutations);
+            this.projectMutations = projectMutations.stream()
+                    .sorted(
+                        comparing(ProjectMutations::getProjectName,
+                            nullsLast(
+                                naturalOrder())))
+                    .collect(Collectors.toList());
             return this;
         }
 
@@ -115,18 +119,10 @@ public class Status implements Visitable, Countable {
         return sum;
     }
 
-    private enum ProjectName implements Function<ProjectMutations, String> {
-        GET;
-
-        @Override
-        public String apply(ProjectMutations input) {
-            return input.getProjectName();
-        }
-
-    }
-
     public Builder copyOf() {
-        return builder().withDetectionStatus(detectionStatus).withProjectMutations(projectMutations);
+        return builder()
+            .withDetectionStatus(detectionStatus)
+            .withProjectMutations(projectMutations);
     }
 
     public MutationsModel getMutationsModel() {

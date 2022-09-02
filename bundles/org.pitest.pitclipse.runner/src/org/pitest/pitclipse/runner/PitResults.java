@@ -18,28 +18,28 @@ package org.pitest.pitclipse.runner;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pitest.pitclipse.runner.PitOptions.PitLaunchException;
 import org.pitest.pitclipse.runner.results.Mutations;
 import org.pitest.pitclipse.runner.results.ObjectFactory;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * Results produced by PIT during an analyze.
  */
 public final class PitResults implements Serializable {
-    private static final long serialVersionUID = 5457147591186148047L;
+
+    private static final long serialVersionUID = -3422757345245132100L;
 
     private final File htmlResultFile;
 
     private final Mutations mutations;
 
-    private final ImmutableList<String> projects;
+    private final List<String> projects;
 
     private PitResults(File htmlResultFile, Mutations mutations,
-            ImmutableList<String> projects) {
+            List<String> projects) {
         this.htmlResultFile = htmlResultFile;
         this.mutations = mutations;
         this.projects = projects;
@@ -52,7 +52,7 @@ public final class PitResults implements Serializable {
     public static final class Builder {
 
         private File htmlResultFile = null;
-        private ImmutableList<String> projects = ImmutableList.of();
+        private List<String> projects = new ArrayList<>();
         private Mutations mutations = new ObjectFactory().createMutations();
 
         private Builder() {
@@ -85,7 +85,7 @@ public final class PitResults implements Serializable {
         }
 
         public Builder withProjects(List<String> projects) {
-            this.projects = ImmutableList.copyOf(projects);
+            this.projects = new ArrayList<>(projects);
             return this;
         }
 
@@ -108,7 +108,7 @@ public final class PitResults implements Serializable {
         return new Builder();
     }
 
-    public ImmutableList<String> getProjects() {
+    public List<String> getProjects() {
         return projects;
     }
 

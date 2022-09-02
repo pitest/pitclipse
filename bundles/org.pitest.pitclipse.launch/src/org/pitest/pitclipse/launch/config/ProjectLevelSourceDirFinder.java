@@ -16,9 +16,12 @@
 
 package org.pitest.pitclipse.launch.config;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -26,15 +29,11 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-
 public class ProjectLevelSourceDirFinder implements SourceDirFinder {
 
     @Override
     public List<File> getSourceDirs(LaunchConfigurationWrapper configurationWrapper) throws CoreException {
-        Builder<File> sourceDirBuilder = ImmutableSet.builder();
+        Set<File> sourceDirBuilder = new HashSet<>();
         IJavaProject javaProject = configurationWrapper.getProject();
         URI location = getProjectLocation(javaProject.getProject());
         IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
@@ -49,7 +48,7 @@ public class ProjectLevelSourceDirFinder implements SourceDirFinder {
                 }
             }
         }
-        return ImmutableList.copyOf(sourceDirBuilder.build());
+        return new ArrayList<>(sourceDirBuilder);
     }
 
     private boolean isValid(IPackageFragmentRoot packageRoot) {

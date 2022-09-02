@@ -16,6 +16,7 @@
 
 package org.pitest.pitclipse.launch.config;
 
+
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME;
 import static org.pitest.pitclipse.core.PitCoreActivator.getDefault;
@@ -24,6 +25,7 @@ import static org.pitest.pitclipse.core.preferences.PitPreferences.MUTATOR_GROUP
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -42,9 +44,7 @@ import org.pitest.pitclipse.core.launch.TestClassNotFoundException;
 import org.pitest.pitclipse.runner.PitOptions;
 import org.pitest.pitclipse.runner.PitOptions.PitOptionsBuilder;
 import org.pitest.pitclipse.runner.config.PitConfiguration;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
+import org.pitest.pitclipse.runner.util.PitUtils;
 
 public class LaunchConfigurationWrapper {
 
@@ -207,39 +207,33 @@ public class LaunchConfigurationWrapper {
     }
 
     private List<String> getExcludedMethods() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String excludedMethods;
         if (launchConfig.hasAttribute(ATTR_EXCLUDE_METHODS)) {
             excludedMethods = launchConfig.getAttribute(ATTR_EXCLUDE_METHODS, "");
         } else {
             excludedMethods = pitConfiguration.getExcludedMethods();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(excludedMethods));
-        return results.build();
+        return PitUtils.splitBasedOnComma(excludedMethods);
     }
 
     private List<String> getAvoidCallsTo() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String avoidCallsTo;
         if (launchConfig.hasAttribute(ATTR_AVOID_CALLS_TO)) {
             avoidCallsTo = launchConfig.getAttribute(ATTR_AVOID_CALLS_TO, "");
         } else {
             avoidCallsTo = pitConfiguration.getAvoidCallsTo();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(avoidCallsTo));
-        return results.build();
+        return PitUtils.splitBasedOnComma(avoidCallsTo);
     }
 
     private List<String> getExcludedClasses() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         String excludedClasses;
         if (launchConfig.hasAttribute(ATTR_EXCLUDE_CLASSES)) {
             excludedClasses = launchConfig.getAttribute(ATTR_EXCLUDE_CLASSES, "");
         } else {
             excludedClasses = pitConfiguration.getExcludedClasses();
         }
-        results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(excludedClasses));
-        return results.build();
+        return PitUtils.splitBasedOnComma(excludedClasses);
     }
 
     private boolean isIncrementalAnalysis() throws CoreException {
@@ -264,10 +258,9 @@ public class LaunchConfigurationWrapper {
     }
 
     private List<String> getTargetClasses() throws CoreException {
-        ImmutableList.Builder<String> results = ImmutableList.builder();
         final String targetClasses = launchConfig.getAttribute(ATTR_TARGET_CLASSES, "");
         return targetClasses.equals("") ? null
-                : results.addAll(Splitter.on(',').trimResults().omitEmptyStrings().split(targetClasses)).build();
+                : new ArrayList<>(PitUtils.splitBasedOnComma(targetClasses));
     }
 
     public IResource[] getMappedResources() throws CoreException {

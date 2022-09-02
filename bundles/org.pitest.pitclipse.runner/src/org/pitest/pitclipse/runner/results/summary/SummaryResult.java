@@ -16,10 +16,9 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
-
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,23 +29,22 @@ import java.util.List;
  */
 public class SummaryResult implements Serializable {
 
+    private static final long serialVersionUID = -7879466679282865684L;
     public static final SummaryResult EMPTY = new SummaryResult();
-    private static final long serialVersionUID = 5598868063090306204L;
-    private final ImmutableList<ClassSummary> summaries;
+    private final List<ClassSummary> summaries;
 
     private SummaryResult() {
-        this(ImmutableList.<ClassSummary>of());
+        this(Collections.emptyList());
     }
 
-    private SummaryResult(ImmutableList<ClassSummary> summaries) {
+    private SummaryResult(List<ClassSummary> summaries) {
         this.summaries = summaries;
     }
 
     public SummaryResult update(ClassSummary classSummary) {
-        Builder<ClassSummary> builder = ImmutableList.builder();
-        builder.addAll(getSummaries());
+        List<ClassSummary> builder = new ArrayList<>(getSummaries());
         builder.add(classSummary);
-        return new SummaryResult(builder.build());
+        return new SummaryResult(builder);
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package org.pitest.pitclipse.launch.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -25,22 +26,20 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.google.common.collect.ImmutableList;
-
 public class ProjectUtils {
 
     private ProjectUtils() {
     }
 
     public static List<IJavaProject> getOpenJavaProjects() throws CoreException {
-        ImmutableList.Builder<IJavaProject> resultBuilder = ImmutableList.builder();
+        List<IJavaProject> resultBuilder = new ArrayList<>();
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         for (IProject project : root.getProjects()) {
             if (project.isOpen() && project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
                 resultBuilder.add(JavaCore.create(project));
             }
         }
-        return resultBuilder.build();
+        return resultBuilder;
     }
 
     public static boolean onClassPathOf(IJavaProject testProject, IJavaProject project) {
