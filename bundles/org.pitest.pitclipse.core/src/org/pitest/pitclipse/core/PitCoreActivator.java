@@ -16,7 +16,6 @@
 
 package org.pitest.pitclipse.core;
 
-import static org.eclipse.core.runtime.FileLocator.getBundleFile;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.AVOID_CALLS_TO;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_CLASSES;
 import static org.pitest.pitclipse.core.preferences.PitPreferences.EXCLUDED_METHODS;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -158,7 +158,9 @@ public class PitCoreActivator extends Plugin {
     }
 
     private String getBundleCanonicalPath(String bundleName) throws IOException {
-        return getBundleFile(Platform.getBundle(bundleName)).getCanonicalPath();
+    	return FileLocator.getBundleFileLocation(Platform.getBundle(bundleName))
+    			.orElseThrow(() -> new IOException("Unable to locate the bundle file: " + bundleName))
+    			.getCanonicalPath();
     }
 
     private void setupStateDirectories() {
