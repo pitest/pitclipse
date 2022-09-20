@@ -23,7 +23,7 @@
 
 	<properties>
 		<!-- PLUGIN DEPENDENCIES -->
-		<tycho-version>2.7.3</tycho-version>
+		<tycho-version>2.7.5</tycho-version>
 		<jacoco-version>0.8.6</jacoco-version>
 
 		<!-- MISC -->
