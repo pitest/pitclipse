@@ -51,8 +51,8 @@ import org.pitest.pitclipse.runner.results.DetectionStatus;
 
 public class PitMutationsViewLabelProvider extends LabelProvider {
 
-    private static final Image MUTATION_DETECTED = getBundleImage("detected.gif");
-    private static final Image MUTATION_NOT_DETECTED = getBundleImage("not_detected.gif");
+    private static final Image MUTATION_DETECTED = getBundleImage("detected.png");
+    private static final Image MUTATION_NOT_DETECTED = getBundleImage("not_detected.png");
     private static final Set<DetectionStatus> DETECTED_STATUSES = new HashSet<>(
         Arrays.asList(
             KILLED, TIMED_OUT, NON_VIABLE,
