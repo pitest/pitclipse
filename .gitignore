@@ -11,3 +11,7 @@ target/
 # Eclipse
 bin/
 *.versionsBackup
+
+# Tycho pomless temporary files
+.META-INF_MANIFEST.MF
+.polyglot*
