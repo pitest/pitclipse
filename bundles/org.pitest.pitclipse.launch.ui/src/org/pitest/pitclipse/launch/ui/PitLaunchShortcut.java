@@ -63,6 +63,7 @@ import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IOrdinaryClassFile;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -364,7 +365,10 @@ public class PitLaunchShortcut implements ILaunchShortcut2 {
             case METHOD:
                 return Optional.of(element);
             case CLASS_FILE:
-                return Optional.ofNullable(((IClassFile) element).getType());
+				IClassFile classFile = (IClassFile) element;
+				if (classFile instanceof IOrdinaryClassFile) {
+					return Optional.ofNullable(((IOrdinaryClassFile)classFile).getType());
+				}
             case COMPILATION_UNIT:
                 return Optional.ofNullable(((ICompilationUnit) element).findPrimaryType());
             default:
