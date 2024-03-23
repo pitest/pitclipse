@@ -28,7 +28,6 @@ import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
 import org.pitest.mutationtest.MutationStatusTestPair;
 import org.pitest.mutationtest.engine.Location;
-import org.pitest.mutationtest.engine.MethodName;
 import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.pitclipse.example.Foo;
@@ -48,7 +47,7 @@ class ListenerTestFixture {
     private static final ObjectFactory JAXB_OBJECT_FACTORY = new ObjectFactory();
 
     public static ClassMutationResults aClassMutationResult() {
-        Location location = new Location(ClassName.fromClass(Foo.class), MethodName.fromString("doFoo"), "doFoo");
+        Location location = new Location(ClassName.fromClass(Foo.class), "doFoo", "doFoo");
         MutationIdentifier id = new MutationIdentifier(location, 1, "SomeMutator");
         MutationDetails md = new MutationDetails(id, "org/pitest/pitclipse/example/Foo.java", TEST_FACTORY.aString(),
                 20, TEST_FACTORY.aRandomInt());

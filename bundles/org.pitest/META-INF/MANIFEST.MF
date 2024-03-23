@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Pitest
 Bundle-SymbolicName: org.pitest
-Bundle-Version: 1.6.8.qualifier
+Bundle-Version: 1.15.8.qualifier
 Bundle-ClassPath: lib/pitest-command-line-javadoc.jar,
  lib/pitest-command-line-sources.jar,
  lib/pitest-command-line.jar,
@@ -34,7 +34,6 @@ Export-Package: joptsimple,
  org.pitest.coverage.analysis,
  org.pitest.coverage.execute,
  org.pitest.coverage.export,
- org.pitest.dependency,
  org.pitest.extension.common,
  org.pitest.functional,
  org.pitest.functional.predicate,
@@ -60,7 +59,6 @@ Export-Package: joptsimple,
  org.pitest.mutationtest.engine.gregor.config,
  org.pitest.mutationtest.engine.gregor.mutators,
  org.pitest.mutationtest.engine.gregor.mutators.experimental,
- org.pitest.mutationtest.engine.gregor.mutators.rv,
  org.pitest.mutationtest.execute,
  org.pitest.mutationtest.filter,
  org.pitest.mutationtest.incremental,
@@ -98,7 +96,6 @@ Export-Package: joptsimple,
  org.pitest.testapi,
  org.pitest.testapi.execute,
  org.pitest.testapi.execute.containers,
- org.pitest.testng,
  org.pitest.util,
  sun.pitest
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

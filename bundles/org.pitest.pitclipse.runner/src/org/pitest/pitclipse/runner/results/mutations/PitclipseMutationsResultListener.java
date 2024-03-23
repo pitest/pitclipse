@@ -61,7 +61,7 @@ public class PitclipseMutationsResultListener implements MutationResultListener 
             result.getKillingTest().ifPresent(mutation::setKillingTest);
             mutation.setLineNumber(BigInteger.valueOf(details.getLineNumber()));
             mutation.setMutatedClass(details.getClassName().asJavaName());
-            mutation.setMutatedMethod(details.getMethod().name());
+            mutation.setMutatedMethod(details.getMethod());
             mutation.setMutator(details.getMutator());
             mutation.setSourceFile(details.getFilename());
             mutation.setStatus(DetectionStatusCoverter.convert(result.getStatus()));
