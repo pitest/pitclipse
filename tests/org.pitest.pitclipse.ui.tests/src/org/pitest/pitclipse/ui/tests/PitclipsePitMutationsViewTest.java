@@ -1,5 +1,7 @@
 package org.pitest.pitclipse.ui.tests;
 
+import static org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory.withTitle;
+import static org.eclipse.swtbot.eclipse.finder.waits.Conditions.waitForEditor;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +12,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pitest.pitclipse.ui.behaviours.pageobjects.DurationElapsed;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitMutationsViewPageObject;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
@@ -47,12 +50,21 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         coverageReportGenerated(2, 80, 0, 6, 0);
         PitclipseSteps pitclipseSteps = new PitclipseSteps();
         PitMutation mutation = fromMutationLine(
-        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional");
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false");
+        final PitMutationsViewPageObject pitMutationsView = new PitMutationsViewPageObject(bot);
+        pitMutationsView.getView();
+        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
+
+        bot.waitUntil(waitForEditor(withTitle(FOO_CLASS + ".java")));
+        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.mutationIsOpened(FOO_CLASS + ".java", 7);
         mutation = fromMutationLine(
-        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional");
+        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false");
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
+        
+        bot.waitUntil(waitForEditor(withTitle(BAR_CLASS + ".java")));
+        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
     }
 

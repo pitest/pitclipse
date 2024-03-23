@@ -67,9 +67,10 @@ public class PitMutationsViewPageObject {
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         mutationsView.setFocus();
+        //
         // Make sure the 'PIT Mutations' view is opened
-        // this should not be required anymore
-        // bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
+        //
+        bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         return mutationsView;
     }
 
@@ -157,12 +158,13 @@ public class PitMutationsViewPageObject {
             this.statuses = statuses;
         }
 
-        public void select(PitMutation mutation) {
+        public boolean select(PitMutation mutation) {
             String status = mutation.getStatus().toString();
             for (StatusTree statusTree : statuses) {
                 if (status.equals(statusTree.statusName)) {
-                    statusTree.select(mutation);
-                    return;
+                    if (statusTree.select(mutation)) {
+                    	return true;
+                    }
                 }
             }
             throw new AssertionFailedError(
@@ -187,11 +189,12 @@ public class PitMutationsViewPageObject {
             this.projects = projects;
         }
 
-        public void select(PitMutation mutation) {
+        public boolean select(PitMutation mutation) {
             for (ProjectTree projectTree : projects) {
                 if (mutation.getProject().equals(projectTree.projectName)) {
-                    projectTree.select(mutation);
-                    return;
+                    if (projectTree.select(mutation)) {
+                    	return true;
+                    }
                 }
             }
             throw new AssertionFailedError(
@@ -218,11 +221,12 @@ public class PitMutationsViewPageObject {
             this.packages = packages;
         }
 
-        public void select(PitMutation mutation) {
+        public boolean select(PitMutation mutation) {
             for (PackageTree packageTree : packages) {
                 if (mutation.getPkg().equals(packageTree.packageName)) {
-                    packageTree.select(mutation);
-                    return;
+                    if (packageTree.select(mutation)) {
+                    	return true;
+                    }
                 }
             }
             throw new AssertionFailedError(
@@ -249,11 +253,12 @@ public class PitMutationsViewPageObject {
             this.classes = classes;
         }
 
-        public void select(PitMutation mutation) {
+        public boolean select(PitMutation mutation) {
             for (ClassTree classTree : classes) {
                 if (mutation.getClassName().equals(classTree.className)) {
-                    classTree.select(mutation);
-                    return;
+                    if (classTree.select(mutation)) {
+                    	return true;
+                    }
                 }
             }
             throw new AssertionFailedError(
@@ -280,12 +285,12 @@ public class PitMutationsViewPageObject {
             this.mutations = projects;
         }
 
-        public void select(PitMutation mutation) {
+        public boolean select(PitMutation mutation) {
             for (MutationTree mutationTree : mutations) {
                 if (mutation.getLineNumber() == mutationTree.lineNumber &&
                         mutation.getMutation().equals(mutationTree.mutation)) {
                     mutationTree.select();
-                    return;
+                    return true;
                 }
             }
             throw new AssertionFailedError(
