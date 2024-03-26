@@ -19,9 +19,8 @@ package org.pitest.pitclipse.runner.results.summary;
 import java.util.Collections;
 import java.util.List;
 
-import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
-import org.pitest.coverage.CoverageDatabase;
+import org.pitest.coverage.ReportCoverage;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResultListener;
 import org.pitest.pitclipse.runner.results.Dispatcher;
@@ -37,7 +36,7 @@ public class SummaryResultListener implements MutationResultListener {
 
     private SummaryResult result = SummaryResult.EMPTY;
     private final Dispatcher<SummaryResult> dispatcher;
-    private final CoverageDatabase coverage;
+    private final ReportCoverage coverage;
 
     /**
      * Creates a new listener that will compute a summary of the whole PIT analysis.
@@ -47,7 +46,7 @@ public class SummaryResultListener implements MutationResultListener {
      * @param coverage
      *          The coverage computed from the tests.
      */
-    public SummaryResultListener(Dispatcher<SummaryResult> dispatcher, CoverageDatabase coverage) {
+    public SummaryResultListener(Dispatcher<SummaryResult> dispatcher, ReportCoverage coverage) {
         this.dispatcher = dispatcher;
         this.coverage = coverage;
     }
@@ -59,12 +58,20 @@ public class SummaryResultListener implements MutationResultListener {
 
     @Override
     public void handleMutationResult(ClassMutationResults results) {
-        List<ClassName> classUnderTest = Collections.singletonList(results.getMutatedClass());
-        int coveredLines = coverage.getNumberOfCoveredLines(classUnderTest);
-        for (ClassInfo info : coverage.getClassInfo(classUnderTest)) {
-            ClassSummary classSummary = ClassSummary.from(results, info, coveredLines);
-            result = result.update(classSummary);
-        }
+        List<ClassName> classesUnderTest = Collections.singletonList(results.getMutatedClass());
+        
+//        long totalNumberOfCoveredLines = classesUnderTest.stream().map(coverage::getCoveredLines).flatMap(Collection::stream).count();
+        
+//        int coveredLines = coverage.getNumberOfCoveredLines(classUnderTest);
+        for (ClassName classUnderTest : classesUnderTest) {
+        	int numberOfCoveredLines = coverage.getCoveredLines(classUnderTest).size();
+        	int numberOfLines = coverage.getCodeLinesForClass(classUnderTest).getNumberOfCodeLines();
+			ClassSummary classSummary = ClassSummary.from(results, numberOfLines, numberOfCoveredLines);
+			result = result.update(classSummary);
+		}
+//        for (ClassInfo info : coverage.getClassInfo(classesUnderTest)) {
+//            ClassSummary classSummary = ClassSummary.from(results, info, totalNumberOfCoveredLines);
+//        }
     }
 
     @Override

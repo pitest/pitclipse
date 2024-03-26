@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 import org.pitest.classinfo.ClassInfo;
+import org.pitest.coverage.CoverageData;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.MutationResult;
 
@@ -43,13 +44,14 @@ class ClassSummary implements Serializable {
         this.mutationCoverage = mutationCoverage;
     }
 
-    public static ClassSummary from(ClassMutationResults results, ClassInfo classInfo, int linesCovered) {
+    public static ClassSummary from(ClassMutationResults results, int numberOfCodeLines, int linesCovered) {
         Collection<MutationResult> mutations = results.getMutations();
         int totalMutations = mutations.size();
         int survivedMutations = (int) mutations.stream()
                 .filter(m -> !m.getStatus().isDetected())
                 .count();
-        Coverage lineCoverage = Coverage.from(linesCovered, classInfo.getNumberOfCodeLines());
+        CoverageData data;
+        Coverage lineCoverage = Coverage.from(linesCovered, numberOfCodeLines);
         Coverage mutationCoverage = Coverage.from(totalMutations - survivedMutations, totalMutations);
 
         return from(results.getMutatedClass().asJavaName(), lineCoverage, mutationCoverage);
