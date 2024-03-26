@@ -81,31 +81,14 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
     }
 
     @Test
-    public void useOldDefaultsMutatorsGroup() { // NOSONAR
-        // set OLD_DEFAULTS mutators
-        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);
-        // run test and confirm result is as expected
-        PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 8, 0);
-        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
-                        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | replaced return of integer sized value with (x == 0 ? 1 : 0)");
-    }
-
-    @Test
     public void useDefaultMutatorsGroup() { // NOSONAR
         // set DEFAULTS mutators
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
         coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 6, 0);
-        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
+                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
@@ -119,10 +102,10 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
         coverageReportGenerated(TESTED_CLASSES, COVERAGE, 0, 8, 0);
-        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | negated conditional\n" +
-                        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
-                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | negated conditional\n" +
+        mutationsAre(   "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false\n" +
+                        "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with true\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false\n" +
+                        "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with true\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | Replaced integer addition with subtraction\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    8 | replaced int return with 0 for foo/bar/Bar::f\n" +
                         "NO_COVERAGE | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    8 | Replaced integer addition with subtraction\n" +
@@ -150,7 +133,7 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 84, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 5, 20, 1);
         mutationsAre(getAllMutantsResult());
     }
 
@@ -162,94 +145,31 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
         PAGES.getRunMenu().checkAllMutators(TEST_CONFIG_NAME);
         // run test and confirm result is as expected
         PAGES.getRunMenu().runPitWithConfiguration(TEST_CONFIG_NAME);
-        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 1, 84, 1);
+        coverageReportGenerated(TESTED_CLASSES, COVERAGE, 5, 20, 1);
         mutationsAre(getAllMutantsResult());
     }
 
     private String getAllMutantsResult(){
-        return "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with -1\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with -1\n" +
+        return 
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with 0\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with 0\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with 0\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | Substituted 1 with 2\n" +
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | negated conditional\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | not equal to equal\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | not equal to greater or equal\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | not equal to greater than\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | not equal to less or equal\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | not equal to less than\n" +
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | removed call to java/util/ArrayList::size\n" +
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | removed conditional - replaced equality check with false\n" +
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 7 | removed conditional - replaced equality check with true\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | Substituted 0 with -1\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | Substituted 0 with -1\n" +
                 "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | Substituted 0 with 1\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | Substituted 0 with 1\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | Substituted 0 with 1\n" +
-                "SURVIVED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
                 "KILLED | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 6 | removed call to java/util/ArrayList::<init>\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 6 | removed call to java/util/ArrayList::<init>\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with -1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with -1\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | Substituted 1 with 2\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | negated conditional\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | not equal to equal\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | not equal to greater or equal\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | not equal to greater than\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | not equal to less or equal\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | not equal to less than\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | removed call to java/util/ArrayList::size\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | removed conditional - replaced equality check with false\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 7 | removed conditional - replaced equality check with true\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Decremented (--a) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Decremented (a--) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Incremented (++a) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Incremented (a++) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Negated integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer addition with division\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer addition with modulus\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer addition with multiplication\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer addition with subtraction\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer addition with subtraction\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer operation by second member\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Replaced integer operation with first member\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with -1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with -1\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | Substituted 1 with 2\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | replaced int return with 0 for foo/bar/Bar::f\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 8 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | Substituted 0 with -1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | Substituted 0 with -1\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | Substituted 0 with 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | Substituted 0 with 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | Substituted 0 with 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Bar | 10 | replaced return of integer sized value with (x == 0 ? 1 : 0)\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Decremented (--a) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Decremented (a--) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Incremented (++a) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Incremented (a++) integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Negated integer local variable number 1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer addition with division\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer addition with modulus\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer addition with multiplication\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer addition with subtraction\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer addition with subtraction\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer operation by second member\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Replaced integer operation with first member\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with -1\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with -1\n" +
                 "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with 0\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | Substituted 1 with 2\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | replaced int return with 0 for foo/bar/Foo::f\n" +
-                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | replaced return of integer sized value with (x == 0 ? 1 : 0)";
+                "NO_COVERAGE | " + TEST_PROJECT + " |foo.bar | foo.bar.Foo | 8 | replaced int return with 0 for foo/bar/Foo::f\n";
     }
 }
