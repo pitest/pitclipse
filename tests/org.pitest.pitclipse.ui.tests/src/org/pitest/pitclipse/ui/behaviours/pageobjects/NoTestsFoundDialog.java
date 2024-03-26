@@ -31,9 +31,7 @@ public class NoTestsFoundDialog {
     public void assertAppears() {
         SWTBotShell shell = bot.shell("Pitclipse");
         shell.activate();
-        bot.waitUntil(new DurationElapsed(500));
         bot.label("No tests found");
-        bot.waitUntil(new DurationElapsed(500));
         bot.button("OK").click();
 
         bot.waitUntil(Conditions.shellCloses(shell));
