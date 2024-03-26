@@ -25,6 +25,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 3.9.6
     - name: Install WebKit # required for SWT Browser
       run: |
         sudo apt update
