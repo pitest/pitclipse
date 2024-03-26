@@ -60,7 +60,6 @@ public class PitclipseRunConfigurationMutationTabTest extends AbstractPitclipseS
 
     @Test
     public void pressMutatorGroupButtons() { // NOSONAR
-        PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.OLD_DEFAULTS);
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.DEFAULTS);
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.STRONGER);
         PAGES.getRunMenu().setMutatorGroup(TEST_CONFIG_NAME, Mutators.ALL);
