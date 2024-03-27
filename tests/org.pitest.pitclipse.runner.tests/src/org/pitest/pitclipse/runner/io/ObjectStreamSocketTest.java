@@ -16,22 +16,6 @@
 
 package org.pitest.pitclipse.runner.io;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.net.Socket;
-
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -43,9 +27,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.net.Socket;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectStreamSocketTest {
@@ -121,7 +120,7 @@ public class ObjectStreamSocketTest {
 
     @Test
     public void readThrowsException() throws IOException, ClassNotFoundException {
-        InputStream inputStream = spy(new ByteArrayInputStream(asBytes(expectedObject)));
+        InputStream inputStream = new ByteArrayInputStream(asBytes(expectedObject));
         OutputStream outputStream = new ByteArrayOutputStream();
         when(underlyingSocket.getInputStream()).thenReturn(inputStream);
         when(underlyingSocket.getOutputStream()).thenReturn(outputStream);
@@ -138,7 +137,7 @@ public class ObjectStreamSocketTest {
 
     @Test
     public void writeThrowsException() throws IOException, ClassNotFoundException {
-        InputStream inputStream = spy(new ByteArrayInputStream(asBytes(expectedObject)));
+        InputStream inputStream = new ByteArrayInputStream(asBytes(expectedObject));
         OutputStream outputStream = new ByteArrayOutputStream();
         when(underlyingSocket.getInputStream()).thenReturn(inputStream);
         when(underlyingSocket.getOutputStream()).thenReturn(outputStream);
