@@ -185,9 +185,6 @@ public class PitMutationsViewPageObject {
             this.projects = projects;
         }
 
-        /**
-         * @return
-         */
         public void select(PitMutation mutation) {
             for (ProjectTree projectTree : projects) {
                 if (mutation.getProject().equals(projectTree.projectName)) {
@@ -281,9 +278,6 @@ public class PitMutationsViewPageObject {
             this.mutations = projects;
         }
 
-        /**
-         * @return
-         */
         public void select(PitMutation mutation) {
             for (MutationTree mutationTree : mutations) {
                 if (mutation.getLineNumber() == mutationTree.lineNumber &&
