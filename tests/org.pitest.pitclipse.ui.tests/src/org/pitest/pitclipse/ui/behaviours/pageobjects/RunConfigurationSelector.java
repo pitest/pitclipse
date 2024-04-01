@@ -145,7 +145,6 @@ public class RunConfigurationSelector implements Closeable {
     }
 
     public void createRunConfiguration(String configurationName, String projectName, String className) {
-    	System.out.println("RunConfigurationSelector.createRunConfiguration()");
         getPitConfigurationItem().contextMenu("New Configuration").click();
         bot.textWithLabel("Name:").setText(configurationName);
         PitRunConfiguration config = new Builder().withName(configurationName).withProjects(projectName)

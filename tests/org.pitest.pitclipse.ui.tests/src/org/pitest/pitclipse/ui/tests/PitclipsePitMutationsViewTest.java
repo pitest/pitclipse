@@ -12,7 +12,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.DurationElapsed;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitMutationsViewPageObject;
 import org.pitest.pitclipse.ui.behaviours.steps.PitMutation;
 import org.pitest.pitclipse.ui.behaviours.steps.PitclipseSteps;
@@ -53,18 +52,15 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false");
         final PitMutationsViewPageObject pitMutationsView = new PitMutationsViewPageObject(bot);
         pitMutationsView.getView();
-        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
 
         bot.waitUntil(waitForEditor(withTitle(FOO_CLASS + ".java")));
-        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.mutationIsOpened(FOO_CLASS + ".java", 7);
         mutation = fromMutationLine(
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Bar |    7 | removed conditional - replaced equality check with false");
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
         
         bot.waitUntil(waitForEditor(withTitle(BAR_CLASS + ".java")));
-        bot.waitUntil(new DurationElapsed(200));
         pitclipseSteps.mutationIsOpened(BAR_CLASS + ".java", 7);
     }
 

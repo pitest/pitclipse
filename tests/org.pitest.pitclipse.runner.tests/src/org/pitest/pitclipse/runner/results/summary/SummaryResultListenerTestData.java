@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.pitest.classinfo.ClassName;
@@ -127,9 +128,9 @@ class SummaryResultListenerTestData {
 
 		@Override
 		public Set<ClassLine> getCoveredLines(ClassName clazz) {
-			Set<ClassLine> lines = new HashSet<>();
 			int expectedNbOfLinesCovered = classCoverage.getOrDefault(clazz, -1);
 			
+			Set<ClassLine> lines = new HashSet<>();
 			for (int i = 0; i < expectedNbOfLinesCovered; ++i) {
 				lines.add(new ClassLine(clazz, i));
 			}
@@ -140,24 +141,6 @@ class SummaryResultListenerTestData {
 		public Collection<TestInfo> getTestsForBlockLocation(BlockLocation location) {
 			throw new UnsupportedOperationException("the stub does not implement getTestsForBlockLocation");
 		}
-
-//        @Override
-//        public Collection<ClassInfo> getClassInfo(Collection<ClassName> classes) {
-//            return filter(transform(classes, classInfoLookup()), notNull());
-//        }
-//
-//        @Override
-//        public int getNumberOfCoveredLines(Collection<ClassName> classes) {
-//            int total = 0;
-//            for (ClassName className : classes) {
-//                total += coverageFor(className);
-//            }
-//            return total;
-//        }
-
-//        private int coverageFor(ClassName className) {
-//            return classCoverage.getOrDefault(className, 0);
-//        }
 
         @Override
         public Collection<TestInfo> getTestsForClass(ClassName clazz) {
@@ -173,15 +156,6 @@ class SummaryResultListenerTestData {
         public Collection<ClassLines> getClassesForFile(String sourceFile, String packageName) {
             return ImmutableList.of();
         }
-
-//        private Function<ClassName, ClassInfo> classInfoLookup() {
-//            return new Function<ClassName, ClassInfo>() {
-//                @Override
-//                public ClassInfo apply(ClassName input) {
-//                    return classInfo.get(input);
-//                }
-//            };
-//        }
 
     }
 }

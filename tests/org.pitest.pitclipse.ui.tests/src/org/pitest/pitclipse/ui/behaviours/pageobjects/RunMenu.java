@@ -70,7 +70,6 @@ public class RunMenu {
 
     public void createRunConfiguration(String configurationName, String projectName, String className) {
         try (RunConfigurationSelector selector = openRunMenu().andThen()) {
-        	System.out.println("RunMenu.createRunConfiguration()");
             selector.createRunConfiguration(configurationName, projectName, className);
         }
     }

@@ -60,18 +60,12 @@ public class SummaryResultListener implements MutationResultListener {
     public void handleMutationResult(ClassMutationResults results) {
         List<ClassName> classesUnderTest = Collections.singletonList(results.getMutatedClass());
         
-//        long totalNumberOfCoveredLines = classesUnderTest.stream().map(coverage::getCoveredLines).flatMap(Collection::stream).count();
-        
-//        int coveredLines = coverage.getNumberOfCoveredLines(classUnderTest);
         for (ClassName classUnderTest : classesUnderTest) {
         	int numberOfCoveredLines = coverage.getCoveredLines(classUnderTest).size();
         	int numberOfLines = coverage.getCodeLinesForClass(classUnderTest).getNumberOfCodeLines();
 			ClassSummary classSummary = ClassSummary.from(results, numberOfLines, numberOfCoveredLines);
 			result = result.update(classSummary);
 		}
-//        for (ClassInfo info : coverage.getClassInfo(classesUnderTest)) {
-//            ClassSummary classSummary = ClassSummary.from(results, info, totalNumberOfCoveredLines);
-//        }
     }
 
     @Override

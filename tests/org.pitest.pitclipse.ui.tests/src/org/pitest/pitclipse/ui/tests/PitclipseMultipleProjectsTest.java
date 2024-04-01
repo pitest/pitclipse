@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pitest.pitclipse.core.PitCoreActivator;
 import org.pitest.pitclipse.core.preferences.PitPreferences;
-import org.pitest.pitclipse.ui.behaviours.pageobjects.DurationElapsed;
 import org.pitest.pitclipse.ui.behaviours.pageobjects.PitPreferenceSelector;
 
 /**
@@ -67,14 +66,12 @@ public class PitclipseMultipleProjectsTest extends AbstractPitclipseSWTBotTest {
     public void testExecutionMode() throws CoreException {
         try {
             PitPreferenceSelector selector = PAGES.getWindowsMenu().openPreferences().andThen();
-            bot.waitUntil(new DurationElapsed(200));
             assertEquals(PROJECT_ISOLATION, selector.getPitExecutionMode());
             selector.close();
             runProjectTest(FOO_BAR_PROJECT);
             // only the classes in the project is mutated
             coverageReportGenerated(2, 100, 100, 3, 3);
             selector = PAGES.getWindowsMenu().openPreferences().andThen();
-            bot.waitUntil(new DurationElapsed(200));
             selector.setPitExecutionMode(WORKSPACE);
             selector.close();
             runProjectTest(FOO_BAR_PROJECT);

@@ -55,11 +55,11 @@ public enum Mutators {
     REMOVE_INCREMENTS("Remove Increments", "Removes local variable increments"),
     EXPERIMENTAL_ARGUMENT_PROPAGATION("Experimentation Argument Propagation", "Replaces method call with one of its parameters of matching type"),
     EXPERIMENTAL_BIG_INTEGER("Experimental Big Integer", "Swaps big integer methods"),
-    EXPERIMENTAL_BIG_DECIMAL("Experimental Big Integer", "Swaps big decimal methods"),
+    EXPERIMENTAL_BIG_DECIMAL("Experimental Big Decimal", "Swaps big decimal methods"),
     EXPERIMENTAL_NAKED_RECEIVER("Experimental Naked Receiver", "Replaces method call with a naked receiver"),
     EXPERIMENTAL_MEMBER_VARIABLE("Experimental Member Variable", "Removes assignments to member variables. Can even remove assignments to final members. The members will be initialized with their Java Default Value"),
     EXPERIMENTAL_SWITCH("Experimental Switch", "Finds the first label within a switch statement that differs from the default label. Mutates the switch statement by replacing the default label (wherever it is used) with this label. All the other labels are replaced by the default one"),
-    REMOVE_SWITCH("Remove Switch","Finds the first switch label that differs from the default label, then replaces the default label with this label, and all other labels are replaced with the default one");
+    REMOVE_SWITCH("Remove Switch", "Finds the first switch label that differs from the default label, then replaces the default label with this label, and all other labels are replaced with the default one");
 
     /**
      * Descriptor which is used to display the name of this mutator in a table
