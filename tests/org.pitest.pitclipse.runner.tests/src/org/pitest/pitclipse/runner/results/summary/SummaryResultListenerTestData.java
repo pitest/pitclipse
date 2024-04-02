@@ -16,39 +16,35 @@
 
 package org.pitest.pitclipse.runner.results.summary;
 
-import static com.google.common.base.Predicates.notNull;
-import static com.google.common.collect.Collections2.filter;
-import static com.google.common.collect.Collections2.transform;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static java.util.stream.Collectors.toSet;
 import static org.pitest.mutationtest.DetectionStatus.KILLED;
 import static org.pitest.mutationtest.DetectionStatus.NO_COVERAGE;
 import static org.pitest.pitclipse.runner.TestFactory.TEST_FACTORY;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassName;
+import org.pitest.coverage.BlockLocation;
 import org.pitest.coverage.ClassLine;
+import org.pitest.coverage.ClassLines;
 import org.pitest.coverage.CoverageDatabase;
-import org.pitest.coverage.CoverageSummary;
-import org.pitest.coverage.InstructionLocation;
 import org.pitest.coverage.TestInfo;
 import org.pitest.mutationtest.ClassMutationResults;
 import org.pitest.mutationtest.DetectionStatus;
 import org.pitest.mutationtest.MutationResult;
 import org.pitest.mutationtest.MutationStatusTestPair;
 import org.pitest.mutationtest.engine.Location;
-import org.pitest.mutationtest.engine.MethodName;
 import org.pitest.mutationtest.engine.MutationDetails;
 import org.pitest.mutationtest.engine.MutationIdentifier;
 import org.pitest.pitclipse.example.Foo;
 import org.pitest.pitclipse.runner.results.summary.SummaryResultListenerTestSugar.SummaryResultWrapper;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -78,7 +74,7 @@ class SummaryResultListenerTestData {
     }
 
     private static ClassMutationResults aClassMutationResultForFooWithStatus(DetectionStatus detectionStatus) {
-        Location location = new Location(ClassName.fromClass(Foo.class), MethodName.fromString("doFoo"), "doFoo");
+        Location location = new Location(ClassName.fromClass(Foo.class), "doFoo", "doFoo");
         MutationIdentifier id = new MutationIdentifier(location, 1, "SomeMutator");
         MutationDetails md = new MutationDetails(id, "org/pitest/pitclipse/example/Foo.java", TEST_FACTORY.aString(),
                 9, TEST_FACTORY.aRandomInt());
@@ -90,36 +86,31 @@ class SummaryResultListenerTestData {
 
     private static class CoverageTestData {
 
-        public static final CoverageTestData FOO_WITH_FULL_COVERAGE = new CoverageTestData(Foo.class, fooInfo(1), 1);
-        public static final CoverageTestData FOO_WITH_NO_COVERAGE = new CoverageTestData(Foo.class, fooInfo(1), 0);
+        public static final CoverageTestData FOO_WITH_FULL_COVERAGE = new CoverageTestData(Foo.class, 1, 1);
+        public static final CoverageTestData FOO_WITH_NO_COVERAGE = new CoverageTestData(Foo.class, 1, 0);
 
         public final ClassName className;
-        public final ClassInfo classInfo;
         public final int linesCovered;
+        public final int totalNumberOfLines;
         public final StubbedCoverage coverageDatabase;
 
-        private CoverageTestData(Class<?> clazz, ClassInfo classInfo, int linesCovered) {
+        private CoverageTestData(Class<?> clazz, int totalNumberOfLines, int linesCovered) {
             this.className = ClassName.fromClass(clazz);
-            this.classInfo = classInfo;
             this.linesCovered = linesCovered;
+            this.totalNumberOfLines = totalNumberOfLines;
             this.coverageDatabase = new StubbedCoverage(this);
         }
 
-        private static ClassInfo fooInfo(int totalLines) {
-            ClassInfo info = mock(ClassInfo.class);
-            when(info.getNumberOfCodeLines()).thenReturn(totalLines);
-            return info;
-        }
     }
 
     private static class StubbedCoverage implements CoverageDatabase {
         // DATABASE;
 
-        private final Map<ClassName, ClassInfo> classInfo;
+        private final Map<ClassName, Integer> classInfo;
         private final Map<ClassName, Integer> classCoverage;
 
         private StubbedCoverage(CoverageTestData coverageTestData) {
-            classInfo = ImmutableMap.of(coverageTestData.className, coverageTestData.classInfo);
+            classInfo = ImmutableMap.of(coverageTestData.className, coverageTestData.totalNumberOfLines);
             classCoverage = ImmutableMap.of(coverageTestData.className, coverageTestData.linesCovered);
         }
 
@@ -128,31 +119,31 @@ class SummaryResultListenerTestData {
             classCoverage = ImmutableMap.of();
         }
 
-        @Override
-        public Collection<ClassInfo> getClassInfo(Collection<ClassName> classes) {
-            return filter(transform(classes, classInfoLookup()), notNull());
-        }
+		@Override
+		public ClassLines getCodeLinesForClass(ClassName clazz) {
+			int totalNumberOfLines = classInfo.getOrDefault(clazz, -1);
+			Set<Integer> linesNumber = Stream.iterate(1, x -> x + 1).limit(totalNumberOfLines).collect(toSet());
+			return new ClassLines(clazz, linesNumber);
+		}
 
-        @Override
-        public int getNumberOfCoveredLines(Collection<ClassName> classes) {
-            int total = 0;
-            for (ClassName className : classes) {
-                total += coverageFor(className);
-            }
-            return total;
-        }
+		@Override
+		public Set<ClassLine> getCoveredLines(ClassName clazz) {
+			int expectedNbOfLinesCovered = classCoverage.getOrDefault(clazz, -1);
+			
+			Set<ClassLine> lines = new HashSet<>();
+			for (int i = 0; i < expectedNbOfLinesCovered; ++i) {
+				lines.add(new ClassLine(clazz, i));
+			}
+			return lines;
+		}
 
-        private int coverageFor(ClassName className) {
-            return classCoverage.getOrDefault(className, 0);
-        }
+		@Override
+		public Collection<TestInfo> getTestsForBlockLocation(BlockLocation location) {
+			throw new UnsupportedOperationException("the stub does not implement getTestsForBlockLocation");
+		}
 
         @Override
         public Collection<TestInfo> getTestsForClass(ClassName clazz) {
-            return ImmutableList.of();
-        }
-
-        @Override
-        public Collection<TestInfo> getTestsForClassLine(ClassLine classLine) {
             return ImmutableList.of();
         }
 
@@ -162,27 +153,9 @@ class SummaryResultListenerTestData {
         }
 
         @Override
-        public Collection<ClassInfo> getClassesForFile(String sourceFile, String packageName) {
+        public Collection<ClassLines> getClassesForFile(String sourceFile, String packageName) {
             return ImmutableList.of();
         }
 
-        @Override
-        public CoverageSummary createSummary() {
-            return null;
-        }
-
-        private Function<ClassName, ClassInfo> classInfoLookup() {
-            return new Function<ClassName, ClassInfo>() {
-                @Override
-                public ClassInfo apply(ClassName input) {
-                    return classInfo.get(input);
-                }
-            };
-        }
-
-        @Override
-        public Collection<TestInfo> getTestsForInstructionLocation(InstructionLocation location) {
-            return Collections.emptyList();
-        }
     }
 }

@@ -67,9 +67,6 @@ public class PitMutationsViewPageObject {
         SWTBotView mutationsView = bot.viewByTitle("PIT Mutations");
         mutationsView.show();
         mutationsView.setFocus();
-        // Make sure the 'PIT Mutations' view is opened
-        // this should not be required anymore
-        // bot.waitUntil(new ViewOpenedCondition(bot, "PIT Mutations"));
         return mutationsView;
     }
 

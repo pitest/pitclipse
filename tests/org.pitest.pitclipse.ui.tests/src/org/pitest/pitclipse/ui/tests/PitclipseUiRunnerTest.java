@@ -218,7 +218,7 @@ public class PitclipseUiRunnerTest extends AbstractPitclipseSWTBotTest {
                 .choose(FOO_TEST_CLASS_MULTIPLE_LAUNCHES + " (All Mutators)"));
         // not just 2 mutants, but much more since in this launch
         // we enabled All Mutators
-        coverageReportGenerated(1, 0, 0, 20, 0);
+        coverageReportGenerated(1, 0, 0, 3, 0);
 
         @SuppressWarnings("serial")
         class MyException extends RuntimeException {
