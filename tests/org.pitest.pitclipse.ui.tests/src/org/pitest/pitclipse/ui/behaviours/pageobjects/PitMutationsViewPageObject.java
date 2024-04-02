@@ -160,7 +160,6 @@ public class PitMutationsViewPageObject {
                 if (status.equals(statusTree.statusName)) {
                     statusTree.select(mutation);
                     return;
-                    
                 }
             }
             throw new AssertionFailedError(

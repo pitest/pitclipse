@@ -50,8 +50,6 @@ public class PitclipsePitMutationsViewTest extends AbstractPitclipseSWTBotTest {
         PitclipseSteps pitclipseSteps = new PitclipseSteps();
         PitMutation mutation = fromMutationLine(
         "SURVIVED    | " + TEST_PROJECT + " | foo.bar | foo.bar.Foo |    7 | removed conditional - replaced equality check with false");
-        final PitMutationsViewPageObject pitMutationsView = new PitMutationsViewPageObject(bot);
-        pitMutationsView.getView();
         pitclipseSteps.doubleClickMutationInMutationsView(mutation);
 
         bot.waitUntil(waitForEditor(withTitle(FOO_CLASS + ".java")));
